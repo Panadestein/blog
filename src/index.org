@@ -1,0 +1,13 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+
+#+HTML: <div class="container">
+#+HTML: <header class="header">
+#+HTML:   <div class="header-left">The Alien's Cuneiform</div>
+#+HTML:   <div class="header-right"><a href="https://panadestein.github.io/">About</a></div>
+#+HTML: </header>
+
+1. [[./qbqn.org][BQN's Quantum Noise]]
+2. [[./spodat.org][Songs to pave the seasons]]
+3. [[./hf.org][A classical Hartree-Fock program]]
+   
+#+HTML: </div>

@@ -1,0 +1,6 @@
+#+TITLE: A natural sciences and array programming blog
+
+Welcome to the source files from my blog [[https://panadestein.github.io/tac/][The Alien's Cuneiform]].
+Here, I delve into solving computational problems across various
+disciplines using my preferred [[https://mlochbaum.github.io/BQN/][tool of thought]]. Every post is actually
+an =org-mode= literate programming computational notebook.

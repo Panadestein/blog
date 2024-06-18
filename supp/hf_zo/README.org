@@ -1,0 +1,10 @@
+#+TITLE: The Hartree-Fock implementation from Szabo-Ostlund
+
+This is pretty much the original code listed in Appendix B of the legendary [[https://store.doverpublications.com/products/9780486691862][book]]. It has some
+minimal modifications introduced [[http://www.ccl.net/cca/software/SOURCES/FORTRAN/szabo/index.html][here]]. Compiling it is not so easy anymore, but it is still
+possible with legacy options:
+
+#+begin_src bash
+  gfortran -o hfzo hf_so.f -std=legacy
+#+end_src
+
