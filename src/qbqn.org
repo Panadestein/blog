@@ -9,7 +9,7 @@ Initially, we import the necessary system functions and define a 1-modifier for 
 complex matrix products. Next, we define a namespace containing various quantum gates:
 
 #+name: preamble
-#+begin_src bqn :exports code :results none :tangle ../supp/perf_qi/q.bqn
+#+begin_src bqn :exports code :results none :tangle ./bqn/q.bqn
   Sin‿Cos‿GCD ← •math
   U ← •rand.Range
   _cp ← {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
@@ -28,7 +28,7 @@ The (call_count-chars() chars[fn:2]) quantum interpreter is based on references 
 and [[https://arxiv.org/abs/1608.03355][arXiv:1608.03355]]. For simplicity, we always measure at the end of the execution:
 
 #+name: interpreter
-#+begin_src bqn :exports code :results none :tangle ../supp/perf_qi/q.bqn
+#+begin_src bqn :exports code :results none :tangle ./bqn/q.bqn
   Q ← {𝕊qb‿sc‿r:
     wf ← (1⌾⊑⋈⊢)⥊⟜0 2⋆qb
     M‿K ← ⟨+˝∘×⎉1‿∞ _cp, {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜<_cp𝕩}⟩
@@ -53,7 +53,7 @@ statistical accuracy, the experiment is repeated multiple times.
 Additionally, we define a classical post-processing function:
 
 #+name: test
-#+begin_src bqn :exports code :results none :tangle ../supp/perf_qi/q.bqn
+#+begin_src bqn :exports code :results none :tangle ./bqn/q.bqn
   n‿a‿qb‿r ← ⟨15, 11, 5, 0 U˜ 2⋆3⟩
 
   sc ← ⟨
@@ -69,7 +69,7 @@ Additionally, we define a classical post-processing function:
 Wir müssen wissen, wir werden wissen![fn:3]
 
 #+name: run
-#+begin_src bqn :exports both :tangle ../supp/perf_qi/q.bqn
+#+begin_src bqn :exports both :tangle ./bqn/q.bqn
   C >+˝{Q qb‿sc‿𝕩}¨ r
 #+end_src
 
