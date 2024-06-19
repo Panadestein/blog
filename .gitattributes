@@ -1,1 +1,9 @@
+# These are chore files used to generate the site
 *.html linguist-vendored
+*.css linguist-vendored
+*.ttf linguist-vendored
+*.sh linguist-vendored
+
+# These are supplementary files
+*.f linguist-vendored
+*.lisp linguist-vendored

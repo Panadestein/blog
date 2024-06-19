@@ -1,8 +1,18 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+#+HTML_HEAD: <script>
+#+HTML_HEAD:   function toggleTitle() {
+#+HTML_HEAD:     var titleElement = document.getElementById('title');
+#+HTML_HEAD:     if (titleElement.innerText === 'First atop infinity') {
+#+HTML_HEAD:       titleElement.innerText = '⊑∘∞';
+#+HTML_HEAD:     } else {
+#+HTML_HEAD:       titleElement.innerText = 'First atop infinity';
+#+HTML_HEAD:     }
+#+HTML_HEAD:   }
+#+HTML_HEAD: </script>
 
 #+HTML: <div class="container">
 #+HTML: <header class="header">
-#+HTML:   <div class="header-left">The Alien's Cuneiform</div>
+#+HTML:   <div class="header-left"><a id="title" href="#" onclick="toggleTitle(); return false;">First atop infinity</a></div>
 #+HTML:   <div class="header-right"><a href="https://panadestein.github.io/">About</a></div>
 #+HTML: </header>
 
