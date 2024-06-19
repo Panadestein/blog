@@ -192,12 +192,22 @@
   .org-svg { }
 </style>
 <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+<script>
+function toggleTitle() {
+var titleElement = document.getElementById('title');
+if (titleElement.innerText === 'First atop infinity') {
+titleElement.innerText = '⊑∘∞';
+} else {
+titleElement.innerText = 'First atop infinity';
+}
+}
+</script>
 </head>
 <body>
 <div id="content" class="content">
 <div class="container">
 <header class="header">
-<div class="header-left">The Alien's Cuneiform</div>
+<div class="header-left"><a id="title" href="#" onclick="toggleTitle(); return false;">First atop infinity</a></div>
 <div class="header-right"><a href="https://panadestein.github.io/">About</a></div>
 </header>
 
