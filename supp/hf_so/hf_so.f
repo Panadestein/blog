@@ -17,7 +17,7 @@ C                   and Daniele (kalium) Dondi (2013)
 C*********************************************************************
 
       IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      IOP=2
+      IOP=1
       N=3
       R=1.4632D0
       ZETA1=2.0925D0
