@@ -91,17 +91,22 @@ Define a (50 chars) dyadic block function to execute the queries:
                                ┘
 #+end_example
 
-** Opeth anthology
+** Bonus: Opeth anthology
 
-This is the Opeth album I would recommend anyone. The query function needs to be modified a bit. Also,
-they will never release one of 20 songs:
+This is the Opeth album I would recommend anyone. The query function needs to be modified a bit for generating it.
+But before that, let's look at the [[https://www.opeth.com/releases/albums][official discography]]:
 
-#+begin_src bqn :results none :tangle ./bqn/spodat.bqn
-  l ← ↕10
-  O ← {l (1⊸+∘⊣≍˘⊏) (⊢˝˘⊸∊⟜𝕨/⊏˘) ∾(⍷s‿a⊸⊏˘)¨ ((⍒(+´m⊸⊏˘)¨)⊸⊏ s⊸⊏˘⊐⊸⊔⊢) >1⊏¨ 𝕩}
+#+begin_src bqn :results none :exports both :tangle ./bqn/spodat.bqn
+  lo ← (↕∘⌈+´÷≠) 7‿5‿9‿7‿8‿6‿8‿8‿7‿10‿7‿11‿10
 #+end_src
 
 Then:
+
+#+begin_src bqn :results none :tangle ./bqn/spodat.bqn
+  O ← {lo (1⊸+∘⊣≍˘⊏) (⊢˝˘⊸∊⟜𝕨/⊏˘) ∾(⍷s‿a⊸⊏˘)¨ ((⍒(+´m⊸⊏˘)¨)⊸⊏ s⊸⊏˘⊐⊸⊔⊢) >1⊏¨ 𝕩}
+#+end_src
+
+Enjoy:
 
 #+begin_src bqn :exports both :tangle ./bqn/spodat.bqn
   spd O˜⋈ "Opeth" 
@@ -109,16 +114,14 @@ Then:
 
 #+RESULTS:
 #+begin_example
-┌─                                   
-╵ 1  "Ghost of Perdition"            
-  2  "River"                         
-  3  "Will o the Wisp"               
-  4  "Eternal Rains Will Come"       
-  5  "The Drapery Falls"             
-  6  "Elysian Woes"                  
-  7  "Burden"                        
-  8  "Harvest"                       
-  9  "In The Mist She Was Standing"  
-  10 "Hours of Wealth"               
-                                    ┘
+┌─                             
+╵ 1 "Ghost of Perdition"       
+  2 "River"                    
+  3 "Will o the Wisp"          
+  4 "Eternal Rains Will Come"  
+  5 "The Drapery Falls"        
+  6 "Elysian Woes"             
+  7 "Burden"                   
+  8 "Harvest"                  
+                              ┘
 #+end_example
