@@ -180,8 +180,6 @@ Got 25361 samples
 #+end_export
 
 Try running the simulation in the call_generate-bqn-link() and explore it! The complete source code is hosted in a GitHub [[https://github.com/Panadestein/qbqn][repository]].
-Additionally, I recommend reading Stylewarning's [[https://www.stylewarning.com/posts/quantum-interpreter/][blog post]],
-which served as an inspiration for this one and kindly lists it as a re-implementation.
 
 #+name: generate-bqn-link
 #+begin_src emacs-lisp :noweb yes :noweb-prefix no :exports none :results raw :tangle no

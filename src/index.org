@@ -18,6 +18,7 @@
 
 1. [[./qbqn.org][BQN's Quantum Noise]]
 2. [[./spodat.org][Songs to pave the seasons]]
-3. [[./hf.org][A classical Hartree-Fock program]]
-   
+3. [[./hf.org][Helonium's Hartree-Fock program]]
+4. [[./si.org][Scheme interpreter à la SICP]]
+
 #+HTML: </div>
