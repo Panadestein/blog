@@ -197,11 +197,12 @@
 <div id="content" class="content">
 <h1 class="title">Songs to pave the seasons</h1>
 <p>
-Analysis of my <a href="https://support.spotify.com/us/article/understanding-my-data/">Spotify data</a> for the period 2016-2024.
+I have analyzed my Spotify data<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> for the period 2016-2024. The results accurately represent
+my actual music taste.
 </p>
-<div id="outline-container-orgf404f7c" class="outline-2">
-<h2 id="orgf404f7c">Technical details</h2>
-<div class="outline-text-2" id="text-orgf404f7c">
+<div id="outline-container-org3a0f9cd" class="outline-2">
+<h2 id="org3a0f9cd">Technical details</h2>
+<div class="outline-text-2" id="text-org3a0f9cd">
 <p>
 This is a suitable task for an array language, so I rely on <a href="https://mlochbaum.github.io/BQN/index.html">BQN</a> which is my
 favorite one:
@@ -224,7 +225,7 @@ artists, elapsed time, and the length of the desired result.
 </div>
 
 <p>
-Define a (50 chars) dyadic block function to execute the queries:
+We define a (50 chars) dyadic block function to execute the queries:
 </p>
 
 <div class="org-src-container">
@@ -233,15 +234,15 @@ Define a (50 chars) dyadic block function to execute the queries:
 </div>
 </div>
 </div>
-<div id="outline-container-org2249efb" class="outline-2">
-<h2 id="org2249efb">Top songs</h2>
-<div class="outline-text-2" id="text-org2249efb">
+<div id="outline-container-org9171b38" class="outline-2">
+<h2 id="org9171b38">Top songs</h2>
+<div class="outline-text-2" id="text-org9171b38">
 <div class="org-src-container">
 <pre class="src src-bqn">s Q spd	
 </pre>
 </div>
 
-<pre class="example" id="orge61d700">
+<pre class="example" id="org941f17d">
 ┌─                                                     
 ╵ 1  "Countless Skies"                                 
   2  "Divertimento I, K.136: Allegro"                  
@@ -267,15 +268,15 @@ Define a (50 chars) dyadic block function to execute the queries:
 </pre>
 </div>
 </div>
-<div id="outline-container-org6090247" class="outline-2">
-<h2 id="org6090247">Top artists</h2>
-<div class="outline-text-2" id="text-org6090247">
+<div id="outline-container-org1aa428e" class="outline-2">
+<h2 id="org1aa428e">Top artists</h2>
+<div class="outline-text-2" id="text-org1aa428e">
 <div class="org-src-container">
 <pre class="src src-bqn">a Q spd
 </pre>
 </div>
 
-<pre class="example" id="orgef0078d">
+<pre class="example" id="org7eef665">
 ┌─                              
 ╵ 1  "Opeth"                    
   2  "Wolfgang Amadeus Mozart"  
@@ -301,11 +302,11 @@ Define a (50 chars) dyadic block function to execute the queries:
 </pre>
 </div>
 </div>
-<div id="outline-container-orge6ef69a" class="outline-2">
-<h2 id="orge6ef69a">Bonus: Opeth anthology</h2>
-<div class="outline-text-2" id="text-orge6ef69a">
+<div id="outline-container-orgccafdc2" class="outline-2">
+<h2 id="orgccafdc2">Bonus: Opeth anthology</h2>
+<div class="outline-text-2" id="text-orgccafdc2">
 <p>
-This is the Opeth album I would recommend anyone. The query function needs to be modified a bit for generating it.
+This is the Opeth album I would recommend to anyone. The query function needs to be modified a bit for generating it.
 But before that, let's look at the <a href="https://www.opeth.com/releases/albums">official discography</a>:
 </p>
 
@@ -332,7 +333,7 @@ Enjoy:
 </pre>
 </div>
 
-<pre class="example" id="org9d2bb1b">
+<pre class="example" id="org04e4603">
 ┌─                             
 ╵ 1 "Ghost of Perdition"       
   2 "River"                    
@@ -346,6 +347,18 @@ Enjoy:
 </pre>
 </div>
 </div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+It is possible to request a detailed report of all user activity since the account was created. There are
+some <a href="https://support.spotify.com/us/article/understanding-my-data/">interesting fields</a> in the data, but more advanced information, such as genre, requires querying the
+Spotify Web API, which is beyond the scope of this post.
+</p></div></div>
+
+
 </div>
+</div></div>
 </body>
 </html>
