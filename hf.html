@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>A classical Hartree-Fock program</title>
+<title>Helonium's Hartree-Fock program</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -192,10 +192,49 @@
   .org-svg { }
 </style>
 <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">A classical Hartree-Fock program</h1>
+<h1 class="title">Helonium's Hartree-Fock program</h1>
+<p>
+We will implement the Hartree-Fock program from the classic <a href="https://store.doverpublications.com/products/9780486691862">Szabo-Ostlund</a> text,
+a staple in quantum chemistry. If you have any experience in the field, chances are you know it well.
+If you don't, the BQN implementation will take you only a few cognitive units. Using this program,
+we will compute the energy of the HeH\(^+\) molecule. It may not look like much, but
+helonium was the very <a href="https://www.scientificamerican.com/article/the-first-molecule-in-the-universe/">first molecule</a> formed in the universe.
+</p>
 </div>
 </body>
 </html>
