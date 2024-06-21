@@ -9,6 +9,7 @@
 #+HTML_HEAD:     }
 #+HTML_HEAD:   }
 #+HTML_HEAD: </script>
+#+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 #+HTML: <div class="container">
 #+HTML: <header class="header">
@@ -19,6 +20,6 @@
 1. [[./qbqn.org][BQN's Quantum Noise]]
 2. [[./spodat.org][Songs to pave the seasons]]
 3. [[./hf.org][Helonium's Hartree-Fock program]]
-4. [[./si.org][Scheme interpreter à la SICP]]
+4. [[./si.org][Scheming a mise-en-abîme in BQN]]
 
 #+HTML: </div>

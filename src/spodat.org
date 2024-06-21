@@ -2,7 +2,8 @@
 #+TITLE: Songs to pave the seasons
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 
-Analysis of my [[https://support.spotify.com/us/article/understanding-my-data/][Spotify data]] for the period 2016-2024.
+I have analyzed my Spotify data[fn:1] for the period 2016-2024. The results accurately represent
+my actual music taste.
 
 ** Technical details
 
@@ -21,7 +22,7 @@ artists, elapsed time, and the length of the desired result.
   s‿a‿m‿l ← ⟨7, 8, 3, 1+↕20⟩
 #+end_src
 
-Define a (50 chars) dyadic block function to execute the queries:
+We define a (50 chars) dyadic block function to execute the queries:
 
 #+begin_src bqn :results none :tangle ./bqn/spodat.bqn
   Q ← {l≍˘∾(⍷𝕨⊸⊏˘)¨ l⊏ ((⍒(+´m⊸⊏˘)¨)⊸⊏ 𝕨⊸⊏˘⊐⊸⊔⊢) >1⊏¨ 𝕩}
@@ -93,7 +94,7 @@ Define a (50 chars) dyadic block function to execute the queries:
 
 ** Bonus: Opeth anthology
 
-This is the Opeth album I would recommend anyone. The query function needs to be modified a bit for generating it.
+This is the Opeth album I would recommend to anyone. The query function needs to be modified a bit for generating it.
 But before that, let's look at the [[https://www.opeth.com/releases/albums][official discography]]:
 
 #+begin_src bqn :results none :exports both :tangle ./bqn/spodat.bqn
@@ -125,3 +126,7 @@ Enjoy:
   8 "Harvest"                  
                               ┘
 #+end_example
+
+[fn:1] It is possible to request a detailed report of all user activity since the account was created. There are
+some [[https://support.spotify.com/us/article/understanding-my-data/][interesting fields]] in the data, but more advanced information, such as genre, requires querying the
+Spotify Web API, which is beyond the scope of this post.

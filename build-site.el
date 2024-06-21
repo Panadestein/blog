@@ -49,7 +49,7 @@
       (list
        (list "assets"
 	     :base-directory "./assets"
-	     :base-extension "css\\|ttf"
+	     :base-extension 'any
 	     :publishing-directory "./public/assets"
 	     :publishing-function 'org-publish-attachment
 	     :recursive t)

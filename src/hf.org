@@ -5,5 +5,7 @@
 We will implement the Hartree-Fock program from the classic [[https://store.doverpublications.com/products/9780486691862][Szabo-Ostlund]] text,
 a staple in quantum chemistry. If you have any experience in the field, chances are you know it well.
 If you don't, the BQN implementation will take you only a few cognitive units. Using this program,
-we will compute the energy of the HeH\(^+\) molecule. It may not look like much, but
-helonium was the very [[https://www.scientificamerican.com/article/the-first-molecule-in-the-universe/][first molecule]] formed in the universe.
+we will compute the energy of the HeH\(^+\) molecule[fn:1].
+
+
+[fn:1] It may not look like much, but helonium was the very [[https://www.scientificamerican.com/article/the-first-molecule-in-the-universe/][first molecule]] formed in the universe.

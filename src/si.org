@@ -1,3 +1,12 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
-#+TITLE: Scheme interpreter à la SICP
+#+TITLE: Scheming a mise-en-abîme in BQN
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+
+We will build and interpreter for a subset of the Scheme programming language,
+following Norvig's [[https://www.norvig.com/lispy.html][essay]]. An alternative reference would have been SICP's
+metacircular evaluator[fn:1], but I consider =lispy= a very elegant implementation
+targeting a non-Lisp host.
+
+[fn:1] I recommend SICP as further reading. Much like Louis Reasoner, I attempted
+solving all the problems in the book, but I haven't gotten very far.
+I believe there are some interesting Racket bits in my [[https://panadestein.github.io/solved-sicp/][solutions]], though.
