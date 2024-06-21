@@ -2,10 +2,23 @@
 #+TITLE: Scheming a mise-en-abîme in BQN
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 
+** Prelude
+
 We will build and interpreter for a subset of the Scheme programming language,
-following Norvig's [[https://www.norvig.com/lispy.html][essay]]. An alternative reference would have been SICP's
-metacircular evaluator[fn:1], but I consider =lispy= a very elegant implementation
-targeting a non-Lisp host.
+following Norvig's essays [[https://www.norvig.com/lispy.html][lis.py]] and [[https://www.norvig.com/lispy2.html][lispy.py]]. An alternative reference would
+have been of course SICP's metacircular evaluator[fn:1], but I consider the former a
+very elegant implementation if we have a non-Lisp host.
+
+** A Lisp quine
+
+Given the title of this post, I couldn't think of a better test for our
+interpreter than this one:
+
+#+begin_src racket
+  ((lambda (x) (list x (list (quote quote) x)))
+   (quote (lambda (x) (list x (list (quote quote) x))))) 
+#+end_src
+
 
 [fn:1] I recommend SICP as further reading. Much like Louis Reasoner, I attempted
 solving all the problems in the book, but I haven't gotten very far.
