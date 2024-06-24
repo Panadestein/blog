@@ -3,195 +3,13 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-06-24 Mon 11:44 -->
+<!-- 2024-06-24 Mon 13:57 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>The Hartree-Fock program from Szabo-Ostlund</title>
+<meta name="author" content="Ramón L. Panadés-Barrueta, PhD" />
 <meta name="generator" content="Org Mode" />
-<style type="text/css">
-  #content { max-width: 60em; margin: auto; }
-  .title  { text-align: center;
-             margin-bottom: .2em; }
-  .subtitle { text-align: center;
-              font-size: medium;
-              font-weight: bold;
-              margin-top:0; }
-  .todo   { font-family: monospace; color: red; }
-  .done   { font-family: monospace; color: green; }
-  .priority { font-family: monospace; color: orange; }
-  .tag    { background-color: #eee; font-family: monospace;
-            padding: 2px; font-size: 80%; font-weight: normal; }
-  .timestamp { color: #bebebe; }
-  .timestamp-kwd { color: #5f9ea0; }
-  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
-  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
-  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
-  .underline { text-decoration: underline; }
-  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
-  p.verse { margin-left: 3%; }
-  pre {
-    border: 1px solid #e6e6e6;
-    border-radius: 3px;
-    background-color: #f2f2f2;
-    padding: 8pt;
-    font-family: monospace;
-    overflow: auto;
-    margin: 1.2em;
-  }
-  pre.src {
-    position: relative;
-    overflow: auto;
-  }
-  pre.src:before {
-    display: none;
-    position: absolute;
-    top: -8px;
-    right: 12px;
-    padding: 3px;
-    color: #555;
-    background-color: #f2f2f299;
-  }
-  pre.src:hover:before { display: inline; margin-top: 14px;}
-  /* Languages per Org manual */
-  pre.src-asymptote:before { content: 'Asymptote'; }
-  pre.src-awk:before { content: 'Awk'; }
-  pre.src-authinfo::before { content: 'Authinfo'; }
-  pre.src-C:before { content: 'C'; }
-  /* pre.src-C++ doesn't work in CSS */
-  pre.src-clojure:before { content: 'Clojure'; }
-  pre.src-css:before { content: 'CSS'; }
-  pre.src-D:before { content: 'D'; }
-  pre.src-ditaa:before { content: 'ditaa'; }
-  pre.src-dot:before { content: 'Graphviz'; }
-  pre.src-calc:before { content: 'Emacs Calc'; }
-  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
-  pre.src-fortran:before { content: 'Fortran'; }
-  pre.src-gnuplot:before { content: 'gnuplot'; }
-  pre.src-haskell:before { content: 'Haskell'; }
-  pre.src-hledger:before { content: 'hledger'; }
-  pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
-  pre.src-latex:before { content: 'LaTeX'; }
-  pre.src-ledger:before { content: 'Ledger'; }
-  pre.src-lisp:before { content: 'Lisp'; }
-  pre.src-lilypond:before { content: 'Lilypond'; }
-  pre.src-lua:before { content: 'Lua'; }
-  pre.src-matlab:before { content: 'MATLAB'; }
-  pre.src-mscgen:before { content: 'Mscgen'; }
-  pre.src-ocaml:before { content: 'Objective Caml'; }
-  pre.src-octave:before { content: 'Octave'; }
-  pre.src-org:before { content: 'Org mode'; }
-  pre.src-oz:before { content: 'OZ'; }
-  pre.src-plantuml:before { content: 'Plantuml'; }
-  pre.src-processing:before { content: 'Processing.js'; }
-  pre.src-python:before { content: 'Python'; }
-  pre.src-R:before { content: 'R'; }
-  pre.src-ruby:before { content: 'Ruby'; }
-  pre.src-sass:before { content: 'Sass'; }
-  pre.src-scheme:before { content: 'Scheme'; }
-  pre.src-screen:before { content: 'Gnu Screen'; }
-  pre.src-sed:before { content: 'Sed'; }
-  pre.src-sh:before { content: 'shell'; }
-  pre.src-sql:before { content: 'SQL'; }
-  pre.src-sqlite:before { content: 'SQLite'; }
-  /* additional languages in org.el's org-babel-load-languages alist */
-  pre.src-forth:before { content: 'Forth'; }
-  pre.src-io:before { content: 'IO'; }
-  pre.src-J:before { content: 'J'; }
-  pre.src-makefile:before { content: 'Makefile'; }
-  pre.src-maxima:before { content: 'Maxima'; }
-  pre.src-perl:before { content: 'Perl'; }
-  pre.src-picolisp:before { content: 'Pico Lisp'; }
-  pre.src-scala:before { content: 'Scala'; }
-  pre.src-shell:before { content: 'Shell Script'; }
-  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
-  /* additional language identifiers per "defun org-babel-execute"
-       in ob-*.el */
-  pre.src-cpp:before  { content: 'C++'; }
-  pre.src-abc:before  { content: 'ABC'; }
-  pre.src-coq:before  { content: 'Coq'; }
-  pre.src-groovy:before  { content: 'Groovy'; }
-  /* additional language identifiers from org-babel-shell-names in
-     ob-shell.el: ob-shell is the only babel language using a lambda to put
-     the execution function name together. */
-  pre.src-bash:before  { content: 'bash'; }
-  pre.src-csh:before  { content: 'csh'; }
-  pre.src-ash:before  { content: 'ash'; }
-  pre.src-dash:before  { content: 'dash'; }
-  pre.src-ksh:before  { content: 'ksh'; }
-  pre.src-mksh:before  { content: 'mksh'; }
-  pre.src-posh:before  { content: 'posh'; }
-  /* Additional Emacs modes also supported by the LaTeX listings package */
-  pre.src-ada:before { content: 'Ada'; }
-  pre.src-asm:before { content: 'Assembler'; }
-  pre.src-caml:before { content: 'Caml'; }
-  pre.src-delphi:before { content: 'Delphi'; }
-  pre.src-html:before { content: 'HTML'; }
-  pre.src-idl:before { content: 'IDL'; }
-  pre.src-mercury:before { content: 'Mercury'; }
-  pre.src-metapost:before { content: 'MetaPost'; }
-  pre.src-modula-2:before { content: 'Modula-2'; }
-  pre.src-pascal:before { content: 'Pascal'; }
-  pre.src-ps:before { content: 'PostScript'; }
-  pre.src-prolog:before { content: 'Prolog'; }
-  pre.src-simula:before { content: 'Simula'; }
-  pre.src-tcl:before { content: 'tcl'; }
-  pre.src-tex:before { content: 'TeX'; }
-  pre.src-plain-tex:before { content: 'Plain TeX'; }
-  pre.src-verilog:before { content: 'Verilog'; }
-  pre.src-vhdl:before { content: 'VHDL'; }
-  pre.src-xml:before { content: 'XML'; }
-  pre.src-nxml:before { content: 'XML'; }
-  /* add a generic configuration mode; LaTeX export needs an additional
-     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
-  pre.src-conf:before { content: 'Configuration File'; }
-
-  table { border-collapse:collapse; }
-  caption.t-above { caption-side: top; }
-  caption.t-bottom { caption-side: bottom; }
-  td, th { vertical-align:top;  }
-  th.org-right  { text-align: center;  }
-  th.org-left   { text-align: center;   }
-  th.org-center { text-align: center; }
-  td.org-right  { text-align: right;  }
-  td.org-left   { text-align: left;   }
-  td.org-center { text-align: center; }
-  dt { font-weight: bold; }
-  .footpara { display: inline; }
-  .footdef  { margin-bottom: 1em; }
-  .figure { padding: 1em; }
-  .figure p { text-align: center; }
-  .equation-container {
-    display: table;
-    text-align: center;
-    width: 100%;
-  }
-  .equation {
-    vertical-align: middle;
-  }
-  .equation-label {
-    display: table-cell;
-    text-align: right;
-    vertical-align: middle;
-  }
-  .inlinetask {
-    padding: 10px;
-    border: 2px solid gray;
-    margin: 10px;
-    background: #ffffcc;
-  }
-  #org-div-home-and-up
-   { text-align: right; font-size: 70%; white-space: nowrap; }
-  textarea { overflow-x: auto; }
-  .linenr { font-size: smaller }
-  .code-highlighted { background-color: #ffff00; }
-  .org-info-js_info-navigation { border-style: none; }
-  #org-info-js_console-label
-    { font-size: 10px; font-weight: bold; white-space: nowrap; }
-  .org-info-js_search-highlight
-    { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { }
-</style>
+<link rel="stylesheet" type="text/css" href="../../assets/style.css"/>
 </head>
 <body>
 <div id="content" class="content">
@@ -201,144 +19,147 @@ This is pretty much the original code listed in Appendix B of the legendary <a h
 minimal modifications introduced <a href="http://www.ccl.net/cca/software/SOURCES/FORTRAN/szabo/index.html">here</a>. The code was developed in <a href="https://www.math-cs.gordon.edu/courses/cs323/FORTRAN/fortran.html">Fortran IV</a> and ran in a <a href="https://en.wikipedia.org/wiki/PDP-10">PDP-10</a>.
 </p>
 
+<details>
+<summary>Source code</summary>
+
 <div class="org-src-container">
-<pre class="src src-fortran" id="orgf723100">C********************************************************************
-C
-C MINIMAL BASIS STO-3G CALCULATION ON HEH+
-C
-C THIS IS A LITTLE DUMMY MAIN PROGRAM WHICH CALLS HFCALC
-C
-C APPENDIX B: TWO-ELECTRON SELF-CONSISTENT-FIELD PROGRAM
-C OF MODERN QUANTUM CHEMISTRY by
-C Attila Szabo and Neil S. Ostlund
-C Ed. 2nd (1989) Dover Publications INC.
-C
-C Labourly Typed by Michael Zitolo (Feb., 2005)
-C Edited and Compiled by Michael Zitolo and Xihua Chen
-C
-C Cleaned up and debugged again by Andrew Long (2012) 
-C                   and Daniele (kalium) Dondi (2013)
-C*********************************************************************
+<pre class="src src-fortran" id="org8f6b4b0"><span class="org-comment-delimiter">C********************************************************************</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">MINIMAL BASIS STO-3G CALCULATION ON HEH+</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">THIS IS A LITTLE DUMMY MAIN PROGRAM WHICH CALLS HFCALC</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">APPENDIX B: TWO-ELECTRON SELF-CONSISTENT-FIELD PROGRAM</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">OF MODERN QUANTUM CHEMISTRY by</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">Attila Szabo and Neil S. Ostlund</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">Ed. 2nd (1989) Dover Publications INC.</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">Labourly Typed by Michael Zitolo (Feb., 2005)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">Edited and Compiled by Michael Zitolo and Xihua Chen</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">Cleaned up and debugged again by Andrew Long (2012) </span>
+<span class="org-comment-delimiter">C                   </span><span class="org-comment">and Daniele (kalium) Dondi (2013)</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      IOP=1
-      N=3
-      R=1.4632D0
-      ZETA1=2.0925D0
-      ZETA2=1.24D0
-      ZA=2.0D0
-      ZB=1.0D0
-      CALL HFCALC(IOP,N,R,ZETA1,ZETA2,ZA,ZB)
-      END
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      IOP=<span class="org-highlight-numbers-number">1</span>
+      N=<span class="org-highlight-numbers-number">3</span>
+      R=<span class="org-highlight-numbers-number">1.4632D0</span>
+      ZETA1=<span class="org-highlight-numbers-number">2.0925D0</span>
+      ZETA2=<span class="org-highlight-numbers-number">1.24D0</span>
+      ZA=<span class="org-highlight-numbers-number">2.0D0</span>
+      ZB=<span class="org-highlight-numbers-number">1.0D0</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">HFCALC</span><span class="org-rainbow-delimiters-depth-1">(</span>IOP,N,R,ZETA1,ZETA2,ZA,ZB<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      SUBROUTINE HFCALC(IOP,N,R,ZETA1,ZETA2,ZA,ZB)
-C
-C DOES A HARTREE-FOCK CALCULATION FOR A TWO-ELECTRON DIATOMIC
-C USING THE 1S MINIMAL STO-NG BASIS SET
-C MINIMAL BASIS SET HAS BASIS FUNCTIONS 1 AND 2 ON NUCLEI A AND B
-C
-C IOP=0 NO PRINTING WHATSOEVER (TO OPTIMIZE EXPONENTS, SAY)
-C IOP=1 PRINT ONLY CONVERGED RESULTS
-C IOP=2 PRINT EVERY ITERATION
-C N STO-NG CALCULATION (N=1,2 OR 3)
-C R BONDLENGTH (AU)
-C ZETA1 SLATER ORBITAL EXPONENT (FUNCTION 1)
-C ZETA2 SLATER ORBITAL EXPONENT (FUNCTION 2)
-C ZA ATOMIC NUMBER (ATOM A)
-C ZB ATOMIC NUMBER (ATOM B)
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">SUBROUTINE</span> <span class="org-function-name">HFCALC</span><span class="org-rainbow-delimiters-depth-1">(</span>IOP,N,R,ZETA1,ZETA2,ZA,ZB<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">DOES A HARTREE-FOCK CALCULATION FOR A TWO-ELECTRON DIATOMIC</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">USING THE 1S MINIMAL STO-NG BASIS SET</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">MINIMAL BASIS SET HAS BASIS FUNCTIONS 1 AND 2 ON NUCLEI A AND B</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">IOP=0 NO PRINTING WHATSOEVER (TO OPTIMIZE EXPONENTS, SAY)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">IOP=1 PRINT ONLY CONVERGED RESULTS</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">IOP=2 PRINT EVERY ITERATION</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">N STO-NG CALCULATION (N=1,2 OR 3)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">R BONDLENGTH (AU)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">ZETA1 SLATER ORBITAL EXPONENT (FUNCTION 1)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">ZETA2 SLATER ORBITAL EXPONENT (FUNCTION 2)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">ZA ATOMIC NUMBER (ATOM A)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">ZB ATOMIC NUMBER (ATOM B)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      IF (IOP.EQ.0) GO TO 20
-      PRINT 10,N,ZA,ZB
-   10 FORMAT(' ',2X,'STO-',I1,'G FOR ATOMIC NUMBERS ',F5.2,' AND ',
-     $ F5.2//)
-   20 CONTINUE
-C CALCULATE ALL THE ONE AND TWO ELECTRON INTEGRALS
-      CALL INTGRL(IOP,N,R,ZETA1,ZETA2,ZA,ZB)
-C BE INEFFICIENT AND PUT ALL INTEGRALS IN PRETTY ARRAYS
-      CALL COLECT(IOP,N,R,ZETA1,ZETA2,ZA,ZB)
-C PERFORM THE SCF CALCULATION
-      CALL SCF(IOP,N,R,ZETA1,ZETA2,ZA,ZB)
-      RETURN
-      END
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.EQ.</span>0<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">20</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">10</span>,N,ZA,ZB
+   <span class="org-highlight-numbers-number">10</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-string">' '</span>,<span class="org-highlight-numbers-number">2X</span>,<span class="org-string">'STO-'</span>,I1,<span class="org-string">'G FOR ATOMIC NUMBERS '</span>,F5.2,<span class="org-string">' AND '</span>,
+     <span class="org-string">$</span> F5.2//<span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">20</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATE ALL THE ONE AND TWO ELECTRON INTEGRALS</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">INTGRL</span><span class="org-rainbow-delimiters-depth-1">(</span>IOP,N,R,ZETA1,ZETA2,ZA,ZB<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">BE INEFFICIENT AND PUT ALL INTEGRALS IN PRETTY ARRAYS</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">COLECT</span><span class="org-rainbow-delimiters-depth-1">(</span>IOP,N,R,ZETA1,ZETA2,ZA,ZB<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">PERFORM THE SCF CALCULATION</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">SCF</span><span class="org-rainbow-delimiters-depth-1">(</span>IOP,N,R,ZETA1,ZETA2,ZA,ZB<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      SUBROUTINE INTGRL(IOP,N,R,ZETA1,ZETA2,ZA,ZB)
-C
-C CALCULATES ALL THE BASIC INTEGRALS NEEDED FOR SCF CALCULATION
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">SUBROUTINE</span> <span class="org-function-name">INTGRL</span><span class="org-rainbow-delimiters-depth-1">(</span>IOP,N,R,ZETA1,ZETA2,ZA,ZB<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATES ALL THE BASIC INTEGRALS NEEDED FOR SCF CALCULATION</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      COMMON/INT/S12,T11,T12,T22,V11A,V12A,V22A,V11B,V12B,V22B,
-     $ V1111,V2111,V2121,V2211,V2221,V2222
-      DIMENSION COEF(3,3),EXPON(3,3),D1(3),A1(3),D2(3),A2(3)
-      DATA PI/3.1415926535898D0/
-C THESE ARE THE CONTRACTION COEFFICIENTS AND EXPONENTS FOR
-C A NORMALIZED SLATER ORBITAL WITH EXPONENT 1.0 IN TERMS OF
-C NORMALIZED 1S PRIMITIVE GAUSSIANS
-      DATA COEF,EXPON/1.0D0,2*0.0D0,0.678914D0,0.430129D0,0.0D0,
-     $ 0.444635D0,0.535328D0,0.154329D0,0.270950D0,2*0.0D0,0.151623D0,
-     $ 0.851819D0,0.0D0,0.109818D0,0.405771D0,2.22766D0/
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">COMMON</span>/<span class="org-variable-name">INT</span>/S12,T11,T12,T22,V11A,V12A,V22A,V11B,V12B,V22B,
+     <span class="org-string">$</span> V1111,V2111,V2121,V2211,V2221,V2222
+      <span class="org-type">DIMENSION</span> <span class="org-variable-name">COEF</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">3</span><span class="org-rainbow-delimiters-depth-1">)</span>,<span class="org-variable-name">EXPON</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">3</span><span class="org-rainbow-delimiters-depth-1">)</span>,<span class="org-variable-name">D1</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3</span><span class="org-rainbow-delimiters-depth-1">)</span>,<span class="org-variable-name">A1</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3</span><span class="org-rainbow-delimiters-depth-1">)</span>,<span class="org-variable-name">D2</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3</span><span class="org-rainbow-delimiters-depth-1">)</span>,<span class="org-variable-name">A2</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">PI</span>/<span class="org-highlight-numbers-number">3.1415926535898D0</span>/
+<span class="org-comment-delimiter">C </span><span class="org-comment">THESE ARE THE CONTRACTION COEFFICIENTS AND EXPONENTS FOR</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">A NORMALIZED SLATER ORBITAL WITH EXPONENT 1.0 IN TERMS OF</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">NORMALIZED 1S PRIMITIVE GAUSSIANS</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">COEF</span>,<span class="org-variable-name">EXPON</span>/<span class="org-highlight-numbers-number">1.0D0</span>,<span class="org-highlight-numbers-number">2</span>*<span class="org-highlight-numbers-number">0.0D0</span>,<span class="org-highlight-numbers-number">0.678914D0</span>,<span class="org-highlight-numbers-number">0.430129D0</span>,<span class="org-highlight-numbers-number">0.0D0</span>,
+     <span class="org-string">$</span> <span class="org-highlight-numbers-number">0.444635D0</span>,<span class="org-highlight-numbers-number">0.535328D0</span>,<span class="org-highlight-numbers-number">0.154329D0</span>,<span class="org-highlight-numbers-number">0.270950D0</span>,<span class="org-highlight-numbers-number">2</span>*<span class="org-highlight-numbers-number">0.0D0</span>,<span class="org-highlight-numbers-number">0.151623D0</span>,
+     <span class="org-string">$</span> <span class="org-highlight-numbers-number">0.851819D0</span>,<span class="org-highlight-numbers-number">0.0D0</span>,<span class="org-highlight-numbers-number">0.109818D0</span>,<span class="org-highlight-numbers-number">0.405771D0</span>,<span class="org-highlight-numbers-number">2.22766D0</span>/
       R2=R*R
-C SCALE THE EXPONENTS (A) OF PRIMITIVE GAUSSIANS
-C INCLUDE NORMALIZATION IN CONTRACTION COEFFICIENTS (D)
-      DO 10 I=1,N
-      A1(I)=EXPON(I,N)*(ZETA1**2)
-      D1(I)=COEF(I,N)*((2.0D0*A1(I)/PI)**0.75D0)
-      A2(I)=EXPON(I,N)*(ZETA2**2)
-      D2(I)=COEF(I,N)*((2.0D0*A2(I)/PI)**0.75D0)
-   10 CONTINUE
-C D AND A ARE NOW THE CONTRACTION COEFFICIENTS AND EXPONENTS
-C IN TERMS OF UNNORMALIZED PRIMITIVE GAUSSIANS
-      S12=0.0D0
-      T11=0.0D0
-      T12=0.0D0
-      T22=0.0D0
-      V11A=0.0D0
-      V12A=0.0D0
-      V22A=0.0D0
-      V11B=0.0D0
-      V12B=0.0D0
-      V22B=0.0D0
-      V1111=0.0D0
-      V2111=0.0D0
-      V2121=0.0D0
-      V2211=0.0D0
-      V2221=0.0D0
-      V2222=0.0D0
-C CALCULATE ONE-ELECTRON INTEGRALS
-C CENTER A IS FIRST ATOM, CETER B IS SECOND ATOM
-C ORIGIN IS ON CENTER A
-C V12A = OFF-DIAGONAL NUCLEAR ATTRACTION TO CENTER A, ETC.
-      DO 20 I=1,N
-      DO 20 J=1,N
-C RAP2 = SQUARED DISTANCE BETWEEN CENTER A AND CENTER P, ETC.
-      RAP=A2(J)*R/(A1(I)+A2(J))
-      RAP2=RAP**2
-      RBP2=(R-RAP)**2
-      S12=S12+S(A1(I),A2(J),R2)*D1(I)*D2(J)
-      T11=T11+T(A1(I),A1(J),0.0D0)*D1(I)*D1(J)
-      T12=T12+T(A1(I),A2(J),R2)*D1(I)*D2(J)
-      T22=T22+T(A2(I),A2(J),0.0D0)*D2(I)*D2(J)
-      V11A=V11A+V(A1(I),A1(J),0.0D0,0.0D0,ZA)*D1(I)*D1(J)
-      V12A=V12A+V(A1(I),A2(J),R2,RAP2,ZA)*D1(I)*D2(J)
-      V22A=V22A+V(A2(I),A2(J),0.0D0,R2,ZA)*D2(I)*D2(J)
-      V11B=V11B+V(A1(I),A1(J),0.0D0,R2,ZB)*D1(I)*D1(J)
-      V12B=V12B+V(A1(I),A2(J),R2,RBP2,ZB)*D1(I)*D2(J)
-      V22B=V22B+V(A2(I),A2(J),0.0D0,0.0D0,ZB)*D2(I)*D2(J)
-   20 CONTINUE
-C CALCULATE TWO-ELECTRON INTEGRALS
-      DO 30 I=1,N
-      DO 30 J=1,N
-      DO 30 K=1,N
-      DO 30 L=1,N
-      RAP=A2(I)*R/(A2(I)+A1(J))
+<span class="org-comment-delimiter">C </span><span class="org-comment">SCALE THE EXPONENTS (A) OF PRIMITIVE GAUSSIANS</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">INCLUDE NORMALIZATION IN CONTRACTION COEFFICIENTS (D)</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">10</span> I=<span class="org-highlight-numbers-number">1</span>,N
+      A1<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>=EXPON<span class="org-rainbow-delimiters-depth-1">(</span>I,N<span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-rainbow-delimiters-depth-1">(</span>ZETA1**<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      D1<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>=COEF<span class="org-rainbow-delimiters-depth-1">(</span>I,N<span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-highlight-numbers-number">2.0D0</span>*A1<span class="org-rainbow-delimiters-depth-3">(</span>I<span class="org-rainbow-delimiters-depth-3">)</span>/PI<span class="org-rainbow-delimiters-depth-2">)</span>**<span class="org-highlight-numbers-number">0.75D0</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      A2<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>=EXPON<span class="org-rainbow-delimiters-depth-1">(</span>I,N<span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-rainbow-delimiters-depth-1">(</span>ZETA2**<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      D2<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>=COEF<span class="org-rainbow-delimiters-depth-1">(</span>I,N<span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-highlight-numbers-number">2.0D0</span>*A2<span class="org-rainbow-delimiters-depth-3">(</span>I<span class="org-rainbow-delimiters-depth-3">)</span>/PI<span class="org-rainbow-delimiters-depth-2">)</span>**<span class="org-highlight-numbers-number">0.75D0</span><span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">10</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">D AND A ARE NOW THE CONTRACTION COEFFICIENTS AND EXPONENTS</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">IN TERMS OF UNNORMALIZED PRIMITIVE GAUSSIANS</span>
+      S12=<span class="org-highlight-numbers-number">0.0D0</span>
+      T11=<span class="org-highlight-numbers-number">0.0D0</span>
+      T12=<span class="org-highlight-numbers-number">0.0D0</span>
+      T22=<span class="org-highlight-numbers-number">0.0D0</span>
+      V11A=<span class="org-highlight-numbers-number">0.0D0</span>
+      V12A=<span class="org-highlight-numbers-number">0.0D0</span>
+      V22A=<span class="org-highlight-numbers-number">0.0D0</span>
+      V11B=<span class="org-highlight-numbers-number">0.0D0</span>
+      V12B=<span class="org-highlight-numbers-number">0.0D0</span>
+      V22B=<span class="org-highlight-numbers-number">0.0D0</span>
+      V1111=<span class="org-highlight-numbers-number">0.0D0</span>
+      V2111=<span class="org-highlight-numbers-number">0.0D0</span>
+      V2121=<span class="org-highlight-numbers-number">0.0D0</span>
+      V2211=<span class="org-highlight-numbers-number">0.0D0</span>
+      V2221=<span class="org-highlight-numbers-number">0.0D0</span>
+      V2222=<span class="org-highlight-numbers-number">0.0D0</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATE ONE-ELECTRON INTEGRALS</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CENTER A IS FIRST ATOM, CETER B IS SECOND ATOM</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">ORIGIN IS ON CENTER A</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">V12A = OFF-DIAGONAL NUCLEAR ATTRACTION TO CENTER A, ETC.</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">20</span> I=<span class="org-highlight-numbers-number">1</span>,N
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">20</span> J=<span class="org-highlight-numbers-number">1</span>,N
+<span class="org-comment-delimiter">C </span><span class="org-comment">RAP2 = SQUARED DISTANCE BETWEEN CENTER A AND CENTER P, ETC.</span>
+      RAP=A2<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>*R/<span class="org-rainbow-delimiters-depth-1">(</span>A1<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>+A2<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      RAP2=RAP**<span class="org-highlight-numbers-number">2</span>
+      RBP2=<span class="org-rainbow-delimiters-depth-1">(</span>R-RAP<span class="org-rainbow-delimiters-depth-1">)</span>**<span class="org-highlight-numbers-number">2</span>
+      S12=S12+S<span class="org-rainbow-delimiters-depth-1">(</span>A1<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,R2<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>
+      T11=T11+T<span class="org-rainbow-delimiters-depth-1">(</span>A1<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,<span class="org-highlight-numbers-number">0.0D0</span><span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>
+      T12=T12+T<span class="org-rainbow-delimiters-depth-1">(</span>A1<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,R2<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>
+      T22=T22+T<span class="org-rainbow-delimiters-depth-1">(</span>A2<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,<span class="org-highlight-numbers-number">0.0D0</span><span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>
+      V11A=V11A+V<span class="org-rainbow-delimiters-depth-1">(</span>A1<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,<span class="org-highlight-numbers-number">0.0D0</span>,<span class="org-highlight-numbers-number">0.0D0</span>,ZA<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>
+      V12A=V12A+V<span class="org-rainbow-delimiters-depth-1">(</span>A1<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,R2,RAP2,ZA<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>
+      V22A=V22A+V<span class="org-rainbow-delimiters-depth-1">(</span>A2<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,<span class="org-highlight-numbers-number">0.0D0</span>,R2,ZA<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>
+      V11B=V11B+V<span class="org-rainbow-delimiters-depth-1">(</span>A1<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,<span class="org-highlight-numbers-number">0.0D0</span>,R2,ZB<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>
+      V12B=V12B+V<span class="org-rainbow-delimiters-depth-1">(</span>A1<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,R2,RBP2,ZB<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>
+      V22B=V22B+V<span class="org-rainbow-delimiters-depth-1">(</span>A2<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,<span class="org-highlight-numbers-number">0.0D0</span>,<span class="org-highlight-numbers-number">0.0D0</span>,ZB<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">20</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATE TWO-ELECTRON INTEGRALS</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">30</span> I=<span class="org-highlight-numbers-number">1</span>,N
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">30</span> J=<span class="org-highlight-numbers-number">1</span>,N
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">30</span> K=<span class="org-highlight-numbers-number">1</span>,N
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">30</span> L=<span class="org-highlight-numbers-number">1</span>,N
+      RAP=A2<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*R/<span class="org-rainbow-delimiters-depth-1">(</span>A2<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>+A1<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
       RBP=R-RAP
-      RAQ=A2(K)*R/(A2(K)+A1(L))
+      RAQ=A2<span class="org-rainbow-delimiters-depth-1">(</span>K<span class="org-rainbow-delimiters-depth-1">)</span>*R/<span class="org-rainbow-delimiters-depth-1">(</span>A2<span class="org-rainbow-delimiters-depth-2">(</span>K<span class="org-rainbow-delimiters-depth-2">)</span>+A1<span class="org-rainbow-delimiters-depth-2">(</span>L<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
       RBQ=R-RAQ
       RPQ=RAP-RAQ
       RAP2=RAP*RAP
@@ -346,434 +167,436 @@ C CALCULATE TWO-ELECTRON INTEGRALS
       RAQ2=RAQ*RAQ
       RBQ2=RBQ*RBQ
       RPQ2=RPQ*RPQ
-      V1111=V1111+TWOE(A1(I),A1(J),A1(K),A1(L),0.0D0,0.0D0,0.0D0)
-     $ *D1(I)*D1(J)*D1(K)*D1(L)
-      V2111=V2111+TWOE(A2(I),A1(J),A1(K),A1(L),R2,0.0D0,RAP2)
-     $ *D2(I)*D1(J)*D1(K)*D1(L)
-      V2121=V2121+TWOE(A2(I),A1(J),A2(K),A1(L),R2,R2,RPQ2)
-     $ *D2(I)*D1(J)*D2(K)*D1(L)
-      V2211=V2211+TWOE(A2(I),A2(J),A1(K),A1(L),0.0D0,0.0D0,R2)
-     $ *D2(I)*D2(J)*D1(K)*D1(L)
-      V2221=V2221+TWOE(A2(I),A2(J),A2(K),A1(L),0.0D0,R2,RBQ2)
-     $ *D2(I)*D2(J)*D2(K)*D1(L)
-      V2222=V2222+TWOE(A2(I),A2(J),A2(K),A2(L),0.0D0,0.0D0,0.0D0)
-     $ *D2(I)*D2(J)*D2(K)*D2(L)
-   30 CONTINUE
-      IF (IOP.EQ.0) GO TO 90
-      PRINT 40
-   40 FORMAT(3X,'R',10X,'ZETA1',6X,'ZETA2',6X,'S12',8X,'T11'/)
-      PRINT 50, R,ZETA1,ZETA2,S12,T11
-   50 FORMAT(5F11.6//)
-      PRINT 60
-   60 FORMAT(3X,'T12',8X,'T22',8X,'V11A',7X,'V12A',7X,'V22A'/)
-      PRINT 50, T12,T22,V11A,V12A,V22A
-      PRINT 70
-   70 FORMAT(3X,4HV11B,7X,4HV12B,7X,4HV22B,7X,'V1111',6X,'V2111'/)
-      PRINT 50, V11B,V12B,V22B,V1111,V2111
-      PRINT 80
-   80 FORMAT(3X,5HV2121,6X,5HV2211,6X,5HV2221,6X,5HV2222/)
-      PRINT 50, V2121,V2211,V2221,V2222
-   90 RETURN
-      END
+      V1111=V1111+TWOE<span class="org-rainbow-delimiters-depth-1">(</span>A1<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>K<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>L<span class="org-rainbow-delimiters-depth-2">)</span>,<span class="org-highlight-numbers-number">0.0D0</span>,<span class="org-highlight-numbers-number">0.0D0</span>,<span class="org-highlight-numbers-number">0.0D0</span><span class="org-rainbow-delimiters-depth-1">)</span>
+     <span class="org-string">$</span> *D1<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>K<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>L<span class="org-rainbow-delimiters-depth-1">)</span>
+      V2111=V2111+TWOE<span class="org-rainbow-delimiters-depth-1">(</span>A2<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>K<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>L<span class="org-rainbow-delimiters-depth-2">)</span>,R2,<span class="org-highlight-numbers-number">0.0D0</span>,RAP2<span class="org-rainbow-delimiters-depth-1">)</span>
+     <span class="org-string">$</span> *D2<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>K<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>L<span class="org-rainbow-delimiters-depth-1">)</span>
+      V2121=V2121+TWOE<span class="org-rainbow-delimiters-depth-1">(</span>A2<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>K<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>L<span class="org-rainbow-delimiters-depth-2">)</span>,R2,R2,RPQ2<span class="org-rainbow-delimiters-depth-1">)</span>
+     <span class="org-string">$</span> *D2<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>K<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>L<span class="org-rainbow-delimiters-depth-1">)</span>
+      V2211=V2211+TWOE<span class="org-rainbow-delimiters-depth-1">(</span>A2<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>K<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>L<span class="org-rainbow-delimiters-depth-2">)</span>,<span class="org-highlight-numbers-number">0.0D0</span>,<span class="org-highlight-numbers-number">0.0D0</span>,R2<span class="org-rainbow-delimiters-depth-1">)</span>
+     <span class="org-string">$</span> *D2<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>K<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>L<span class="org-rainbow-delimiters-depth-1">)</span>
+      V2221=V2221+TWOE<span class="org-rainbow-delimiters-depth-1">(</span>A2<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>K<span class="org-rainbow-delimiters-depth-2">)</span>,A1<span class="org-rainbow-delimiters-depth-2">(</span>L<span class="org-rainbow-delimiters-depth-2">)</span>,<span class="org-highlight-numbers-number">0.0D0</span>,R2,RBQ2<span class="org-rainbow-delimiters-depth-1">)</span>
+     <span class="org-string">$</span> *D2<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>K<span class="org-rainbow-delimiters-depth-1">)</span>*D1<span class="org-rainbow-delimiters-depth-1">(</span>L<span class="org-rainbow-delimiters-depth-1">)</span>
+      V2222=V2222+TWOE<span class="org-rainbow-delimiters-depth-1">(</span>A2<span class="org-rainbow-delimiters-depth-2">(</span>I<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>J<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>K<span class="org-rainbow-delimiters-depth-2">)</span>,A2<span class="org-rainbow-delimiters-depth-2">(</span>L<span class="org-rainbow-delimiters-depth-2">)</span>,<span class="org-highlight-numbers-number">0.0D0</span>,<span class="org-highlight-numbers-number">0.0D0</span>,<span class="org-highlight-numbers-number">0.0D0</span><span class="org-rainbow-delimiters-depth-1">)</span>
+     <span class="org-string">$</span> *D2<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>J<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>K<span class="org-rainbow-delimiters-depth-1">)</span>*D2<span class="org-rainbow-delimiters-depth-1">(</span>L<span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">30</span> <span class="org-keyword">CONTINUE</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.EQ.</span>0<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">90</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">40</span>
+   <span class="org-highlight-numbers-number">40</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3X</span>,<span class="org-string">'R'</span>,<span class="org-highlight-numbers-number">10X</span>,<span class="org-string">'ZETA1'</span>,<span class="org-highlight-numbers-number">6X</span>,<span class="org-string">'ZETA2'</span>,<span class="org-highlight-numbers-number">6X</span>,<span class="org-string">'S12'</span>,<span class="org-highlight-numbers-number">8X</span>,<span class="org-string">'T11'</span>/<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">50</span>, R,ZETA1,ZETA2,S12,T11
+   <span class="org-highlight-numbers-number">50</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">5F11.6</span>//<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">60</span>
+   <span class="org-highlight-numbers-number">60</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3X</span>,<span class="org-string">'T12'</span>,<span class="org-highlight-numbers-number">8X</span>,<span class="org-string">'T22'</span>,<span class="org-highlight-numbers-number">8X</span>,<span class="org-string">'V11A'</span>,<span class="org-highlight-numbers-number">7X</span>,<span class="org-string">'V12A'</span>,<span class="org-highlight-numbers-number">7X</span>,<span class="org-string">'V22A'</span>/<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">50</span>, T12,T22,V11A,V12A,V22A
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">70</span>
+   <span class="org-highlight-numbers-number">70</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3X</span>,<span class="org-highlight-numbers-number">4HV11B</span>,<span class="org-highlight-numbers-number">7X</span>,<span class="org-highlight-numbers-number">4HV12B</span>,<span class="org-highlight-numbers-number">7X</span>,<span class="org-highlight-numbers-number">4HV22B</span>,<span class="org-highlight-numbers-number">7X</span>,<span class="org-string">'V1111'</span>,<span class="org-highlight-numbers-number">6X</span>,<span class="org-string">'V2111'</span>/<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">50</span>, V11B,V12B,V22B,V1111,V2111
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">80</span>
+   <span class="org-highlight-numbers-number">80</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3X</span>,<span class="org-highlight-numbers-number">5HV2121</span>,<span class="org-highlight-numbers-number">6X</span>,<span class="org-highlight-numbers-number">5HV2211</span>,<span class="org-highlight-numbers-number">6X</span>,<span class="org-highlight-numbers-number">5HV2221</span>,<span class="org-highlight-numbers-number">6X</span>,<span class="org-highlight-numbers-number">5HV2222</span>/<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">50</span>, V2121,V2211,V2221,V2222
+   <span class="org-highlight-numbers-number">90</span> <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      FUNCTION F0(ARG)
-C
-C CALCULATES THE F FUNCTION
-C FO ONLY (S-TYPE ORBITALS)
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">FUNCTION</span> <span class="org-function-name">F0</span><span class="org-rainbow-delimiters-depth-1">(</span>ARG<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATES THE F FUNCTION</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">FO ONLY (S-TYPE ORBITALS)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      DATA PI/3.1415926535898D0/
-      IF (ARG.LT.1.0D-6) GO TO 10
-C F0 IN TERMS OF THE ERROR FUNCTION
-      F0=DSQRT(PI/ARG)*DERFOTHER(DSQRT(ARG))/2.0D0
-      GO TO 20
-C ASYMPTOTIC VALUE FOR SMALL ARGUMENTS
-   10 F0=1.0D0-ARG/3.0D0
-   20 CONTINUE
-      RETURN
-      END
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">PI</span>/<span class="org-highlight-numbers-number">3.1415926535898D0</span>/
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>ARG<span class="org-keyword">.LT.</span>1.0D-<span class="org-highlight-numbers-number">6</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">10</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">F0 IN TERMS OF THE ERROR FUNCTION</span>
+      F0=<span class="org-builtin">DSQRT</span><span class="org-rainbow-delimiters-depth-1">(</span>PI/ARG<span class="org-rainbow-delimiters-depth-1">)</span>*DERFOTHER<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-builtin">DSQRT</span><span class="org-rainbow-delimiters-depth-2">(</span>ARG<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>/<span class="org-highlight-numbers-number">2.0D0</span>
+      <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">20</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">ASYMPTOTIC VALUE FOR SMALL ARGUMENTS</span>
+   <span class="org-highlight-numbers-number">10</span> F0=<span class="org-highlight-numbers-number">1.0D0</span>-ARG/<span class="org-highlight-numbers-number">3.0D0</span>
+   <span class="org-highlight-numbers-number">20</span> <span class="org-keyword">CONTINUE</span>
+      <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      FUNCTION DERFOTHER(ARG)
-C
-C CALCULATES THE ERROR FUNCTION ACCORDING TO A RATIONAL
-C APPROXIMATION FROM M. ARBRAMOWITZ AND I.A. STEGUN,
-C HANDBOOK OF MATHEMATICAL FUNCTIONS, DOVER.
-C ABSOLUTE ERROR IS LESS THAN 1.5*10**(-7)
-C CAN BE REPLACED BY A BUILT-IN FUNCTION ON SOME MACHINES
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">FUNCTION</span> <span class="org-function-name">DERFOTHER</span><span class="org-rainbow-delimiters-depth-1">(</span>ARG<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATES THE ERROR FUNCTION ACCORDING TO A RATIONAL</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">APPROXIMATION FROM M. ARBRAMOWITZ AND I.A. STEGUN,</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">HANDBOOK OF MATHEMATICAL FUNCTIONS, DOVER.</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">ABSOLUTE ERROR IS LESS THAN 1.5*10**(-7)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CAN BE REPLACED BY A BUILT-IN FUNCTION ON SOME MACHINES</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      DIMENSION A(5)
-      DATA P/0.3275911D0/
-      DATA A/0.254829592D0,-0.284496736D0,1.421413741D0,
-     $ -1.453152027D0,1.061405429D0/
-      T=1.0D0/(1.0D0+P*ARG)
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DIMENSION</span> <span class="org-variable-name">A</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">5</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">P</span>/<span class="org-highlight-numbers-number">0.3275911D0</span>/
+      <span class="org-type">DATA</span> <span class="org-variable-name">A</span>/<span class="org-highlight-numbers-number">0.254829592D0</span>,-<span class="org-highlight-numbers-number">0.284496736D0</span>,<span class="org-highlight-numbers-number">1.421413741D0</span>,
+     <span class="org-string">$</span> -<span class="org-highlight-numbers-number">1.453152027D0</span>,<span class="org-highlight-numbers-number">1.061405429D0</span>/
+      T=<span class="org-highlight-numbers-number">1.0D0</span>/<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1.0D0</span>+P*ARG<span class="org-rainbow-delimiters-depth-1">)</span>
       TN=T
-      POLY=A(1)*TN
-      DO 10 I=2,5
+      POLY=A<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>*TN
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">10</span> I=<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">5</span>
       TN=TN*T
-      POLY=POLY+A(I)*TN
-   10 CONTINUE
-      DERFOTHER=1.0D0-POLY*DEXP(-ARG*ARG)
-      RETURN
-      END
+      POLY=POLY+A<span class="org-rainbow-delimiters-depth-1">(</span>I<span class="org-rainbow-delimiters-depth-1">)</span>*TN
+   <span class="org-highlight-numbers-number">10</span> <span class="org-keyword">CONTINUE</span>
+      DERFOTHER=<span class="org-highlight-numbers-number">1.0D0</span>-POLY*<span class="org-builtin">DEXP</span><span class="org-rainbow-delimiters-depth-1">(</span>-ARG*ARG<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      FUNCTION S(A,B,RAB2)
-C
-C CALCULATES OVERLAPS FOR UN-NORMALIZED PRIMITIVES
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">FUNCTION</span> <span class="org-function-name">S</span><span class="org-rainbow-delimiters-depth-1">(</span>A,B,RAB2<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATES OVERLAPS FOR UN-NORMALIZED PRIMITIVES</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      DATA PI/3.1415926535898D0/
-      S=(PI/(A+B))**1.5D0*DEXP(-A*B*RAB2/(A+B))
-      RETURN
-      END
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">PI</span>/<span class="org-highlight-numbers-number">3.1415926535898D0</span>/
+      S=<span class="org-rainbow-delimiters-depth-1">(</span>PI/<span class="org-rainbow-delimiters-depth-2">(</span>A+B<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>**<span class="org-highlight-numbers-number">1.5D0</span>*<span class="org-builtin">DEXP</span><span class="org-rainbow-delimiters-depth-1">(</span>-A*B*RAB2/<span class="org-rainbow-delimiters-depth-2">(</span>A+B<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      FUNCTION T(A,B,RAB2)
-C
-C CALCULATES KINETIC ENERGY INTEGRALS FOR UN-NORMALIZED PRIMITIVES
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">FUNCTION</span> <span class="org-function-name">T</span><span class="org-rainbow-delimiters-depth-1">(</span>A,B,RAB2<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATES KINETIC ENERGY INTEGRALS FOR UN-NORMALIZED PRIMITIVES</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      DATA PI/3.1415926535898D0/
-      T=A*B/(A+B)*(3.0D0-2.0D0*A*B*RAB2/(A+B))*(PI/(A+B))**1.5D0
-     $ *DEXP(-A*B*RAB2/(A+B))
-      RETURN
-      END
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">PI</span>/<span class="org-highlight-numbers-number">3.1415926535898D0</span>/
+      T=A*B/<span class="org-rainbow-delimiters-depth-1">(</span>A+B<span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3.0D0</span>-<span class="org-highlight-numbers-number">2.0D0</span>*A*B*RAB2/<span class="org-rainbow-delimiters-depth-2">(</span>A+B<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-rainbow-delimiters-depth-1">(</span>PI/<span class="org-rainbow-delimiters-depth-2">(</span>A+B<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>**<span class="org-highlight-numbers-number">1.5D0</span>
+     <span class="org-string">$</span> *<span class="org-builtin">DEXP</span><span class="org-rainbow-delimiters-depth-1">(</span>-A*B*RAB2/<span class="org-rainbow-delimiters-depth-2">(</span>A+B<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      FUNCTION V(A,B,RAB2,RCP2,ZC)
-C
-C CALCULATES UN-NORMALIZED NUCLEAR ATTRACTION INTEGRALS
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">FUNCTION</span> <span class="org-function-name">V</span><span class="org-rainbow-delimiters-depth-1">(</span>A,B,RAB2,RCP2,ZC<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATES UN-NORMALIZED NUCLEAR ATTRACTION INTEGRALS</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      DATA PI/3.1415926535898D0/
-      V=2.0D0*PI/(A+B)*F0((A+B)*RCP2)*DEXP(-A*B*RAB2/(A+B))
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">PI</span>/<span class="org-highlight-numbers-number">3.1415926535898D0</span>/
+      V=<span class="org-highlight-numbers-number">2.0D0</span>*PI/<span class="org-rainbow-delimiters-depth-1">(</span>A+B<span class="org-rainbow-delimiters-depth-1">)</span>*F0<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">(</span>A+B<span class="org-rainbow-delimiters-depth-2">)</span>*RCP2<span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-builtin">DEXP</span><span class="org-rainbow-delimiters-depth-1">(</span>-A*B*RAB2/<span class="org-rainbow-delimiters-depth-2">(</span>A+B<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
       V=-V*ZC
-      RETURN
-      END
+      <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      FUNCTION TWOE(A,B,C,D,RAB2,RCD2,RPQ2)
-C
-C CALCULATES TWO-ELECTRON INTEGRALS FOR UN-NORMALIZED PRIMITIVES
-C A,B,C,D ARE THE EXPONENTS ALPHA, BETA, ETC.
-C RAB2 EQUALS SQUARED DISTANCE BETWEEN CENTER A AND CENTER B, ETC.
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">FUNCTION</span> <span class="org-function-name">TWOE</span><span class="org-rainbow-delimiters-depth-1">(</span>A,B,C,D,RAB2,RCD2,RPQ2<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATES TWO-ELECTRON INTEGRALS FOR UN-NORMALIZED PRIMITIVES</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">A,B,C,D ARE THE EXPONENTS ALPHA, BETA, ETC.</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">RAB2 EQUALS SQUARED DISTANCE BETWEEN CENTER A AND CENTER B, ETC.</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      DATA PI/3.1415926535898D0/
-      TWOE=2.0D0*(PI**2.5D0)/((A+B)*(C+D)*DSQRT(A+B+C+D))
-     $ *F0((A+B)*(C+D)*RPQ2/(A+B+C+D))
-     $ *DEXP(-A*B*RAB2/(A+B)-C*D*RCD2/(C+D))
-      RETURN
-      END
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">PI</span>/<span class="org-highlight-numbers-number">3.1415926535898D0</span>/
+      TWOE=<span class="org-highlight-numbers-number">2.0D0</span>*<span class="org-rainbow-delimiters-depth-1">(</span>PI**<span class="org-highlight-numbers-number">2.5D0</span><span class="org-rainbow-delimiters-depth-1">)</span>/<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">(</span>A+B<span class="org-rainbow-delimiters-depth-2">)</span>*<span class="org-rainbow-delimiters-depth-2">(</span>C+D<span class="org-rainbow-delimiters-depth-2">)</span>*<span class="org-builtin">DSQRT</span><span class="org-rainbow-delimiters-depth-2">(</span>A+B+C+D<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+     <span class="org-string">$</span> *F0<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">(</span>A+B<span class="org-rainbow-delimiters-depth-2">)</span>*<span class="org-rainbow-delimiters-depth-2">(</span>C+D<span class="org-rainbow-delimiters-depth-2">)</span>*RPQ2/<span class="org-rainbow-delimiters-depth-2">(</span>A+B+C+D<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+     <span class="org-string">$</span> *<span class="org-builtin">DEXP</span><span class="org-rainbow-delimiters-depth-1">(</span>-A*B*RAB2/<span class="org-rainbow-delimiters-depth-2">(</span>A+B<span class="org-rainbow-delimiters-depth-2">)</span>-C*D*RCD2/<span class="org-rainbow-delimiters-depth-2">(</span>C+D<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      SUBROUTINE COLECT(IOP,N,R,ZETA1,ZETA2,ZA,ZB)
-C
-C THIS TAKES THE BASIC INTEGRALS FROM COMMON AND ASSEMBLES THE
-C RELEVENT MATRICES, THAT IS S,H,X,XT, AND TWO-ELECTRON INTEGRALS
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">SUBROUTINE</span> <span class="org-function-name">COLECT</span><span class="org-rainbow-delimiters-depth-1">(</span>IOP,N,R,ZETA1,ZETA2,ZA,ZB<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">THIS TAKES THE BASIC INTEGRALS FROM COMMON AND ASSEMBLES THE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">RELEVENT MATRICES, THAT IS S,H,X,XT, AND TWO-ELECTRON INTEGRALS</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      COMMON/MATRIX/S(2,2),X(2,2),XT(2,2),H(2,2),F(2,2),G(2,2),C(2,2),
-     $ FPRIME(2,2),CPRIME(2,2),P(2,2),OLDP(2,2),TT(2,2,2,2),E(2,2)
-      COMMON/INT/S12,T11,T12,T22,V11A,V12A,V22A,V11B,V12B,V22B,
-     $ V1111,V2111,V2121,V2211,V2221,V2222
-C FORM CORE HAMILTONIAN
-      H(1,1)=T11+V11A+V11B
-      H(1,2)=T12+V12A+V12B
-      H(2,1)=H(1,2)
-      H(2,2)=T22+V22A+V22B
-C FORM OVERLAP MATRIX
-      S(1,1)=1.0D0
-      S(1,2)=S12
-      S(2,1)=S(1,2)
-      S(2,2)=1.0D0
-C USE CANONICAL ORTHOGONALIZATION
-      X(1,1)=1.0D0/DSQRT(2.0D0*(1.0D0+S12))
-      X(2,1)=X(1,1)
-      X(1,2)=1.0D0/DSQRT(2.0D0*(1.0D0-S12))
-      X(2,2)=-X(1,2)
-C TRANSPOSE OF TRANSFORMATION MATRIX
-      XT(1,1)=X(1,1)
-      XT(1,2)=X(2,1)
-      XT(2,1)=X(1,2)
-      XT(2,2)=X(2,2)
-C MATRIX OF TWO-ELE�CTRON INTEGRALS
-      TT(1,1,1,1)=V1111
-      TT(2,1,1,1)=V2111
-      TT(1,2,1,1)=V2111
-      TT(1,1,2,1)=V2111
-      TT(1,1,1,2)=V2111
-      TT(2,1,2,1)=V2121
-      TT(1,2,2,1)=V2121
-      TT(2,1,1,2)=V2121
-      TT(1,2,1,2)=V2121
-      TT(2,2,1,1)=V2211
-      TT(1,1,2,2)=V2211
-      TT(2,2,2,1)=V2221
-      TT(2,2,1,2)=V2221
-      TT(2,1,2,2)=V2221
-      TT(1,2,2,2)=V2221
-      TT(2,2,2,2)=V2222
-      IF (IOP.EQ.0) GO TO 40
-      CALL MATOUT(S,2,2,2,2,4HS   )
-      CALL MATOUT(X,2,2,2,2,4HX   )
-      CALL MATOUT(H,2,2,2,2,4HH   )
-      PRINT 10
-   10 FORMAT(//)
-      DO 30 I=1,2
-      DO 30 J=1,2
-      DO 30 K=1,2
-      DO 30 L=1,2
-      PRINT 20, I,J,K,L,TT(I,J,K,L)
-   20 FORMAT(3X,1H(,4I2,2H ),F10.6)
-   30 CONTINUE
-   40 RETURN
-      END
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">COMMON</span>/<span class="org-variable-name">MATRIX</span>/S<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,XT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,H<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,F<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,G<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,
+     <span class="org-string">$</span> FPRIME<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,CPRIME<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,P<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,OLDP<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,E<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">COMMON</span>/<span class="org-variable-name">INT</span>/S12,T11,T12,T22,V11A,V12A,V22A,V11B,V12B,V22B,
+     <span class="org-string">$</span> V1111,V2111,V2121,V2211,V2221,V2222
+<span class="org-comment-delimiter">C </span><span class="org-comment">FORM CORE HAMILTONIAN</span>
+      H<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=T11+V11A+V11B
+      H<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=T12+V12A+V12B
+      H<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=H<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      H<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=T22+V22A+V22B
+<span class="org-comment-delimiter">C </span><span class="org-comment">FORM OVERLAP MATRIX</span>
+      S<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-highlight-numbers-number">1.0D0</span>
+      S<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=S12
+      S<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=S<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      S<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-highlight-numbers-number">1.0D0</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">USE CANONICAL ORTHOGONALIZATION</span>
+      X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-highlight-numbers-number">1.0D0</span>/<span class="org-builtin">DSQRT</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2.0D0</span>*<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-highlight-numbers-number">1.0D0</span>+S12<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-highlight-numbers-number">1.0D0</span>/<span class="org-builtin">DSQRT</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2.0D0</span>*<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-highlight-numbers-number">1.0D0</span>-S12<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=-X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">TRANSPOSE OF TRANSFORMATION MATRIX</span>
+      XT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      XT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      XT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      XT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">MATRIX OF TWO-ELE&#65533;CTRON INTEGRALS</span>
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=V1111
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2111
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2111
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2111
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2111
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2121
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2121
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2121
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2121
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2211
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2211
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2221
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2221
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2221
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2221
+      TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=V2222
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.EQ.</span>0<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">40</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>S,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HS</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>X,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HX</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>H,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HH</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">10</span>
+   <span class="org-highlight-numbers-number">10</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span>//<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">30</span> I=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">30</span> J=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">30</span> K=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">30</span> L=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">20</span>, I,J,K,L,TT<span class="org-rainbow-delimiters-depth-1">(</span>I,J,K,L<span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">20</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">3X</span>,<span class="org-highlight-numbers-number">1H</span><span class="org-rainbow-delimiters-depth-2">(</span>,<span class="org-highlight-numbers-number">4I2</span>,<span class="org-highlight-numbers-number">2H</span> <span class="org-rainbow-delimiters-depth-2">)</span>,F10.6<span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">30</span> <span class="org-keyword">CONTINUE</span>
+   <span class="org-highlight-numbers-number">40</span> <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      SUBROUTINE SCF(IOP,N,R,ZETA1,ZETA2,ZA,ZB)
-C
-C PERFORMS THE SCF ITERATIONS
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">SUBROUTINE</span> <span class="org-function-name">SCF</span><span class="org-rainbow-delimiters-depth-1">(</span>IOP,N,R,ZETA1,ZETA2,ZA,ZB<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">PERFORMS THE SCF ITERATIONS</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      COMMON/MATRIX/S(2,2),X(2,2),XT(2,2),H(2,2),F(2,2),G(2,2),C(2,2),
-     $ FPRIME(2,2),CPRIME(2,2),P(2,2),OLDP(2,2),TT(2,2,2,2),E(2,2)
-      DATA PI/3.1415926535898D0/
-C CONVERGENCE CRITERION FOR DENSITY MATRIX
-      DATA CRIT/1.0D-4/
-C MAXIMUM NUMBER OF ITERATIONS
-      DATA MAXIT/25/
-C ITERATION NUMBER
-      ITER=0
-C USE CORE-HAMILTONIAN FOR INITIAL GUESS AT F, I.E. (P=0)
-      DO 10 I=1,2
-      DO 10 J=1,2
-   10 P(I,J)=0.0D0
-      IF (IOP.LT.2) GO TO 20
-      CALL MATOUT(P,2,2,2,2,4HP   )
-C START OF ITERATION LOOP
-   20 ITER=ITER+1
-      IF (IOP.LT.2) GO TO 40
-      PRINT 30, ITER
-   30 FORMAT(/,4X,28HSTART OF ITERATION NUMBER = ,I2)
-   40 CONTINUE
-C FORM TWO-ELECTRON PART OF FOCK MATRIX FROM P
-      CALL FORMG
-      IF (IOP.LT.2) GO TO 50
-      CALL MATOUT(G,2,2,2,2,4HG   )
-   50 CONTINUE
-C ADD CORE HAMILTONIAN TO GET FOCK MATRIX
-      DO 60 I=1,2
-      DO 60 J=1,2
-      F(I,J) = H(I,J)+G(I,J)
-   60 CONTINUE
-C CALCULATE ELECTRONIC ENERGY
-      EN=0.0D0
-      DO 70 I=1,2
-      DO 70 J=1,2
-      EN=EN+0.5D0*P(I,J)*(H(I,J)+F(I,J))
-   70 CONTINUE
-      IF (IOP.LT.2) GO TO 90
-      CALL MATOUT(F,2,2,2,2,4HF   )
-      PRINT 80, EN
-   80 FORMAT(///,4X,20HELECTRONIC ENERGY = ,D20.12)
-   90 CONTINUE
-C TRANSFORM FOCK MATRIX USING G FOR TEMPORARY STORAGE
-      CALL MULT(F,X,G,2,2)
-      CALL MULT(XT,G,FPRIME,2,2)
-C DIAGONALIZE TRANSFORMED FOCK MATRIX
-      CALL DIAG(FPRIME,CPRIME,E)
-C TRANSFORM EIGENVECTORS TO GET MATRIX C
-      CALL MULT(X,CPRIME,C,2,2)
-C FORM NEW DENSITY MATRIX
-      DO 100 I=1,2
-      DO 100 J=1,2
-C SAVE PRESENT DENSITY MATRIX
-C BEFORE CREATING NEW ONE
-      OLDP(I,J)=P(I,J)
-      P(I,J)=0.0D0
-      DO 100 K=1,1
-      P(I,J)=P(I,J)+2.0D0*C(I,K)*C(J,K)
-  100 CONTINUE
-      IF (IOP.LT.2) GO TO 110
-      CALL MATOUT(FPRIME,2,2,2,2,"F'  ")
-      CALL MATOUT(CPRIME,2,2,2,2,"C'  ")
-      CALL MATOUT(E,2,2,2,2,'E   ')
-      CALL MATOUT(C,2,2,2,2,'C   ')
-      CALL MATOUT(P,2,2,2,2,'P   ')
-  110 CONTINUE
-C CALCULATE DELTA
-      DELTA=0.0D0
-      DO 120 I=1,2
-      DO 120 J=1,2
-      DELTA=DELTA+(P(I,J)-OLDP(I,J))**2
-  120 CONTINUE
-      DELTA=DSQRT(DELTA/4.0D0)
-      IF (IOP.EQ.0) GO TO 140
-      PRINT 130, DELTA
-  130 FORMAT(/,4X,39HDELTA(CONVERGENCE OF DENSITY MATRIX) =
-     $F10.6,/)
-  140 CONTINUE
-C CHECK FOR CONVERGENCE
-      IF (DELTA.LT.CRIT) GO TO 160
-C NOT YET CONVERGED
-C TEST FOR MAXIMUM NUMBER OF ITERATIONS
-C IF MAXIMUM NUMBER NOT YET REACHED
-C GO BACK FOR ANOTHER ITERATION
-      IF(ITER.LT.MAXIT) GO TO 20
-C SOMETHING WRONG HERE
-      PRINT 150
-  150 FORMAT(4X,21HNO CONVERGENCE IN SCF)
-      STOP
-  160 CONTINUE
-C CALCULATION CONVERGED IF IT GOT HERE
-C ADD NUCLEAR REPULSION TO GET TOTAL ENERGY
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">COMMON</span>/<span class="org-variable-name">MATRIX</span>/S<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,XT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,H<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,F<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,G<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,
+     <span class="org-string">$</span> FPRIME<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,CPRIME<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,P<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,OLDP<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,E<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">PI</span>/<span class="org-highlight-numbers-number">3.1415926535898D0</span>/
+<span class="org-comment-delimiter">C </span><span class="org-comment">CONVERGENCE CRITERION FOR DENSITY MATRIX</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">CRIT</span>/<span class="org-highlight-numbers-number">1.0D</span>-<span class="org-highlight-numbers-number">4</span>/
+<span class="org-comment-delimiter">C </span><span class="org-comment">MAXIMUM NUMBER OF ITERATIONS</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">MAXIT</span>/<span class="org-highlight-numbers-number">25</span>/
+<span class="org-comment-delimiter">C </span><span class="org-comment">ITERATION NUMBER</span>
+      ITER=<span class="org-highlight-numbers-number">0</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">USE CORE-HAMILTONIAN FOR INITIAL GUESS AT F, I.E. (P=0)</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">10</span> I=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">10</span> J=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+   <span class="org-highlight-numbers-number">10</span> P<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-highlight-numbers-number">0.0D0</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.LT.</span>2<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">20</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>P,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HP</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">START OF ITERATION LOOP</span>
+   <span class="org-highlight-numbers-number">20</span> ITER=ITER+<span class="org-highlight-numbers-number">1</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.LT.</span>2<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">40</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">30</span>, ITER
+   <span class="org-highlight-numbers-number">30</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span>/,<span class="org-highlight-numbers-number">4X</span>,<span class="org-highlight-numbers-number">28HSTART</span> OF ITERATION NUMBER = ,I2<span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">40</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">FORM TWO-ELECTRON PART OF FOCK MATRIX FROM P</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">FORMG</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.LT.</span>2<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">50</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>G,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HG</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">50</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">ADD CORE HAMILTONIAN TO GET FOCK MATRIX</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">60</span> I=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">60</span> J=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      F<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span> = H<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>+G<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">60</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATE ELECTRONIC ENERGY</span>
+      EN=<span class="org-highlight-numbers-number">0.0D0</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">70</span> I=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">70</span> J=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      EN=EN+<span class="org-highlight-numbers-number">0.5D0</span>*P<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-rainbow-delimiters-depth-1">(</span>H<span class="org-rainbow-delimiters-depth-2">(</span>I,J<span class="org-rainbow-delimiters-depth-2">)</span>+F<span class="org-rainbow-delimiters-depth-2">(</span>I,J<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">70</span> <span class="org-keyword">CONTINUE</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.LT.</span>2<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">90</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>F,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HF</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">80</span>, EN
+   <span class="org-highlight-numbers-number">80</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span>///,<span class="org-highlight-numbers-number">4X</span>,<span class="org-highlight-numbers-number">20HELECTRONIC</span> ENERGY = ,D20.12<span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">90</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">TRANSFORM FOCK MATRIX USING G FOR TEMPORARY STORAGE</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MULT</span><span class="org-rainbow-delimiters-depth-1">(</span>F,X,G,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MULT</span><span class="org-rainbow-delimiters-depth-1">(</span>XT,G,FPRIME,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">DIAGONALIZE TRANSFORMED FOCK MATRIX</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">DIAG</span><span class="org-rainbow-delimiters-depth-1">(</span>FPRIME,CPRIME,E<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">TRANSFORM EIGENVECTORS TO GET MATRIX C</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MULT</span><span class="org-rainbow-delimiters-depth-1">(</span>X,CPRIME,C,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">FORM NEW DENSITY MATRIX</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">100</span> I=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">100</span> J=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">SAVE PRESENT DENSITY MATRIX</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">BEFORE CREATING NEW ONE</span>
+      OLDP<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>=P<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>
+      P<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-highlight-numbers-number">0.0D0</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">100</span> K=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>
+      P<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>=P<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>+<span class="org-highlight-numbers-number">2.0D0</span>*C<span class="org-rainbow-delimiters-depth-1">(</span>I,K<span class="org-rainbow-delimiters-depth-1">)</span>*C<span class="org-rainbow-delimiters-depth-1">(</span>J,K<span class="org-rainbow-delimiters-depth-1">)</span>
+  <span class="org-highlight-numbers-number">100</span> <span class="org-keyword">CONTINUE</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.LT.</span>2<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">110</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>FPRIME,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-string">"F'  "</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>CPRIME,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-string">"C'  "</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>E,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-string">'E   '</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>C,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-string">'C   '</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>P,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-string">'P   '</span><span class="org-rainbow-delimiters-depth-1">)</span>
+  <span class="org-highlight-numbers-number">110</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATE DELTA</span>
+      DELTA=<span class="org-highlight-numbers-number">0.0D0</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">120</span> I=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">120</span> J=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      DELTA=DELTA+<span class="org-rainbow-delimiters-depth-1">(</span>P<span class="org-rainbow-delimiters-depth-2">(</span>I,J<span class="org-rainbow-delimiters-depth-2">)</span>-OLDP<span class="org-rainbow-delimiters-depth-2">(</span>I,J<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>**<span class="org-highlight-numbers-number">2</span>
+  <span class="org-highlight-numbers-number">120</span> <span class="org-keyword">CONTINUE</span>
+      DELTA=<span class="org-builtin">DSQRT</span><span class="org-rainbow-delimiters-depth-1">(</span>DELTA/<span class="org-highlight-numbers-number">4.0D0</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.EQ.</span>0<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">140</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">130</span>, DELTA
+  <span class="org-highlight-numbers-number">130</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span>/,<span class="org-highlight-numbers-number">4X</span>,<span class="org-highlight-numbers-number">39HDELTA</span><span class="org-rainbow-delimiters-depth-2">(</span>CONVERGENCE OF DENSITY MATRIX<span class="org-rainbow-delimiters-depth-2">)</span> =
+     <span class="org-string">$</span>F10.6,/<span class="org-rainbow-delimiters-depth-1">)</span>
+  <span class="org-highlight-numbers-number">140</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CHECK FOR CONVERGENCE</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>DELTA<span class="org-keyword">.LT.</span>CRIT<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">160</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">NOT YET CONVERGED</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">TEST FOR MAXIMUM NUMBER OF ITERATIONS</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">IF MAXIMUM NUMBER NOT YET REACHED</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">GO BACK FOR ANOTHER ITERATION</span>
+      <span class="org-keyword">IF</span><span class="org-rainbow-delimiters-depth-1">(</span>ITER<span class="org-keyword">.LT.</span>MAXIT<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">20</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">SOMETHING WRONG HERE</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">150</span>
+  <span class="org-highlight-numbers-number">150</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">4X</span>,<span class="org-highlight-numbers-number">21HNO</span> CONVERGENCE IN SCF<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">STOP</span>
+  <span class="org-highlight-numbers-number">160</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATION CONVERGED IF IT GOT HERE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">ADD NUCLEAR REPULSION TO GET TOTAL ENERGY</span>
       ENT=EN+ZA*ZB/R
-      IF (IOP.EQ.0) GO TO 180
-      PRINT 170, EN, ENT
-  170 FORMAT(//,4X,21HCALCULATION CONVERGED,//,
-     $4X,20HELECTRONIC ENERGY = ,D20.12,//,
-     $4X,20HTOTAL ENERGY =      ,D20.12   )
-  180 CONTINUE
-      IF (IOP.NE.1) GO TO 190
-C PRINT OUT THE FINAL RESULTS IF
-C HAVE NOT DONE SO ALREADY
-      CALL MATOUT(G,2,2,2,2,4HG   )
-      CALL MATOUT(F,2,2,2,2,4HF   )
-      CALL MATOUT(E,2,2,2,2,4HE   )
-      CALL MATOUT(C,2,2,2,2,4HC   )
-      CALL MATOUT(P,2,2,2,2,4HP   )
-  190 CONTINUE
-C PS MATRIX HAS MULLIKEN POPULATIONS
-      CALL MULT(P,S,OLDP,2,2)
-      IF(IOP.EQ.0) GO TO 200
-      CALL MATOUT(OLDP,2,2,2,2,4HPS   )
-  200 CONTINUE
-      RETURN
-      END
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.EQ.</span>0<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">180</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">170</span>, EN, ENT
+  <span class="org-highlight-numbers-number">170</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span>//,<span class="org-highlight-numbers-number">4X</span>,<span class="org-highlight-numbers-number">21HCALCULATION</span> CONVERGED,//,
+     <span class="org-string">$</span>4X,<span class="org-highlight-numbers-number">20HELECTRONIC</span> ENERGY = ,D20.12,//,
+     <span class="org-string">$</span>4X,<span class="org-highlight-numbers-number">20HTOTAL</span> ENERGY =      ,D20.12   <span class="org-rainbow-delimiters-depth-1">)</span>
+  <span class="org-highlight-numbers-number">180</span> <span class="org-keyword">CONTINUE</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.NE.</span>1<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">190</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">PRINT OUT THE FINAL RESULTS IF</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">HAVE NOT DONE SO ALREADY</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>G,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HG</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>F,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HF</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>E,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HE</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>C,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HC</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>P,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HP</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+  <span class="org-highlight-numbers-number">190</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">PS MATRIX HAS MULLIKEN POPULATIONS</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MULT</span><span class="org-rainbow-delimiters-depth-1">(</span>P,S,OLDP,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">IF</span><span class="org-rainbow-delimiters-depth-1">(</span>IOP<span class="org-keyword">.EQ.</span>0<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">200</span>
+      <span class="org-keyword">CALL</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>OLDP,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">4HPS</span>   <span class="org-rainbow-delimiters-depth-1">)</span>
+  <span class="org-highlight-numbers-number">200</span> <span class="org-keyword">CONTINUE</span>
+      <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      SUBROUTINE FORMG
-C
-C CALCULATES THE G MATRIX FROM THE DENSITY MATRIX
-C AND TWO-ELECTRON INTEGRALS
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">SUBROUTINE</span> <span class="org-function-name">FORMG</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">CALCULATES THE G MATRIX FROM THE DENSITY MATRIX</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">AND TWO-ELECTRON INTEGRALS</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      COMMON/MATRIX/S(2,2),X(2,2),XT(2,2),H(2,2),F(2,2),G(2,2),C(2,2),
-     $FPRIME(2,2),CPRIME(2,2),P(2,2),OLDP(2,2),TT(2,2,2,2),E(2,2)
-      DO 10 I=1,2
-      DO 10 J=1,2
-      G(I,J)=0.0D0
-      DO 10 K=1,2
-      DO 10 L=1,2
-      G(I,J)=G(I,J)+P(K,L)*(TT(I,J,K,L)-0.5D0*TT(I,L,K,J))
-   10 CONTINUE
-      RETURN
-      END
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">COMMON</span>/<span class="org-variable-name">MATRIX</span>/S<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,X<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,XT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,H<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,F<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,G<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,
+     <span class="org-string">$</span>FPRIME<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,CPRIME<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,P<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,OLDP<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,TT<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,E<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">10</span> I=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">10</span> J=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      G<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-highlight-numbers-number">0.0D0</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">10</span> K=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">10</span> L=<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>
+      G<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>=G<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>+P<span class="org-rainbow-delimiters-depth-1">(</span>K,L<span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-rainbow-delimiters-depth-1">(</span>TT<span class="org-rainbow-delimiters-depth-2">(</span>I,J,K,L<span class="org-rainbow-delimiters-depth-2">)</span>-<span class="org-highlight-numbers-number">0.5D0</span>*TT<span class="org-rainbow-delimiters-depth-2">(</span>I,L,K,J<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">10</span> <span class="org-keyword">CONTINUE</span>
+      <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      SUBROUTINE DIAG(F,C,E)
-C
-C DIAGONALIZES F TO GIVE EIGENVECTORS IN C AND EIGENVALUES IN E
-C THETA IS THE ANGLE DESCRIBING SOLUTION
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">SUBROUTINE</span> <span class="org-function-name">DIAG</span><span class="org-rainbow-delimiters-depth-1">(</span>F,C,E<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">DIAGONALIZES F TO GIVE EIGENVECTORS IN C AND EIGENVALUES IN E</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">THETA IS THE ANGLE DESCRIBING SOLUTION</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      DIMENSION F(2,2),C(2,2),E(2,2)
-      DATA PI/3.1415926535898D0/
-      IF (DABS(F(1,1)-F(2,2)).GT.1.0D-20) GO TO 10
-C HERE IS SYMMETRY DETERMINED SOLUTION (HOMONUCLEAR DIATOMIC)
-      THETA=PI/4.0D0
-      GO TO 20
-   10 CONTINUE
-C SOLUTION FOR HETERONUCLEAR DIATOMIC
-      THETA=0.5D0*DATAN(2.0D0*F(1,2)/(F(1,1)-F(2,2)))
-   20 CONTINUE
-      C(1,1)=DCOS(THETA)
-      C(2,1)=DSIN(THETA)
-      C(1,2)=DSIN(THETA)
-      C(2,2)=-DCOS(THETA)
-      E(1,1)=F(1,1)*DCOS(THETA)**2+F(2,2)*DSIN(THETA)**2
-     $ +F(1,2)*DSIN(2.0D0*THETA)
-      E(2,2)=F(2,2)*DCOS(THETA)**2+F(1,1)*DSIN(THETA)**2
-     $ -F(1,2)*DSIN(2.0D0*THETA)
-      E(2,1)=0.0D0
-      E(1,2)=0.0D0
-C ORDER EIGENVALUES AND EIGENVECTORS
-      IF (E(2,2).GT.E(1,1)) GO TO 30
-      TEMP=E(2,2)
-      E(2,2)=E(1,1)
-      E(1,1)=TEMP
-      TEMP=C(1,2)
-      C(1,2)=C(1,1)
-      C(1,1)=TEMP
-      TEMP=C(2,2)
-      C(2,2)=C(2,1)
-      C(2,1)=TEMP
-   30 RETURN
-      END
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DIMENSION</span> <span class="org-variable-name">F</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,<span class="org-variable-name">C</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>,<span class="org-variable-name">E</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DATA</span> <span class="org-variable-name">PI</span>/<span class="org-highlight-numbers-number">3.1415926535898D0</span>/
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span><span class="org-builtin">DABS</span><span class="org-rainbow-delimiters-depth-2">(</span>F<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-3">)</span>-F<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-keyword">.GT.</span>1.0D-<span class="org-highlight-numbers-number">20</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">10</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">HERE IS SYMMETRY DETERMINED SOLUTION (HOMONUCLEAR DIATOMIC)</span>
+      THETA=PI/<span class="org-highlight-numbers-number">4.0D0</span>
+      <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">20</span>
+   <span class="org-highlight-numbers-number">10</span> <span class="org-keyword">CONTINUE</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">SOLUTION FOR HETERONUCLEAR DIATOMIC</span>
+      THETA=<span class="org-highlight-numbers-number">0.5D0</span>*<span class="org-builtin">DATAN</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2.0D0</span>*F<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-2">)</span>/<span class="org-rainbow-delimiters-depth-2">(</span>F<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-3">)</span>-F<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">20</span> <span class="org-keyword">CONTINUE</span>
+      C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-builtin">DCOS</span><span class="org-rainbow-delimiters-depth-1">(</span>THETA<span class="org-rainbow-delimiters-depth-1">)</span>
+      C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-builtin">DSIN</span><span class="org-rainbow-delimiters-depth-1">(</span>THETA<span class="org-rainbow-delimiters-depth-1">)</span>
+      C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-builtin">DSIN</span><span class="org-rainbow-delimiters-depth-1">(</span>THETA<span class="org-rainbow-delimiters-depth-1">)</span>
+      C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=-<span class="org-builtin">DCOS</span><span class="org-rainbow-delimiters-depth-1">(</span>THETA<span class="org-rainbow-delimiters-depth-1">)</span>
+      E<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=F<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-builtin">DCOS</span><span class="org-rainbow-delimiters-depth-1">(</span>THETA<span class="org-rainbow-delimiters-depth-1">)</span>**<span class="org-highlight-numbers-number">2</span>+F<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-builtin">DSIN</span><span class="org-rainbow-delimiters-depth-1">(</span>THETA<span class="org-rainbow-delimiters-depth-1">)</span>**<span class="org-highlight-numbers-number">2</span>
+     <span class="org-string">$</span> +F<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-builtin">DSIN</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2.0D0</span>*THETA<span class="org-rainbow-delimiters-depth-1">)</span>
+      E<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=F<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-builtin">DCOS</span><span class="org-rainbow-delimiters-depth-1">(</span>THETA<span class="org-rainbow-delimiters-depth-1">)</span>**<span class="org-highlight-numbers-number">2</span>+F<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-builtin">DSIN</span><span class="org-rainbow-delimiters-depth-1">(</span>THETA<span class="org-rainbow-delimiters-depth-1">)</span>**<span class="org-highlight-numbers-number">2</span>
+     <span class="org-string">$</span> -F<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>*<span class="org-builtin">DSIN</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2.0D0</span>*THETA<span class="org-rainbow-delimiters-depth-1">)</span>
+      E<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-highlight-numbers-number">0.0D0</span>
+      E<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-highlight-numbers-number">0.0D0</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">ORDER EIGENVALUES AND EIGENVECTORS</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>E<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-keyword">.GT.</span>E<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-keyword">GO TO</span> <span class="org-highlight-numbers-number">30</span>
+      TEMP=E<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      E<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=E<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      E<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=TEMP
+      TEMP=C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=TEMP
+      TEMP=C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">2</span><span class="org-rainbow-delimiters-depth-1">)</span>=C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      C<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span><span class="org-rainbow-delimiters-depth-1">)</span>=TEMP
+   <span class="org-highlight-numbers-number">30</span> <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      SUBROUTINE MULT(A,B,C,IM,M)
-C
-C MULTIPLIES TWO SQUARE MATRICES A AND B TO GET C
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">SUBROUTINE</span> <span class="org-function-name">MULT</span><span class="org-rainbow-delimiters-depth-1">(</span>A,B,C,IM,M<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">MULTIPLIES TWO SQUARE MATRICES A AND B TO GET C</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      DIMENSION A(IM,IM),B(IM,IM),C(IM,IM)
-      DO 10 I=1,M
-      DO 10 J=1,M
-      C(I,J)=0.0D0
-      DO 10 K=1,M
-   10 C(I,J)=C(I,J)+A(I,K)*B(K,J)
-      RETURN
-      END
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DIMENSION</span> <span class="org-variable-name">A</span><span class="org-rainbow-delimiters-depth-1">(</span>IM,IM<span class="org-rainbow-delimiters-depth-1">)</span>,<span class="org-variable-name">B</span><span class="org-rainbow-delimiters-depth-1">(</span>IM,IM<span class="org-rainbow-delimiters-depth-1">)</span>,<span class="org-variable-name">C</span><span class="org-rainbow-delimiters-depth-1">(</span>IM,IM<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">10</span> I=<span class="org-highlight-numbers-number">1</span>,M
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">10</span> J=<span class="org-highlight-numbers-number">1</span>,M
+      C<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>=<span class="org-highlight-numbers-number">0.0D0</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">10</span> K=<span class="org-highlight-numbers-number">1</span>,M
+   <span class="org-highlight-numbers-number">10</span> C<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>=C<span class="org-rainbow-delimiters-depth-1">(</span>I,J<span class="org-rainbow-delimiters-depth-1">)</span>+A<span class="org-rainbow-delimiters-depth-1">(</span>I,K<span class="org-rainbow-delimiters-depth-1">)</span>*B<span class="org-rainbow-delimiters-depth-1">(</span>K,J<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 
-C*********************************************************************
-      SUBROUTINE MATOUT(A,IM,IN,M,N,LABEL)
-C
-C PRINT MATRICES OF SIZE M BY N
-C
-C*********************************************************************
+<span class="org-comment-delimiter">C*********************************************************************</span>
+      <span class="org-keyword">SUBROUTINE</span> <span class="org-function-name">MATOUT</span><span class="org-rainbow-delimiters-depth-1">(</span>A,IM,IN,M,N,LABEL<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C </span><span class="org-comment">PRINT MATRICES OF SIZE M BY N</span>
+<span class="org-comment-delimiter">C</span>
+<span class="org-comment-delimiter">C*********************************************************************</span>
 
-      IMPLICIT DOUBLE PRECISION(A-H,O-Z)
-      DIMENSION A(IM,IN)
-      IHIGH=0
-   10 LOW=IHIGH+1
-      IHIGH=IHIGH+5
-      IHIGH=MIN(IHIGH,N)
-      PRINT 20, LABEL,(I,I=LOW,IHIGH)
-   20 FORMAT(///,3X,5H THE ,A4,6H ARRAY,/,15X,5(10X,I3,6X)//)
-      DO 30 I=1,M
-   30 PRINT 40, I,(A(I,J),J=LOW,IHIGH)
-   40 FORMAT(I10,5X,5(1X,D18.10))
-      IF (N-IHIGH) 50,50,10
-   50 RETURN
-      END
+      <span class="org-type">IMPLICIT DOUBLE PRECISION</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">A</span>-H,<span class="org-variable-name">O</span>-Z<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-type">DIMENSION</span> <span class="org-variable-name">A</span><span class="org-rainbow-delimiters-depth-1">(</span>IM,IN<span class="org-rainbow-delimiters-depth-1">)</span>
+      IHIGH=<span class="org-highlight-numbers-number">0</span>
+   <span class="org-highlight-numbers-number">10</span> LOW=IHIGH+<span class="org-highlight-numbers-number">1</span>
+      IHIGH=IHIGH+<span class="org-highlight-numbers-number">5</span>
+      IHIGH=<span class="org-builtin">MIN</span><span class="org-rainbow-delimiters-depth-1">(</span>IHIGH,N<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">20</span>, LABEL,<span class="org-rainbow-delimiters-depth-1">(</span>I,I=LOW,IHIGH<span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">20</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span>///,<span class="org-highlight-numbers-number">3X</span>,<span class="org-highlight-numbers-number">5H</span> THE ,A4,<span class="org-highlight-numbers-number">6H</span> ARRAY,/,<span class="org-highlight-numbers-number">15X</span>,<span class="org-highlight-numbers-number">5</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-highlight-numbers-number">10X</span>,I3,<span class="org-highlight-numbers-number">6X</span><span class="org-rainbow-delimiters-depth-2">)</span>//<span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">DO</span> <span class="org-highlight-numbers-number">30</span> I=<span class="org-highlight-numbers-number">1</span>,M
+   <span class="org-highlight-numbers-number">30</span> <span class="org-keyword">PRINT</span> <span class="org-highlight-numbers-number">40</span>, I,<span class="org-rainbow-delimiters-depth-1">(</span>A<span class="org-rainbow-delimiters-depth-2">(</span>I,J<span class="org-rainbow-delimiters-depth-2">)</span>,J=LOW,IHIGH<span class="org-rainbow-delimiters-depth-1">)</span>
+   <span class="org-highlight-numbers-number">40</span> <span class="org-keyword">FORMAT</span><span class="org-rainbow-delimiters-depth-1">(</span>I10,<span class="org-highlight-numbers-number">5X</span>,<span class="org-highlight-numbers-number">5</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-highlight-numbers-number">1X</span>,D18.10<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+      <span class="org-keyword">IF</span> <span class="org-rainbow-delimiters-depth-1">(</span>N-IHIGH<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-highlight-numbers-number">50</span>,<span class="org-highlight-numbers-number">50</span>,<span class="org-highlight-numbers-number">10</span>
+   <span class="org-highlight-numbers-number">50</span> <span class="org-keyword">RETURN</span>
+      <span class="org-keyword">END</span>
 </pre>
 </div>
+
+</details>
 
 <p>
 The code is getting harder to compile with every update from <code>gfortran</code>, but it is still working under legacy options:
@@ -784,7 +607,7 @@ The code is getting harder to compile with every update from <code>gfortran</cod
 </pre>
 </div>
 
-<pre class="example" id="orgb887fbd">
+<pre class="example" id="orga9873e1">
  STO-3G FOR ATOMIC NUMBERS  2.00 AND  1.00
 
 
