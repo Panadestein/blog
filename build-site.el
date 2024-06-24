@@ -59,7 +59,7 @@
 	     :publishing-directory "./public/supp"
 	     :publishing-function 'org-publish-attachment
 	     :recursive t)
-       (list "tac"
+       (list "blog"
 	     :recursive t
 	     :base-directory "./src"
 	     :publishing-directory "./public"

@@ -1,8 +1,15 @@
 #+TITLE: The Hartree-Fock program from Szabo-Ostlund
 #+OPTIONS: html-postamble:nil
+#+OPTIONS: html-style:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../../assets/style.css"/>
 
 This is pretty much the original code listed in Appendix B of the legendary [[https://store.doverpublications.com/products/9780486691862][book]]. It has some
 minimal modifications introduced [[http://www.ccl.net/cca/software/SOURCES/FORTRAN/szabo/index.html][here]]. The code was developed in [[https://www.math-cs.gordon.edu/courses/cs323/FORTRAN/fortran.html][Fortran IV]] and ran in a [[https://en.wikipedia.org/wiki/PDP-10][PDP-10]].
+
+#+begin_export html
+<details>
+<summary>Source code</summary>
+#+end_export
 
 #+name: hf
 #+begin_src fortran :tangle hfso.f :main no
@@ -578,7 +585,9 @@ C*********************************************************************
       END
 #+end_src
 
-#+RESULTS:
+#+begin_export html
+</details>
+#+end_export
 
 The code is getting harder to compile with every update from =gfortran=, but it is still working under legacy options:
 
