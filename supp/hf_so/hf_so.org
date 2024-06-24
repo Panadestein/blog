@@ -1,3 +1,11 @@
+#+TITLE: The Hartree-Fock program from Szabo-Ostlund
+#+OPTIONS: html-postamble:nil
+
+This is pretty much the original code listed in Appendix B of the legendary [[https://store.doverpublications.com/products/9780486691862][book]]. It has some
+minimal modifications introduced [[http://www.ccl.net/cca/software/SOURCES/FORTRAN/szabo/index.html][here]]. The code was developed in [[https://www.math-cs.gordon.edu/courses/cs323/FORTRAN/fortran.html][Fortran IV]] and ran in a [[https://en.wikipedia.org/wiki/PDP-10][PDP-10]].
+
+#+name: hf
+#+begin_src fortran :tangle hfso.f :main no
 C********************************************************************
 C
 C MINIMAL BASIS STO-3G CALCULATION ON HEH+
@@ -568,3 +576,145 @@ C*********************************************************************
       IF (N-IHIGH) 50,50,10
    50 RETURN
       END
+#+end_src
+
+#+RESULTS:
+
+The code is getting harder to compile with every update from =gfortran=, but it is still working under legacy options:
+
+#+begin_src bash :results raw :wrap example :exports both :noweb yes :noweb-prefix no
+  gfortran hfso.f -o hfso -std=legacy && ./hfso 
+#+end_src
+
+#+RESULTS:
+#+begin_example
+   STO-3G FOR ATOMIC NUMBERS  2.00 AND  1.00
+
+
+   R          ZETA1      ZETA2      S12        T11
+
+   1.463200   2.092500   1.240000   0.450770   2.164313
+
+
+   T12        T22        V11A       V12A       V22A
+
+   0.167013   0.760033  -4.139827  -1.102912  -1.265246
+
+
+   V11B       V12B       V22B       V1111      V2111
+
+  -0.677230  -0.411305  -1.226615   1.307152   0.437279
+
+
+   V2121      V2211      V2221      V2222
+
+   0.177267   0.605703   0.311795   0.774608
+
+
+
+    THE S    ARRAY
+                           1                  2
+         1        0.1000000000D+01   0.4507704116D+00
+         2        0.4507704116D+00   0.1000000000D+01
+
+
+
+    THE X    ARRAY
+                           1                  2
+         1        0.5870642812D+00   0.9541310722D+00
+         2        0.5870642812D+00  -0.9541310722D+00
+
+
+
+    THE H    ARRAY
+                           1                  2
+         1       -0.2652744703D+01  -0.1347205024D+01
+         2       -0.1347205024D+01  -0.1731828436D+01
+
+
+
+   ( 1 1 1 1 )  1.307152
+   ( 1 1 1 2 )  0.437279
+   ( 1 1 2 1 )  0.437279
+   ( 1 1 2 2 )  0.605703
+   ( 1 2 1 1 )  0.437279
+   ( 1 2 1 2 )  0.177267
+   ( 1 2 2 1 )  0.177267
+   ( 1 2 2 2 )  0.311795
+   ( 2 1 1 1 )  0.437279
+   ( 2 1 1 2 )  0.177267
+   ( 2 1 2 1 )  0.177267
+   ( 2 1 2 2 )  0.311795
+   ( 2 2 1 1 )  0.605703
+   ( 2 2 1 2 )  0.311795
+   ( 2 2 2 1 )  0.311795
+   ( 2 2 2 2 )  0.774608
+
+    DELTA(CONVERGENCE OF DENSITY MATRIX) =   0.882867
+
+
+    DELTA(CONVERGENCE OF DENSITY MATRIX) =   0.279176
+
+
+    DELTA(CONVERGENCE OF DENSITY MATRIX) =   0.029662
+
+
+    DELTA(CONVERGENCE OF DENSITY MATRIX) =   0.002318
+
+
+    DELTA(CONVERGENCE OF DENSITY MATRIX) =   0.000174
+
+
+    DELTA(CONVERGENCE OF DENSITY MATRIX) =   0.000013
+
+
+
+    CALCULATION CONVERGED
+
+    ELECTRONIC ENERGY =  -0.422752913203D+01
+
+    TOTAL ENERGY =       -0.286066199152D+01
+
+
+
+    THE G    ARRAY
+                           1                  2
+         1       -0.1473078126D+01  -0.3893277677D+00
+         2       -0.1092586075D+01  -0.2290700802D+00
+
+
+
+    THE F    ARRAY
+                           1                  2
+         1       -0.1458636156D+01  -0.1050591833D+01
+         2       -0.1050591833D+01  -0.8105094301D+00
+
+
+
+    THE E    ARRAY
+                           1                  2
+         1       -0.1597448132D+01   0.0000000000D+00
+         2        0.0000000000D+00  -0.6166851652D-01
+
+
+
+    THE C    ARRAY
+                           1                  2
+         1        0.8019175078D+00  -0.7822652261D+00
+         2        0.3368004878D+00   0.1068445602D+01
+
+
+
+    THE P    ARRAY
+                           1                  2
+         1        0.1286143379D+01   0.5401724156D+00
+         2        0.5401724156D+00   0.2268691372D+00
+
+
+
+    THE PS   ARRAY
+                           1                  2
+         1        0.1529637121D+01   0.1119927796D+01
+         2        0.6424383099D+00   0.4703628793D+00
+#+end_example
+
