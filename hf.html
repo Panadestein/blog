@@ -228,21 +228,45 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Helonium's Hartree-Fock program</h1>
+<div id="outline-container-orgcfff49d" class="outline-2">
+<h2 id="orgcfff49d">Exordium</h2>
+<div class="outline-text-2" id="text-orgcfff49d">
 <p>
-We will implement the Hartree-Fock program from the classic <a href="https://store.doverpublications.com/products/9780486691862">Szabo-Ostlund</a> text,
+We will implement the Hartree-Fock<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> program from the classic <a href="https://store.doverpublications.com/products/9780486691862">Szabo-Ostlund</a> text,
 a staple in quantum chemistry. If you have any experience in the field, chances are you know it well.
-If you don't, the BQN implementation will take you only a few cognitive units. Using this program,
-we will compute the energy of the HeH\(^+\) molecule<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>.
+If you don't, the BQN implementation will take you only a few cognitive units: the coarse mathematical
+description involves basis sets, the calculation of electronic integrals, and the self-consistent
+optimization of the Fock matrix. Using this program, we will compute the energy of the HeH\(^+\) molecule<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
+</div>
+</div>
+<div id="outline-container-org90d9c6a" class="outline-2">
+<h2 id="org90d9c6a">STO-3G</h2>
+</div>
 
+<div id="outline-container-org07a1ace" class="outline-2">
+<h2 id="org07a1ace">Electronic integrals</h2>
+</div>
+
+<div id="outline-container-org2a35ecc" class="outline-2">
+<h2 id="org2a35ecc">SCF</h2>
+<div class="outline-text-2" id="text-org2a35ecc">
 <p>
 Compare the electronic energy with the one computed using the original <a href="./supp/hf_so/hf_so.html">F66</a> program.
 </p>
+</div>
+</div>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+A recasting of the <a href="https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation#Time-independent_equation">TISE</a> into a set of integro-differential equations. Derived by optimizing
+the expectation value of the energy subject to normalization constraints, then discretizing it using a suitable
+basis set.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 It may not look like much, but helonium was the very <a href="https://www.scientificamerican.com/article/the-first-molecule-in-the-universe/">first molecule</a> formed in the universe.
 </p></div></div>
 
