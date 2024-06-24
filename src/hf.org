@@ -2,11 +2,23 @@
 #+TITLE: Helonium's Hartree-Fock program
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 
-We will implement the Hartree-Fock program from the classic [[https://store.doverpublications.com/products/9780486691862][Szabo-Ostlund]] text,
+** Exordium
+
+We will implement the Hartree-Fock[fn:1] program from the classic [[https://store.doverpublications.com/products/9780486691862][Szabo-Ostlund]] text,
 a staple in quantum chemistry. If you have any experience in the field, chances are you know it well.
-If you don't, the BQN implementation will take you only a few cognitive units. Using this program,
-we will compute the energy of the HeH\(^+\) molecule[fn:1].
+If you don't, the BQN implementation will take you only a few cognitive units: the coarse mathematical
+description involves basis sets, the calculation of electronic integrals, and the self-consistent
+optimization of the Fock matrix. Using this program, we will compute the energy of the HeH\(^+\) molecule[fn:2].
+
+** STO-3G
+
+** Electronic integrals
+
+** SCF
 
 Compare the electronic energy with the one computed using the original [[./supp/hf_so/hf_so.html][F66]] program.
 
-[fn:1] It may not look like much, but helonium was the very [[https://www.scientificamerican.com/article/the-first-molecule-in-the-universe/][first molecule]] formed in the universe.
+[fn:1] A recasting of the [[https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation#Time-independent_equation][TISE]] into a set of integro-differential equations. Derived by optimizing
+the expectation value of the energy subject to normalization constraints, then discretizing it using a suitable
+basis set.
+[fn:2] It may not look like much, but helonium was the very [[https://www.scientificamerican.com/article/the-first-molecule-in-the-universe/][first molecule]] formed in the universe.
