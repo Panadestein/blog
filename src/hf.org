@@ -10,15 +10,68 @@ If you don't, the BQN implementation will take you only a few cognitive units: t
 description involves basis sets, the calculation of electronic integrals, and the self-consistent
 optimization of the Fock matrix. Using this program, we will compute the energy of the HeH\(^+\) molecule[fn:2].
 
+Four BQN system functions are required:
+
+#+begin_src bqn :results none :tangle ./bqn/hf.bqn
+  Sin‿Cos‿Tan‿Erf ← •math
+#+end_src
+
 ** STO-3G
 
+Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
+Slater type orbitals ([[https://en.wikipedia.org/wiki/Slater-type_orbital][STO]]s) should be a good choice, but the computation of the integrals is a lot easier
+if we approximate them with Gaussian functions[fn:3], three in our case. Since our molecule has only \(1s\)
+orbitals:
+
+#+begin_src bqn :results none :tangle ./bqn/hf.bqn
+  STO3G ← {
+    c‿e ← ⟨0.316894‿0.381531‿0.109991, 0.109818‿0.405771‿2.22766⟩
+    G ← ⋆⟜(3÷4)×·⋆-⊸×⟜(×˜)
+    +´c×e⊸G𝕩
+  }
+#+end_src
+
 ** Electronic integrals
+
+Constructing the ERIs tensor is complicated[fn:4], and the reason of the poor scaling of electronic structure
+methods. Since we are restricting ourselves to \(1s\) orbitals, we can compute the integrals almost analytically.
+
+#+begin_src bqn :tangle ./bqn/hf.bqn
+  1
+#+end_src
+
+#+RESULTS:
+: 1
+
+#+begin_export html
+<details>
+<summary>Further details</summary>
+#+end_export
+
+We need to compute the overlap, kinetic energy, nuclear attraction, and four-center integrals.
+Crucially, the product of two Gaussians at different centers is proportional to a Gaussian at a scaled center.
+This property, combined with the Laplacian of a Gaussian, yields the first two set of integrals. The remaining
+two sets are more complex: we combine the Gaussians as before, then transform to reciprocal space where
+the delta distribution arises and simplifies the problem to this integration by reduction:
+
+\begin{equation*}
+  I(x) = \int_0^{\infty}{{{e^ {- a\,k^2 }\,\sin \left(k\,x\right)}\over{k}}\;dk}
+\end{equation*}
+
+Solving the above integral is a fun exercise, with the solution expressed in terms of the error function.
+
+#+begin_export html
+</details>
+#+end_export
 
 ** SCF
 
 Compare the electronic energy with the one computed using the original [[./supp/hf_so/hf_so.html][F66]] program.
 
-[fn:1] A recasting of the [[https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation#Time-independent_equation][TISE]] into a set of integro-differential equations. Derived by optimizing
+[fn:1] Recasting of the [[https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation#Time-independent_equation][TISE]] into a set of coupled integro-differential equations. Derived by optimizing
 the expectation value of the energy subject to normalization constraints, then discretizing it using a suitable
 basis set.
 [fn:2] It may not look like much, but helonium was the very [[https://www.scientificamerican.com/article/the-first-molecule-in-the-universe/][first molecule]] formed in the universe.
+[fn:3] These are called STO-nG: a non-linear least-squares fit of functions \(r^ne^{-\zeta r}\) as
+a weighted sum of n Gaussians.
+[fn:4] See for example [[https://arxiv.org/abs/2007.12057][arXiv:2007.12057]].
