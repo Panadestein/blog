@@ -28,7 +28,7 @@ orbitals:
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   STO3G ← {
     c‿e ← ⟨0.316894‿0.381531‿0.109991, 0.109818‿0.405771‿2.22766⟩
-    +´c×e⊸G𝕩
+    c×(e×𝕨)G𝕩
   }
 #+end_src
 
@@ -69,6 +69,13 @@ the delta distribution arises and simplifies the problem to this integration by 
 </details>
 #+end_export
 
+#+begin_src bqn :tangle ./bqn/hf.bqn
+  I ← {e1‿e2‿z1‿z2𝕊𝕩:
+    e1‿e2 STO3G⌜ 𝕩‿
+    S‿T‿V‿ERI {𝕎𝕩}     
+  }
+#+end_src
+
 ** SCF
 
 Compare the electronic energy with the one computed using the original [[./supp/hf_so/hf_so.html][F66]] program.
@@ -76,7 +83,8 @@ Compare the electronic energy with the one computed using the original [[./supp/
 [fn:1] Recasting of the [[https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation#Time-independent_equation][TISE]] into a set of coupled integro-differential equations. Derived by optimizing
 the expectation value of the energy subject to normalization constraints, then discretizing it using a suitable
 basis set.
-[fn:2] It may not look like much, but helonium was the very [[https://www.scientificamerican.com/article/the-first-molecule-in-the-universe/][first molecule]] formed in the universe.
+[fn:2] The program should work for any two-electron system. It may not look like much, but helonium was the
+very [[https://www.scientificamerican.com/article/the-first-molecule-in-the-universe/][first molecule]] formed in the universe.
 [fn:3] STO: functions of the form \(r^le^{-\zeta r}Y_l^m(\theta, \phi)\). For \(1s\) orbitals the
 spherical harmonics integrate out to 1.
 [fn:4] STO-nG: a non-linear least-squares fit of an STO as a weighted sum of n Gaussians.
