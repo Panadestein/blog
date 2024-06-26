@@ -10,11 +10,12 @@ If you don't, the BQN implementation will take you only a few cognitive units: t
 description involves basis sets, the calculation of electronic integrals, and the self-consistent
 optimization of the Fock matrix. Using this program, we will compute the energy of the HeH\(^+\) molecule[fn:2].
 
-Four BQN system functions are required:
+First we will import the required BQN system values and define some auxiliary functions:
 
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   Sin‿Cos‿Tan‿Erf ← •math
   F ← (π÷4)⊸÷×⟜Erf○√⊢
+  G ← ⋆⟜0.75×·⋆-⊸×⟜(×˜)
 #+end_src
 
 ** STO-3G
@@ -27,7 +28,6 @@ orbitals:
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   STO3G ← {
     c‿e ← ⟨0.316894‿0.381531‿0.109991, 0.109818‿0.405771‿2.22766⟩
-    G ← ⋆⟜0.75×·⋆-⊸×⟜(×˜)
     +´c×e⊸G𝕩
   }
 #+end_src
@@ -40,8 +40,13 @@ while others lack a closed-form solution (V, ERI):
 
 #+begin_src bqn :tangle ./bqn/hf.bqn 
   S ← {a‿b𝕊𝕩: (1.5⋆˜π÷a+b) × ⋆-𝕩×a(×÷+)b}
-  T ← {a‿b𝕊𝕩: f←a(×÷+)b ⋄ ×´⟨⋆-𝕩×f, 1.5⋆˜π÷a+b, (3×f)-2×𝕩××˜f⟩}
-  V ← {a‿b‿z𝕊r‿rz: ×´⟨-2×z×π÷a+b, F rz×a+b, ⋆-r×a(×÷+)b⟩}
+  T ← {a‿b𝕊𝕩: f ← a(×÷+)b ⋄ ×´⟨1.5⋆˜π÷a+b, (3×f)-2×𝕩××˜f, ⋆-𝕩×f⟩}
+  V ← {a‿b‿z𝕊r‿s: ×´⟨-2×z×π÷a+b, F s×a+b, ⋆-r×a(×÷+)b⟩}
+  ERI ← {a‿b‿c‿d𝕊r‿s‿t:
+    f ← (a+b)×(c+d)×√a+b+c+d
+    g‿h ← a‿b⋈○((×÷+)´)c‿d 
+    ×´⟨2÷f×π⋆5÷2, F f⋆t, ⋆-+´r‿s×g‿h⟩
+  }
 #+end_src
 
 #+begin_export html
