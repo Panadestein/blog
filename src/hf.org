@@ -35,8 +35,8 @@ orbitals:
 ** Electronic integrals
 
 Constructing the integrals' tensor is complicated[fn:5] and is the main reason for the poor scaling
-of electronic structure methods. For \(1s\) orbitals, some integrals are analytical (S, T)
-while others lack a closed-form solution (V, ERI):
+of electronic structure methods. The \(1s\) orbitals are the simplest case, and here two types of integrals
+are analytical (S, T) while the rest already lacks a closed-form solution (V, ERI):
 
 #+begin_src bqn :tangle ./bqn/hf.bqn 
   S ← {a‿b𝕊𝕩: (1.5⋆˜π÷a+b) × ⋆-𝕩×a(×÷+)b}
