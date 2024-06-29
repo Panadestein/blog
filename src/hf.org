@@ -15,7 +15,6 @@ First we will import the required BQN system values and define some auxiliary fu
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   Sin‿Cos‿Tan‿Erf ← •math
   F ← (π÷4)⊸÷×⟜Erf○√⊢
-  G ← ⋆⟜0.75×·⋆-⊸×⟜(×˜)
 #+end_src
 
 ** STO-3G
@@ -25,12 +24,16 @@ Slater type orbitals[fn:3] should be a good choice, but the computation of the i
 if we approximate them with Gaussian functions[fn:4], three in our case. Since our molecule has only \(1s\)
 orbitals:
 
-#+begin_src bqn :results none :tangle ./bqn/hf.bqn
+#+begin_src bqn :tangle ./bqn/hf.bqn
   STO3G ← {
-    c‿e ← ⟨0.316894‿0.381531‿0.109991, 0.109818‿0.405771‿2.22766⟩
-    c×(e×𝕨)G𝕩
+    e ← 0.109818‿0.405771‿2.22766 × ×˜𝕨
+    c ← 0.444635‿0.535328‿0.154329 × (2×e÷π)⋆3÷4
+    c⋈⋆-e××˜𝕩
   }
 #+end_src
+
+#+RESULTS:
+: (function block)
 
 ** Electronic integrals
 
@@ -48,6 +51,9 @@ are analytical (S, T) while the rest already lacks a closed-form solution (V, ER
     ×´⟨2÷f×π⋆5÷2, F f⋆t, ⋆-+´r‿s×g‿h⟩
   }
 #+end_src
+
+#+RESULTS:
+: (function block)
 
 #+begin_export html
 <br/>
@@ -71,10 +77,15 @@ the delta distribution arises and simplifies the problem to this integration by 
 
 #+begin_src bqn :tangle ./bqn/hf.bqn
   I ← {e1‿e2‿z1‿z2𝕊𝕩:
-    e1‿e2 STO3G⌜ 𝕩‿
-    S‿T‿V‿ERI {𝕎𝕩}     
+    e1‿e2 STO3G⌜ 𝕩
   }
+  1‿5‿1‿1 I 5
 #+end_src
+
+#+RESULTS:
+: ┌─                                                                                                                                                                                                                                                           
+: · ⟨ ⟨ 0.0604531430684543 0.19397278694452924 0.20055999696037574 ⟩ ⟨ 0.06421939571324288 3.930043383859457e¯5 6.5086191712493175e¯25 ⟩ ⟩ ⟨ ⟨ 0.6758866867729201 2.168681686965255 2.242328933852757 ⟩ ⟨ 1.5547313879185297e¯30 7.243252329697942e¯111 0 ⟩ ⟩  
+:                                                                                                                                                                                                                                                             ┘
 
 ** SCF
 
