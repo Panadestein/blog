@@ -20,15 +20,14 @@ First we will import the required BQN system values and define some auxiliary fu
 ** STO-3G
 
 Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
-Slater type orbitals[fn:3] should be a good choice, but the computation of the integrals is a lot easier
-if we approximate them with Gaussian functions[fn:4], three in our case. Since our molecule has only \(1s\)
-orbitals:
+Slater type orbitals[fn:3] should be a good choice for our Hamiltonian. However, the computation of the integrals
+is a lot easier if we approximate them with Gaussian functions[fn:4]. We define the approximating function:
 
 #+begin_src bqn :tangle ./bqn/hf.bqn
   STO3G ← {
-    e ← 0.109818‿0.405771‿2.22766 × ×˜𝕨
-    c ← 0.444635‿0.535328‿0.154329 × (2×e÷π)⋆3÷4
-    c⋈⋆-e××˜𝕩
+    e ← 0.109818‿0.405771‿2.22766 ××˜ 𝕩
+    c ← 0.444635‿0.535328‿0.154329
+    e⋈c×(2×e÷π)⋆3÷4
   }
 #+end_src
 
@@ -73,19 +72,27 @@ the delta distribution arises and simplifies the problem to this integration by 
 
 #+begin_export html
 </details>
+</br>
 #+end_export
 
 #+begin_src bqn :tangle ./bqn/hf.bqn
-  I ← {e1‿e2‿z1‿z2𝕊𝕩:
-    e1‿e2 STO3G⌜ 𝕩
+  I ← {e1‿e2‿z1‿z2𝕊r:
+    ⟨a‿c, b‿d⟩ ← STO3G¨ e1‿e2
+    em‿cm ← ⟨a⋈⌜b, c×⌜d⟩
+    s, t ←  <˘⍉⁼> a (r⊸-⊸⋈˜×⟜r÷+)⌜ b
+    #{+˝ cm × em S¨𝕩}¨ ⌽⊸≍˜0⊸∾ r
   }
-  1‿5‿1‿1 I 5
+  2.0925‿1.24‿2‿1 I 1.4632
 #+end_src
 
 #+RESULTS:
-: ┌─                                                                                                                                                                                                                                                           
-: · ⟨ ⟨ 0.0604531430684543 0.19397278694452924 0.20055999696037574 ⟩ ⟨ 0.06421939571324288 3.930043383859457e¯5 6.5086191712493175e¯25 ⟩ ⟩ ⟨ ⟨ 0.6758866867729201 2.168681686965255 2.242328933852757 ⟩ ⟨ 1.5547313879185297e¯30 7.243252329697942e¯111 0 ⟩ ⟩  
-:                                                                                                                                                                                                                                                             ┘
+: ┌─                                                                                                                             
+: · ┌─                                                            ┌─                                                             
+:   ╵  0.3802834517766498 0.8263442309465723 1.2830785512208247   ╵ 1.0829165482233503 0.6368557690534278 0.18012144877917546    
+:     0.12699271202767193 0.3802834517766498 0.9634530005800718     1.3362072879723281 1.0829165482233503  0.4997469994199283    
+:     0.02489927826656735 0.0879671978915455   0.38028345177665     1.4383007217334327 1.3752328021084546    1.08291654822335    
+:                                                               ┘                                                             ┘  
+:                                                                                                                               ┘
 
 ** SCF
 
