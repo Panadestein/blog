@@ -10,15 +10,15 @@ If you don't, the BQN implementation will take you only a few cognitive units: t
 description involves basis sets, the calculation of electronic integrals, and the self-consistent
 optimization of the Fock matrix. Using this program, we will compute the energy of the HeH\(^+\) molecule[fn:2].
 
-First we import the required BQN system values and define some auxiliary functions:
+First, we import the required BQN system values and define some auxiliary functions:
 
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   Sin‿Cos‿Tan‿Erf ← •math
   F ← (π÷4)⊸÷×⟜Erf○√⊢
 #+end_src
 
-Then we create a namespace with the physical constants defining the system[fn:3],
-as customary in /ab-initio/ methods:
+Then, we create a namespace with the physical constants defining the system[fn:3],
+as is customary in /ab-initio/ methods:
 
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   system ← {
@@ -91,22 +91,21 @@ The following function constructs the Fock matrix:
 
 #+begin_src bqn :tangle ./bqn/hf.bqn
   I ← {𝕊e1‿e2‿z1‿z2‿r:
-    ⟨a‿c, b‿d⟩ ← STO3G¨ e1‿e2
-    em‿cm ← ⋈‿× {(⋈˜/3‿3) ⊔ 𝕎⌜˜𝕩}¨ ⟨a∾b, c∾d⟩ 
-    rap‿rbp ← <˘⍉⁼> a(r⊸-⊸⋈˜×⟜r÷+)⌜b
-    rm ← ⌽⊸≍∾⟜0 ×˜r
-    #sm ← {+´∘⥊⚇1 cm×em S¨𝕩}¨ ⌽⊸≍∾⟜0 ×˜r
-    #tm ← {+´∘⥊⚇1 cm×em T¨𝕩}¨ ⌽⊸≍∾⟜0 ×˜r
-    +´∘⥊¨cm×em S¨⚇2‿0 rm
+    ad ← ⍉>STO3G¨ e1‿e2
+    r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏ad
+    as‿ds ← ⋈‿× {(⋈˜/3‿3) ⊔ 𝕎⌜˜𝕩}¨ <∘∾˘ad
+    sm‿tm ← {+´∘⥊¨ds×as 𝕏¨¨ ⌽⊸≍∾⟜0 ×˜r}¨ S‿T
   }
   I system
 #+end_src
 
 #+RESULTS:
-: ┌─                                       
-: ╵  1.000001425997864 0.4507704116477877  
-:   0.4507704116477877 1.0000014259978642  
-:                                         ┘
+: ┌─                                                                                    
+: · ┌─                                        ┌─                                        
+:   ╵  1.000001425997864 0.4507704116477877   ╵ 2.164312561949012  0.167012865864049    
+:     0.4507704116477877 1.0000014259978642     0.167012865864049 0.7600329435650854    
+:                                           ┘                                        ┘  
+:                                                                                      ┘
 
 ** SCF
 
