@@ -10,18 +10,30 @@ If you don't, the BQN implementation will take you only a few cognitive units: t
 description involves basis sets, the calculation of electronic integrals, and the self-consistent
 optimization of the Fock matrix. Using this program, we will compute the energy of the HeH\(^+\) molecule[fn:2].
 
-First we will import the required BQN system values and define some auxiliary functions:
+First we import the required BQN system values and define some auxiliary functions:
 
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   Sin‿Cos‿Tan‿Erf ← •math
   F ← (π÷4)⊸÷×⟜Erf○√⊢
 #+end_src
 
+Then we create a namespace with the physical constants defining the system[fn:3],
+as customary in /ab-initio/ methods:
+
+#+begin_src bqn :results none :tangle ./bqn/hf.bqn
+  system ← {
+    e1‿e2 ⇐ 2.0925‿1.24
+    z1‿z2 ⇐ 2‿1
+    r ⇐ 1.4632 
+  }
+#+end_src
+
+
 ** STO-3G
 
 Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
-Slater type orbitals[fn:3] should be a good choice for our Hamiltonian. However, the computation of the integrals
-is a lot easier if we approximate them with Gaussian functions[fn:4]. We define the approximating function:
+Slater type orbitals[fn:4] should be a good choice for our Hamiltonian. However, the computation of the integrals
+is a lot easier if we approximate them with Gaussian functions[fn:5]. We define the approximating function:
 
 #+begin_src bqn :tangle ./bqn/hf.bqn
   STO3G ← {
@@ -36,7 +48,7 @@ is a lot easier if we approximate them with Gaussian functions[fn:4]. We define 
 
 ** Electronic integrals
 
-Constructing the integrals' tensor is complicated[fn:5] and is the main reason for the poor scaling
+Constructing the integrals' tensor is complicated[fn:6] and is the main reason for the poor scaling
 of electronic structure methods. The \(1s\) orbitals are the simplest case, and here two types of integrals
 are analytical (S, T) while the rest already lacks a closed-form solution (V, ERI):
 
@@ -75,21 +87,41 @@ the delta distribution arises and simplifies the problem to this integration by 
 </br>
 #+end_export
 
+The following function constructs the Fock matrix:
+
 #+begin_src bqn :tangle ./bqn/hf.bqn
-  I ← {e1‿e2‿z1‿z2𝕊r:
+  I ← {𝕊e1‿e2‿z1‿z2‿r:
     ⟨a‿c, b‿d⟩ ← STO3G¨ e1‿e2
-    em‿cm ← ⟨a⋈⌜b, c×⌜d⟩
-    rap‿rab ← <˘⍉⁼> a(r⊸-⊸⋈˜×⟜r÷+)⌜b
-    {+´∘⥊⚇1 cm×em S¨𝕩}¨ ⌽⊸≍∾⟜0 ×˜r
+    em‿cm ← ⋈‿× {𝕎⌜˜𝕩}¨ ⟨a∾b, c∾d⟩ 
+    rap‿rbp ← <˘⍉⁼> a(r⊸-⊸⋈˜×⟜r÷+)⌜b
+    #sm ← {+´∘⥊⚇1 cm×em S¨𝕩}¨ ⌽⊸≍∾⟜0 ×˜r
+    #tm ← {+´∘⥊⚇1 cm×em T¨𝕩}¨ ⌽⊸≍∾⟜0 ×˜r
+    {cm×em S¨𝕩}¨⌽⊸≍∾⟜0 ×˜r
   }
-  2.0925‿1.24‿2‿1 I 1.4632
+  I system
 #+end_src
 
 #+RESULTS:
-: ┌─                                       
-: ╵ 0.9019718710395872 0.4507704116477877  
-:   0.4507704116477877 0.9019718710395872  
-:                                         ┘
+#+begin_example
+┌─                                                                                                                                                                                                                                                                           
+╵ ┌─                                                                                                                                   ┌─                                                                                                                                    
+  ╵  0.19770028322499994  0.17637175461598842 0.018891511669258922  0.16241403626946468  0.23502530506187438  0.03655145336089894      ╵  0.11815760297663422   0.07844515036940695   0.00708239992124435  0.12428686321077882   0.1314072199004803  0.014820088932592193    
+     0.17637175461598842  0.28657606758400006 0.050690551188684714  0.10056631473148703  0.23542695577010014  0.07631194153001802         0.07844515036940695   0.04278111572951334 0.0020299965073363097  0.07228959352897389   0.0876012368090879    0.0062350370213522    
+    0.018891511669258922 0.050690551188684714 0.023817440240999993 0.009027510152384576 0.027081935036153953 0.019566419127205473         0.00708239992124435 0.0020299965073363097  6.954539635193337e¯7 0.006327562980142102 0.007716823569397964  8.598569498233154e¯5    
+     0.16241403626946468  0.10056631473148703 0.009027510152384576  0.19770028322500002  0.17637175461598845 0.018891511669258926         0.12428686321077882   0.07228959352897389  0.006327562980142102  0.16500825622069387  0.13269872270327546  0.013385657543911621    
+     0.23502530506187438  0.23542695577010014 0.027081935036153953  0.17637175461598845       0.286576067584  0.05069055118868469          0.1314072199004803    0.0876012368090879  0.007716823569397964  0.13269872270327546  0.14695389407589982  0.016375574004420898    
+     0.03655145336089894  0.07631194153001802 0.019566419127205473 0.018891511669258926  0.05069055118868469  0.02381744024099999        0.014820088932592193    0.0062350370213522  8.598569498233154e¯5 0.013385657543911621 0.016375574004420898 0.0006088193574600109    
+                                                                                                                                  ┘                                                                                                                                       ┘  
+  ┌─                                                                                                                                   ┌─                                                                                                                                    
+  ╵  0.11815760297663422   0.07844515036940695   0.00708239992124435  0.12428686321077882   0.1314072199004803  0.014820088932592193   ╵  0.19770028322499994  0.17637175461598842 0.018891511669258922  0.16241403626946468  0.23502530506187438  0.03655145336089894       
+     0.07844515036940695   0.04278111572951334 0.0020299965073363097  0.07228959352897389   0.0876012368090879    0.0062350370213522      0.17637175461598842  0.28657606758400006 0.050690551188684714  0.10056631473148703  0.23542695577010014  0.07631194153001802       
+     0.00708239992124435 0.0020299965073363097  6.954539635193337e¯7 0.006327562980142102 0.007716823569397964  8.598569498233154e¯5     0.018891511669258922 0.050690551188684714 0.023817440240999993 0.009027510152384576 0.027081935036153953 0.019566419127205473       
+     0.12428686321077882   0.07228959352897389  0.006327562980142102  0.16500825622069387  0.13269872270327546  0.013385657543911621      0.16241403626946468  0.10056631473148703 0.009027510152384576  0.19770028322500002  0.17637175461598845 0.018891511669258926       
+      0.1314072199004803    0.0876012368090879  0.007716823569397964  0.13269872270327546  0.14695389407589982  0.016375574004420898      0.23502530506187438  0.23542695577010014 0.027081935036153953  0.17637175461598845       0.286576067584  0.05069055118868469       
+    0.014820088932592193    0.0062350370213522  8.598569498233154e¯5 0.013385657543911621 0.016375574004420898 0.0006088193574600109      0.03655145336089894  0.07631194153001802 0.019566419127205473 0.018891511669258926  0.05069055118868469  0.02381744024099999       
+                                                                                                                                     ┘                                                                                                                                 ┘     
+                                                                                                                                                                                                                                                                            ┘
+#+end_example
 
 ** SCF
 
@@ -98,9 +130,9 @@ Compare the electronic energy with the one computed using the original [[./supp/
 [fn:1] Recasting of the [[https://en.wikipedia.org/wiki/Schr%C3%B6dinger_equation#Time-independent_equation][TISE]] into a set of coupled integro-differential equations. Derived by optimizing
 the expectation value of the energy subject to normalization constraints, then discretizing it using a suitable
 basis set.
-[fn:2] The program should work for any two-electron system. It may not look like much, but helonium was the
-very [[https://www.scientificamerican.com/article/the-first-molecule-in-the-universe/][first molecule]] formed in the universe.
-[fn:3] STO: functions of the form \(r^le^{-\zeta r}Y_l^m(\theta, \phi)\). For \(1s\) orbitals the
+[fn:2] It may not look like much, but helonium was the very [[https://www.scientificamerican.com/article/the-first-molecule-in-the-universe/][first molecule]] formed in the universe.
+[fn:3] This program can compute the Hartree-Fock energy of any two-electron diatomic molecule.
+[fn:4] STO: functions of the form \(r^le^{-\zeta r}Y_l^m(\theta, \phi)\). For \(1s\) orbitals the
 spherical harmonics integrate out to 1.
-[fn:4] STO-nG: a non-linear least-squares fit of an STO as a weighted sum of n Gaussians.
-[fn:5] See for example [[https://arxiv.org/abs/2007.12057][arXiv:2007.12057]].
+[fn:5] STO-nG: a non-linear least-squares fit of an STO as a weighted sum of n Gaussians.
+[fn:6] See for example [[https://arxiv.org/abs/2007.12057][arXiv:2007.12057]].
