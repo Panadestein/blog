@@ -24,10 +24,11 @@ ERI ← {a‿b‿c‿d𝕊r‿s‿t:
 
 I ← {𝕊e1‿e2‿z1‿z2‿r:
   ⟨a‿c, b‿d⟩ ← STO3G¨ e1‿e2
-  em‿cm ← ⋈‿× {𝕎⌜˜𝕩}¨ ⟨a∾b, c∾d⟩ 
+  em‿cm ← ⋈‿× {(⋈˜/3‿3) ⊔ 𝕎⌜˜𝕩}¨ ⟨a∾b, c∾d⟩ 
   rap‿rbp ← <˘⍉⁼> a(r⊸-⊸⋈˜×⟜r÷+)⌜b
+  rm ← ⌽⊸≍∾⟜0 ×˜r
   #sm ← {+´∘⥊⚇1 cm×em S¨𝕩}¨ ⌽⊸≍∾⟜0 ×˜r
   #tm ← {+´∘⥊⚇1 cm×em T¨𝕩}¨ ⌽⊸≍∾⟜0 ×˜r
-  {cm×em S¨𝕩}¨⌽⊸≍∾⟜0 ×˜r
+  +´∘⥊¨cm×em S¨⚇2‿0 rm
 }
 I system
