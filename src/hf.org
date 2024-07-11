@@ -36,7 +36,7 @@ Slater type orbitals[fn:4] should be a good choice for our Hamiltonian. However,
 is a lot easier if we approximate them with Gaussian functions[fn:5]. We define the approximating function:
 
 #+begin_src bqn :tangle ./bqn/hf.bqn
-  STO3G ← {
+  STO ← {
     e ← 0.109818‿0.405771‿2.22766 ××˜ 𝕩
     c ← 0.444635‿0.535328‿0.154329
     e⋈c×(2×e÷π)⋆3÷4
@@ -84,28 +84,23 @@ the delta distribution arises and simplifies the problem to this integration by 
 
 #+begin_export html
 </details>
-</br>
 #+end_export
 
 The following function constructs the Fock matrix:
 
 #+begin_src bqn :tangle ./bqn/hf.bqn
   I ← {𝕊e1‿e2‿z1‿z2‿r:
-    ad ← ⍉>STO3G¨ e1‿e2
-    r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏ad
-    as‿ds ← ⋈‿× {(⋈˜/3‿3) ⊔ 𝕎⌜˜𝕩}¨ <∘∾˘ad
-    sm‿tm ← {+´∘⥊¨ds×as 𝕏¨¨ ⌽⊸≍∾⟜0 ×˜r}¨ S‿T
+    bs‿nb ← (⊢⋈≠∘⊑)⍉>STO¨ e1‿e2
+    r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
+    a‿d ← ⋈‿× {(⋈˜/nb‿nb) ⊔ 𝕎⌜˜𝕩}¨ <∘∾˘bs
+    sm‿tm ← {+´∘⥊¨ d×a𝕏¨¨ ⌽⊸≍∾⟜0 ×˜r}¨ S‿T
+    vm ← {𝕩}¨ z1‿z2
   }
   I system
 #+end_src
 
 #+RESULTS:
-: ┌─                                                                                    
-: · ┌─                                        ┌─                                        
-:   ╵  1.000001425997864 0.4507704116477877   ╵ 2.164312561949012  0.167012865864049    
-:     0.4507704116477877 1.0000014259978642     0.167012865864049 0.7600329435650854    
-:                                           ┘                                        ┘  
-:                                                                                      ┘
+: ⟨ 2 1 ⟩
 
 ** SCF
 
