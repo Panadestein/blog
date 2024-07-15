@@ -1,6 +1,12 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
 #+TITLE: Scheming a mise-en-abîme in BQN
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+#+HTML_HEAD: <script>
+#+HTML_HEAD:   function goBack() {
+#+HTML_HEAD:     window.history.back();
+#+HTML_HEAD:   }
+#+HTML_HEAD: </script>
+#+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 ** Prelude
 
@@ -23,3 +29,9 @@ interpreter than this one:
 [fn:1] I recommend SICP as further reading. Much like Louis Reasoner, I attempted
 solving all the problems in the book, but I haven't gotten very far.
 I believe there are some interesting Racket bits in my [[https://panadestein.github.io/solved-sicp/][solutions]], though.
+
+#+BEGIN_EXPORT html
+  <div style="text-align: center; font-size: 2em; padding: 20px 0;">
+    <a href="#" onclick="goBack(); return false;">⊑∘∞</a>
+  </div>
+#+END_EXPORT

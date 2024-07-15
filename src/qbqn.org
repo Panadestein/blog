@@ -1,6 +1,12 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
 #+TITLE: BQN's Quantum Noise
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+#+HTML_HEAD: <script>
+#+HTML_HEAD:   function goBack() {
+#+HTML_HEAD:     window.history.back();
+#+HTML_HEAD:   }
+#+HTML_HEAD: </script>
+#+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 ** Preamble
 
@@ -196,3 +202,9 @@ Try running the simulation in the call_generate-bqn-link() and explore it! The c
 [fn:1] This post's title is a playful recursive acronym that employs quantum computing terminology, without any specific significance beyond that.
 [fn:2] I optimized it up to this number, but I wasn't targeting the Kolmogorov complexity.
 [fn:3] Hilbert's [[https://maa.org/press/periodicals/convergence/david-hilberts-radio-address-english-translation][radio address]] in 1930.
+
+#+BEGIN_EXPORT html
+  <div style="text-align: center; font-size: 2em; padding: 20px 0;">
+    <a href="#" onclick="goBack(); return false;">⊑∘∞</a>
+  </div>
+#+END_EXPORT

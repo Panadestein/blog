@@ -1,6 +1,12 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
 #+TITLE: Songs to pave the seasons
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+#+HTML_HEAD: <script>
+#+HTML_HEAD:   function goBack() {
+#+HTML_HEAD:     window.history.back();
+#+HTML_HEAD:   }
+#+HTML_HEAD: </script>
+#+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 I have analyzed my Spotify data[fn:1] for the period 2016-2024. The results accurately represent
 my actual music taste.
@@ -130,3 +136,9 @@ Enjoy:
 [fn:1] It is possible to request a detailed report of all user activity since the account was created. There are
 some [[https://support.spotify.com/us/article/understanding-my-data/][interesting fields]] in the data, but more advanced information, such as genre, requires querying the
 Spotify Web API, which is beyond the scope of this post.
+
+#+BEGIN_EXPORT html
+  <div style="text-align: center; font-size: 2em; padding: 20px 0;">
+    <a href="#" onclick="goBack(); return false;">⊑∘∞</a>
+  </div>
+#+END_EXPORT
