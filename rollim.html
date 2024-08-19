@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Scheming a mise-en-abîme in BQN</title>
+<title>A coding impromptu</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -198,52 +198,140 @@ window.history.back();
 }
 </script>
 <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Scheming a mise-en-abîme in BQN</h1>
-<div id="outline-container-orgc533209" class="outline-2">
-<h2 id="orgc533209">Prelude</h2>
-<div class="outline-text-2" id="text-orgc533209">
+<h1 class="title">A coding impromptu</h1>
 <p>
-We will build and interpreter for a subset of the Scheme programming language,
-following a Norvig's <a href="https://www.norvig.com/lispy.html">essay</a>. An alternative reference would
-have been of course SICP's metacircular evaluator<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, but I consider <code>lispy</code> to be
-a very elegant implementation in a non-Lisp host.
+A rolling collection of algorithms I like, implemented in BQN.
 </p>
-</div>
-</div>
-<div id="outline-container-org2d1a090" class="outline-2">
-<h2 id="org2d1a090">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org2d1a090">
+<div id="outline-container-orgc18ef1b" class="outline-2">
+<h2 id="orgc18ef1b">Z algorithm</h2>
+<div class="outline-text-2" id="text-orgc18ef1b">
 <p>
-Given the title of this post, I couldn't think of a better test for our
-interpreter than this one:
+This is a very efficient procedure that finds prefix strings in <a href="https://cp-algorithms.com/string/z-function.html">linear time</a>. The imperative
+implementation reads:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-racket">((lambda (x) (list x (list (quote quote) x)))
- (quote (lambda (x) (list x (list (quote quote) x))))) 
+<pre class="src src-bqn">ZI ← {
+  l‿r‿z ← 0‿0‿(0¨𝕩)
+  {z ⊏˜⌾(r&lt;◶(r-𝕩+1⌊z⊏˜𝕩-l)‿0)𝕩}¨ ↕≠𝕩
+}
+ZI "abacabadabacaba"
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-cpp"><span style="color: #228b22;">int</span> <span style="color: #b8860b;">x</span> = 0, <span style="color: #b8860b;">y</span> = 0;
+<span style="color: #4169e1;">for</span> (<span style="color: #228b22;">int</span> <span style="color: #b8860b;">i</span> = 1; i &lt; n; i++) {
+  z[i] = (y &lt; i) ? 0 : min(y-i+1,z[i-x]);
+  <span style="color: #4169e1;">while</span> (i+z[i] &lt; n &amp;&amp; s[z[i]] == s[i+z[i]]) z[i]++;
+  <span style="color: #4169e1;">if</span> (i+z[i]-1 &gt; y) {
+    x = i; y = i+z[i]-1;
+  }
+}
+</pre>
+</div>
+
+<p>
+And the array version:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">ZA ← 1
+ZA "abacabadabacaba"
 </pre>
 </div>
 </div>
 </div>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-I recommend SICP as further reading. Much like Louis Reasoner, I attempted
-solving all the problems in the book, but I haven't gotten very far.
-I believe there are some interesting Racket bits in my <a href="https://panadestein.github.io/solved-sicp/">solutions</a>, though.
+<div id="outline-container-orgf0500e5" class="outline-2">
+<h2 id="orgf0500e5">Longest increasing sub-sequence</h2>
+<div class="outline-text-2" id="text-orgf0500e5">
+<p>
+This <a href="https://en.wikipedia.org/wiki/Longest_increasing_subsequence">problem</a> can be solved in \(O(n\log n)\) using dynamic programming. Here is an
+imperative implementation which is quadratic, but can be optimized:
 </p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">LI ← {
+  k‿dp ← ¯1‿(∞¨𝕩)
+  {i ← ∧´◶(⊑⊐⟜0)‿{𝕊:k+↩1} dp&lt;𝕩 ⋄ dp 𝕩⌾(i⊸⊑)↩}¨ 𝕩
+  +´∞&gt;dp
+}
+LI¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿7‿7⟩
+</pre>
+</div>
+
+<p>
+A more elegant tacit solution was crafted by Dzaima and Marshall:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">LA ← +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽
+LA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿7‿7⟩
+</pre>
+</div>
+
+<p>
+In case you are wondering like I did, the minus one is there to make the bins comparison
+strictly increasing.
+</p>
+</div>
+</div>
+<div id="outline-container-orgfae2ebd" class="outline-2">
+<h2 id="orgfae2ebd">N-queens problem</h2>
+<div class="outline-text-2" id="text-orgfae2ebd">
+<p>
+This problem is archetypal example of backtracking:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">NQ ← {
+  +‿-‿⊢ {𝕎⌜○↕˜𝕩}¨ 𝕩
+}
+NQ 8
+</pre>
+</div>
+
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="#" onclick="goBack(); return false;">⊑∘∞</a>
-</div></div></div>
-
-
 </div>
-</div></div>
+</div>
+</div>
+</div>
 </body>
 </html>

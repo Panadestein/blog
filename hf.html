@@ -234,9 +234,9 @@ window.history.back();
 <body>
 <div id="content" class="content">
 <h1 class="title">Helonium's Hartree-Fock program</h1>
-<div id="outline-container-org85f3be8" class="outline-2">
-<h2 id="org85f3be8">Exordium</h2>
-<div class="outline-text-2" id="text-org85f3be8">
+<div id="outline-container-org46457f1" class="outline-2">
+<h2 id="org46457f1">Exordium</h2>
+<div class="outline-text-2" id="text-org46457f1">
 <p>
 We will implement the Hartree-Fock<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> program from the classic <a href="https://store.doverpublications.com/products/9780486691862">Szabo-Ostlund</a> text,
 a staple in quantum chemistry. If you have any experience in the field, chances are you know it well.
@@ -270,9 +270,9 @@ as is customary in <i>ab-initio</i> methods:
 </div>
 </div>
 </div>
-<div id="outline-container-org890d02a" class="outline-2">
-<h2 id="org890d02a">STO-3G</h2>
-<div class="outline-text-2" id="text-org890d02a">
+<div id="outline-container-org653d33d" class="outline-2">
+<h2 id="org653d33d">STO-3G</h2>
+<div class="outline-text-2" id="text-org653d33d">
 <p>
 Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
 Slater type orbitals<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup> should be a good choice for our Hamiltonian. However, the computation of the integrals
@@ -289,9 +289,9 @@ is a lot easier if we approximate them with Gaussian functions<sup><a id="fnr.5"
 </div>
 </div>
 </div>
-<div id="outline-container-orgb879a46" class="outline-2">
-<h2 id="orgb879a46">Electronic integrals</h2>
-<div class="outline-text-2" id="text-orgb879a46">
+<div id="outline-container-org26311c6" class="outline-2">
+<h2 id="org26311c6">Electronic integrals</h2>
+<div class="outline-text-2" id="text-org26311c6">
 <p>
 Constructing the integrals' tensor is complicated<sup><a id="fnr.6" class="footref" href="#fn.6" role="doc-backlink">6</a></sup> and is the main reason for the poor scaling
 of electronic structure methods. The \(1s\) orbitals are the simplest case, and here two types of integrals
@@ -345,9 +345,9 @@ I system
 </div>
 </div>
 </div>
-<div id="outline-container-orgf2ca897" class="outline-2">
-<h2 id="orgf2ca897">SCF</h2>
-<div class="outline-text-2" id="text-orgf2ca897">
+<div id="outline-container-orga2ed063" class="outline-2">
+<h2 id="orga2ed063">SCF</h2>
+<div class="outline-text-2" id="text-orga2ed063">
 <p>
 Compare the electronic energy with the one computed using the original <a href="./supp/hf_so/hf_so.html">F66</a> program.
 </p>
