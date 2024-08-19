@@ -1,0 +1,111 @@
+# -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
+#+TITLE: A coding impromptu 
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+#+HTML_HEAD: <script>
+#+HTML_HEAD:   function goBack() {
+#+HTML_HEAD:     window.history.back();
+#+HTML_HEAD:   }
+#+HTML_HEAD: </script>
+#+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+
+A rolling collection of algorithms I like, implemented in BQN.
+
+** Z algorithm
+
+This is a very efficient procedure that finds prefix strings in [[https://cp-algorithms.com/string/z-function.html][linear time]]. The imperative
+implementation reads:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn
+  ZI ← {
+    l‿r‿z ← 0‿0‿(0¨𝕩)
+    {z ⊏˜⌾(r<◶(r-𝕩+1⌊z⊏˜𝕩-l)‿0)𝕩}¨ ↕≠𝕩
+  }
+  ZI "abacabadabacaba"
+#+end_src
+
+#+RESULTS:
+: Error: Second-level parts of a train must be functions
+: at   {z ⊏˜⌾(r<◶(r-𝕩+1⌊z⊏˜𝕩-l)‿0)𝕩}¨ ↕≠𝕩
+:             ^
+
+#+begin_src cpp
+  int x = 0, y = 0;
+  for (int i = 1; i < n; i++) {
+    z[i] = (y < i) ? 0 : min(y-i+1,z[i-x]);
+    while (i+z[i] < n && s[z[i]] == s[i+z[i]]) z[i]++;
+    if (i+z[i]-1 > y) {
+      x = i; y = i+z[i]-1;
+    }
+  }
+#+end_src
+
+And the array version:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn
+  ZA ← 1
+  ZA "abacabadabacaba"
+#+end_src
+
+** Longest increasing sub-sequence
+
+This [[https://en.wikipedia.org/wiki/Longest_increasing_subsequence][problem]] can be solved in \(O(n\log n)\) using dynamic programming. Here is an
+imperative implementation which is quadratic, but can be optimized:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn
+  LI ← {
+    k‿dp ← ¯1‿(∞¨𝕩)
+    {i ← ∧´◶(⊑⊐⟜0)‿{𝕊:k+↩1} dp<𝕩 ⋄ dp 𝕩⌾(i⊸⊑)↩}¨ 𝕩
+    +´∞>dp
+  }
+  LI¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿7‿7⟩
+#+end_src
+
+#+RESULTS:
+: ⟨ 4 4 1 ⟩
+
+A more elegant tacit solution was crafted by Dzaima and Marshall:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn
+  LA ← +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽
+  LA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿7‿7⟩
+#+end_src
+
+#+RESULTS:
+: ⟨ 4 4 1 ⟩
+
+In case you are wondering like I did, the minus one is there to make the bins comparison
+strictly increasing.
+
+** N-queens problem
+
+This problem is archetypal example of backtracking:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn
+  NQ ← {
+    +‿-‿⊢ {𝕎⌜○↕˜𝕩}¨ 𝕩
+  }
+  NQ 8
+#+end_src
+
+#+RESULTS:
+#+begin_example
+┌─                                                                         
+· ┌─                       ┌─                         ┌─                   
+  ╵ 0 1 2  3  4  5  6  7   ╵ 0 ¯1 ¯2 ¯3 ¯4 ¯5 ¯6 ¯7   ╵ 0 1 2 3 4 5 6 7    
+    1 2 3  4  5  6  7  8     1  0 ¯1 ¯2 ¯3 ¯4 ¯5 ¯6     0 1 2 3 4 5 6 7    
+    2 3 4  5  6  7  8  9     2  1  0 ¯1 ¯2 ¯3 ¯4 ¯5     0 1 2 3 4 5 6 7    
+    3 4 5  6  7  8  9 10     3  2  1  0 ¯1 ¯2 ¯3 ¯4     0 1 2 3 4 5 6 7    
+    4 5 6  7  8  9 10 11     4  3  2  1  0 ¯1 ¯2 ¯3     0 1 2 3 4 5 6 7    
+    5 6 7  8  9 10 11 12     5  4  3  2  1  0 ¯1 ¯2     0 1 2 3 4 5 6 7    
+    6 7 8  9 10 11 12 13     6  5  4  3  2  1  0 ¯1     0 1 2 3 4 5 6 7    
+    7 8 9 10 11 12 13 14     7  6  5  4  3  2  1  0     0 1 2 3 4 5 6 7    
+                         ┘                          ┘                   ┘  
+                                                                          ┘
+#+end_example
+
+
+#+BEGIN_EXPORT html
+  <div style="text-align: center; font-size: 2em; padding: 20px 0;">
+    <a href="#" onclick="goBack(); return false;">⊑∘∞</a>
+  </div>
+#+END_EXPORT

@@ -17,9 +17,10 @@
 #+HTML:   <div class="header-right"><a href="https://panadestein.github.io/">About</a></div>
 #+HTML: </header>
 
-1. [[./qbqn.org][BQN's Quantum Noise]]
-2. [[./spodat.org][Songs to pave the seasons]]
-3. [[./hf.org][Helonium's Hartree-Fock program]]
-4. [[./si.org][Scheming a mise-en-abîme in BQN]]
+1. [[./rollim.org][A coding impromptu]]
+2. [[./qbqn.org][BQN's Quantum Noise]]
+3. [[./spodat.org][Songs to pave the seasons]]
+4. [[./hf.org][Helonium's Hartree-Fock program]]
+5. [[./si.org][Scheming a mise-en-abîme in BQN]]
 
 #+HTML: </div>
