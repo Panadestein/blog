@@ -237,9 +237,9 @@ window.history.back();
 <p>
 A rolling collection of algorithms I like, implemented in BQN.
 </p>
-<div id="outline-container-orgf1c9303" class="outline-2">
-<h2 id="orgf1c9303">Z algorithm</h2>
-<div class="outline-text-2" id="text-orgf1c9303">
+<div id="outline-container-orgeeb1ef4" class="outline-2">
+<h2 id="orgeeb1ef4">Z algorithm</h2>
+<div class="outline-text-2" id="text-orgeeb1ef4">
 <p>
 This is a very efficient procedure that finds prefix strings in <a href="https://cp-algorithms.com/string/z-function.html">linear time</a>. The imperative
 implementation reads:
@@ -277,9 +277,9 @@ ZA "abacabadabacaba"
 </div>
 </div>
 </div>
-<div id="outline-container-orgb068917" class="outline-2">
-<h2 id="orgb068917">Longest increasing sub-sequence</h2>
-<div class="outline-text-2" id="text-orgb068917">
+<div id="outline-container-org20f318f" class="outline-2">
+<h2 id="org20f318f">Longest increasing sub-sequence</h2>
+<div class="outline-text-2" id="text-org20f318f">
 <p>
 This <a href="https://en.wikipedia.org/wiki/Longest_increasing_subsequence">problem</a> can be solved in \(O(n\log n)\) using dynamic programming. Here is an
 imperative implementation which is quadratic, but can be optimized:
@@ -311,9 +311,9 @@ strictly increasing.
 </p>
 </div>
 </div>
-<div id="outline-container-org350f560" class="outline-2">
-<h2 id="org350f560">N-queens problem</h2>
-<div class="outline-text-2" id="text-org350f560">
+<div id="outline-container-org252ef35" class="outline-2">
+<h2 id="org252ef35">N-queens problem</h2>
+<div class="outline-text-2" id="text-org252ef35">
 <p>
 This problem is the archetypal example of backtracking. Initially, I tried to solve it
 using a function to place the queens in the full board, hoping that it would lead to a
@@ -332,13 +332,16 @@ Wirth implementation:
 
 <div class="org-src-container">
 <pre class="src src-bqn">NQ ← {𝕊n:
-  q‿s ← (0⋈0×·↕¨⊢∾·⋈˜+˜)n
-  I ← (⊢∾-⋈+)´∘⊢ ⋄ V‿P ← ⟨∨´⊣⊑¨˜I, ⊣{1⌾(𝕩⊸⊑)𝕨}¨I⟩
-  s{n≠𝕩 ? (𝕨V𝕩⊸⋈)◶⟨(𝕩+1)𝕊˜𝕨P𝕩⋈⊢,@⟩¨ ↕n; q+↩1}0 ⋄ q
+  V‿P ← {⊣𝕏(⊢∾-⋈+)´∘⊢}¨ ⟨∨´⊑¨˜, {1⌾(𝕩⊸⊑)𝕨}¨⟩
+  0{n≠𝕩 ? +´(𝕨V⊢)◶⟨(𝕩+1)𝕊˜𝕨P⊢,0⟩∘(𝕩⋈⊢)¨ ↕n; 1}˜(0×·↕¨⊢∾·⋈˜+˜)n 
 }
 (NQ¨ 1+↕8) ≡ a000170 ← 1‿0‿0‿2‿10‿4‿40‿92
 </pre>
 </div>
+
+<p>
+Which nicely compares with the OEIS <a href="https://oeis.org/A000170">sequence.</a>
+</p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="#" onclick="goBack(); return false;">⊑∘∞</a>
