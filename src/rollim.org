@@ -105,15 +105,16 @@ Wirth implementation:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn
   NQ ← {𝕊n:
-    q‿s ← (0⋈0×·↕¨⊢∾·⋈˜+˜)n
-    I ← (⊢∾-⋈+)´∘⊢ ⋄ V‿P ← ⟨∨´⊣⊑¨˜I, ⊣{1⌾(𝕩⊸⊑)𝕨}¨I⟩
-    s{n≠𝕩 ? (𝕨V𝕩⊸⋈)◶⟨(𝕩+1)𝕊˜𝕨P𝕩⋈⊢,@⟩¨ ↕n; q+↩1}0 ⋄ q
+    V‿P ← {⊣𝕏(⊢∾-⋈+)´∘⊢}¨ ⟨∨´⊑¨˜, {1⌾(𝕩⊸⊑)𝕨}¨⟩
+    0{n≠𝕩 ? +´(𝕨V⊢)◶⟨(𝕩+1)𝕊˜𝕨P⊢,0⟩∘(𝕩⋈⊢)¨ ↕n; 1}˜(0×·↕¨⊢∾·⋈˜+˜)n 
   }
   (NQ¨ 1+↕8) ≡ a000170 ← 1‿0‿0‿2‿10‿4‿40‿92
 #+end_src
 
 #+RESULTS:
 : 1
+
+Which nicely compares with the OEIS [[https://oeis.org/A000170][sequence.]]
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
