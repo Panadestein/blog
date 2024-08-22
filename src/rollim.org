@@ -52,57 +52,68 @@ This [[https://en.wikipedia.org/wiki/Longest_increasing_subsequence][problem]] c
 imperative implementation which is quadratic, but can be optimized:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn
-  LI ← {
+  LISI ← {
     k‿dp ← ¯1‿(∞¨𝕩)
     {i ← ∧´◶(⊑⊐⟜0)‿{𝕊:k+↩1} dp<𝕩 ⋄ dp 𝕩⌾(i⊸⊑)↩}¨ 𝕩
     +´∞>dp
   }
-  LI¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿7‿7⟩
+  LISI¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿7‿7⟩
 #+end_src
 
 #+RESULTS:
 : ⟨ 4 4 1 ⟩
 
-A more elegant tacit solution was crafted by Dzaima and Marshall:
+A more elegant array and tacit solution was crafted by Dzaima and Marshall:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn
-  LA ← +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽
-  LA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿7‿7⟩
+  LISA ← +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽
+  LISA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿7‿7⟩
 #+end_src
 
 #+RESULTS:
 : ⟨ 4 4 1 ⟩
 
-In case you are wondering like I did, the minus one is there to make the bins comparison
+In case you are wondering like I did, the minus one there is to make the bins comparison
 strictly increasing.
 
 ** N-queens problem
 
-This problem is archetypal example of backtracking:
+This problem is the archetypal example of backtracking. Initially, I tried to solve it
+using a function to place the queens in the full board, hoping that it would lead to a
+more array oriented solution:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn
-  NQ ← {
-    +‿-‿⊢ {𝕎⌜○↕˜𝕩}¨ 𝕩
-  }
-  NQ 8
+  8 {n𝕊i‿j: ((∨⌜´0⊸=)∨(0=-⌜´)∨0=+⌜´) j‿i-¨<↕n} 2‿3
 #+end_src
 
 #+RESULTS:
 #+begin_example
-┌─                                                                         
-· ┌─                       ┌─                         ┌─                   
-  ╵ 0 1 2  3  4  5  6  7   ╵ 0 ¯1 ¯2 ¯3 ¯4 ¯5 ¯6 ¯7   ╵ 0 1 2 3 4 5 6 7    
-    1 2 3  4  5  6  7  8     1  0 ¯1 ¯2 ¯3 ¯4 ¯5 ¯6     0 1 2 3 4 5 6 7    
-    2 3 4  5  6  7  8  9     2  1  0 ¯1 ¯2 ¯3 ¯4 ¯5     0 1 2 3 4 5 6 7    
-    3 4 5  6  7  8  9 10     3  2  1  0 ¯1 ¯2 ¯3 ¯4     0 1 2 3 4 5 6 7    
-    4 5 6  7  8  9 10 11     4  3  2  1  0 ¯1 ¯2 ¯3     0 1 2 3 4 5 6 7    
-    5 6 7  8  9 10 11 12     5  4  3  2  1  0 ¯1 ¯2     0 1 2 3 4 5 6 7    
-    6 7 8  9 10 11 12 13     6  5  4  3  2  1  0 ¯1     0 1 2 3 4 5 6 7    
-    7 8 9 10 11 12 13 14     7  6  5  4  3  2  1  0     0 1 2 3 4 5 6 7    
-                         ┘                          ┘                   ┘  
-                                                                          ┘
+┌─                 
+╵ 0 0 1 0 0 1 0 0  
+  1 0 1 0 1 0 0 0  
+  0 1 1 1 0 0 0 0  
+  1 1 1 1 1 1 1 1  
+  0 1 1 1 0 0 0 0  
+  1 0 1 0 1 0 0 0  
+  0 0 1 0 0 1 0 0  
+  0 0 1 0 0 0 1 0  
+                  ┘
 #+end_example
 
+This resulted in a more complicated algorithm, so I decided to go for the classical
+Wirth implementation:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn
+  NQ ← {𝕊n:
+    q‿s ← (0⋈0×·↕¨⊢∾·⋈˜+˜)n
+    I ← (⊢∾-⋈+)´∘⊢ ⋄ V‿P ← ⟨∨´⊣⊑¨˜I, ⊣{1⌾(𝕩⊸⊑)𝕨}¨I⟩
+    s{n≠𝕩 ? (𝕨V𝕩⊸⋈)◶⟨(𝕩+1)𝕊˜𝕨P𝕩⋈⊢,@⟩¨ ↕n; q+↩1}0 ⋄ q
+  }
+  (NQ¨ 1+↕8) ≡ a000170 ← 1‿0‿0‿2‿10‿4‿40‿92
+#+end_src
+
+#+RESULTS:
+: 1
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
