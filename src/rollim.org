@@ -103,18 +103,23 @@ more array oriented solution:
 This resulted in a more complicated algorithm, so I decided to go for the classical
 Wirth implementation:
 
-#+begin_src bqn :tangle ./bqn/rollim.bqn
+#+begin_src bqn :tangle ./bqn/rollim.bqn :results none
   NQ ← {𝕊n:
     V‿P ← {⊣𝕏(⊢∾-⋈+)´∘⊢}¨ ⟨∨´⊑¨˜, {1⌾(𝕩⊸⊑)𝕨}¨⟩
-    0{n≠𝕩 ? +´(𝕨V⊢)◶⟨(𝕩+1)𝕊˜𝕨P⊢,0⟩∘(𝕩⋈⊢)¨ ↕n; 1}˜(0×·↕¨⊢∾·⋈˜+˜)n 
+    {n≠𝕩 ? +´(𝕨V⊢)◶⟨(𝕩+1)𝕊˜𝕨P⊢,0⟩∘(𝕩⋈⊢)¨ ↕n ; 1
+    }˜´ (0⋈0×·↕¨⊢∾·⋈˜+˜)n 
   }
-  (NQ¨ 1+↕8) ≡ a000170 ← 1‿0‿0‿2‿10‿4‿40‿92
+#+end_src
+
+Which nicely compares with the OEIS [[https://oeis.org/A000170][sequence]]:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn 
+  a000170 ← 1‿0‿0‿2‿10‿4‿40‿92
+  a000170 ≡ NQ¨ 1+↕8
 #+end_src
 
 #+RESULTS:
 : 1
-
-Which nicely compares with the OEIS [[https://oeis.org/A000170][sequence.]]
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
