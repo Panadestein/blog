@@ -8,42 +8,72 @@
 #+HTML_HEAD: </script>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
-A rolling collection of algorithms I like, implemented in BQN.
+A rolling collection of algorithms I like, implemented in BQN. It serves as my personal complement
+to the [[https://mlochbaum.github.io/bqncrate/][bqncrate]]. Extrapolating Perlis' remark[fn:1], it's likely that a group of 50 individuals
+would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
+juxtapose my implementations with those of seasoned /BQNators/, acknowledging their contributions
+in footnotes.
+
 
 ** Z algorithm
 
 This is a very efficient procedure that finds prefix strings in [[https://cp-algorithms.com/string/z-function.html][linear time]]. The imperative
 implementation reads:
 
-#+begin_src bqn :tangle ./bqn/rollim.bqn
-  ZI ← {
-    l‿r‿z ← 0‿0‿(0¨𝕩)
-    {z ⊏˜⌾(r<◶(r-𝕩+1⌊z⊏˜𝕩-l)‿0)𝕩}¨ ↕≠𝕩
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  ZI ← {𝕊s:
+    l‿r‿z ← 0⚇0 0‿0‿s
+    z ⊣ {
+      v ← r(⊢1⊸+•_while_{(𝕩+𝕨)<≠s ? =´⟨𝕩,𝕩+𝕨⟩⊑¨<s ; 0}<◶({z⊑˜𝕩-l}⌊-+1)‿0)𝕩
+      r <◶@‿{𝕊: l↩𝕩-v+1 ⋄ r↩𝕩} 𝕩+v-1
+      z v⌾(𝕩⊸⊑)↩
+    }¨ ↕≠s
   }
   ZI "abacabadabacaba"
 #+end_src
 
 #+RESULTS:
-: Error: Second-level parts of a train must be functions
-: at   {z ⊏˜⌾(r<◶(r-𝕩+1⌊z⊏˜𝕩-l)‿0)𝕩}¨ ↕≠𝕩
-:             ^
+: ⟨ 15 0 1 0 3 0 1 0 7 0 1 0 3 0 1 ⟩
 
-#+begin_src cpp
-  int x = 0, y = 0;
-  for (int i = 1; i < n; i++) {
-    z[i] = (y < i) ? 0 : min(y-i+1,z[i-x]);
-    while (i+z[i] < n && s[z[i]] == s[i+z[i]]) z[i]++;
-    if (i+z[i]-1 > y) {
-      x = i; y = i+z[i]-1;
-    }
+Two algorithmic improvements were proposed[fn:2] for the function above, namely only iterate
+over indices where the character found is equal to the first character, and only search
+to extend the count if it goes up to the end of r:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  ZFun ← {𝕊s:
+    CountEq ← { 1⊸+•_while_((≠𝕨)⊸≤◶⟨⊑⟜𝕨≡⊑⟜𝕩,0⟩) 0 }
+    l←r←0 ⋄ Ulr ← {(r⌈↩𝕨+𝕩)>r ? l↩𝕨 ⋄ 𝕩; 𝕩}
+    SearchEq ← ⊣ Ulr ⊢ + + CountEq○(↓⟜s) ⊢
+    Set ← {i𝕊𝕩: ((r-i) (i SearchEq 0⌈⊣)⍟≤ (i-l)⊑𝕩)⌾(i⊸⊑) 𝕩 }
+    (⌽1↓/⊑⊸=s) Set´˜ ↑˜≠s
   }
 #+end_src
 
-And the array version:
+An array version which I find more beautiful, but has quadratic time complexity is:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  ZAQ ← ¯1↓↓(+´·∧`⊣=≠⊸↑)¨<
+  ZAQ "abacabadabacaba"
+#+end_src
+
+#+RESULTS:
+: ⟨ 15 0 1 0 3 0 1 0 7 0 1 0 3 0 1 ⟩
+
+I also came up with a cubic solution, but as we will see it can be made quadratic:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  ZAC ← (+´∧`)¨<=↕∘≠{«⍟𝕨𝕩}⌜<
+  ZAC "abacabadabacaba"
+#+end_src
+
+#+RESULTS:
+: ⟨ 15 0 1 0 3 0 1 0 7 0 1 0 3 0 1 ⟩
+
+Further improvements where proposed by[fn:2][fn:3], rendering the above solutions into:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn
-  ZA ← 1
-  ZA "abacabadabacaba"
+  ZAC ← (+´∧`)¨≠↑↓=⌽∘↑
+  ZAC ← (+´∧`)¨<=«⍟(↕∘≠)
 #+end_src
 
 ** Longest increasing sub-sequence
@@ -51,7 +81,7 @@ And the array version:
 This [[https://en.wikipedia.org/wiki/Longest_increasing_subsequence][problem]] can be solved in \(O(n\log n)\) using dynamic programming. Here is an
 imperative implementation which is quadratic, but can be optimized:
 
-#+begin_src bqn :tangle ./bqn/rollim.bqn
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
   LISI ← {
     k‿dp ← ¯1‿(∞¨𝕩)
     {i ← ∧´◶(⊑⊐⟜0)‿{𝕊:k+↩1} dp<𝕩 ⋄ dp 𝕩⌾(i⊸⊑)↩}¨ 𝕩
@@ -63,9 +93,9 @@ imperative implementation which is quadratic, but can be optimized:
 #+RESULTS:
 : ⟨ 4 4 1 ⟩
 
-A more elegant array and tacit solution was crafted by Dzaima and Marshall:
+A more elegant array and tacit solution was crafted by[fn:2][fn:3]:
 
-#+begin_src bqn :tangle ./bqn/rollim.bqn
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
   LISA ← +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽
   LISA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿7‿7⟩
 #+end_src
@@ -82,21 +112,21 @@ This problem is the archetypal example of backtracking. Initially, I tried to so
 using a function to place the queens in the full board, hoping that it would lead to a
 more array oriented solution:
 
-#+begin_src bqn :tangle ./bqn/rollim.bqn
-  8 {n𝕊i‿j: ((∨⌜´0⊸=)∨(0=-⌜´)∨0=+⌜´) j‿i-¨<↕n} 2‿3
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  8 {((∨⌜´0⊸=)∨(0=-⌜´)∨0=+⌜´) 𝕩-¨<↕𝕨} 2‿3
 #+end_src
 
 #+RESULTS:
 #+begin_example
 ┌─                 
-╵ 0 0 1 0 0 1 0 0  
-  1 0 1 0 1 0 0 0  
-  0 1 1 1 0 0 0 0  
+╵ 0 1 0 1 0 1 0 0  
+  0 0 1 1 1 0 0 0  
   1 1 1 1 1 1 1 1  
-  0 1 1 1 0 0 0 0  
-  1 0 1 0 1 0 0 0  
-  0 0 1 0 0 1 0 0  
-  0 0 1 0 0 0 1 0  
+  0 0 1 1 1 0 0 0  
+  0 1 0 1 0 1 0 0  
+  1 0 0 1 0 0 1 0  
+  0 0 0 1 0 0 0 1  
+  0 0 0 1 0 0 0 0  
                   ┘
 #+end_example
 
@@ -113,13 +143,21 @@ Wirth implementation:
 
 Which nicely compares with the OEIS [[https://oeis.org/A000170][sequence]]:
 
-#+begin_src bqn :tangle ./bqn/rollim.bqn 
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
   a000170 ← 1‿0‿0‿2‿10‿4‿40‿92
   a000170 ≡ NQ¨ 1+↕8
 #+end_src
 
 #+RESULTS:
 : 1
+
+And of course, in the implementation above I could have used a single array instead of three,
+but I find the resulting validation and position functions very aesthetic the way they are.
+
+[fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
+from [[https://www.jsoftware.com/papers/perlis78.htm][jsofware]]'s papers collection.
+[fn:2] [[https://github.com/mlochbaum][Marshall Lochbaum]], the BQN creator.
+[fn:3] [[https://github.com/dzaima][dzaima]], the CBQN developer.
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
