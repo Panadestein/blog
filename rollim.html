@@ -235,51 +235,99 @@ window.history.back();
 <div id="content" class="content">
 <h1 class="title">A coding impromptu</h1>
 <p>
-A rolling collection of algorithms I like, implemented in BQN.
+A rolling collection of algorithms I like, implemented in BQN. It serves as my personal complement
+to the <a href="https://mlochbaum.github.io/bqncrate/">bqncrate</a>. Extrapolating Perlis' remark<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, it's likely that a group of 50 individuals
+would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
+juxtapose my implementations with those of seasoned <i>BQNators</i>, acknowledging their contributions
+in footnotes.
 </p>
-<div id="outline-container-orgb301af8" class="outline-2">
-<h2 id="orgb301af8">Z algorithm</h2>
-<div class="outline-text-2" id="text-orgb301af8">
+<div id="outline-container-orgda7bf83" class="outline-2">
+<h2 id="orgda7bf83">Z algorithm</h2>
+<div class="outline-text-2" id="text-orgda7bf83">
 <p>
 This is a very efficient procedure that finds prefix strings in <a href="https://cp-algorithms.com/string/z-function.html">linear time</a>. The imperative
 implementation reads:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">ZI ← {
-  l‿r‿z ← 0‿0‿(0¨𝕩)
-  {z ⊏˜⌾(r&lt;◶(r-𝕩+1⌊z⊏˜𝕩-l)‿0)𝕩}¨ ↕≠𝕩
+<pre class="src src-bqn">ZI ← {𝕊s:
+  l‿r‿z ← 0⚇0 0‿0‿s
+  z ⊣ {
+    v ← r(⊢1⊸+•_while_{(𝕩+𝕨)&lt;≠s ? =´⟨𝕩,𝕩+𝕨⟩⊑¨&lt;s ; 0}&lt;◶({z⊑˜𝕩-l}⌊-+1)‿0)𝕩
+    r &lt;◶@‿{𝕊: l↩𝕩-v+1 ⋄ r↩𝕩} 𝕩+v-1
+    z v⌾(𝕩⊸⊑)↩
+  }¨ ↕≠s
 }
 ZI "abacabadabacaba"
 </pre>
 </div>
 
+<pre class="example">
+⟨ 15 0 1 0 3 0 1 0 7 0 1 0 3 0 1 ⟩
+</pre>
+
+
+<p>
+Two algorithmic improvements were proposed<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> for the function above, namely only iterate
+over indices where the character found is equal to the first character, and only search
+to extend the count if it goes up to the end of r:
+</p>
+
 <div class="org-src-container">
-<pre class="src src-cpp"><span style="color: #228b22;">int</span> <span style="color: #b8860b;">x</span> = 0, <span style="color: #b8860b;">y</span> = 0;
-<span style="color: #4169e1;">for</span> (<span style="color: #228b22;">int</span> <span style="color: #b8860b;">i</span> = 1; i &lt; n; i++) {
-  z[i] = (y &lt; i) ? 0 : min(y-i+1,z[i-x]);
-  <span style="color: #4169e1;">while</span> (i+z[i] &lt; n &amp;&amp; s[z[i]] == s[i+z[i]]) z[i]++;
-  <span style="color: #4169e1;">if</span> (i+z[i]-1 &gt; y) {
-    x = i; y = i+z[i]-1;
-  }
+<pre class="src src-bqn">ZFun ← {𝕊s:
+  CountEq ← { 1⊸+•_while_((≠𝕨)⊸≤◶⟨⊑⟜𝕨≡⊑⟜𝕩,0⟩) 0 }
+  l←r←0 ⋄ Ulr ← {(r⌈↩𝕨+𝕩)&gt;r ? l↩𝕨 ⋄ 𝕩; 𝕩}
+  SearchEq ← ⊣ Ulr ⊢ + + CountEq○(↓⟜s) ⊢
+  Set ← {i𝕊𝕩: ((r-i) (i SearchEq 0⌈⊣)⍟≤ (i-l)⊑𝕩)⌾(i⊸⊑) 𝕩 }
+  (⌽1↓/⊑⊸=s) Set´˜ ↑˜≠s
 }
 </pre>
 </div>
 
 <p>
-And the array version:
+An array version which I find more beautiful, but has quadratic time complexity is:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">ZA ← 1
-ZA "abacabadabacaba"
+<pre class="src src-bqn">ZAQ ← ¯1↓↓(+´·∧`⊣=≠⊸↑)¨&lt;
+ZAQ "abacabadabacaba"
+</pre>
+</div>
+
+<pre class="example">
+⟨ 15 0 1 0 3 0 1 0 7 0 1 0 3 0 1 ⟩
+</pre>
+
+
+<p>
+I also came up with a cubic solution, but as we will see it can be made quadratic:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">ZAC ← (+´∧`)¨&lt;=↕∘≠{«⍟𝕨𝕩}⌜&lt;
+ZAC "abacabadabacaba"
+</pre>
+</div>
+
+<pre class="example">
+⟨ 15 0 1 0 3 0 1 0 7 0 1 0 3 0 1 ⟩
+</pre>
+
+
+<p>
+Further improvements where proposed by<sup><a id="fnr.2.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup><sup>, </sup><sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>, rendering the above solutions into:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">ZAC ← (+´∧`)¨≠↑↓=⌽∘↑
+ZAC ← (+´∧`)¨&lt;=«⍟(↕∘≠)
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org1a14cca" class="outline-2">
-<h2 id="org1a14cca">Longest increasing sub-sequence</h2>
-<div class="outline-text-2" id="text-org1a14cca">
+<div id="outline-container-org08aba84" class="outline-2">
+<h2 id="org08aba84">Longest increasing sub-sequence</h2>
+<div class="outline-text-2" id="text-org08aba84">
 <p>
 This <a href="https://en.wikipedia.org/wiki/Longest_increasing_subsequence">problem</a> can be solved in \(O(n\log n)\) using dynamic programming. Here is an
 imperative implementation which is quadratic, but can be optimized:
@@ -295,8 +343,13 @@ LISI¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿
 </pre>
 </div>
 
+<pre class="example">
+⟨ 4 4 1 ⟩
+</pre>
+
+
 <p>
-A more elegant array and tacit solution was crafted by Dzaima and Marshall:
+A more elegant array and tacit solution was crafted by<sup><a id="fnr.2.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup><sup>, </sup><sup><a id="fnr.3.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>:
 </p>
 
 <div class="org-src-container">
@@ -305,15 +358,20 @@ LISA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿
 </pre>
 </div>
 
+<pre class="example">
+⟨ 4 4 1 ⟩
+</pre>
+
+
 <p>
 In case you are wondering like I did, the minus one there is to make the bins comparison
 strictly increasing.
 </p>
 </div>
 </div>
-<div id="outline-container-orgba0d05c" class="outline-2">
-<h2 id="orgba0d05c">N-queens problem</h2>
-<div class="outline-text-2" id="text-orgba0d05c">
+<div id="outline-container-org35df4ee" class="outline-2">
+<h2 id="org35df4ee">N-queens problem</h2>
+<div class="outline-text-2" id="text-org35df4ee">
 <p>
 This problem is the archetypal example of backtracking. Initially, I tried to solve it
 using a function to place the queens in the full board, hoping that it would lead to a
@@ -321,9 +379,22 @@ more array oriented solution:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">8 {n𝕊i‿j: ((∨⌜´0⊸=)∨(0=-⌜´)∨0=+⌜´) j‿i-¨&lt;↕n} 2‿3
+<pre class="src src-bqn">8 {((∨⌜´0⊸=)∨(0=-⌜´)∨0=+⌜´) 𝕩-¨&lt;↕𝕨} 2‿3
 </pre>
 </div>
+
+<pre class="example" id="orgc9b5322">
+┌─                 
+╵ 0 1 0 1 0 1 0 0  
+  0 0 1 1 1 0 0 0  
+  1 1 1 1 1 1 1 1  
+  0 0 1 1 1 0 0 0  
+  0 1 0 1 0 1 0 0  
+  1 0 0 1 0 0 1 0  
+  0 0 0 1 0 0 0 1  
+  0 0 0 1 0 0 0 0  
+                  ┘
+</pre>
 
 <p>
 This resulted in a more complicated algorithm, so I decided to go for the classical
@@ -349,11 +420,40 @@ a000170 ≡ NQ¨ 1+↕8
 </pre>
 </div>
 
+<pre class="example">
+1
+</pre>
+
+
+<p>
+And of course, in the implementation above I could have used a single array instead of three,
+but I find the resulting validation and position functions very aesthetic the way they are.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
+from <a href="https://www.jsoftware.com/papers/perlis78.htm">jsofware</a>'s papers collection.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+<a href="https://github.com/mlochbaum">Marshall Lochbaum</a>, the BQN creator.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+<a href="https://github.com/dzaima">dzaima</a>, the CBQN developer.
+</p>
+
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="#" onclick="goBack(); return false;">⊑∘∞</a>
+</div></div></div>
+
+
 </div>
-</div>
-</div>
-</div>
+</div></div>
 </body>
 </html>
