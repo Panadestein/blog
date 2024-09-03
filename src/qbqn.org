@@ -205,6 +205,6 @@ Try running the simulation in the call_generate-bqn-link() and explore it! The c
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
-    <a href="#" onclick="goBack(); return false;">⊑∘∞</a>
+    <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
   </div>
 #+END_EXPORT

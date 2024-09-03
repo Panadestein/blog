@@ -161,6 +161,6 @@ from [[https://www.jsoftware.com/papers/perlis78.htm][jsofware]]'s papers collec
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
-    <a href="#" onclick="goBack(); return false;">⊑∘∞</a>
+    <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
   </div>
 #+END_EXPORT

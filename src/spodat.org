@@ -139,6 +139,6 @@ Spotify Web API, which is beyond the scope of this post.
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
-    <a href="#" onclick="goBack(); return false;">⊑∘∞</a>
+    <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
   </div>
 #+END_EXPORT

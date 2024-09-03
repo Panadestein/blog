@@ -124,6 +124,6 @@ spherical harmonics integrate out to 1.
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
-    <a href="#" onclick="goBack(); return false;">⊑∘∞</a>
+    <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
   </div>
 #+END_EXPORT
