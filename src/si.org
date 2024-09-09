@@ -1,11 +1,6 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
 #+TITLE: Scheming a mise-en-abîme in BQN
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
-#+HTML_HEAD: <script>
-#+HTML_HEAD:   function goBack() {
-#+HTML_HEAD:     window.history.back();
-#+HTML_HEAD:   }
-#+HTML_HEAD: </script>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 ** Prelude

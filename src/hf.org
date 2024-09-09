@@ -1,11 +1,6 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
 #+TITLE: Helonium's Hartree-Fock program
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
-#+HTML_HEAD: <script>
-#+HTML_HEAD:   function goBack() {
-#+HTML_HEAD:     window.history.back();
-#+HTML_HEAD:   }
-#+HTML_HEAD: </script>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 ** Exordium
@@ -106,7 +101,10 @@ The following function constructs the Fock matrix:
 #+end_src
 
 #+RESULTS:
-: ⟨ 2 1 ⟩
+: ┌─                       
+: ╵          0 2.14095424  
+:   2.14095424          0  
+:                         ┘
 
 ** SCF
 

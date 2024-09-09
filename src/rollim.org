@@ -1,15 +1,17 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
 #+TITLE: A coding impromptu 
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
-#+HTML_HEAD: <script>
-#+HTML_HEAD:   function goBack() {
-#+HTML_HEAD:     window.history.back();
-#+HTML_HEAD:   }
-#+HTML_HEAD: </script>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+#+HTML_HEAD: <style>
+#+HTML_HEAD:   #table-of-contents > h2 { display: none; } /* Hide the default TOC heading */
+#+HTML_HEAD:   #table-of-contents > ul { display: block; } /* Ensure TOC content is shown */
+#+HTML_HEAD: </style>
 
-A rolling collection of algorithms I like, implemented in BQN. It serves as my personal complement
-to the [[https://mlochbaum.github.io/bqncrate/][bqncrate]]. Extrapolating Perlis' remark[fn:1], it's likely that a group of 50 individuals
+This post is a rolling collection of algorithms and computational ideas I like, implemented in BQN:
+
+#+TOC: headlines 1 :ignore-title t
+
+Extrapolating Perlis' remark[fn:1], it's likely that a group of 50 individuals
 would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
 juxtapose my implementations with those of seasoned /BQNators/, acknowledging their contributions
 in footnotes.
@@ -155,7 +157,7 @@ And of course, in the implementation above I could have used a single array inst
 but I find the resulting validation and position functions very aesthetic the way they are.
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
-from [[https://www.jsoftware.com/papers/perlis78.htm][jsofware]]'s papers collection.
+Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
 [fn:2] [[https://github.com/mlochbaum][Marshall Lochbaum]], the BQN creator.
 [fn:3] [[https://github.com/dzaima][dzaima]], the CBQN developer.
 

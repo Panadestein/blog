@@ -1,11 +1,6 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
 #+TITLE: BQN's Quantum Noise
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
-#+HTML_HEAD: <script>
-#+HTML_HEAD:   function goBack() {
-#+HTML_HEAD:     window.history.back();
-#+HTML_HEAD:   }
-#+HTML_HEAD: </script>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 ** Preamble
@@ -185,7 +180,8 @@ Got 25361 samples
 </details>
 #+end_export
 
-Try running the simulation in the call_generate-bqn-link() and explore it! The complete source code is hosted in a GitHub [[https://github.com/Panadestein/qbqn][repository]].
+Try running the simulation in the call_generate-bqn-link() and explore it! This post is also available as an =org-mode= computational
+notebook in a GitHub [[https://github.com/Panadestein/blog][repository]].
 
 #+name: generate-bqn-link
 #+begin_src emacs-lisp :noweb yes :noweb-prefix no :exports none :results raw :tangle no
