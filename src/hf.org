@@ -87,7 +87,7 @@ the delta distribution arises and simplifies the problem to this integration by 
 </details>
 #+end_export
 
-The following function constructs the Fock matrix:
+The following function constructs the Fock matrix.
 
 #+begin_src bqn :tangle ./bqn/hf.bqn
   I ← {𝕊e1‿e2‿z1‿z2‿r:
