@@ -132,7 +132,7 @@ Enjoy:
 some [[https://support.spotify.com/us/article/understanding-my-data/][interesting fields]] in the data, but more advanced information, such as genre, requires querying the
 Spotify Web API, which is beyond the scope of this post.
 [fn:2] Well, modulo all from =Tool= and =Silent state optimizer= from =Leech=, which are definitely in my top ten,
-and which I listen to on YouTube. It's possible to analyze the [[ www.google.com/takeout][data]] from this site as well—perhaps in a follow-up post.
+and which I listen to on YouTube. It's possible to analyze the [[https://takeout.google.com/settings/takeout][data]] from this site as well—perhaps in a follow-up post.
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
