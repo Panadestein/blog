@@ -15,7 +15,7 @@ First, we import the required BQN system values and define some auxiliary functi
 
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   Sin‿Cos‿Tan‿Erf ← •math
-  F ← (π÷4)⊸÷×⟜Erf○√⊢
+  F ← 1e¯6⊸<◶(1-÷⟜3)‿((π÷4)⊸÷×⟜Erf○√⊢)
 #+end_src
 
 Then, we create a namespace with the physical constants defining the system[fn:3],
@@ -29,14 +29,13 @@ as is customary in /ab-initio/ methods:
   }
 #+end_src
 
-
 ** STO-3G
 
 Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
 Slater type orbitals[fn:4] should be a good choice for our Hamiltonian. However, the computation of the integrals
 is a lot easier if we approximate them with Gaussian functions[fn:5]. We define the approximating function:
 
-#+begin_src bqn :tangle ./bqn/hf.bqn
+#+begin_src bqn :results none :tangle ./bqn/hf.bqn
   STO ← {
     e ← 0.109818‿0.405771‿2.22766 ××˜ 𝕩
     c ← 0.444635‿0.535328‿0.154329
@@ -44,16 +43,13 @@ is a lot easier if we approximate them with Gaussian functions[fn:5]. We define 
   }
 #+end_src
 
-#+RESULTS:
-: (function block)
-
 ** Electronic integrals
 
 Constructing the integrals' tensor is complicated[fn:6] and is the main reason for the poor scaling
 of electronic structure methods. The \(1s\) orbitals are the simplest case, and here two types of integrals
 are analytical (S, T) while the rest already lacks a closed-form solution (V, ERI):
 
-#+begin_src bqn :tangle ./bqn/hf.bqn 
+#+begin_src bqn :results none :tangle ./bqn/hf.bqn 
   S ← {a‿b𝕊𝕩: (1.5⋆˜π÷a+b) × ⋆-𝕩×a(×÷+)b}
   T ← {a‿b𝕊𝕩: f ← a(×÷+)b ⋄ ×´⟨1.5⋆˜π÷a+b, (3×f)-2×𝕩××˜f, ⋆-𝕩×f⟩}
   V ← {a‿b‿z𝕊r‿s: ×´⟨-2×z×π÷a+b, F s×a+b, ⋆-r×a(×÷+)b⟩}
@@ -63,9 +59,6 @@ are analytical (S, T) while the rest already lacks a closed-form solution (V, ER
     ×´⟨2÷f×π⋆5÷2, F f⋆t, ⋆-+´r‿s×g‿h⟩
   }
 #+end_src
-
-#+RESULTS:
-: (function block)
 
 #+begin_export html
 <br/>
@@ -95,16 +88,21 @@ The following function constructs the Fock matrix.
     r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
     a‿d ← ⋈‿× {(⋈˜/nb‿nb) ⊔ 𝕎⌜˜𝕩}¨ <∘∾˘bs
     sm‿tm ← {+´∘⥊¨ d×a𝕏¨¨ ⌽⊸≍∾⟜0 ×˜r}¨ S‿T
-    vm ← {𝕩}¨ z1‿z2
+    vm ← z1‿z2 {
+      m ← {×˜⌽⌾(¯1⊸⊏)<⎉2(⍉⁼∘>∘(0⊸⋈¨⟜𝕨¨)≍˘⊢≍○(r⊸∾¨)⍉)𝕩}´𝕩
+      +´∘⥊¨ d×m V⚇1˜a∾¨¨𝕨
+    }¨ ⟨⟨0‿r, r1⟩, ⟨r‿0, r2⟩⟩
   }
   I system
 #+end_src
 
 #+RESULTS:
-: ┌─                       
-: ╵          0 2.14095424  
-:   2.14095424          0  
-:                         ┘
+: ┌─                                                                                          
+: · ┌─                                          ┌─                                            
+:   ╵  ¯4.139827204696602 ¯1.1029125678873688   ╵ ¯0.6772300819326643 ¯0.41130547028974934    
+:     ¯1.1029125678873688 ¯1.2652458734233518     ¯0.4113054702897494  ¯1.2266154680582528    
+:                                             ┘                                            ┘  
+:                                                                                            ┘
 
 ** SCF
 
