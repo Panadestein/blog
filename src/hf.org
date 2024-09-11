@@ -15,7 +15,7 @@ First, we import the required BQN system values and define some auxiliary functi
 
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   Sin‿Cos‿Tan‿Erf ← •math
-  F ← 1e¯6⊸<◶(1-÷⟜3)‿((π÷4)⊸÷×⟜Erf○√⊢)
+  E ← 1e¯6⊸<◶(1-÷⟜3)‿((π÷4)⊸÷×⟜Erf○√⊢)
 #+end_src
 
 Then, we create a namespace with the physical constants defining the system[fn:3],
@@ -52,11 +52,11 @@ are analytical (S, T) while the rest already lacks a closed-form solution (V, ER
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn 
   S ← {a‿b𝕊𝕩: (1.5⋆˜π÷a+b) × ⋆-𝕩×a(×÷+)b}
   T ← {a‿b𝕊𝕩: f ← a(×÷+)b ⋄ ×´⟨1.5⋆˜π÷a+b, (3×f)-2×𝕩××˜f, ⋆-𝕩×f⟩}
-  V ← {a‿b‿z𝕊r‿s: ×´⟨-2×z×π÷a+b, F s×a+b, ⋆-r×a(×÷+)b⟩}
+  V ← {a‿b‿z𝕊r‿s: ×´⟨-2×z×π÷a+b, E s×a+b, ⋆-r×a(×÷+)b⟩}
   ERI ← {a‿b‿c‿d𝕊r‿s‿t:
     f ← (a+b)×(c+d)×√a+b+c+d
     g‿h ← a‿b⋈○((×÷+)´)c‿d 
-    ×´⟨2÷f×π⋆5÷2, F f⋆t, ⋆-+´r‿s×g‿h⟩
+    ×´⟨2÷f×π⋆5÷2, E f⋆t, ⋆-+´r‿s×g‿h⟩
   }
 #+end_src
 
@@ -83,26 +83,24 @@ the delta distribution arises and simplifies the problem to this integration by 
 The following function constructs the Fock matrix.
 
 #+begin_src bqn :tangle ./bqn/hf.bqn
-  I ← {𝕊e1‿e2‿z1‿z2‿r:
+  F ← {𝕊e1‿e2‿z1‿z2‿r:
     bs‿nb ← (⊢⋈≠∘⊑)⍉>STO¨ e1‿e2
     r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
     a‿d ← ⋈‿× {(⋈˜/nb‿nb) ⊔ 𝕎⌜˜𝕩}¨ <∘∾˘bs
-    sm‿tm ← {+´∘⥊¨ d×a𝕏¨¨ ⌽⊸≍∾⟜0 ×˜r}¨ S‿T
+    sm‿tm ← {+´∘⥊¨ d × a𝕏¨¨⌽⊸≍∾⟜0×˜r}¨ S‿T
     vm ← z1‿z2 {
-      m ← {×˜⌽⌾(¯1⊸⊏)<⎉2(⍉⁼∘>∘(0⊸⋈¨⟜𝕨¨)≍˘⊢≍○(r⊸∾¨)⍉)𝕩}´𝕩
-      +´∘⥊¨ d×m V⚇1˜a∾¨¨𝕨
+      +´∘⥊¨ d × a∾⟜𝕨⊸V¨¨{×˜[0‿2,3‿1] ⊏ ({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´ 𝕩 
     }¨ ⟨⟨0‿r, r1⟩, ⟨r‿0, r2⟩⟩
+    hcore ← +´vm∾<tm
   }
-  I system
+  F system
 #+end_src
 
 #+RESULTS:
-: ┌─                                                                                          
-: · ┌─                                          ┌─                                            
-:   ╵  ¯4.139827204696602 ¯1.1029125678873688   ╵ ¯0.6772300819326643 ¯0.41130547028974934    
-:     ¯1.1029125678873688 ¯1.2652458734233518     ¯0.4113054702897494  ¯1.2266154680582528    
-:                                             ┘                                            ┘  
-:                                                                                            ┘
+: ┌─                                         
+: ╵ ¯2.6527447246802547 ¯1.3472051723130691  
+:   ¯1.3472051723130691 ¯1.7318283979165192  
+:                                           ┘
 
 ** SCF
 
