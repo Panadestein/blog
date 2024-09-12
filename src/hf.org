@@ -80,27 +80,76 @@ the delta distribution arises and simplifies the problem to this integration by 
 </details>
 #+end_export
 
-The following function constructs the Fock matrix.
+** Fock operator's matrix
+
+The following function constructs the Fock matrix. Extending this code to an arbitrary
+number of atoms would imply mapping over a list of coordinates, as opposed to fusing them
+in the implementation, as we do here for simplicity. The ERIs are the computational
+bottleneck: there =N⋆4= of them, in our case =N≡2=.  
 
 #+begin_src bqn :tangle ./bqn/hf.bqn
   F ← {𝕊e1‿e2‿z1‿z2‿r:
     bs‿nb ← (⊢⋈≠∘⊑)⍉>STO¨ e1‿e2
     r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
-    a‿d ← ⋈‿× {(⋈˜/nb‿nb) ⊔ 𝕎⌜˜𝕩}¨ <∘∾˘bs
-    sm‿tm ← {+´∘⥊¨ d × a𝕏¨¨⌽⊸≍∾⟜0×˜r}¨ S‿T
-    vm ← z1‿z2 {
-      +´∘⥊¨ d × a∾⟜𝕨⊸V¨¨×˜{[0‿2,3‿1] ⊏ ({0‿𝕨¨𝕩}⟜𝕩¨𝕨) ∾ ⋈⟜⍉r⋈¨𝕩}´𝕩
-    }¨ ⟨0‿r, r1⟩‿⟨r‿0, r2⟩
-    hcore ← +´vm∾<tm
+    B ← {𝕊d: ⋈‿× {(⋈˜/nb¨↕d) ⊔ 𝕎⌜⍟(d-1)˜𝕩}¨ <∘∾˘bs}
+
+    sm‿hcore ← {
+      a‿d ← B 2
+      mst ← ⌽⊸≍∾⟜0×˜r
+      mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
+      +´∘⥊¨¨ ⟨d×a S¨¨mst, +´(<d×a T¨¨mst)∾z1‿z2{d×a∾⟜𝕨⊸V¨¨𝕩}¨mv⟩
+    }
   }
   F system
 #+end_src
 
 #+RESULTS:
-: ┌─                                         
-: ╵ ¯2.6527447246802547 ¯1.3472051723130691  
-:   ¯1.3472051723130691 ¯1.7318283979165192  
-:                                           ┘
+: ┌─                                                                                       
+: · ┌─                                        ┌─                                           
+:   ╵  1.000001425997864 0.4507704116477877   ╵  ¯2.652744724680255 ¯1.3472051723130691    
+:     0.4507704116477877 1.0000014259978642     ¯1.3472051723130691 ¯1.7318283979165194    
+:                                           ┘                                           ┘  
+:                                                                                         ┘
+
+#+begin_export html
+<br/>
+<details>
+<summary>Physical context</summary>
+#+end_export
+
+The Fock operator is an effective one-electron operator that arises after constrained
+minimization of the energy functional:
+
+\begin{equation*}
+  \tilde{\mathcal{F}} \left[ \{\psi_i\} \right] = \sum_i h_i +
+  \frac{1}{2} \sum_{i,j} (J_{ij} - K_{ij}) - \sum_{i,j} \lambda_{ij}
+  \left( \langle \psi_i | \psi_j \rangle - \delta_{ij} \right)
+\end{equation*}
+
+where \(h_i\) is the core Hamiltonian matrix and \(J_{ij}, K_{ij}\) are the Coulomb and
+exchange components of the ERI matrix. To fully understand the derivation, consider
+the variational derivative of this functional with respect to the complex
+conjugate of the wave function \(\psi_i^*\):
+
+\begin{align*}
+  \lim_{\epsilon \to 0} \frac{\tilde{\mathcal{F}} \left[ \psi_k^* + \epsilon \delta
+   \psi_k^* \right] - \tilde{\mathcal{F}} \left[ \psi_k^* \right]}{\epsilon} 
+  &= \langle \delta \psi_k | \hat{h} | \psi_k \rangle + \sum_j \left( \langle \delta
+   \psi_k \psi_j | \frac{1}{r} | \psi_k \psi_j \rangle - \langle \delta
+   \psi_k \psi_j | \frac{1}{r} | \psi_j \psi_k \rangle \right)
+   - \sum_j \lambda_{kj} \langle \delta \psi_k | \psi_j \rangle \\
+  &= \int \left[ \hat{h} \psi_k(x) + \sum_j
+     \left( \psi_k(x) \int \frac{|\psi_j(x')|^2}{|r - r'|} dx'
+   - \psi_j(x) \int \frac{\psi_j^*(x') \psi_k(x')}{|r - r'|} dx' \right) \right.
+   \left. - \sum_j \lambda_{kj} \psi_j(x) \right] \delta \psi_k^*(x) \, dx.
+\end{align*}
+
+As discussed earlier, basis sets are used to discretize the Hartree-Fock problem.
+This process results in the  [[https://en.wikipedia.org/wiki/Roothaan_equations][Roothaan equations]], which are implemented in the code above.
+
+#+begin_export html
+</details>
+#+end_export
 
 ** SCF
 
