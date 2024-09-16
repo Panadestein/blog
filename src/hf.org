@@ -58,7 +58,8 @@ are analytical (S, T) while the rest already lacks a closed-form solution (V, ER
   S ← {a‿b𝕊𝕩: (1.5⋆˜π÷a+b) × ⋆-𝕩×a(×÷+)b}
   T ← {a‿b𝕊𝕩: f ← a(×÷+)b ⋄ ×´⟨1.5⋆˜π÷a+b, (3×f)-2×𝕩××˜f, ⋆-𝕩×f⟩}
   V ← {a‿b‿z𝕊r‿s: ×´⟨-2×z×π÷a+b, E s×a+b, ⋆-r×a(×÷+)b⟩}
-  ERI ← {a‿b‿c‿d𝕊r‿s‿t:
+  ERI ← {a‿b‿c‿d𝕊r‿s:
+    t ← |-´⟨a‿b ⋄ c‿d⟩ (+´∘×÷+´∘⊣)¨< r‿s
     f ← (a+b)×(c+d)×√a+b+c+d
     g‿h ← a‿b⋈○((×÷+)´)c‿d 
     ×´⟨2÷f×π⋆5÷2, E f⋆t, ⋆-+´r‿s×g‿h⟩
@@ -95,7 +96,7 @@ bottleneck: there =N⋆4= of them, in our case =N≡2=.
 #+begin_src bqn :tangle ./bqn/hf.bqn
   F ← {𝕊e1‿e2‿z1‿z2‿r:
     bs‿nb ← (⊢⋈≠∘⊑)⍉>STO¨ e1‿e2
-    D ← {∾‿×({2: {(⋈˜/nb‿nb) ⊔ 𝕎⌜˜𝕩}¨; 4: {𝕎⌜⍟3˜𝕩}¨}𝕩)○⊢<∘∾˘bs}
+    D ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
 
     sm‿hcore ← {a𝕊d:
       mst ← ⌽⊸≍∾⟜0×˜r
@@ -106,29 +107,15 @@ bottleneck: there =N⋆4= of them, in our case =N≡2=.
 
     erim ← {a𝕊d:
       i ← a{↕𝕩¨↕=𝕨}≠bs
-      {𝕩⊏0‿r}¨ i
+      meri ← {|-´˘2‿∘⥊𝕩⊏0‿r}¨i
+      1 ⊣ a(⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)meri
     }´ D 4
   }
   F system
 #+end_src
 
 #+RESULTS:
-#+begin_example
-┌─                                                            
-┆ ⟨ 0 0 0 0 ⟩                ⟨ 0 0 0 1.4632 ⟩                 
-  ⟨ 0 0 1.4632 0 ⟩           ⟨ 0 0 1.4632 1.4632 ⟩            
-                                                              
-  ⟨ 0 1.4632 0 0 ⟩           ⟨ 0 1.4632 0 1.4632 ⟩            
-  ⟨ 0 1.4632 1.4632 0 ⟩      ⟨ 0 1.4632 1.4632 1.4632 ⟩       
-                                                              
-                                                              
-  ⟨ 1.4632 0 0 0 ⟩           ⟨ 1.4632 0 0 1.4632 ⟩            
-  ⟨ 1.4632 0 1.4632 0 ⟩      ⟨ 1.4632 0 1.4632 1.4632 ⟩       
-                                                              
-  ⟨ 1.4632 1.4632 0 0 ⟩      ⟨ 1.4632 1.4632 0 1.4632 ⟩       
-  ⟨ 1.4632 1.4632 1.4632 0 ⟩ ⟨ 1.4632 1.4632 1.4632 1.4632 ⟩  
-                                                             ┘
-#+end_example
+: 1
 
 #+begin_export html
 <br/>
