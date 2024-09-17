@@ -115,12 +115,12 @@ in the implementation, as we do here for simplicity.
 <summary>Performance</summary>
 #+end_export
 
-The ERIs computation should be the bottleneck: there =N⋆4= of them, in our case 16. The tensors needed are
-of shape =6¨↕4=. As we see in the profile bellow, the fact that I have used an array strategy for the ERIs
-made their computation more efficient than for the other two center integrals. For the latter, I traded
-rank for depth, creating tiled matrices.
+The computation of the ERIs is expected to be the primary bottleneck, as there are =N⋆4= of them—in our case, 16.
+The required tensors have a shape of =6¨↕4=. As shown in the profile below, using an array-based strategy
+for the ERIs significantly improved their computational efficiency compared to the two-center integrals.
+For the latter, I opted to trade rank for depth by creating tiled matrices.
 
-#+begin_src bqn :exports both :tangle no
+#+begin_src bqn :exports both :tangle no :results raw :wrap example
   )profile {𝕊: F system}¨↕1e4
 #+end_src
 
