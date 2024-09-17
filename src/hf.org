@@ -34,11 +34,12 @@ as is customary in /ab-initio/ methods:
   }
 #+end_src
 
-** STO-3G
+** Basis set
 
 Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
-Slater type orbitals[fn:4] should be a good choice for our Hamiltonian. However, the computation of the integrals
-is a lot easier if we approximate them with Gaussian functions[fn:5]. We define the approximating function:
+Slater type orbitals[fn:4] are a good choice for our Hamiltonian. However, the computation of the integrals
+is a lot easier if we approximate them using Gaussian functions[fn:5]. Specifically, the STO-3G approach defines
+the approximating function as follows:
 
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   STO ← {
@@ -85,10 +86,50 @@ the delta distribution arises and simplifies the problem to this integration by 
 </details>
 #+end_export
 
-** Fock operator's matrix
+** Fock matrix
+
+#+begin_export html
+<br/>
+<details>
+<summary>Physical context</summary>
+#+end_export
+
+The Fock operator is an effective one-electron operator that arises after constrained
+minimization of the energy functional:
+
+\begin{equation*}
+  \tilde{\mathcal{F}} \left[ \{\psi_i\} \right] = \sum_i h_i +
+  \frac{1}{2} \sum_{i,j} (J_{ij} - K_{ij}) - \sum_{i,j} \lambda_{ij}
+  \left( \langle \psi_i | \psi_j \rangle - \delta_{ij} \right)
+\end{equation*}
+
+where \(h_i\) is the core Hamiltonian matrix and \(J_{ij}, K_{ij}\) are the Coulomb and
+exchange components of the ERI matrix. To fully understand the derivation, consider
+the variational derivative of this functional with respect to the complex
+conjugate of the wave function \(\psi_i^*\):
+
+\begin{align*}
+  \lim_{\epsilon \to 0} \frac{\tilde{\mathcal{F}} \left[ \psi_k^* + \epsilon \delta
+   \psi_k^* \right] - \tilde{\mathcal{F}} \left[ \psi_k^* \right]}{\epsilon} 
+  &= \langle \delta \psi_k | \hat{h} | \psi_k \rangle + \sum_j \left( \langle \delta
+   \psi_k \psi_j | \frac{1}{r} | \psi_k \psi_j \rangle - \langle \delta
+   \psi_k \psi_j | \frac{1}{r} | \psi_j \psi_k \rangle \right)
+   - \sum_j \lambda_{kj} \langle \delta \psi_k | \psi_j \rangle \\
+  &= \int \left[ \hat{h} \psi_k(x) + \sum_j
+     \left( \psi_k(x) \int \frac{|\psi_j(x')|^2}{|r - r'|} dx'
+   - \psi_j(x) \int \frac{\psi_j^*(x') \psi_k(x')}{|r - r'|} dx' \right) \right.
+   \left. - \sum_j \lambda_{kj} \psi_j(x) \right] \delta \psi_k^*(x) \, dx.
+\end{align*}
+
+As discussed earlier, basis sets are used to discretize the Hartree-Fock problem.
+This process results in the  [[https://en.wikipedia.org/wiki/Roothaan_equations][Roothaan equations]], which are implemented in the code below.
+
+#+begin_export html
+</details>
+#+end_export
 
 The following function constructs the Fock matrix. Extending this code to an arbitrary
-number of atoms would imply mapping over a list of coordinates, as opposed to fusing them
+number of atoms would imply mapping over an array of coordinates, as opposed to fusing them
 in the implementation, as we do here for simplicity.
 
 #+begin_src bqn :tangle :results none ./bqn/hf.bqn
@@ -146,46 +187,6 @@ Got 35458 samples
       │}
       │F system
 #+end_example
-
-#+begin_export html
-</details>
-#+end_export
-
-#+begin_export html
-<br/>
-<details>
-<summary>Physical context</summary>
-#+end_export
-
-The Fock operator is an effective one-electron operator that arises after constrained
-minimization of the energy functional:
-
-\begin{equation*}
-  \tilde{\mathcal{F}} \left[ \{\psi_i\} \right] = \sum_i h_i +
-  \frac{1}{2} \sum_{i,j} (J_{ij} - K_{ij}) - \sum_{i,j} \lambda_{ij}
-  \left( \langle \psi_i | \psi_j \rangle - \delta_{ij} \right)
-\end{equation*}
-
-where \(h_i\) is the core Hamiltonian matrix and \(J_{ij}, K_{ij}\) are the Coulomb and
-exchange components of the ERI matrix. To fully understand the derivation, consider
-the variational derivative of this functional with respect to the complex
-conjugate of the wave function \(\psi_i^*\):
-
-\begin{align*}
-  \lim_{\epsilon \to 0} \frac{\tilde{\mathcal{F}} \left[ \psi_k^* + \epsilon \delta
-   \psi_k^* \right] - \tilde{\mathcal{F}} \left[ \psi_k^* \right]}{\epsilon} 
-  &= \langle \delta \psi_k | \hat{h} | \psi_k \rangle + \sum_j \left( \langle \delta
-   \psi_k \psi_j | \frac{1}{r} | \psi_k \psi_j \rangle - \langle \delta
-   \psi_k \psi_j | \frac{1}{r} | \psi_j \psi_k \rangle \right)
-   - \sum_j \lambda_{kj} \langle \delta \psi_k | \psi_j \rangle \\
-  &= \int \left[ \hat{h} \psi_k(x) + \sum_j
-     \left( \psi_k(x) \int \frac{|\psi_j(x')|^2}{|r - r'|} dx'
-   - \psi_j(x) \int \frac{\psi_j^*(x') \psi_k(x')}{|r - r'|} dx' \right) \right.
-   \left. - \sum_j \lambda_{kj} \psi_j(x) \right] \delta \psi_k^*(x) \, dx.
-\end{align*}
-
-As discussed earlier, basis sets are used to discretize the Hartree-Fock problem.
-This process results in the  [[https://en.wikipedia.org/wiki/Roothaan_equations][Roothaan equations]], which are implemented in the code above.
 
 #+begin_export html
 </details>
