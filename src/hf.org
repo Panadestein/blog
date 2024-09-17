@@ -60,8 +60,7 @@ are analytical (S, T) while the rest already lacks a closed-form solution (V, ER
   V ← {a‿b‿z𝕊r‿s: ×´⟨-2×z×π÷a+b, E s×a+b, ⋆-r×a(×÷+)b⟩}
   ERI ← {a‿b‿c‿d𝕊r1‿r2‿r3‿r4:
     r5 ← -´⟨a‿b ⋄ c‿d⟩ (+´∘×÷+´∘⊣)¨ ⟨r1‿r2 ⋄ r3‿r4⟩
-    f1‿f2 ← {(√∘+××)⋈(×÷+)}´ ⟨a+b, c+d⟩
-    f3 ← a‿b⋈○((×÷+)´)c‿d 
+    f1‿f2‿f3 ← a‿b ({(√∘+××)⋈(×÷+)}○(+´)∾<∘⋈○((×÷+)´)) c‿d
     ×´⟨f1÷˜2×π⋆5÷2, E f2××˜r5, ⋆-+´f3××˜-´¨⟨r1‿r2, r3‿r4⟩⟩
   }
 #+end_src
@@ -90,10 +89,9 @@ the delta distribution arises and simplifies the problem to this integration by 
 
 The following function constructs the Fock matrix. Extending this code to an arbitrary
 number of atoms would imply mapping over a list of coordinates, as opposed to fusing them
-in the implementation, as we do here for simplicity. The ERIs are the computational
-bottleneck: there =N⋆4= of them, in our case =N≡2=.  
+in the implementation, as we do here for simplicity.
 
-#+begin_src bqn :tangle ./bqn/hf.bqn
+#+begin_src bqn :tangle :results none ./bqn/hf.bqn
   F ← {𝕊e1‿e2‿z1‿z2‿r:
     bs‿nb ← (⊢⋈≠∘⊑)⍉>STO¨ e1‿e2
     D ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
@@ -106,31 +104,52 @@ bottleneck: there =N⋆4= of them, in our case =N≡2=.
     }´ D 2
 
     erim ← {a𝕊d:
-      i ← a{↕𝕩¨↕=𝕨}≠bs
-      meri ← {𝕩⊏0‿r}¨i
-      (1+↕4){(+˝˘[0‿1‿2, 3‿4‿5]⊸⊏)⎉𝕨 𝕩}´˜ a(d⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)meri
+      4 {+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(2‿3⥊˜2×𝕨)⥊𝕩}(d⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕2¨↕=𝕩} a
     }´ D 4
   }
-  F system
+#+end_src
+
+#+begin_export html
+<br/>
+<details>
+<summary>Performance</summary>
+#+end_export
+
+The ERIs computation should be the bottleneck: there =N⋆4= of them, in our case 16. The tensors needed are
+of shape =6¨↕4=. As we see in the profile bellow, the fact that I have used an array strategy for the ERIs
+made their computation more efficient than for the other two center integrals. For the latter, I traded
+rank for depth, creating tiled matrices.
+
+#+begin_src bqn :exports both :tangle no
+  )profile {𝕊: F system}¨↕1e4
 #+end_src
 
 #+RESULTS:
 #+begin_example
-┌─                                         
-┆  1.3071516075554825 0.43727932526541674  
-   0.4372793252654168  0.6057033663335996  
-                                           
-   0.4372793252654168 0.17726712195066158  
-  0.17726712195066158 0.31179457036897384  
-                                           
-                                           
-   0.4372793252654168 0.17726712195066158  
-  0.17726712195066158  0.3117945703689738  
-                                           
-   0.6057033663335996 0.31179457036897384  
-  0.31179457036897384  0.7746083600328786  
-                                          ┘
+Got 35458 samples
+(self-hosted runtime1): 1016 samples
+(REPL): 34442 samples:
+    61│F ← {𝕊e1‿e2‿z1‿z2‿r:
+    54│  bs‿nb ← (⊢⋈≠∘⊑)⍉>STO¨ e1‿e2
+  1930│  D ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
+      │
+   144│  sm‿hcore ← {a𝕊d:
+   247│    mst ← ⌽⊸≍∾⟜0×˜r
+  3209│    r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
+ 15632│    mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
+  6304│    (⊑⋈·+´1⊸↓)+´∘⥊¨¨ d<⊸× ({a𝕏¨¨mst}¨S‿T) ∾ z1‿z2{a∾⟜𝕨⊸V¨¨𝕩}¨mv
+  2937│  }´ D 2
+   762│
+  1967│  erim ← {a𝕊d:
+  1192│    4 {+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(2‿3⥊˜2×𝕨)⥊𝕩}(d⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕2¨↕=𝕩} a
+     3│  }´ D 4
+      │}
+      │F system
 #+end_example
+
+#+begin_export html
+</details>
+#+end_export
 
 #+begin_export html
 <br/>
