@@ -241,9 +241,9 @@ This post is a rolling collection of algorithms and computational ideas I like, 
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org6886dda">Z algorithm</a></li>
-<li><a href="#orgb2bbf09">Longest increasing sub-sequence</a></li>
-<li><a href="#orgad45b49">N-queens problem</a></li>
+<li><a href="#org335db96">Z algorithm</a></li>
+<li><a href="#orgf38ebed">Longest increasing sub-sequence</a></li>
+<li><a href="#orgd8f9bdd">N-queens problem</a></li>
 </ul>
 </div>
 </div>
@@ -254,9 +254,9 @@ would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Th
 juxtapose my implementations with those of seasoned <i>BQNators</i>, acknowledging their contributions
 in footnotes.
 </p>
-<div id="outline-container-org6886dda" class="outline-2">
-<h2 id="org6886dda">Z algorithm</h2>
-<div class="outline-text-2" id="text-org6886dda">
+<div id="outline-container-org335db96" class="outline-2">
+<h2 id="org335db96">Z algorithm</h2>
+<div class="outline-text-2" id="text-org335db96">
 <p>
 This is a very efficient procedure that finds prefix strings in <a href="https://cp-algorithms.com/string/z-function.html">linear time</a>. The imperative
 implementation reads:
@@ -338,9 +338,9 @@ ZAC ← (+´∧`)¨&lt;=«⍟(↕∘≠)
 </div>
 </div>
 </div>
-<div id="outline-container-orgb2bbf09" class="outline-2">
-<h2 id="orgb2bbf09">Longest increasing sub-sequence</h2>
-<div class="outline-text-2" id="text-orgb2bbf09">
+<div id="outline-container-orgf38ebed" class="outline-2">
+<h2 id="orgf38ebed">Longest increasing sub-sequence</h2>
+<div class="outline-text-2" id="text-orgf38ebed">
 <p>
 This <a href="https://en.wikipedia.org/wiki/Longest_increasing_subsequence">problem</a> can be solved in \(O(n\log n)\) using dynamic programming. Here is an
 imperative implementation which is quadratic, but can be optimized:
@@ -382,9 +382,9 @@ strictly increasing.
 </p>
 </div>
 </div>
-<div id="outline-container-orgad45b49" class="outline-2">
-<h2 id="orgad45b49">N-queens problem</h2>
-<div class="outline-text-2" id="text-orgad45b49">
+<div id="outline-container-orgd8f9bdd" class="outline-2">
+<h2 id="orgd8f9bdd">N-queens problem</h2>
+<div class="outline-text-2" id="text-orgd8f9bdd">
 <p>
 This problem is the archetypal example of backtracking. Initially, I tried to solve it
 using a function to place the queens in the full board, hoping that it would lead to a
@@ -396,7 +396,7 @@ more array oriented solution:
 </pre>
 </div>
 
-<pre class="example" id="org0f0ace9">
+<pre class="example" id="org436108b">
 ┌─                 
 ╵ 0 1 0 1 0 1 0 0  
   0 0 1 1 1 0 0 0  
