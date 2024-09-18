@@ -234,9 +234,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Helonium's Hartree-Fock program</h1>
-<div id="outline-container-org511250d" class="outline-2">
-<h2 id="org511250d">Exordium</h2>
-<div class="outline-text-2" id="text-org511250d">
+<div id="outline-container-orgb39e0a0" class="outline-2">
+<h2 id="orgb39e0a0">Exordium</h2>
+<div class="outline-text-2" id="text-orgb39e0a0">
 <p>
 We will implement the Hartree-Fock<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> program from the classic <a href="https://store.doverpublications.com/products/9780486691862">Szabo-Ostlund</a> text,
 a staple in quantum chemistry. If you have any experience in the field, chances are you know it well.
@@ -246,12 +246,22 @@ optimization of the Fock matrix. Using this program, we will compute the energy 
 </p>
 
 <p>
-First, we import the required BQN system values and define some auxiliary functions:
+First, we import the required BQN system values and utility functions:
 </p>
 
 <div class="org-src-container">
 <pre class="src src-bqn">Sin‿Cos‿Tan‿Erf ← •math
-E ← 1e¯6⊸&lt;◶(1-÷⟜3)‿((π÷4)⊸÷×⟜Erf○√⊢)
+Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
+Setplot "line"
+</pre>
+</div>
+
+<p>
+Two additional auxiliary functions are needed for the computation of the integrals and the eigenvalues:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E ← 1e¯6⊸&lt;◶(1-÷⟜3)‿((π÷4)⊸÷×⟜Erf○√⊢)
 </pre>
 </div>
 
@@ -270,9 +280,9 @@ as is customary in <i>ab-initio</i> methods:
 </div>
 </div>
 </div>
-<div id="outline-container-org78e1e39" class="outline-2">
-<h2 id="org78e1e39">Basis set</h2>
-<div class="outline-text-2" id="text-org78e1e39">
+<div id="outline-container-org5155004" class="outline-2">
+<h2 id="org5155004">Basis set</h2>
+<div class="outline-text-2" id="text-org5155004">
 <p>
 Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
 Slater type orbitals<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup> are a good choice for our Hamiltonian. However, the computation of the integrals
@@ -290,9 +300,9 @@ the approximating function as follows:
 </div>
 </div>
 </div>
-<div id="outline-container-org9e6aad9" class="outline-2">
-<h2 id="org9e6aad9">Electronic integrals</h2>
-<div class="outline-text-2" id="text-org9e6aad9">
+<div id="outline-container-org9192481" class="outline-2">
+<h2 id="org9192481">Electronic integrals</h2>
+<div class="outline-text-2" id="text-org9192481">
 <p>
 Constructing the integrals' tensor is complicated<sup><a id="fnr.6" class="footref" href="#fn.6" role="doc-backlink">6</a></sup> and is the main reason for the poor scaling
 of electronic structure methods. The \(1s\) orbitals are the simplest case, and here two types of integrals
@@ -330,9 +340,9 @@ the delta distribution arises and simplifies the problem to this integration by 
 </details>
 </div>
 </div>
-<div id="outline-container-org50b04b1" class="outline-2">
-<h2 id="org50b04b1">Fock matrix</h2>
-<div class="outline-text-2" id="text-org50b04b1">
+<div id="outline-container-org333ebf2" class="outline-2">
+<h2 id="org333ebf2">Fock matrix</h2>
+<div class="outline-text-2" id="text-org333ebf2">
 <p>
 The following function constructs the Fock matrix, our approximation to the true Hamiltonian of the system.
 Extending the code to an arbitrary number of atoms implies mapping over an array of coordinates,
@@ -418,7 +428,7 @@ slower than replicating the elements to match each axis' length, like I do for t
 </pre>
 </div>
 
-<pre class="example" id="orga3f2863">
+<pre class="example" id="orgdb09394">
 Got 38135 samples
 (REPL): 37021 samples:
     92│F ← {𝕊e1‿e2‿z1‿z2‿r:
@@ -447,12 +457,35 @@ Morals: Never underestimate the power of vectorization and reshaping operations 
 </details>
 </div>
 </div>
-<div id="outline-container-orgd5260b1" class="outline-2">
-<h2 id="orgd5260b1">SCF</h2>
-<div class="outline-text-2" id="text-orgd5260b1">
+<div id="outline-container-orgcdbb627" class="outline-2">
+<h2 id="orgcdbb627">SCF</h2>
+<div class="outline-text-2" id="text-orgcdbb627">
 <p>
 Compare the electronic energy with the one computed using the original <a href="./supp/hf_so/hf_so.html">F66</a> program.
 </p>
+
+<details>
+<summary>Potential Energy Curve</summary>
+
+<p>
+The <a href="https://en.wikipedia.org/wiki/Potential_energy_surface">PEC</a> of the system will be here:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">)r •Out¨ 10‿⟨1, 1⟩ Plot ⋈˜ 2+↕10
+</pre>
+</div>
+
+<div style='text-align: center;'>
+<svg viewBox='-1 -1 12 12' width='30%'>
+  <g font-family='BQN,monospace' font-size='18px'>
+    <rect class='code' fill='#e3e7e7' stroke-width='1' rx='0.5' x='-0.5' y='-0.5' width='11' height='11'/>
+    <path class='code' stroke='black' stroke-width='0.1' d='M0 10L1.111 8.889L2.222 7.778L3.333 6.667L4.444 5.556L5.556 4.444L6.667 3.333L7.778 2.222L8.889 1.111L10 0'/>
+  </g>
+</svg>
+</div>
+
+</details>
 </div>
 </div>
 <div id="footnotes">
