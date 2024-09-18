@@ -88,6 +88,29 @@ the delta distribution arises and simplifies the problem to this integration by 
 
 ** Fock matrix
 
+The following function constructs the Fock matrix, our approximation to the true Hamiltonian of the system.
+Extending the code to an arbitrary number of atoms implies mapping over an array of coordinates,
+as opposed to fusing them in the implementation.
+
+#+begin_src bqn :tangle :results none ./bqn/hf.bqn
+  F ← {𝕊e1‿e2‿z1‿z2‿r:
+    bs‿na‿nb ← (<∾·≢⊏∘>)⍉>STO¨ e1‿e2
+    D ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
+
+    sm‿hcore ← {e𝕊c:
+      mst ← ⌽⊸≍∾⟜0×˜r
+      r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
+      mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
+      (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c<⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
+    }´ D 2
+
+    erim ← {e𝕊c:
+      meri ← (c⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
+      =⊸{+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(na‿nb⥊˜na×𝕨)⥊𝕩} meri
+    }´ D 4
+  }
+#+end_src
+
 #+begin_export html
 <br/>
 <details>
@@ -128,28 +151,6 @@ This process results in the  [[https://en.wikipedia.org/wiki/Roothaan_equations]
 </details>
 #+end_export
 
-The following function constructs the Fock matrix. Extending this code to an arbitrary
-number of atoms would imply mapping over an array of coordinates, as opposed to fusing them
-in the implementation, as we do here for simplicity.
-
-#+begin_src bqn :tangle :results none ./bqn/hf.bqn
-  F ← {𝕊e1‿e2‿z1‿z2‿r:
-    bs‿nb ← (⊢⋈≠∘⊑)⍉>STO¨ e1‿e2
-    D ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
-
-    sm‿hcore ← {a𝕊d:
-      mst ← ⌽⊸≍∾⟜0×˜r
-      r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
-      mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
-      (⊑⋈·+´1⊸↓)+´∘⥊¨¨ d<⊸× ({a𝕏¨¨mst}¨S‿T) ∾ z1‿z2{a∾⟜𝕨⊸V¨¨𝕩}¨mv
-    }´ D 2
-
-    erim ← {a𝕊d:
-      4 {+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(2‿3⥊˜2×𝕨)⥊𝕩}(d⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕2¨↕=𝕩} a
-    }´ D 4
-  }
-#+end_src
-
 #+begin_export html
 <br/>
 <details>
@@ -159,7 +160,8 @@ in the implementation, as we do here for simplicity.
 The computation of the ERIs is expected to be the primary bottleneck, as there are =N⋆4= of them—in our case, 16.
 The required tensors have a shape of =6¨↕4=. As shown in the profile below, using an array-based strategy
 for the ERIs significantly improved their computational efficiency compared to the two-center integrals.
-For the latter, I opted to trade rank for depth by creating tiled matrices.
+For the latter, I increased the depth by grouping the tables (block matrices). The resulting code was significantly
+slower than replicating the elements to match each axis' length, like I do for the ERIs.
 
 #+begin_src bqn :exports both :tangle no :results raw :wrap example
   )profile {𝕊: F system}¨↕1e4
@@ -167,26 +169,28 @@ For the latter, I opted to trade rank for depth by creating tiled matrices.
 
 #+RESULTS:
 #+begin_example
-Got 35458 samples
-(self-hosted runtime1): 1016 samples
-(REPL): 34442 samples:
-    61│F ← {𝕊e1‿e2‿z1‿z2‿r:
-    54│  bs‿nb ← (⊢⋈≠∘⊑)⍉>STO¨ e1‿e2
-  1930│  D ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
+Got 35941 samples
+(REPL): 34968 samples:
+    73│F ← {𝕊e1‿e2‿z1‿z2‿r:
+    72│  bs‿na‿nb ← (<∾·≢⊏∘>)⍉>STO¨ e1‿e2
+  2004│  D ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
       │
-   144│  sm‿hcore ← {a𝕊d:
-   247│    mst ← ⌽⊸≍∾⟜0×˜r
-  3209│    r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
- 15632│    mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
-  6304│    (⊑⋈·+´1⊸↓)+´∘⥊¨¨ d<⊸× ({a𝕏¨¨mst}¨S‿T) ∾ z1‿z2{a∾⟜𝕨⊸V¨¨𝕩}¨mv
-  2937│  }´ D 2
-   762│
-  1967│  erim ← {a𝕊d:
-  1192│    4 {+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(2‿3⥊˜2×𝕨)⥊𝕩}(d⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕2¨↕=𝕩} a
-     3│  }´ D 4
+   259│  sm‿hcore ← {e𝕊c:
+   115│    mst ← ⌽⊸≍∾⟜0×˜r
+  4100│    r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
+ 14905│    mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
+  8344│    (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c<⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
+  3835│  }´ D 2
+      │
+     8│  erim ← {e𝕊c:
+   972│    meri ← (c⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
+   280│    =⊸{+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(na‿nb⥊˜na×𝕨)⥊𝕩} meri
+     1│  }´ D 4
       │}
-      │F system
+(self-hosted runtime1): 973 samples
 #+end_example
+
+Morals: Never underestimate the power of vectorization and reshaping operations are often computationally trivial.
 
 #+begin_export html
 </details>
