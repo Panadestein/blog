@@ -92,22 +92,22 @@ The following function constructs the Fock matrix, our approximation to the true
 Extending the code to an arbitrary number of atoms implies mapping over an array of coordinates,
 as opposed to fusing them in the implementation.
 
-#+begin_src bqn :tangle :results none ./bqn/hf.bqn
+#+begin_src bqn :tangle ./bqn/hf.bqn :results none
   F ← {𝕊e1‿e2‿z1‿z2‿r:
     bs‿na‿nb ← (<∾·≢⊏∘>)⍉>STO¨ e1‿e2
-    D ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
+    M ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
 
     sm‿hcore ← {e𝕊c:
       mst ← ⌽⊸≍∾⟜0×˜r
       r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
       mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
       (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c<⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
-    }´ D 2
+    }´ M 2
 
     erim ← {e𝕊c:
       meri ← (c⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
       =⊸{+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(na‿nb⥊˜na×𝕨)⥊𝕩} meri
-    }´ D 4
+    }´ M 4
   }
 #+end_src
 
