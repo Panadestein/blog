@@ -169,25 +169,25 @@ slower than replicating the elements to match each axis' length, like I do for t
 
 #+RESULTS:
 #+begin_example
-Got 35941 samples
-(REPL): 34968 samples:
-    73│F ← {𝕊e1‿e2‿z1‿z2‿r:
+Got 38135 samples
+(REPL): 37021 samples:
+    92│F ← {𝕊e1‿e2‿z1‿z2‿r:
     72│  bs‿na‿nb ← (<∾·≢⊏∘>)⍉>STO¨ e1‿e2
-  2004│  D ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
+  2127│  M ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
       │
-   259│  sm‿hcore ← {e𝕊c:
-   115│    mst ← ⌽⊸≍∾⟜0×˜r
-  4100│    r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
- 14905│    mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
-  8344│    (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c<⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
-  3835│  }´ D 2
+   265│  sm‿hcore ← {e𝕊c:
+    99│    mst ← ⌽⊸≍∾⟜0×˜r
+  4235│    r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
+ 15947│    mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
+  8864│    (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c<⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
+  3980│  }´ M 2
       │
-     8│  erim ← {e𝕊c:
-   972│    meri ← (c⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
+     9│  erim ← {e𝕊c:
+  1049│    meri ← (c⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
    280│    =⊸{+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(na‿nb⥊˜na×𝕨)⥊𝕩} meri
-     1│  }´ D 4
+     2│  }´ M 4
       │}
-(self-hosted runtime1): 973 samples
+(self-hosted runtime1): 1114 samples
 #+end_example
 
 Morals: Never underestimate the power of vectorization and reshaping operations are often computationally trivial.
