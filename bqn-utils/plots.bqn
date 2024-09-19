@@ -15,9 +15,9 @@ InitPlot ← {𝕤⋄ opts_type ↩ "line" }
 SetPlot  ⇐ {𝕤⋄ opts_type ↩ 𝕩 }
 
 pa ← At "class=code|style=fill:none;stroke:black|stroke-width=2"
-pg ← At "class=code|style=fill:none;stroke:black|stroke-width=2"
+pg ← At "class=code|style=fill:none;stroke:#267CB9|stroke-width=3"
 pc ← At "class=code|r=4"
-rc ← At "class=code|style=fill:none;stroke:black|stroke-width=2|rx=5"
+rc ← At "class=code|style=fill:none;stroke:black|stroke-width=1|rx=5"
 gr ← "g" At "font-family=BQN,monospace|font-size=18px"
 Path ← "path" Elt ⊣∾"d"⋈⊢
 
