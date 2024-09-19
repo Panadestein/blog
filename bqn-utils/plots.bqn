@@ -7,14 +7,17 @@ At‿Enc‿Elt‿Pos‿FmtNum‿SVG ← •Import "svg.bqn"
 
 # Set plot type
 
+width ← 384
+pad   ← 2⥊10
+
 opts_type ← @
-InitPlot ⇐ {𝕤⋄ opts_type ↩ "line" }
+InitPlot ← {𝕤⋄ opts_type ↩ "line" }
 SetPlot  ⇐ {𝕤⋄ opts_type ↩ 𝕩 }
 
-pa ← At "class=code|stroke=black|stroke-width=0.1"
-pg ← At "class=code|stroke=black|stroke-width=0.1"
+pa ← At "class=code|style=fill:none;stroke:black|stroke-width=2"
+pg ← At "class=code|style=fill:none;stroke:black|stroke-width=2"
 pc ← At "class=code|r=4"
-rc ← At "class=code|fill=#e3e7e7|stroke-width=1|rx=0.5"
+rc ← At "class=code|style=fill:none;stroke:black|stroke-width=2|rx=5"
 gr ← "g" At "font-family=BQN,monospace|font-size=18px"
 Path ← "path" Elt ⊣∾"d"⋈⊢
 
@@ -23,16 +26,12 @@ Pair ← {
   "•Plot: 𝕨 and 𝕩 must have the same length" ! 𝕨 1⊘(≡○(¯1⊑≢)) 𝕩
   ⥊ 𝕨 (< (↕¯1⊑≢)⊘⊣ ⋈ ⊢)⎉1 𝕩
 }
-
 PairRec ← {
   d ← 𝕨≍○≡𝕩
   𝕨 (2≤⌊´d)◶⟨Pair⊣"•Plot: invalid depth mixing"!·∧´1=d˙, ∾∘⥊𝕊¨⟩ 𝕩
 }
-
-# Modify so we get dynamic size
-
-Plot ⇐ {width‿pad𝕊abs‿ord:
-  xy ← 1e300 (⊣-⊸⌈⌊) ⍉> ord PairRec abs
+Plot ⇐ {
+  xy ← 1e300 (⊣-⊸⌈⌊) ⍉> 𝕨 PairRec 𝕩   # organize and clip
   pts ← <∘∾˘ xy
   AB ← {e←(÷5e15)(⊣×⌈´)|𝕩⋄(⌊≍⌈)˝⌾(-⟜0‿e)𝕩} # ensure 0 < window size
   win ← -˜`¨ bounds ← (AB ⌊´≍⌈´)¨ pts # min and range; min and max
