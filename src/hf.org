@@ -23,7 +23,7 @@ First, we import the required BQN system values and utility functions:
   Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
 #+end_src
 
-Three auxiliary functions are needed for the computation of the Boys function, the matrix and vector product,
+Some auxiliary functions are needed for the computation of the Boys function, the matrix and vector product,
 the spectrum of a matrix with shape 2‿2, and Löwdin's canonical orthogonalization:
 
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
@@ -167,8 +167,8 @@ Morals: Never underestimate the power of vectorization and reshaping operations 
 
 The following function constructs the Fock matrix, our approximation to the true Hamiltonian of the system:
 
-#+begin_src bqn :tangle ./bqn/hf.bqn
-  F ← {𝕩}
+#+begin_src bqn :results none :tangle ./bqn/hf.bqn
+  F ← {𝕩.hcore + 𝕨 (+˝∘⥊⎉2⊣×⎉2⊢-2÷˜0‿3‿2⊸⍉⁼) 𝕩.erim}
 #+end_src
 
 #+begin_export html
@@ -212,7 +212,7 @@ This process results in the  [[https://en.wikipedia.org/wiki/Roothaan_equations]
 </details>
 #+end_export
 
-** SCF
+** Self-consistent field
 
 #+begin_src bqn :tangle ./bqn/hf.bqn
   SCF ← {𝕩}
