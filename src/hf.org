@@ -214,9 +214,24 @@ This process results in the  [[https://en.wikipedia.org/wiki/Roothaan_equations]
 
 ** Self-consistent field
 
+The final stage of the computation involves solving the pseudo-eigenvalue problem using a fixed-point iteration.
+This process is commonly known as the self-consistent field method, a term coined by D. R. Hartree.
+
 #+begin_src bqn :tangle ./bqn/hf.bqn
-  SCF ← {𝕩}
+  SCF ← {
+    ints ← I𝕩
+    xm ← L ints.sm
+    f0 ← ints F˜0¨xm
+    #{𝕊∘⊢⍟≢⟜𝔽𝕩}
+  }
+  SCF system
 #+end_src
+
+#+RESULTS:
+: ┌─                                         
+: ╵ ¯2.6527447246802542 ¯1.3472051723130691  
+:   ¯1.3472051723130691 ¯1.7318283979165194  
+:                                           ┘
 
 Compare the electronic energy with the one computed using the original [[./supp/hf_so/hf_so.html][F66]] program.
 
