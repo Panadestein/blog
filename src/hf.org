@@ -19,14 +19,18 @@ optimization of the Fock matrix. Using this program, we will compute the energy 
 First, we import the required BQN system values and utility functions:
 
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
-  Sin‿Cos‿Tan‿Erf ← •math
+  Sin‿Cos‿ATan‿Erf ← •math
   Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
 #+end_src
 
-Two additional auxiliary functions are needed for the computation of the integrals and the eigenvalues:
+Three auxiliary functions are needed for the computation of the Boys function, the matrix and vector product,
+the spectrum of a matrix with shape 2‿2, and Löwdin's canonical orthogonalization:
 
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   E ← 1e¯6⊸<◶(1-÷⟜3)‿((π÷4)⊸÷×⟜Erf○√⊢)
+  P ← +˝∘×⎉1‿∞
+  D ← (⊢⋈·P´<∘⊢∾⋈)⟜([Cos‿Sin⋄Sin‿(-Cos)]{𝕎𝕩}¨·<2÷˜·ATan 2×0‿1⊸⊑÷·-´0‿0⊸⍉)
+  L ← (-⌾(1‿1⊸⊑)·÷∘√≢⥊2˙)⊸P(0¨⌾(0‿0⍉⌽˘)·÷∘√1+1‿¯1×⌽˘)
 #+end_src
 
 Then, we create a namespace with the physical constants defining the system[fn:3],
@@ -92,70 +96,27 @@ the delta distribution arises and simplifies the problem to this integration by 
 </details>
 #+end_export
 
-** Fock matrix
-
-The following function constructs the Fock matrix, our approximation to the true Hamiltonian of the system.
-Extending the code to an arbitrary number of atoms implies mapping over an array of coordinates,
-as opposed to fusing them in the implementation.
+The following namespace exports the corresponding integral arrays. Extending the code to an arbitrary number
+of atoms implies mapping over an array of coordinates, as opposed to fusing them in the implementation.
 
 #+begin_src bqn :tangle ./bqn/hf.bqn :results none
-  F ← {𝕊e1‿e2‿z1‿z2‿r:
+  I ← {𝕊e1‿e2‿z1‿z2‿r:
     bs‿na‿nb ← (<∾·≢⊏∘>)⍉>STO¨ e1‿e2
     M ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
 
-    sm‿hcore ← {e𝕊c:
+    sm‿hcore ⇐ {e𝕊c:
       mst ← ⌽⊸≍∾⟜0×˜r
       r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
       mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
       (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c<⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
     }´ M 2
 
-    erim ← {e𝕊c:
+    erim ⇐ {e𝕊c:
       meri ← (c⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
       =⊸{+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(na‿nb⥊˜na×𝕨)⥊𝕩} meri
     }´ M 4
   }
 #+end_src
-
-#+begin_export html
-<br/>
-<details>
-<summary>Physical context</summary>
-#+end_export
-
-The Fock operator is an effective one-electron operator that arises after constrained
-minimization of the energy functional:
-
-\begin{equation*}
-  \tilde{\mathcal{F}} \left[ \{\psi_i\} \right] = \sum_i h_i +
-  \frac{1}{2} \sum_{i,j} (J_{ij} - K_{ij}) - \sum_{i,j} \lambda_{ij}
-  \left( \langle \psi_i | \psi_j \rangle - \delta_{ij} \right)
-\end{equation*}
-
-where \(h_i\) is the core Hamiltonian matrix and \(J_{ij}, K_{ij}\) are the Coulomb and
-exchange components of the ERI matrix. To fully understand the derivation, consider
-the variational derivative of this functional with respect to the complex
-conjugate of the wave function \(\psi_i^*\):
-
-\begin{align*}
-  \lim_{\epsilon \to 0} \frac{\tilde{\mathcal{F}} \left[ \psi_k^* + \epsilon \delta
-   \psi_k^* \right] - \tilde{\mathcal{F}} \left[ \psi_k^* \right]}{\epsilon} 
-  &= \langle \delta \psi_k | \hat{h} | \psi_k \rangle + \sum_j \left( \langle \delta
-   \psi_k \psi_j | \frac{1}{r} | \psi_k \psi_j \rangle - \langle \delta
-   \psi_k \psi_j | \frac{1}{r} | \psi_j \psi_k \rangle \right)
-   - \sum_j \lambda_{kj} \langle \delta \psi_k | \psi_j \rangle \\
-  &= \int \left[ \hat{h} \psi_k(x) + \sum_j
-     \left( \psi_k(x) \int \frac{|\psi_j(x')|^2}{|r - r'|} dx'
-   - \psi_j(x) \int \frac{\psi_j^*(x') \psi_k(x')}{|r - r'|} dx' \right) \right.
-   \left. - \sum_j \lambda_{kj} \psi_j(x) \right] \delta \psi_k^*(x) \, dx.
-\end{align*}
-
-As discussed earlier, basis sets are used to discretize the Hartree-Fock problem.
-This process results in the  [[https://en.wikipedia.org/wiki/Roothaan_equations][Roothaan equations]], which are implemented in the code below.
-
-#+begin_export html
-</details>
-#+end_export
 
 #+begin_export html
 <br/>
@@ -177,18 +138,18 @@ slower than replicating the elements to match each axis' length, like I do for t
 #+begin_example
 Got 38135 samples
 (REPL): 37021 samples:
-    92│F ← {𝕊e1‿e2‿z1‿z2‿r:
+    92│I ← {𝕊e1‿e2‿z1‿z2‿r:
     72│  bs‿na‿nb ← (<∾·≢⊏∘>)⍉>STO¨ e1‿e2
   2127│  M ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
       │
-   265│  sm‿hcore ← {e𝕊c:
+   265│  sm‿hcore ⇐ {e𝕊c:
     99│    mst ← ⌽⊸≍∾⟜0×˜r
   4235│    r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
  15947│    mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
   8864│    (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c<⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
   3980│  }´ M 2
       │
-     9│  erim ← {e𝕊c:
+     9│  erim ⇐ {e𝕊c:
   1049│    meri ← (c⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
    280│    =⊸{+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(na‿nb⥊˜na×𝕨)⥊𝕩} meri
      2│  }´ M 4
@@ -202,7 +163,60 @@ Morals: Never underestimate the power of vectorization and reshaping operations 
 </details>
 #+end_export
 
+** Fock matrix
+
+The following function constructs the Fock matrix, our approximation to the true Hamiltonian of the system:
+
+#+begin_src bqn :tangle ./bqn/hf.bqn
+  F ← {𝕩}
+#+end_src
+
+#+begin_export html
+<br/>
+<details>
+<summary>Physical context</summary>
+#+end_export
+
+The Fock operator is an effective one-electron operator that arises after constrained
+minimization of the energy functional. The form of the functional is a consequence of
+the use of [[https://en.wikipedia.org/wiki/Slater_determinant][Slater determinants]] as wave functions.
+
+\begin{equation*}
+  \tilde{\mathcal{F}} \left[ \{\psi_i\} \right] = \sum_i h_i +
+  \frac{1}{2} \sum_{i,j} (J_{ij} - K_{ij}) - \sum_{i,j} \lambda_{ij}
+  \left( \langle \psi_i | \psi_j \rangle - \delta_{ij} \right)
+\end{equation*}
+
+where \(h_i\) is the core Hamiltonian matrix, \(J_{ij}, K_{ij}\) are the Coulomb and
+exchange components of the ERI matrix, and \(\lambda_{ij}\) are Lagrange multipliers.
+To fully understand the derivation, consider the variational derivative of this
+functional with respect to the complex conjugate of the one-particle wave function \(\psi_i^*\):
+
+\begin{align*}
+  \lim_{\epsilon \to 0} \frac{\tilde{\mathcal{F}} \left[ \psi_k^* + \epsilon \delta
+   \psi_k^* \right] - \tilde{\mathcal{F}} \left[ \psi_k^* \right]}{\epsilon} 
+  &= \langle \delta \psi_k | \hat{h} | \psi_k \rangle + \sum_j \left( \langle \delta
+   \psi_k \psi_j | \frac{1}{r} | \psi_k \psi_j \rangle - \langle \delta
+   \psi_k \psi_j | \frac{1}{r} | \psi_j \psi_k \rangle \right)
+   - \sum_j \lambda_{kj} \langle \delta \psi_k | \psi_j \rangle \\
+  &= \int \left[ \hat{h} \psi_k(x) + \sum_j
+     \left( \psi_k(x) \int \frac{|\psi_j(x')|^2}{|r - r'|} dx'
+   - \psi_j(x) \int \frac{\psi_j^*(x') \psi_k(x')}{|r - r'|} dx' \right) \right.
+   \left. - \sum_j \lambda_{kj} \psi_j(x) \right] \delta \psi_k^*(x) \, dx.
+\end{align*}
+
+As discussed earlier, basis sets are used to discretize the Hartree-Fock problem.
+This process results in the  [[https://en.wikipedia.org/wiki/Roothaan_equations][Roothaan equations]], which are implemented in the code below.
+
+#+begin_export html
+</details>
+#+end_export
+
 ** SCF
+
+#+begin_src bqn :tangle ./bqn/hf.bqn
+  SCF ← {𝕩}
+#+end_src
 
 Compare the electronic energy with the one computed using the original [[./supp/hf_so/hf_so.html][F66]] program.
 
