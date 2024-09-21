@@ -31,6 +31,7 @@ the spectrum of a matrix with shape 2‿2, and Löwdin's canonical orthogonaliza
   P ← +˝∘×⎉1‿∞
   D ← (⊢⋈·P´<∘⊢∾⋈)⟜([Cos‿Sin⋄Sin‿(-Cos)]{𝕎𝕩}¨·<2÷˜·ATan 2×0‿1⊸⊑÷·-´0‿0⊸⍉)
   L ← (-⌾(1‿1⊸⊑)·÷∘√≢⥊2˙)⊸P(0¨⌾(0‿0⍉⌽˘)·÷∘√1+1‿¯1×⌽˘)
+  _fp ← {𝕊∘⊢⍟≢⟜𝔽𝕩}
 #+end_src
 
 Then, we create a namespace with the physical constants defining the system[fn:3],
@@ -221,17 +222,19 @@ This process is commonly known as the self-consistent field method, a term coine
   SCF ← {
     ints ← I𝕩
     xm ← L ints.sm
-    f0 ← ints F˜0¨xm
-    #{𝕊∘⊢⍟≢⟜𝔽𝕩}
+    {𝕊pm:
+      cm‿em ← xm (D·P´⍉∘⊢<⊸∾⋈)˜ pm F ints
+      2××⌜˜⊏⍉ xm P cm
+    }_fp 0¨xm
   }
   SCF system
 #+end_src
 
 #+RESULTS:
-: ┌─                                         
-: ╵ ¯2.6527447246802542 ¯1.3472051723130691  
-:   ¯1.3472051723130691 ¯1.7318283979165194  
-:                                           ┘
+: ┌─                                        
+: ╵ 1.2861416826010692  0.5401732176446058  
+:   0.5401732176446058 0.22687011004139285  
+:                                          ┘
 
 Compare the electronic energy with the one computed using the original [[./supp/hf_so/hf_so.html][F66]] program.
 
