@@ -234,9 +234,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Helonium's Hartree-Fock program</h1>
-<div id="outline-container-org3951d80" class="outline-2">
-<h2 id="org3951d80">Exordium</h2>
-<div class="outline-text-2" id="text-org3951d80">
+<div id="outline-container-org9759fda" class="outline-2">
+<h2 id="org9759fda">Exordium</h2>
+<div class="outline-text-2" id="text-org9759fda">
 <p>
 We will implement the Hartree-Fock<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> program from the classic <a href="https://store.doverpublications.com/products/9780486691862">Szabo-Ostlund</a> text,
 a staple in quantum chemistry. If you have any experience in the field, chances are you know it well.
@@ -265,6 +265,7 @@ the spectrum of a matrix with shape 2‿2, and Löwdin's canonical orthogonaliza
 P ← +˝∘×⎉1‿∞
 D ← (⊢⋈·P´&lt;∘⊢∾⋈)⟜([Cos‿Sin⋄Sin‿(-Cos)]{𝕎𝕩}¨·&lt;2÷˜·ATan 2×0‿1⊸⊑÷·-´0‿0⊸⍉)
 L ← (-⌾(1‿1⊸⊑)·÷∘√≢⥊2˙)⊸P(0¨⌾(0‿0⍉⌽˘)·÷∘√1+1‿¯1×⌽˘)
+_fp ← {𝕊∘⊢⍟≢⟜𝔽𝕩}
 </pre>
 </div>
 
@@ -283,9 +284,9 @@ as is customary in <i>ab-initio</i> methods:
 </div>
 </div>
 </div>
-<div id="outline-container-orgc7bb625" class="outline-2">
-<h2 id="orgc7bb625">Basis set</h2>
-<div class="outline-text-2" id="text-orgc7bb625">
+<div id="outline-container-org4c4a8f9" class="outline-2">
+<h2 id="org4c4a8f9">Basis set</h2>
+<div class="outline-text-2" id="text-org4c4a8f9">
 <p>
 Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
 Slater type orbitals<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup> are a good choice for our Hamiltonian. However, the computation of the integrals
@@ -303,9 +304,9 @@ the approximating function as follows:
 </div>
 </div>
 </div>
-<div id="outline-container-orgbf28701" class="outline-2">
-<h2 id="orgbf28701">Electronic integrals</h2>
-<div class="outline-text-2" id="text-orgbf28701">
+<div id="outline-container-org859a06e" class="outline-2">
+<h2 id="org859a06e">Electronic integrals</h2>
+<div class="outline-text-2" id="text-org859a06e">
 <p>
 Constructing the integrals' tensor is complicated<sup><a id="fnr.6" class="footref" href="#fn.6" role="doc-backlink">6</a></sup> and is the main reason for the poor scaling
 of electronic structure methods. The \(1s\) orbitals are the simplest case, and here two types of integrals
@@ -384,7 +385,7 @@ slower than replicating the elements to match each axis' length, like I do for t
 </pre>
 </div>
 
-<pre class="example" id="orgfd6248a">
+<pre class="example" id="org57ae769">
 Got 38135 samples
 (REPL): 37021 samples:
     92│I ← {𝕊e1‿e2‿z1‿z2‿r:
@@ -413,9 +414,9 @@ Morals: Never underestimate the power of vectorization and reshaping operations 
 </details>
 </div>
 </div>
-<div id="outline-container-org269ccbc" class="outline-2">
-<h2 id="org269ccbc">Fock matrix</h2>
-<div class="outline-text-2" id="text-org269ccbc">
+<div id="outline-container-org37cb805" class="outline-2">
+<h2 id="org37cb805">Fock matrix</h2>
+<div class="outline-text-2" id="text-org37cb805">
 <p>
 The following function constructs the Fock matrix, our approximation to the true Hamiltonian of the system:
 </p>
@@ -469,9 +470,9 @@ This process results in the  <a href="https://en.wikipedia.org/wiki/Roothaan_equ
 </details>
 </div>
 </div>
-<div id="outline-container-org7ab1b6b" class="outline-2">
-<h2 id="org7ab1b6b">Self-consistent field</h2>
-<div class="outline-text-2" id="text-org7ab1b6b">
+<div id="outline-container-org949db21" class="outline-2">
+<h2 id="org949db21">Self-consistent field</h2>
+<div class="outline-text-2" id="text-org949db21">
 <p>
 The final stage of the computation involves solving the pseudo-eigenvalue problem using a fixed-point iteration.
 This process is commonly known as the self-consistent field method, a term coined by D. R. Hartree.
@@ -481,8 +482,10 @@ This process is commonly known as the self-consistent field method, a term coine
 <pre class="src src-bqn">SCF ← {
   ints ← I𝕩
   xm ← L ints.sm
-  f0 ← ints F˜0¨xm
-  #{𝕊∘⊢⍟≢⟜𝔽𝕩}
+  {𝕊pm:
+    cm‿em ← xm (D·P´⍉∘⊢&lt;⊸∾⋈)˜ pm F ints
+    2××⌜˜⊏⍉ xm P cm
+  }_fp 0¨xm
 }
 SCF system
 </pre>
