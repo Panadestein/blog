@@ -234,9 +234,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Helonium's Hartree-Fock program</h1>
-<div id="outline-container-org00edfd7" class="outline-2">
-<h2 id="org00edfd7">Exordium</h2>
-<div class="outline-text-2" id="text-org00edfd7">
+<div id="outline-container-org3951d80" class="outline-2">
+<h2 id="org3951d80">Exordium</h2>
+<div class="outline-text-2" id="text-org3951d80">
 <p>
 We will implement the Hartree-Fock<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> program from the classic <a href="https://store.doverpublications.com/products/9780486691862">Szabo-Ostlund</a> text,
 a staple in quantum chemistry. If you have any experience in the field, chances are you know it well.
@@ -250,17 +250,21 @@ First, we import the required BQN system values and utility functions:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">Sin‿Cos‿Tan‿Erf ← •math
+<pre class="src src-bqn">Sin‿Cos‿ATan‿Erf ← •math
 Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
 </pre>
 </div>
 
 <p>
-Two additional auxiliary functions are needed for the computation of the integrals and the eigenvalues:
+Some auxiliary functions are needed for the computation of the Boys function, the matrix and vector product,
+the spectrum of a matrix with shape 2‿2, and Löwdin's canonical orthogonalization:
 </p>
 
 <div class="org-src-container">
 <pre class="src src-bqn">E ← 1e¯6⊸&lt;◶(1-÷⟜3)‿((π÷4)⊸÷×⟜Erf○√⊢)
+P ← +˝∘×⎉1‿∞
+D ← (⊢⋈·P´&lt;∘⊢∾⋈)⟜([Cos‿Sin⋄Sin‿(-Cos)]{𝕎𝕩}¨·&lt;2÷˜·ATan 2×0‿1⊸⊑÷·-´0‿0⊸⍉)
+L ← (-⌾(1‿1⊸⊑)·÷∘√≢⥊2˙)⊸P(0¨⌾(0‿0⍉⌽˘)·÷∘√1+1‿¯1×⌽˘)
 </pre>
 </div>
 
@@ -279,9 +283,9 @@ as is customary in <i>ab-initio</i> methods:
 </div>
 </div>
 </div>
-<div id="outline-container-orgb0eb43a" class="outline-2">
-<h2 id="orgb0eb43a">Basis set</h2>
-<div class="outline-text-2" id="text-orgb0eb43a">
+<div id="outline-container-orgc7bb625" class="outline-2">
+<h2 id="orgc7bb625">Basis set</h2>
+<div class="outline-text-2" id="text-orgc7bb625">
 <p>
 Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
 Slater type orbitals<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup> are a good choice for our Hamiltonian. However, the computation of the integrals
@@ -299,9 +303,9 @@ the approximating function as follows:
 </div>
 </div>
 </div>
-<div id="outline-container-org62fa23e" class="outline-2">
-<h2 id="org62fa23e">Electronic integrals</h2>
-<div class="outline-text-2" id="text-org62fa23e">
+<div id="outline-container-orgbf28701" class="outline-2">
+<h2 id="orgbf28701">Electronic integrals</h2>
+<div class="outline-text-2" id="text-orgbf28701">
 <p>
 Constructing the integrals' tensor is complicated<sup><a id="fnr.6" class="footref" href="#fn.6" role="doc-backlink">6</a></sup> and is the main reason for the poor scaling
 of electronic structure methods. The \(1s\) orbitals are the simplest case, and here two types of integrals
@@ -337,30 +341,25 @@ the delta distribution arises and simplifies the problem to this integration by 
 \end{equation*}
 
 </details>
-</div>
-</div>
-<div id="outline-container-orgb945570" class="outline-2">
-<h2 id="orgb945570">Fock matrix</h2>
-<div class="outline-text-2" id="text-orgb945570">
+
 <p>
-The following function constructs the Fock matrix, our approximation to the true Hamiltonian of the system.
-Extending the code to an arbitrary number of atoms implies mapping over an array of coordinates,
-as opposed to fusing them in the implementation.
+The following namespace exports the corresponding integral arrays. Extending the code to an arbitrary number
+of atoms implies mapping over an array of coordinates, as opposed to fusing them in the implementation.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">F ← {𝕊e1‿e2‿z1‿z2‿r:
+<pre class="src src-bqn">I ← {𝕊e1‿e2‿z1‿z2‿r:
   bs‿na‿nb ← (&lt;∾·≢⊏∘&gt;)⍉&gt;STO¨ e1‿e2
   M ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢&lt;∘∾˘bs}
 
-  sm‿hcore ← {e𝕊c:
+  sm‿hcore ⇐ {e𝕊c:
     mst ← ⌽⊸≍∾⟜0×˜r
     r1‿r2 ← &lt;˘⍉⁼&gt; (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
     mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
     (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c&lt;⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
   }´ M 2
 
-  erim ← {e𝕊c:
+  erim ⇐ {e𝕊c:
     meri ← (c⊸×⊣ERI¨⊢/˜·&lt;¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
     =⊸{+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(na‿nb⥊˜na×𝕨)⥊𝕩} meri
   }´ M 4
@@ -370,11 +369,70 @@ as opposed to fusing them in the implementation.
 
 <br/>
 <details>
+<summary>Performance</summary>
+
+<p>
+The computation of the ERIs is expected to be the primary bottleneck, as there are <code>N⋆4</code> of them—in our case, 16.
+The required tensors have a shape of <code>6¨↕4</code>. As shown in the profile below, using an array-based strategy
+for the ERIs significantly improved their computational efficiency compared to the two-center integrals.
+For the latter, I increased the depth by grouping the tables (block matrices). The resulting code was significantly
+slower than replicating the elements to match each axis' length, like I do for the ERIs.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">)profile {𝕊: F system}¨↕1e4
+</pre>
+</div>
+
+<pre class="example" id="orgfd6248a">
+Got 38135 samples
+(REPL): 37021 samples:
+    92│I ← {𝕊e1‿e2‿z1‿z2‿r:
+    72│  bs‿na‿nb ← (&lt;∾·≢⊏∘&gt;)⍉&gt;STO¨ e1‿e2
+  2127│  M ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢&lt;∘∾˘bs}
+      │
+   265│  sm‿hcore ⇐ {e𝕊c:
+    99│    mst ← ⌽⊸≍∾⟜0×˜r
+  4235│    r1‿r2 ← &lt;˘⍉⁼&gt; (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
+ 15947│    mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
+  8864│    (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c&lt;⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
+  3980│  }´ M 2
+      │
+     9│  erim ⇐ {e𝕊c:
+  1049│    meri ← (c⊸×⊣ERI¨⊢/˜·&lt;¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
+   280│    =⊸{+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(na‿nb⥊˜na×𝕨)⥊𝕩} meri
+     2│  }´ M 4
+      │}
+(self-hosted runtime1): 1114 samples
+</pre>
+
+<p>
+Morals: Never underestimate the power of vectorization and reshaping operations are often computationally trivial.
+</p>
+
+</details>
+</div>
+</div>
+<div id="outline-container-org269ccbc" class="outline-2">
+<h2 id="org269ccbc">Fock matrix</h2>
+<div class="outline-text-2" id="text-org269ccbc">
+<p>
+The following function constructs the Fock matrix, our approximation to the true Hamiltonian of the system:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">F ← {𝕩.hcore + 𝕨 (+˝∘⥊⎉2⊣×⎉2⊢-2÷˜0‿3‿2⊸⍉⁼) 𝕩.erim}
+</pre>
+</div>
+
+<br/>
+<details>
 <summary>Physical context</summary>
 
 <p>
 The Fock operator is an effective one-electron operator that arises after constrained
-minimization of the energy functional:
+minimization of the energy functional. The form of the functional is a consequence of
+the use of <a href="https://en.wikipedia.org/wiki/Slater_determinant">Slater determinants</a> as wave functions.
 </p>
 
 \begin{equation*}
@@ -384,10 +442,10 @@ minimization of the energy functional:
 \end{equation*}
 
 <p>
-where \(h_i\) is the core Hamiltonian matrix and \(J_{ij}, K_{ij}\) are the Coulomb and
-exchange components of the ERI matrix. To fully understand the derivation, consider
-the variational derivative of this functional with respect to the complex
-conjugate of the wave function \(\psi_i^*\):
+where \(h_i\) is the core Hamiltonian matrix, \(J_{ij}, K_{ij}\) are the Coulomb and
+exchange components of the ERI matrix, and \(\lambda_{ij}\) are Lagrange multipliers.
+To fully understand the derivation, consider the variational derivative of this
+functional with respect to the complex conjugate of the one-particle wave function \(\psi_i^*\):
 </p>
 
 \begin{align*}
@@ -409,56 +467,27 @@ This process results in the  <a href="https://en.wikipedia.org/wiki/Roothaan_equ
 </p>
 
 </details>
-
-<br/>
-<details>
-<summary>Performance</summary>
-
+</div>
+</div>
+<div id="outline-container-org7ab1b6b" class="outline-2">
+<h2 id="org7ab1b6b">Self-consistent field</h2>
+<div class="outline-text-2" id="text-org7ab1b6b">
 <p>
-The computation of the ERIs is expected to be the primary bottleneck, as there are <code>N⋆4</code> of them—in our case, 16.
-The required tensors have a shape of <code>6¨↕4</code>. As shown in the profile below, using an array-based strategy
-for the ERIs significantly improved their computational efficiency compared to the two-center integrals.
-For the latter, I increased the depth by grouping the tables (block matrices). The resulting code was significantly
-slower than replicating the elements to match each axis' length, like I do for the ERIs.
+The final stage of the computation involves solving the pseudo-eigenvalue problem using a fixed-point iteration.
+This process is commonly known as the self-consistent field method, a term coined by D. R. Hartree.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">)profile {𝕊: F system}¨↕1e4
+<pre class="src src-bqn">SCF ← {
+  ints ← I𝕩
+  xm ← L ints.sm
+  f0 ← ints F˜0¨xm
+  #{𝕊∘⊢⍟≢⟜𝔽𝕩}
+}
+SCF system
 </pre>
 </div>
 
-<pre class="example" id="orgdc4b3b6">
-Got 38135 samples
-(REPL): 37021 samples:
-    92│F ← {𝕊e1‿e2‿z1‿z2‿r:
-    72│  bs‿na‿nb ← (&lt;∾·≢⊏∘&gt;)⍉&gt;STO¨ e1‿e2
-  2127│  M ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢&lt;∘∾˘bs}
-      │
-   265│  sm‿hcore ← {e𝕊c:
-    99│    mst ← ⌽⊸≍∾⟜0×˜r
-  4235│    r1‿r2 ← &lt;˘⍉⁼&gt; (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
- 15947│    mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
-  8864│    (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c&lt;⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
-  3980│  }´ M 2
-      │
-     9│  erim ← {e𝕊c:
-  1049│    meri ← (c⊸×⊣ERI¨⊢/˜·&lt;¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
-   280│    =⊸{+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(na‿nb⥊˜na×𝕨)⥊𝕩} meri
-     2│  }´ M 4
-      │}
-(self-hosted runtime1): 1114 samples
-</pre>
-
-<p>
-Morals: Never underestimate the power of vectorization and reshaping operations are often computationally trivial.
-</p>
-
-</details>
-</div>
-</div>
-<div id="outline-container-org0ea7dd8" class="outline-2">
-<h2 id="org0ea7dd8">SCF</h2>
-<div class="outline-text-2" id="text-org0ea7dd8">
 <p>
 Compare the electronic energy with the one computed using the original <a href="./supp/hf_so/hf_so.html">F66</a> program.
 </p>
