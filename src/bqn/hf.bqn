@@ -55,4 +55,6 @@ SCF ← {
 
 SCF∘System 1.4632
 
-)r Setplot "line" ⋄ •Out¨ Plot´ (⊢⋈SCF⎊∞∘System¨) ↕∘⌈⌾((0.1+1e¯2×⊢)⁼)3.5
+PES ← 2⊸÷+SCF⎊∞∘System
+
+)r Setplot "line" ⋄ •Out¨ Plot´ (⊢/¨˜·<∞>⊢´)(⊢⋈PES¨) ↕∘⌈⌾((0.5+1e¯2×⊢)⁼)3
