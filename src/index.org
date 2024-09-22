@@ -1,4 +1,6 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+#+HTML_HEAD: <meta name="description" content="Anthology of computational ideas in BQN.">
+#+HTML_HEAD: <meta name="keywords" content="BQN, quantum computing, Hartree-Fock, array languages, APL, spotify analysis">
 #+HTML_HEAD: <script>
 #+HTML_HEAD:   function toggleTitle() {
 #+HTML_HEAD:     var titleElement = document.getElementById('title');
@@ -10,12 +12,20 @@
 #+HTML_HEAD:   }
 #+HTML_HEAD: </script>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
-
 #+HTML: <div class="container">
 #+HTML: <header class="header">
 #+HTML:   <div class="header-left"><a id="title" href="#" onclick="toggleTitle(); return false;">First atop infinity</a></div>
 #+HTML:   <div class="header-right"><a href="https://panadestein.github.io/">About</a></div>
 #+HTML: </header>
+#+HTML_HEAD: <!-- Google tag (gtag.js) -->
+#+HTML_HEAD: <script async src="https://www.googletagmanager.com/gtag/js?id=G-HHT1HPVCQJ"></script>
+#+HTML_HEAD: <script>
+#+HTML_HEAD:   window.dataLayer = window.dataLayer || [];
+#+HTML_HEAD:   function gtag(){dataLayer.push(arguments);}
+#+HTML_HEAD:   gtag('js', new Date());
+#+HTML_HEAD: 
+#+HTML_HEAD:   gtag('config', 'G-HHT1HPVCQJ');
+#+HTML_HEAD: </script>
 
 1. [[./rollim.org][A coding impromptu]]
 2. [[./qbqn.org][BQN's Quantum Noise]]
