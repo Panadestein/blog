@@ -234,9 +234,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Helonium's Hartree-Fock program</h1>
-<div id="outline-container-orgd1f8791" class="outline-2">
-<h2 id="orgd1f8791">Exordium</h2>
-<div class="outline-text-2" id="text-orgd1f8791">
+<div id="outline-container-orgcbc40e6" class="outline-2">
+<h2 id="orgcbc40e6">Exordium</h2>
+<div class="outline-text-2" id="text-orgcbc40e6">
 <p>
 We will implement the Hartree-Fock<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> program from the classic <a href="https://store.doverpublications.com/products/9780486691862">Szabo-Ostlund</a> text,
 a staple in quantum chemistry. If you have any experience in the field, chances are you know it well.
@@ -286,9 +286,9 @@ geometries:
 </div>
 </div>
 </div>
-<div id="outline-container-orgd48e5ea" class="outline-2">
-<h2 id="orgd48e5ea">Basis set</h2>
-<div class="outline-text-2" id="text-orgd48e5ea">
+<div id="outline-container-org3de5adf" class="outline-2">
+<h2 id="org3de5adf">Basis set</h2>
+<div class="outline-text-2" id="text-org3de5adf">
 <p>
 Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
 Slater type orbitals<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup> are a good choice for our Hamiltonian. However, the computation of the integrals
@@ -306,9 +306,9 @@ the approximating function as follows:
 </div>
 </div>
 </div>
-<div id="outline-container-org9faf22d" class="outline-2">
-<h2 id="org9faf22d">Electronic integrals</h2>
-<div class="outline-text-2" id="text-org9faf22d">
+<div id="outline-container-orgc99fa0b" class="outline-2">
+<h2 id="orgc99fa0b">Electronic integrals</h2>
+<div class="outline-text-2" id="text-orgc99fa0b">
 <p>
 Constructing the integrals' tensor is complicated<sup><a id="fnr.6" class="footref" href="#fn.6" role="doc-backlink">6</a></sup> and is the main reason for the poor scaling
 of electronic structure methods. The \(1s\) orbitals are the simplest case, and here two types of integrals
@@ -387,7 +387,7 @@ slower than replicating the elements to match each axis' length, like I do for t
 </pre>
 </div>
 
-<pre class="example" id="orgfe18804">
+<pre class="example" id="org0fc6984">
 Got 38006 samples
 (self-hosted runtime1): 1067 samples
 (REPL): 36939 samples:
@@ -416,9 +416,9 @@ Morals: Never underestimate the power of vectorization and reshaping operations 
 </details>
 </div>
 </div>
-<div id="outline-container-org6bb7665" class="outline-2">
-<h2 id="org6bb7665">Fock matrix</h2>
-<div class="outline-text-2" id="text-org6bb7665">
+<div id="outline-container-orga435d6f" class="outline-2">
+<h2 id="orga435d6f">Fock matrix</h2>
+<div class="outline-text-2" id="text-orga435d6f">
 <p>
 The following function constructs the Fock matrix, our approximation to the true Hamiltonian of the system:
 </p>
@@ -472,9 +472,9 @@ This process results in the  <a href="https://en.wikipedia.org/wiki/Roothaan_equ
 </details>
 </div>
 </div>
-<div id="outline-container-orgf49d711" class="outline-2">
-<h2 id="orgf49d711">Self-consistent field</h2>
-<div class="outline-text-2" id="text-orgf49d711">
+<div id="outline-container-org4e52de4" class="outline-2">
+<h2 id="org4e52de4">Self-consistent field</h2>
+<div class="outline-text-2" id="text-org4e52de4">
 <p>
 The final stage of the computation involves solving the pseudo-eigenvalue problem using a fixed-point iteration.
 This process is commonly known as the self-consistent field method, a term coined by D. R. Hartree.
@@ -513,34 +513,34 @@ The BQN implementation has 45 LoC, in contrast with the 541 of the Fortran one.
 <summary>Potential Energy Surface</summary>
 
 <p>
-The system's <a href="https://en.wikipedia.org/wiki/Potential_energy_surface">PES</a> will be presented here. For now, it’s (you guessed it) the classic Lennard-Jones:
+Here we compute the system's <a href="https://en.wikipedia.org/wiki/Potential_energy_surface">PES</a>. To do this, we need to add to the electronic energy above
+the nuclear repulsion energy. We also catch the error of non-converged calculations, instead
+of fiddling with convergence thresholds and different starting points:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">(⊢≍SCF⎊∞∘System¨) ↕∘⌈⌾((0.1+1e¯2×⊢)⁼)3.5
+<pre class="src src-bqn">PES ← 2⊸÷+SCF⎊∞∘System
 </pre>
 </div>
 
+<p>
+Then we leverage my modified version of the <code>•Plot</code> namespace:
+</p>
+
 <div class="org-src-container">
-<pre class="src src-bqn">)r Setplot "line" ⋄ •Out¨ Plot´ (⊢⋈SCF⎊∞∘System¨) ↕∘⌈⌾((0.1+1e¯2×⊢)⁼)3.5
+<pre class="src src-bqn">)r Setplot "line" ⋄ •Out¨ Plot´ (⊢/¨˜·&lt;∞&gt;⊢´)(⊢⋈PES¨) ↕∘⌈⌾((0.5+1e¯2×⊢)⁼)3
 </pre>
 </div>
 
 <br/>
 <div style="display: flex; justify-content: center; width: 100%;">
 <div style="width: 40%;">
-Error: •Plot: 𝕨 and 𝕩 must consist of rows of numbers
-/home/loren/Documents/Arbeit/REPOS/blog/bqn-utils/plots.bqn:25:
-    "•Plot: 𝕨 and 𝕩 must consist of rows of numbers" ! 𝕨 ⊢⊘∧○((1≤=)◶⟨0,∧´∘⥊@⊸>⟩) 𝕩
-                                                     ^
-/home/loren/Documents/Arbeit/REPOS/blog/bqn-utils/plots.bqn:31:
-    𝕨 (2≤⌊´d)◶⟨Pair⊣"•Plot: invalid depth mixing"!·∧´1=d˙, ∾∘⥊𝕊¨⟩ 𝕩
-      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-/home/loren/Documents/Arbeit/REPOS/blog/bqn-utils/plots.bqn:34:
-    xy ← 1e300 (⊣-⊸⌈⌊) ⍉> 𝕨 PairRec 𝕩   # organize and clip
-                            ^^^^^^^
-at Setplot "line" ⋄ •Out¨ Plot´ (⊢⋈SCF⎊@∘System¨) ↕∘⌈⌾((0.1+1e¯2×⊢)⁼)3.5
-                          ^^^^^
+<svg viewBox='-10 -10 404 201.112'>
+  <g font-family='BQN,monospace' font-size='18px'>
+    <rect class='code' style='fill:none;stroke:black' stroke-width='1' rx='5' x='-5' y='-5' width='394' height='191.112'/>
+    <path class='code' style='fill:none;stroke:#267CB9' stroke-width='3' d='M0 0L1.542 8.542L3.084 16.664L6.169 31.743L7.711 38.744L10.795 51.771L18.506 79.417L20.048 84.216L21.59 88.799L23.133 93.178L24.675 97.362L26.217 101.361L27.759 105.183L29.301 108.836L30.843 112.33L35.47 121.919L37.012 124.841L41.639 132.864L43.181 135.309L46.265 139.883L49.349 144.065L50.892 146.02L57.06 153.015L58.602 154.574L63.229 158.843L64.771 160.14L66.313 161.377L67.855 162.557L70.94 164.756L72.482 165.779L78.651 169.403L80.193 170.202L81.735 170.961L83.277 171.681L87.904 173.628L89.446 174.209L90.988 174.759L94.072 175.769L95.614 176.231L97.157 176.667L98.699 177.076L100.241 177.46L101.783 177.82L106.41 178.763L107.952 179.035L109.494 179.287L114.12 179.929L117.205 180.269L118.747 180.415L121.831 180.661L124.916 180.849L126.458 180.923L128 180.984L129.542 181.032L131.084 181.069L132.627 181.094L134.169 181.108L135.711 181.112L137.253 181.105L141.88 181.026L143.422 180.982L146.506 180.868L148.048 180.799L151.133 180.638L152.675 180.547L155.759 180.345L158.843 180.119L160.386 179.997L163.47 179.736L168.096 179.308L169.639 179.156L172.723 178.84L174.265 178.676L177.349 178.337L178.892 178.162L180.434 177.984L181.976 177.804L183.518 177.62L185.06 177.433L186.602 177.244L188.145 177.053L191.229 176.663L194.313 176.265L197.398 175.859L198.94 175.654L206.651 174.608L208.193 174.395L209.735 174.182L211.277 173.967L212.819 173.752L214.361 173.537L215.904 173.32L218.988 172.886L220.53 172.669L223.614 172.233L225.157 172.015L226.699 171.796L228.241 171.578L231.325 171.141L232.867 170.923L234.41 170.705L235.952 170.488L237.494 170.27L239.036 170.053L242.12 169.62L243.663 169.404L245.205 169.189L249.831 168.547L252.916 168.121L254.458 167.91L256 167.699L257.542 167.489L259.084 167.28L262.169 166.864L265.253 166.452L269.88 165.841L271.422 165.639L272.964 165.438L276.048 165.04L277.59 164.842L279.133 164.645L280.675 164.45L282.217 164.256L283.759 164.063L285.301 163.871L286.843 163.68L288.386 163.491L289.928 163.302L291.47 163.115L293.012 162.929L294.554 162.744L296.096 162.561L302.265 161.84L303.807 161.663L305.349 161.487L306.892 161.313L314.602 160.46L316.145 160.294L317.687 160.129L319.229 159.965L322.313 159.641L323.855 159.482L325.398 159.323L326.94 159.166L328.482 159.011L330.024 158.857L331.566 158.704L333.108 158.552L334.651 158.402L336.193 158.253L339.277 157.96L340.819 157.816L342.361 157.672L343.904 157.53L345.446 157.39L346.988 157.251L350.072 156.977L353.157 156.708L363.952 155.81L365.494 155.688L368.578 155.446L374.747 154.978L377.831 154.752L379.373 154.641L382.458 154.422L384 154.315'/>
+  </g>
+</svg>
 </div>
 </div>
 
