@@ -24,7 +24,8 @@ First, we import the required BQN system values and utility functions:
 #+end_src
 
 Some auxiliary functions are needed for the computation of the Boys function, the matrix and vector product,
-the spectrum of a matrix with shape 2‿2, and Löwdin's canonical orthogonalization:
+the spectrum of a matrix with shape 2‿2, and Löwdin's canonical orthogonalization. Additionally, we define
+a 1-modifier to compute the fixed point of a function:
 
 #+begin_src bqn :results none :tangle ./bqn/hf.bqn
   E ← 1e¯6⊸<◶(1-÷⟜3)‿((π÷4)⊸÷×⟜Erf○√⊢)
@@ -132,30 +133,30 @@ For the latter, I increased the depth by grouping the tables (block matrices). T
 slower than replicating the elements to match each axis' length, like I do for the ERIs.
 
 #+begin_src bqn :exports both :tangle no :results raw :wrap example
-  )profile {𝕊: F system}¨↕1e4
+  )profile {𝕊: I system}¨↕1e4
 #+end_src
 
 #+RESULTS:
 #+begin_example
-Got 38135 samples
-(REPL): 37021 samples:
-    92│I ← {𝕊e1‿e2‿z1‿z2‿r:
-    72│  bs‿na‿nb ← (<∾·≢⊏∘>)⍉>STO¨ e1‿e2
-  2127│  M ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
+Got 37203 samples
+(self-hosted runtime1): 1092 samples
+(REPL): 36111 samples:
+    61│I ← {𝕊e1‿e2‿z1‿z2‿r:
+    76│  bs‿na‿nb ← (<∾·≢⊏∘>)⍉>STO¨ e1‿e2
+  1942│  M ← {∾‿×({2: {nb(⋈˜/∘⋈˜)⊸⊔𝕎⌜˜𝕩}; 4: {𝕎⌜⍟3˜𝕩}}𝕩)¨○⊢<∘∾˘bs}
       │
-   265│  sm‿hcore ⇐ {e𝕊c:
-    99│    mst ← ⌽⊸≍∾⟜0×˜r
-  4235│    r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
- 15947│    mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
-  8864│    (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c<⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
-  3980│  }´ M 2
+   246│  sm‿hcore ⇐ {e𝕊c:
+   116│    mst ← ⌽⊸≍∾⟜0×˜r
+  4165│    r1‿r2 ← <˘⍉⁼> (r⊸-⊸⋈˜×⟜r÷+)⌜´ ⊏bs
+ 15487│    mv ← ×˜∘{[0‿2,3‿1]⊏({0‿𝕨¨𝕩}⟜𝕩¨𝕨)∾⋈⟜⍉r⋈¨𝕩}´¨⟨0‿r, r1⟩‿⟨r‿0, r2⟩
+  8728│    (⊑⋈·+´1⊸↓)+´∘⥊¨¨ c<⊸× ({e𝕏¨¨mst}¨S‿T) ∾ z1‿z2{e∾⟜𝕨⊸V¨¨𝕩}¨mv
+  3780│  }´ M 2
       │
-     9│  erim ⇐ {e𝕊c:
-  1049│    meri ← (c⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
-   280│    =⊸{+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(na‿nb⥊˜na×𝕨)⥊𝕩} meri
+    10│  erim ⇐ {e𝕊c:
+  1193│    meri ← (c⊸×⊣ERI¨⊢/˜·<¨≢∘⊣÷≢∘⊢)⟜{0‿r⊏˜⚇1↕na¨↕=𝕩} e
+   305│    =⊸{+˝∘⥊⎉𝕨 (2×↕𝕨)⍉⁼(na‿nb⥊˜na×𝕨)⥊𝕩} meri
      2│  }´ M 4
       │}
-(self-hosted runtime1): 1114 samples
 #+end_example
 
 Morals: Never underestimate the power of vectorization and reshaping operations are often computationally trivial.
@@ -218,23 +219,22 @@ This process results in the  [[https://en.wikipedia.org/wiki/Roothaan_equations]
 The final stage of the computation involves solving the pseudo-eigenvalue problem using a fixed-point iteration.
 This process is commonly known as the self-consistent field method, a term coined by D. R. Hartree.
 
-#+begin_src bqn :tangle ./bqn/hf.bqn
+#+begin_src bqn :tangle ./bqn/hf.bqn :results none
   SCF ← {
     ints ← I𝕩
-    xm ← L ints.sm
-    {𝕊pm:
-      cm‿em ← xm (D·P´⍉∘⊢<⊸∾⋈)˜ pm F ints
-      2××⌜˜⊏⍉ xm P cm
-    }_fp 0¨xm
+    pm ← {2××⌜˜⊏⍉ xm(⊢P⟜⊑·D·P´⍉∘⊢<⊸∾⋈)˜𝕩F ints}_fp 0¨xm ← L ints.sm
+    2÷˜+´∘⥊ pm (⊣⍉⊸×{𝕩.hcore + 𝕨F𝕩}) ints
   }
+#+end_src
+
+If you are receptive and humble, mathematics will lead you by the hand[fn:7]:
+
+#+begin_src bqn :tangle ./bqn/hf.bqn :exports both
   SCF system
 #+end_src
 
 #+RESULTS:
-: ┌─                                        
-: ╵ 1.2861416826010692  0.5401732176446058  
-:   0.5401732176446058 0.22687011004139285  
-:                                          ┘
+: ¯4.22752930421725
 
 Compare the electronic energy with the one computed using the original [[./supp/hf_so/hf_so.html][F66]] program.
 
@@ -287,6 +287,7 @@ basis set.
 spherical harmonics integrate out to 1.
 [fn:5] STO-nG: a non-linear least-squares fit of an STO as a weighted sum of n Gaussians.
 [fn:6] See for example [[https://arxiv.org/abs/2007.12057][arXiv:2007.12057]].
+[fn:7] Paul A.M. Dirac, 27 November, 1975
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
