@@ -7,10 +7,10 @@ D ← (⊢⋈·P´<∘⊢∾⋈)⟜([Cos‿Sin⋄Sin‿(-Cos)]{𝕎𝕩}¨·<2÷
 L ← (-⌾(1‿1⊸⊑)·÷∘√≢⥊2˙)⊸P(0¨⌾(0‿0⍉⌽˘)·÷∘√1+1‿¯1×⌽˘)
 _fp ← {𝕊∘⊢⍟≢⟜𝔽𝕩}
 
-system ← {
+System ← {𝕊𝕩:
   e1‿e2 ⇐ 2.0925‿1.24
   z1‿z2 ⇐ 2‿1
-  r ⇐ 1.4632 
+  r ⇐ 𝕩
 }
 
 STO ← {
@@ -53,6 +53,6 @@ SCF ← {
   2÷˜+´∘⥊ pm (⊣⍉⊸×{𝕩.hcore + 𝕨F𝕩}) ints
 }
 
-SCF system
+SCF∘System 1.4632
 
-)r LJ ← 1+4×(⋆⟜12-⋆⟜6)∘÷ ⋄ Setplot "line" ⋄ •Out¨ Plot´ (⊢⋈LJ) ↕∘⌈⌾((1+1e¯2×⊢)⁼)3
+)r Setplot "line" ⋄ •Out¨ Plot´ (⊢⋈SCF⎊∞∘System¨) ↕∘⌈⌾((0.1+1e¯2×⊢)⁼)3.5
