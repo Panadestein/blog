@@ -192,6 +192,8 @@
   .org-svg { }
 </style>
 <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+<meta name="description" content="Anthology of computational ideas in BQN.">
+<meta name="keywords" content="BQN, quantum computing, Hartree-Fock, array languages, APL, spotify analysis">
 <script>
 function toggleTitle() {
 var titleElement = document.getElementById('title');
@@ -203,6 +205,15 @@ titleElement.innerText = 'First atop infinity';
 }
 </script>
 <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HHT1HPVCQJ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-HHT1HPVCQJ');
+</script>
 </head>
 <body>
 <div id="content" class="content">
@@ -211,7 +222,6 @@ titleElement.innerText = 'First atop infinity';
 <div class="header-left"><a id="title" href="#" onclick="toggleTitle(); return false;">First atop infinity</a></div>
 <div class="header-right"><a href="https://panadestein.github.io/">About</a></div>
 </header>
-
 <ol class="org-ol">
 <li><a href="./rollim.html">A coding impromptu</a></li>
 <li><a href="./qbqn.html">BQN's Quantum Noise</a></li>
