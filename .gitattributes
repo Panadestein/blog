@@ -6,4 +6,6 @@
 
 # These are supplementary files
 *.f linguist-vendored
+*.c linguist-vendored
+*.ipynb linguist-vendored
 *.lisp linguist-vendored
