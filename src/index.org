@@ -31,8 +31,6 @@
 2. [[./qbqn.org][BQN's Quantum Noise]]
 3. [[./spodat.org][Songs to pave the seasons]]
 4. [[./hf.org][Helonium's Hartree-Fock program]]
-#+begin_comment
 5. [[./si.org][Scheming a mise-en-abîme in BQN]]
-#+end_comment
 
 #+HTML: </div>

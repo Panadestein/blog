@@ -8,22 +8,59 @@
 We will build and interpreter for a subset of the Scheme programming language,
 following a Norvig's [[https://www.norvig.com/lispy.html][essay]]. An alternative reference would
 have been of course SICP's metacircular evaluator[fn:1], but I consider =lispy= to be
-a very elegant implementation in a non-Lisp host.
+a very elegant implementation targeting a non-Lisp host.
+
+** A R5RS dialect
+
+#+begin_src bqn :tangle ./bqn/si.bqn
+  Scheme ← {
+    T ← {}
+    𝕩
+  } ⋄ Scheme "(+ 1 1)"
+#+end_src
+
+#+RESULTS:
+: "(+ 1 1)"
 
 ** A Lisp quine
 
-Given the title of this post, I couldn't think of a better test for our
-interpreter than this one:
+Given the title of this post, it seems only fitting to test our interpreter
+with a quine:
 
-#+begin_src racket
-  ((lambda (x) (list x (list (quote quote) x)))
-   (quote (lambda (x) (list x (list (quote quote) x))))) 
+#+begin_src bqn :tangle ./bqn/si.bqn :exports both
+  Scheme "((lambda (x) (list x (list (quote quote) x)))
+           (quote (lambda (x) (list x (list (quote quote) x)))))"
 #+end_src
 
+#+RESULTS:
+: "((lambda (x) (list x (list (quote quote) x)))
+:          (quote (lambda (x) (list x (list (quote quote) x)))))"
+
+Naturally, we can do more rigorous tests by comparing to my favorite Scheme
+implementation, [[https://call-cc.org/][Chicken]]. To achieve this, we'll leverage BQN's
+foreign function interface:
+
+#+begin_src bqn :tangle ./bqn/si.bqn :results none
+  ch ← "../supp/chicken/libchicken.so" •FFI "*u8"‿"eval_scheme"‿">*u8:c8"
+  R5RS ← {(⊢↑˜·+´·∧`@⊸≠) @+(Ch𝕩∾@).Read¨↕100}
+#+end_src
+
+But fear not, there’s no room for monotony here. After all,
+people prefer dealing with machinery to dealing with bureaucracies[fn:2]:
+
+#+begin_src bqn :tangle ./bqn/si.bqn :exports both
+  ("Not Compliant"⊸!Scheme≡R5RS)¨ "(+ 10 122)"‿"(* 4 2)"
+#+end_src
+
+#+RESULTS:
+: Error: Not Compliant
+: at ("Not Compliant"⊸!Scheme≡R5RS)¨ "(+ 10 122)"‿"(* 4 2)"
+:    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 [fn:1] I recommend SICP as further reading. Much like Louis Reasoner, I attempted
 solving all the problems in the book, but I haven't gotten very far.
 I believe there are some interesting Racket bits in my [[https://panadestein.github.io/solved-sicp/][solutions]], though.
+[fn:2] John McCarthy, [[http://jmc.stanford.edu/general/sayings.html][1986]].
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
