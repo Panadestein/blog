@@ -193,34 +193,151 @@
 </style>
 <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN</h1>
-<div id="outline-container-org781a262" class="outline-2">
-<h2 id="org781a262">Prelude</h2>
-<div class="outline-text-2" id="text-org781a262">
+<div id="outline-container-org1ca588a" class="outline-2">
+<h2 id="org1ca588a">Prelude</h2>
+<div class="outline-text-2" id="text-org1ca588a">
 <p>
 We will build and interpreter for a subset of the Scheme programming language,
 following a Norvig's <a href="https://www.norvig.com/lispy.html">essay</a>. An alternative reference would
 have been of course SICP's metacircular evaluator<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, but I consider <code>lispy</code> to be
-a very elegant implementation in a non-Lisp host.
+a very elegant implementation targeting a non-Lisp host<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
 </div>
 </div>
-<div id="outline-container-org7771bd2" class="outline-2">
-<h2 id="org7771bd2">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org7771bd2">
+<div id="outline-container-org07efd0f" class="outline-2">
+<h2 id="org07efd0f">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-org07efd0f">
 <p>
-Given the title of this post, I couldn't think of a better test for our
-interpreter than this one:
+Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
+However, seasoned schemers will quickly notice that our implementation still has
+quite some distance to cover in reaching full compliance. Let's start by defining some
+utilities. It is sad that the 1-modifier is needed, after all,
+Booleans are not that <a href="https://mlochbaum.github.io/BQN/tutorial/combinator.html#booleans">special</a>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-racket">((lambda (x) (list x (list (quote quote) x)))
- (quote (lambda (x) (list x (list (quote quote) x))))) 
+<pre class="src src-bqn">_bool ← {𝔽◶"#f"‿"#t"}
 </pre>
 </div>
+
+<p>
+A global environment:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">env ← ⟨
+  "sin", "cos", "tan", "asin", "acos", "atan",
+  "log", "+", "-", "*", "/", "&gt;", "&lt;", "&gt;=", "&lt;=", "="
+  "abs", "append", "apply", "begin", "car", "cdr", "cons"
+  "eq?", "expt", "equal?", "length", "list", "list?"
+  "map", "max", "min", "not", "null?", "number?"
+  "print", "round", "symbol?"
+⟩ •HashMap ⟨
+  ⋆⁼, +´, -´, ×´, ÷´, &gt;´, &lt;´, ≥´, ≤´, =´
+  |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑, 1⊸↓, ⋈´
+  ≡´_bool, ⋆´, =´_bool, ≠, ⋈, 0⊸=_bool{•Type•BQN⎊1𝕩}
+  {𝕎¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, •BQN⎊1
+  •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}
+⟩ ∾˜ •math •ns.Get¨ "sin"‿"cos"‿"tan"‿"asin"‿"acos"‿"atan"
+</pre>
+</div>
+
+<p>
+The interpreter:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">Scheme ← {
+  P ← {
+    -˜˝˘∘‿2⥊/0(∾≠∾˜)(¬·+˝"( )"=⌜⊢)𝕩
+  }
+  P𝕩
+} ⋄ Scheme "(begin (+ 1 1) (* (+ 3 2) 1) (define a (+ 3 3)))"
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3a643f7" class="outline-2">
+<h2 id="org3a643f7">A Lisp quine</h2>
+<div class="outline-text-2" id="text-org3a643f7">
+<p>
+Given the title of this post, it seems only fitting to test our interpreter
+with a quine:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">Scheme "((lambda (x) (list x (list (quote quote) x)))
+         (quote (lambda (x) (list x (list (quote quote) x)))))"
+</pre>
+</div>
+
+<pre class="example">
+"((lambda (x) (list x (list (quote quote) x)))
+         (quote (lambda (x) (list x (list (quote quote) x)))))"
+</pre>
+
+
+<p>
+Naturally, we can do more rigorous tests by comparing to my favorite Scheme
+implementation, <a href="https://call-cc.org/">Chicken</a>. To achieve this, we'll leverage BQN's
+foreign function interface:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">ch ← "../supp/chicken/libchicken.so" •FFI "*u8"‿"eval_scheme"‿"&gt;*u8:c8"
+R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch∾@
+</pre>
+</div>
+
+<p>
+But fear not, there’s no room for monotony here. After all,
+people prefer dealing with machinery to dealing with bureaucracies<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">("Not Compliant"⊸!Scheme≡R5RS)¨ "(+ 10 122)"‿"(* 4 2)"
+</pre>
+</div>
+
+<pre class="example">
+⟨ ⟨ "(+ 10 122)" "132" ⟩ ⟨ "(* 4 2)" "8" ⟩ ⟩
+</pre>
 </div>
 </div>
 <div id="footnotes">
@@ -231,6 +348,14 @@ interpreter than this one:
 I recommend SICP as further reading. Much like Louis Reasoner, I attempted
 solving all the problems in the book, but I haven't gotten very far.
 I believe there are some interesting Racket bits in my <a href="https://panadestein.github.io/solved-sicp/">solutions</a>, though.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+As Norvig himself <a href="https://news.ycombinator.com/item?id=1803815">said</a>, Python has the edge in communication, not in programming.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+John McCarthy, <a href="http://jmc.stanford.edu/general/sayings.html">1986</a>.
 </p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
