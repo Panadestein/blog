@@ -1,12 +1,12 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
-#+TITLE: Scheming a mise-en-abîme in BQN
+#+TITLE: Scheming a mise-en-abîme in BQN (WIP)
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 ** Prelude
 
 We will build and interpreter for a subset of the Scheme programming language,
-following a Norvig's [[https://www.norvig.com/lispy.html][essay]]. An alternative reference would
+following a Peter Norvig's [[https://www.norvig.com/lispy.html][essay]]. An alternative reference would
 have been of course SICP's metacircular evaluator[fn:1], but I consider =lispy= to be
 a very elegant implementation targeting a non-Lisp host[fn:2].
 
