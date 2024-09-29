@@ -82,7 +82,7 @@ foreign function interface:
 #+end_src
 
 But fear not, there’s no room for monotony here. After all,
-people prefer dealing with machinery to dealing with bureaucracies[fn:3]:
+people much prefer dealing with machinery to dealing with bureaucracies[fn:3]:
 
 #+begin_src bqn :tangle ./bqn/si.bqn :exports both
   ("Not Compliant"⊸!Scheme≡R5RS)¨ "(+ 10 122)"‿"(* 4 2)"
@@ -94,7 +94,8 @@ people prefer dealing with machinery to dealing with bureaucracies[fn:3]:
 [fn:1] I recommend SICP as further reading. Much like Louis Reasoner, I attempted
 solving all the problems in the book, but I haven't gotten very far.
 I believe there are some interesting Racket bits in my [[https://panadestein.github.io/solved-sicp/][solutions]], though.
-[fn:2] As Norvig himself [[https://news.ycombinator.com/item?id=1803815][said]], Python has the edge in communication, not in programming.
+[fn:2] This is due to the concept behind the essay, certainly not because of Python.
+As Norvig himself [[https://news.ycombinator.com/item?id=1803815][remarked]], Python excels in communication, not necessarily in programming.
 [fn:3] John McCarthy, [[http://jmc.stanford.edu/general/sayings.html][1986]].
 
 #+BEGIN_EXPORT html
