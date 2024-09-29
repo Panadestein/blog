@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Scheming a mise-en-abîme in BQN</title>
+<title>Scheming a mise-en-abîme in BQN (WIP)</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -228,21 +228,21 @@
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Scheming a mise-en-abîme in BQN</h1>
-<div id="outline-container-orgd62dd3d" class="outline-2">
-<h2 id="orgd62dd3d">Prelude</h2>
-<div class="outline-text-2" id="text-orgd62dd3d">
+<h1 class="title">Scheming a mise-en-abîme in BQN (WIP)</h1>
+<div id="outline-container-org051325c" class="outline-2">
+<h2 id="org051325c">Prelude</h2>
+<div class="outline-text-2" id="text-org051325c">
 <p>
 We will build and interpreter for a subset of the Scheme programming language,
-following a Norvig's <a href="https://www.norvig.com/lispy.html">essay</a>. An alternative reference would
+following a Peter Norvig's <a href="https://www.norvig.com/lispy.html">essay</a>. An alternative reference would
 have been of course SICP's metacircular evaluator<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, but I consider <code>lispy</code> to be
 a very elegant implementation targeting a non-Lisp host<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
 </div>
 </div>
-<div id="outline-container-org8d1a067" class="outline-2">
-<h2 id="org8d1a067">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-org8d1a067">
+<div id="outline-container-orgf0fb978" class="outline-2">
+<h2 id="orgf0fb978">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-orgf0fb978">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -293,9 +293,9 @@ The interpreter:
 </div>
 </div>
 </div>
-<div id="outline-container-orga7c85e7" class="outline-2">
-<h2 id="orga7c85e7">A Lisp quine</h2>
-<div class="outline-text-2" id="text-orga7c85e7">
+<div id="outline-container-org03da5ac" class="outline-2">
+<h2 id="org03da5ac">A Lisp quine</h2>
+<div class="outline-text-2" id="text-org03da5ac">
 <p>
 Given the title of this post, it seems only fitting to test our interpreter
 with a quine:
