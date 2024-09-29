@@ -229,9 +229,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN</h1>
-<div id="outline-container-org1ca588a" class="outline-2">
-<h2 id="org1ca588a">Prelude</h2>
-<div class="outline-text-2" id="text-org1ca588a">
+<div id="outline-container-orgd62dd3d" class="outline-2">
+<h2 id="orgd62dd3d">Prelude</h2>
+<div class="outline-text-2" id="text-orgd62dd3d">
 <p>
 We will build and interpreter for a subset of the Scheme programming language,
 following a Norvig's <a href="https://www.norvig.com/lispy.html">essay</a>. An alternative reference would
@@ -240,9 +240,9 @@ a very elegant implementation targeting a non-Lisp host<sup><a id="fnr.2" class=
 </p>
 </div>
 </div>
-<div id="outline-container-org07efd0f" class="outline-2">
-<h2 id="org07efd0f">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-org07efd0f">
+<div id="outline-container-org8d1a067" class="outline-2">
+<h2 id="org8d1a067">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-org8d1a067">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -293,9 +293,9 @@ The interpreter:
 </div>
 </div>
 </div>
-<div id="outline-container-org3a643f7" class="outline-2">
-<h2 id="org3a643f7">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org3a643f7">
+<div id="outline-container-orga7c85e7" class="outline-2">
+<h2 id="orga7c85e7">A Lisp quine</h2>
+<div class="outline-text-2" id="text-orga7c85e7">
 <p>
 Given the title of this post, it seems only fitting to test our interpreter
 with a quine:
@@ -327,7 +327,7 @@ R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch∾@
 
 <p>
 But fear not, there’s no room for monotony here. After all,
-people prefer dealing with machinery to dealing with bureaucracies<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>:
+people much prefer dealing with machinery to dealing with bureaucracies<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>:
 </p>
 
 <div class="org-src-container">
@@ -351,7 +351,8 @@ I believe there are some interesting Racket bits in my <a href="https://panadest
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-As Norvig himself <a href="https://news.ycombinator.com/item?id=1803815">said</a>, Python has the edge in communication, not in programming.
+This is due to the concept behind the essay, certainly not because of Python.
+As Norvig himself <a href="https://news.ycombinator.com/item?id=1803815">remarked</a>, Python excels in communication, not necessarily in programming.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
