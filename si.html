@@ -229,9 +229,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN (WIP)</h1>
-<div id="outline-container-org19ee345" class="outline-2">
-<h2 id="org19ee345">Prelude</h2>
-<div class="outline-text-2" id="text-org19ee345">
+<div id="outline-container-orgd001711" class="outline-2">
+<h2 id="orgd001711">Prelude</h2>
+<div class="outline-text-2" id="text-orgd001711">
 <p>
 We will build and interpreter for a subset of the Scheme programming language,
 following a Peter Norvig's <a href="https://www.norvig.com/lispy.html">essay</a>. An alternative reference would
@@ -240,9 +240,9 @@ a very elegant implementation targeting a non-Lisp host<sup><a id="fnr.2" class=
 </p>
 </div>
 </div>
-<div id="outline-container-orgbfb699a" class="outline-2">
-<h2 id="orgbfb699a">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-orgbfb699a">
+<div id="outline-container-orgac9d028" class="outline-2">
+<h2 id="orgac9d028">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-orgac9d028">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -284,16 +284,16 @@ The interpreter:
 
 <div class="org-src-container">
 <pre class="src src-bqn">Scheme ← {
-  T ← (0⌾⊑1-˜·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
+  T ← (-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
   T𝕩
 } ⋄ Scheme "(begin (+ 1 1) (* (+ 3 2) 1) (define a (+ 3 3)))"
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orga7ab395" class="outline-2">
-<h2 id="orga7ab395">A Lisp quine</h2>
-<div class="outline-text-2" id="text-orga7ab395">
+<div id="outline-container-orgf7e3069" class="outline-2">
+<h2 id="orgf7e3069">A Lisp quine</h2>
+<div class="outline-text-2" id="text-orgf7e3069">
 <p>
 Given the title of this post, it seems only fitting to test our interpreter
 with a quine:
