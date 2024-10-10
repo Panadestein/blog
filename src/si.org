@@ -8,7 +8,7 @@
 We will build and interpreter for a subset of the Scheme programming language,
 following a Peter Norvig's [[https://www.norvig.com/lispy.html][essay]]. An alternative reference would
 have been of course SICP's metacircular evaluator[fn:1], but I consider =lispy= to be
-a very elegant implementation targeting a non-Lisp host[fn:2].
+a very elegant implementation targeting a non-Lisp host.
 
 ** A R5RS dialect
 
@@ -80,7 +80,7 @@ foreign function interface:
 #+end_src
 
 But fear not, there’s no room for monotony here. After all,
-people much prefer dealing with machinery to dealing with bureaucracies[fn:3]:
+people much prefer dealing with machinery to dealing with bureaucracies[fn:2]:
 
 #+begin_src bqn :tangle ./bqn/si.bqn :exports both
   ("Not Compliant"⊸!Scheme≡R5RS)¨ "(+ 10 122)"‿"(* 4 2)"
@@ -92,9 +92,7 @@ people much prefer dealing with machinery to dealing with bureaucracies[fn:3]:
 [fn:1] I recommend SICP as further reading. Much like Louis Reasoner, I attempted
 solving all the problems in the book, but I haven't gotten very far.
 I believe there are some interesting Racket bits in my [[https://panadestein.github.io/solved-sicp/][solutions]], though.
-[fn:2] Python is a fine language, but as Norvig himself [[https://news.ycombinator.com/item?id=1803815][remarked]], it excels in communication,
-not necessarily in programming.
-[fn:3] John McCarthy, [[http://jmc.stanford.edu/general/sayings.html][1986]].
+[fn:2] John McCarthy, [[http://jmc.stanford.edu/general/sayings.html][1986]].
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
