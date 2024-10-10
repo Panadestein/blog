@@ -229,20 +229,20 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN (WIP)</h1>
-<div id="outline-container-org01a3e86" class="outline-2">
-<h2 id="org01a3e86">Prelude</h2>
-<div class="outline-text-2" id="text-org01a3e86">
+<div id="outline-container-org946a798" class="outline-2">
+<h2 id="org946a798">Prelude</h2>
+<div class="outline-text-2" id="text-org946a798">
 <p>
 We will build and interpreter for a subset of the Scheme programming language,
 following a Peter Norvig's <a href="https://www.norvig.com/lispy.html">essay</a>. An alternative reference would
 have been of course SICP's metacircular evaluator<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, but I consider <code>lispy</code> to be
-a very elegant implementation targeting a non-Lisp host<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
+a very elegant implementation targeting a non-Lisp host.
 </p>
 </div>
 </div>
-<div id="outline-container-orgf5641b5" class="outline-2">
-<h2 id="orgf5641b5">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-orgf5641b5">
+<div id="outline-container-org6f58786" class="outline-2">
+<h2 id="org6f58786">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-org6f58786">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -291,9 +291,9 @@ The interpreter:
 </div>
 </div>
 </div>
-<div id="outline-container-org6aca604" class="outline-2">
-<h2 id="org6aca604">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org6aca604">
+<div id="outline-container-org51c6166" class="outline-2">
+<h2 id="org51c6166">A Lisp quine</h2>
+<div class="outline-text-2" id="text-org51c6166">
 <p>
 Given the title of this post, it seems only fitting to test our interpreter
 with a quine:
@@ -325,7 +325,7 @@ R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch∾@
 
 <p>
 But fear not, there’s no room for monotony here. After all,
-people much prefer dealing with machinery to dealing with bureaucracies<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>:
+people much prefer dealing with machinery to dealing with bureaucracies<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>:
 </p>
 
 <div class="org-src-container">
@@ -349,11 +349,6 @@ I believe there are some interesting Racket bits in my <a href="https://panadest
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-Python is a fine language, but as Norvig himself <a href="https://news.ycombinator.com/item?id=1803815">remarked</a>, it excels in communication,
-not necessarily in programming.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 John McCarthy, <a href="http://jmc.stanford.edu/general/sayings.html">1986</a>.
 </p>
 
