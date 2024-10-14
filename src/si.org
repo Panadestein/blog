@@ -8,7 +8,7 @@
 We will build and interpreter for a subset of the Scheme programming language,
 following a Peter Norvig's [[https://www.norvig.com/lispy.html][essay]]. An alternative reference would
 have been of course SICP's metacircular evaluator[fn:1], but I consider =lispy= to be
-a very elegant implementation targeting a non-Lisp host.
+a very elegant implementation targeting a non-Lisp host[fn:2].
 
 ** A R5RS dialect
 
@@ -71,7 +71,7 @@ with a quine:
 :          (quote (lambda (x) (list x (list (quote quote) x)))))"
 
 Naturally, we can do more rigorous tests by comparing to my favorite Scheme
-implementation, [[https://call-cc.org/][Chicken]]. To achieve this, we'll leverage BQN's
+implementation[fn:3]. To achieve this, we'll leverage BQN's
 foreign function interface:
 
 #+begin_src bqn :tangle ./bqn/si.bqn :results none
@@ -80,7 +80,7 @@ foreign function interface:
 #+end_src
 
 But fear not, there’s no room for monotony here. After all,
-people much prefer dealing with machinery to dealing with bureaucracies[fn:2]:
+people much prefer dealing with machinery to dealing with bureaucracies[fn:4]:
 
 #+begin_src bqn :tangle ./bqn/si.bqn :exports both
   ("Not Compliant"⊸!Scheme≡R5RS)¨ "(+ 10 122)"‿"(* 4 2)"
@@ -92,7 +92,11 @@ people much prefer dealing with machinery to dealing with bureaucracies[fn:2]:
 [fn:1] I recommend SICP as further reading. Much like Louis Reasoner, I attempted
 solving all the problems in the book, but I haven't gotten very far.
 I believe there are some interesting Racket bits in my [[https://panadestein.github.io/solved-sicp/][solutions]], though.
-[fn:2] John McCarthy, [[http://jmc.stanford.edu/general/sayings.html][1986]].
+[fn:2] I am not alone in this view; for instance, the [[https://www.fluentpython.com/][Lizard Book]] dedicates
+an entire section to it.
+[fn:3] One of my favorite hacker guidelines is [[http://www.call-with-current-continuation.org/articles/brutalist-manifesto.txt][The Brutalist Programming Manifesto]],
+written by the creator of Chicken Scheme.
+[fn:4] John McCarthy, [[http://jmc.stanford.edu/general/sayings.html][1986]].
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
