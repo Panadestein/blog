@@ -89,6 +89,8 @@ people much prefer dealing with machinery to dealing with bureaucracies[fn:4]:
 #+RESULTS:
 : ⟨ ⟨ "(+ 10 122)" "132" ⟩ ⟨ "(* 4 2)" "8" ⟩ ⟩
 
+If you manage to find any sneaky corner cases that break the interpreter, do let me know!
+
 [fn:1] I recommend SICP as further reading. Much like Louis Reasoner, I attempted
 solving all the problems in the book, but I haven't gotten very far.
 I believe there are some interesting Racket bits in my [[https://panadestein.github.io/solved-sicp/][solutions]], though.

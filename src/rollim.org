@@ -13,8 +13,7 @@ This post is a rolling collection of algorithms and computational ideas I like, 
 
 Extrapolating Perlis' remark[fn:1], it's likely that a group of 50 individuals
 would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
-juxtapose my implementations with those of seasoned /BQNators/, acknowledging their contributions
-in footnotes.
+juxtapose my implementations with those of seasoned /BQNators/[fn:2].
 
 
 ** Z algorithm
@@ -37,7 +36,7 @@ implementation reads:
 #+RESULTS:
 : ⟨ 15 0 1 0 3 0 1 0 7 0 1 0 3 0 1 ⟩
 
-Two algorithmic improvements were proposed[fn:2] for the function above, namely only iterate
+Two algorithmic improvements can be made here, namely only iterate
 over indices where the character found is equal to the first character, and only search
 to extend the count if it goes up to the end of r:
 
@@ -51,32 +50,26 @@ to extend the count if it goes up to the end of r:
   }
 #+end_src
 
-An array version which I find more beautiful, but has quadratic time complexity is:
+I came up with two array versions, with quadratic and cubic time complexities respectively:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
   ZAQ ← ¯1↓↓(+´·∧`⊣=≠⊸↑)¨<
-  ZAQ "abacabadabacaba"
+  ZAC ← (+´∧`)¨<=↕∘≠{«⍟𝕨𝕩}⌜<
+  (ZAQ≡ZAC)◶@‿ZAC "abacabadabacaba"
 #+end_src
 
 #+RESULTS:
 : ⟨ 15 0 1 0 3 0 1 0 7 0 1 0 3 0 1 ⟩
 
-I also came up with a cubic solution, but as we will see it can be made quadratic:
+With further refinements, the earlier solutions can be transformed into:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
-  ZAC ← (+´∧`)¨<=↕∘≠{«⍟𝕨𝕩}⌜<
-  ZAC "abacabadabacaba"
+  ZAQ‿ZAC ← {(+´∧`)¨𝕏}¨ ⟨≠↑↓=⌽∘↑, <=«⍟(↕∘≠)⟩
+  (ZAQ≡ZAC)◶@‿ZAC "abacabadabacaba"
 #+end_src
 
 #+RESULTS:
 : ⟨ 15 0 1 0 3 0 1 0 7 0 1 0 3 0 1 ⟩
-
-Further improvements where proposed by[fn:2][fn:3], rendering the above solutions into:
-
-#+begin_src bqn :tangle ./bqn/rollim.bqn
-  ZAC ← (+´∧`)¨≠↑↓=⌽∘↑
-  ZAC ← (+´∧`)¨<=«⍟(↕∘≠)
-#+end_src
 
 ** Longest increasing sub-sequence
 
@@ -95,7 +88,7 @@ imperative implementation which is quadratic, but can be optimized:
 #+RESULTS:
 : ⟨ 4 4 1 ⟩
 
-A more elegant array and tacit solution was crafted by[fn:2][fn:3]:
+A more elegant array solution is:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
   LISA ← +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽
@@ -105,8 +98,40 @@ A more elegant array and tacit solution was crafted by[fn:2][fn:3]:
 #+RESULTS:
 : ⟨ 4 4 1 ⟩
 
-In case you are wondering like I did, the minus one there is to make the bins comparison
-strictly increasing.
+Let's =)explain= this optimized version, so we can truly appreciate its beauty.
+So it[[https://en.wikipedia.org/wiki/Slaughterhouse-Five][ goes]]: 
+
+#+begin_src bqn :exports results
+  )explain +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽ 
+ │ │ │ ││    │ │ │  │ │  │ 
+ │ │ │ {┼────┼─┼─┼──┼─┼─´│ 
+ │ │ ∞¨ │    │ │ │  │ │ ││ 
+ │ │  └─┼────┼─┼─┼──┼─┼─┼⌽ 
+ │ ∞≠───┼────┼─┼─┼──┼─┼─┘  
+ +´ │   │    │ │ │  │ │    
+  └─┘   │    │ │ │  │ │    
+        │    │ 𝕨-1  │ │    
+        │    𝕩⍋─┘   │ │    
+        │   ⊑─┘     │ │    
+        │   └──────⊸⊑ │    
+        𝕨⌾─────────┘  │    
+         ├────────────𝕩    
+╶────────┘
+#+end_example
+
+The full expression is structured as a two-train: we sum all finite entries from the
+result of the rightmost three-train. The three-train is a right fold over the reversed
+input, with an initial array of =∞= and the same length as the input. In each step
+of the fold, we modify the right argument using under: we perform a binary search
+with strict comparison to find where the next element should go.
+The element is either placed at the end of the unfilled region, or it replaces
+the first element that is greater than =𝕨=. Since BQN uses a based array model,
+we pick the enclosed atom from this operation's result.
 
 ** N-queens problem
 
@@ -156,10 +181,77 @@ Which nicely compares with the OEIS [[https://oeis.org/A000170][sequence]]:
 And of course, in the implementation above I could have used a single array instead of three,
 but I find the resulting validation and position functions very aesthetic the way they are.
 
+** Majority element
+
+The [[https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm][Boyer–Moore]] algorithm allows for finding the majority element (element that appears
+more than =⌊𝕩÷2= times in the array) in linear time. If such element exists, then it is
+equal to the mode of the data, and for this task we have a nice array [[https://mlochbaum.github.io/bqncrate/?q=mode#][solution]]. The original
+implementation could be expressed as:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  BM ← {v←0 ⋄ I←⊢⊣=◶{𝕊:v+↩1}‿{𝕊:v-↩1} ⋄ 0{𝕊:v=0}◶⟨I,I˜⊣⟩´𝕩}
+  BM 6‿1‿3‿1‿3‿3‿4‿3‿3‿5
+#+end_src
+
+#+RESULTS:
+: 3
+
+The previous fold tracks the majority element as state, a more elegant approach maintains
+the number of votes:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  BM ← {e←@ ⋄ 0{𝕩=0 ? e↩𝕨⋄1 ; 𝕩+¯1⋆e≢𝕨}´𝕩 ⋄ e}
+  BM 6‿1‿3‿1‿3‿3‿4‿3‿3‿5
+#+end_src
+
+#+RESULTS:
+: 3
+
+** An identity on the naturals
+
+Some time ago, while working on performance optimization of linear algebra
+operations with Boolean arrays, I encountered an
+interesting summation property for an array \(a\) of length \(n\):
+
+\begin{equation*}
+    \sum_{i | a_i \neq 0} \sum_{j=i+1}^n f_j
+  = \sum_{j=0}^n f_j \sum_{i < j, \, a_i \neq 0}
+\end{equation*}
+
+It turns out that the second sum on the RHS can be elegantly transformed
+into a scan, giving rise to a beautiful identity that applies to all
+natural numbers, not just Booleans as I initially thought:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  (+`≡·+´/≤⟜<⊒˜) •rand.Range˜ 1e3
+#+end_src
+
+#+RESULTS:
+: 1
+
+This identity holds because =⊒˜= represents the indices =i= of the list,
+and since =+´(/𝕩)=i ←→ i⊑𝕩=, the fold sums all the elements in =𝕩= up to =i=, for
+=i= in the range of the length of the list. Ergo, a scan.
+
+** Depth of nested lists
+
+Studying tree algorithms in APL, I learned about the depth vector [[https://asherbhs.github.io/apl-site/trees/representing-trees.html][representation]]. If
+our nested structure is in a string, the best approach is using boolean [[https://mlochbaum.github.io/bqncrate/?q=depth%20of%20parens#][masks]]. If we
+have a BQN list though, recursion becomes necessary to determine the
+depth of nested elements.
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  {=◶⟨⋈0, 1+·∾𝕊¨⟩𝕩} ⟨1, ⟨2, ⟨3⟩, ⟨4, ⟨5, ⟨6, 7⟩⟩⟩⟩, 1⟩
+#+end_src
+
+#+RESULTS:
+: ⟨ 1 2 3 3 4 5 5 1 ⟩
+
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
-[fn:2] [[https://github.com/mlochbaum][Marshall Lochbaum]], the BQN creator.
-[fn:3] [[https://github.com/dzaima][dzaima]], the CBQN developer.
+[fn:2] Initially, I intended to attribute all community contributions, but this would
+quickly fill the post with footnotes. I often get help from [[https://github.com/mlochbaum][Marshall Lochbaum]] (the BQN creator),
+[[https://github.com/dzaima][dzaima]] (the CBQN developer), and other fine folks from the BQN matrix [[https://app.element.io/#/room/%23array:matrix.org][room]].
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
