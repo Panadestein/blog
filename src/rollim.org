@@ -214,8 +214,8 @@ operations with Boolean arrays, I encountered an
 interesting summation property for an array \(a\) of length \(n\):
 
 \begin{equation*}
-    \sum_{i | a_i \neq 0} \sum_{j=i+1}^n f_j
-  = \sum_{j=0}^n f_j \sum_{i < j, \, a_i \neq 0}
+    \sum_{i | a_i \neq 0} \sum_{j=i+1} f_j
+  = \sum_{j=0} f_j \sum_{i < j | a_i \neq 0} 1
 \end{equation*}
 
 It turns out that the second sum on the RHS can be elegantly transformed
@@ -236,9 +236,9 @@ and since =+´(/𝕩)=i ←→ i⊑𝕩=, the fold sums all the elements in =�
 ** Depth of nested lists
 
 Studying tree algorithms in APL, I learned about the depth vector [[https://asherbhs.github.io/apl-site/trees/representing-trees.html][representation]]. If
-our nested structure is in a string, the best approach is using boolean [[https://mlochbaum.github.io/bqncrate/?q=depth%20of%20parens#][masks]]. If we
-have a BQN list though, recursion becomes necessary to determine the
-depth of nested elements.
+the nested object in consideration is a string, the best approach is using boolean [[https://mlochbaum.github.io/bqncrate/?q=depth%20of%20parens#][masks]].
+However, when dealing with a BQN list, recursion becomes necessary to determine
+the depth of nested elements. Here’s how it can be implemented:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
   {=◶⟨⋈0, 1+·∾𝕊¨⟩𝕩} ⟨1, ⟨2, ⟨3⟩, ⟨4, ⟨5, ⟨6, 7⟩⟩⟩⟩, 1⟩
