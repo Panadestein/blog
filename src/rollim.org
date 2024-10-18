@@ -98,8 +98,7 @@ A more elegant array solution is:
 #+RESULTS:
 : ⟨ 4 4 1 ⟩
 
-Let's =)explain= this optimized version, so we can truly appreciate its beauty.
-So it[[https://en.wikipedia.org/wiki/Slaughterhouse-Five][ goes]]: 
+Let's =)explain= this optimized version, so we can truly appreciate its beauty:
 
 #+begin_src bqn :exports results
   )explain +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽
@@ -131,7 +130,7 @@ of the fold, we modify the right argument using under: we perform a binary searc
 with strict comparison to find where the next element should go.
 The element is either placed at the end of the unfilled region, or it replaces
 the first element that is greater than =𝕨=. Since BQN uses a based array model,
-we pick the enclosed atom from this operation's result.
+we pick the enclosed atom from this operation's result. So it goes[fn:3].
 
 ** N-queens problem
 
@@ -252,6 +251,7 @@ Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jso
 [fn:2] Initially, I intended to attribute all community contributions, but this would
 quickly fill the post with footnotes. I often get help from [[https://github.com/mlochbaum][Marshall Lochbaum]] (the BQN creator),
 [[https://github.com/dzaima][dzaima]] (the CBQN developer), and other fine folks from the BQN matrix [[https://app.element.io/#/room/%23array:matrix.org][room]].
+[fn:3] Don’t believe me? Just ask Kilgore Trout!
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
