@@ -229,26 +229,31 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN (WIP)</h1>
-<div id="outline-container-orgdc38888" class="outline-2">
-<h2 id="orgdc38888">Prelude</h2>
-<div class="outline-text-2" id="text-orgdc38888">
+<div id="outline-container-orgb9fb71b" class="outline-2">
+<h2 id="orgb9fb71b">Prelude</h2>
+<div class="outline-text-2" id="text-orgb9fb71b">
 <p>
-We will build and interpreter for a subset of the Scheme programming language,
-following a Peter Norvig's <a href="https://www.norvig.com/lispy.html">essay</a>. An alternative reference would
+We will build an interpreter for a subset of the Scheme programming language,
+following an <a href="https://www.norvig.com/lispy.html">essay</a> by Peter Norvig. An alternative reference would
 have been of course SICP's metacircular evaluator<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, but I consider <code>lispy</code> to be
 a very elegant implementation targeting a non-Lisp host<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
+
+<p>
+<i>Achtung</i>: this post is a learning exercise. Most of what I’ve learned about
+language implementation comes from self-study of a handful of books<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>.
+</p>
 </div>
 </div>
-<div id="outline-container-org278cfe8" class="outline-2">
-<h2 id="org278cfe8">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-org278cfe8">
+<div id="outline-container-org899ba60" class="outline-2">
+<h2 id="org899ba60">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-org899ba60">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
 quite some distance to cover in reaching full compliance. Let's start by defining some
-utilities. It is sad that the 1-modifier is needed, after all,
-Booleans are not that <a href="https://mlochbaum.github.io/BQN/tutorial/combinator.html#booleans">special</a>.
+utilities. It is unfortunate that the 1-modifier is required,
+given that Booleans are not that <a href="https://mlochbaum.github.io/BQN/tutorial/combinator.html#booleans">special</a>.
 </p>
 
 <div class="org-src-container">
@@ -267,13 +272,13 @@ A global environment:
   "abs", "append", "apply", "begin", "car", "cdr", "cons"
   "eq?", "expt", "equal?", "length", "list", "list?"
   "map", "max", "min", "not", "null?", "number?"
-  "print", "round", "symbol?"
+  "print", "round", "symbol?", "nil"
 ⟩ •HashMap ⟨
   ⋆⁼, +´, -´, ×´, ÷´, &gt;´, &lt;´, ≥´, ≤´, =´
   |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑, 1⊸↓, ⋈´
   ≡´_bool, ⋆´, =´_bool, ≠, ⋈, 0⊸=_bool{•Type•BQN⎊1𝕩}
   {𝕎¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, •BQN⎊1
-  •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}
+  •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}, @
 ⟩ ∾˜ •math •ns.Get¨ "sin"‿"cos"‿"tan"‿"asin"‿"acos"‿"atan"
 </pre>
 </div>
@@ -286,9 +291,10 @@ The interpreter:
 <pre class="src src-bqn">Scheme ← {
   T ← (-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
   R ← {
-    𝕊⟨⟩: "Empty program"!0; 𝕊" ": ⟨⟩; 𝕊𝕩:
-    tk ← •ParseFloat⎊⊢ ⊑ h‿hs ← 1(↑⋈↓)𝕩
-    '('=⟜⊑◶
+    𝕊⟨⟩: "Empty program"!0; 𝕊" ": @;
+    𝕊𝕩: {"("≡𝕩 ? l ← ⟨⟩ ⋄ {l ∾⟜R↩ 𝕩 ⋄ 1↓𝕩}•_while_(")"≢⊑) hs ⋄ l;
+         ")"≡𝕩 ? "Unexpected )"!0 ;
+         •ParseFloat⎊⊢ 𝕩} ⊑ h‿hs ← 1(↑⋈↓)𝕩
   }
   R∘T𝕩
 } ⋄ Scheme "(begin (+ 1 1) (* (+ 3 2) 1) (define a (+ 3 3)))"
@@ -296,9 +302,9 @@ The interpreter:
 </div>
 </div>
 </div>
-<div id="outline-container-org0bf765c" class="outline-2">
-<h2 id="org0bf765c">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org0bf765c">
+<div id="outline-container-orgd2a6794" class="outline-2">
+<h2 id="orgd2a6794">A Lisp quine</h2>
+<div class="outline-text-2" id="text-orgd2a6794">
 <p>
 Given the title of this post, it seems only fitting to test our interpreter
 with a quine:
@@ -318,7 +324,7 @@ with a quine:
 
 <p>
 Naturally, we can do more rigorous tests by comparing to my favorite Scheme
-implementation<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. To achieve this, we'll leverage BQN's
+implementation<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>. To achieve this, we'll leverage BQN's
 foreign function interface:
 </p>
 
@@ -330,7 +336,7 @@ R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch∾@
 
 <p>
 But fear not, there’s no room for monotony here. After all,
-people much prefer dealing with machinery to dealing with bureaucracies<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>:
+people much prefer dealing with machinery to dealing with bureaucracies<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>:
 </p>
 
 <div class="org-src-container">
@@ -364,11 +370,15 @@ an entire section to it.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+For instance <a href="https://craftinginterpreters.com">Crafting Interpreters</a> and <a href="https://www3.nd.edu/~dthain/compilerbook/">Introduction to Compilers and Language Design</a>.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 One of my favorite hacker guidelines is <a href="http://www.call-with-current-continuation.org/articles/brutalist-manifesto.txt">The Brutalist Programming Manifesto</a>,
 written by the creator of Chicken Scheme.
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 John McCarthy, <a href="http://jmc.stanford.edu/general/sayings.html">1986</a>.
 </p>
 
