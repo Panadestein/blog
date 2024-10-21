@@ -5,18 +5,21 @@
 
 ** Prelude
 
-We will build and interpreter for a subset of the Scheme programming language,
-following a Peter Norvig's [[https://www.norvig.com/lispy.html][essay]]. An alternative reference would
+We will build an interpreter for a subset of the Scheme programming language,
+following an [[https://www.norvig.com/lispy.html][essay]] by Peter Norvig. An alternative reference would
 have been of course SICP's metacircular evaluator[fn:1], but I consider =lispy= to be
 a very elegant implementation targeting a non-Lisp host[fn:2].
+
+/Achtung/: this post is a learning exercise. Most of what I’ve learned about
+language implementation comes from self-study of a handful of books[fn:3].
 
 ** A R5RS dialect
 
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme ([[https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html][R5RS]]).
 However, seasoned schemers will quickly notice that our implementation still has
 quite some distance to cover in reaching full compliance. Let's start by defining some
-utilities. It is sad that the 1-modifier is needed, after all,
-Booleans are not that [[https://mlochbaum.github.io/BQN/tutorial/combinator.html#booleans][special]].
+utilities. It is unfortunate that the 1-modifier is required,
+given that Booleans are not that [[https://mlochbaum.github.io/BQN/tutorial/combinator.html#booleans][special]].
 
 #+begin_src bqn :tangle ./bqn/si.bqn :results none
   _bool ← {𝔽◶"#f"‿"#t"}
@@ -31,13 +34,13 @@ A global environment:
     "abs", "append", "apply", "begin", "car", "cdr", "cons"
     "eq?", "expt", "equal?", "length", "list", "list?"
     "map", "max", "min", "not", "null?", "number?"
-    "print", "round", "symbol?"
+    "print", "round", "symbol?", "nil"
   ⟩ •HashMap ⟨
     ⋆⁼, +´, -´, ×´, ÷´, >´, <´, ≥´, ≤´, =´
     |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑, 1⊸↓, ⋈´
     ≡´_bool, ⋆´, =´_bool, ≠, ⋈, 0⊸=_bool{•Type•BQN⎊1𝕩}
     {𝕎¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, •BQN⎊1
-    •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}
+    •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}, @
   ⟩ ∾˜ •math •ns.Get¨ "sin"‿"cos"‿"tan"‿"asin"‿"acos"‿"atan"
 #+end_src
 
@@ -50,16 +53,17 @@ The interpreter:
   Scheme ← {
     T ← (-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
     R ← {
-      𝕊⟨⟩: "Empty program"!0; 𝕊" ": ⟨⟩; 𝕊𝕩:
-      tk ← •ParseFloat⎊⊢ ⊑ h‿hs ← 1(↑⋈↓)𝕩
-      '('=⟜⊑◶
+      𝕊⟨⟩: "Empty program"!0; 𝕊" ": @;
+      𝕊𝕩: {"("≡𝕩 ? l ← ⟨⟩ ⋄ {l ∾⟜R↩ 𝕩 ⋄ 1↓𝕩}•_while_(")"≢⊑) hs ⋄ l;
+           ")"≡𝕩 ? "Unexpected )"!0 ;
+           •ParseFloat⎊⊢ 𝕩} ⊑ h‿hs ← 1(↑⋈↓)𝕩
     }
     R∘T𝕩
   } ⋄ Scheme "(begin (+ 1 1) (* (+ 3 2) 1) (define a (+ 3 3)))"
 #+end_src
 
 #+RESULTS:
-: '('=⟜⊑◶
+: ⟨ "(" ⟩
 
 ** A Lisp quine
 
@@ -76,7 +80,7 @@ with a quine:
 :          (quote (lambda (x) (list x (list (quote quote) x)))))"
 
 Naturally, we can do more rigorous tests by comparing to my favorite Scheme
-implementation[fn:3]. To achieve this, we'll leverage BQN's
+implementation[fn:4]. To achieve this, we'll leverage BQN's
 foreign function interface:
 
 #+begin_src bqn :tangle ./bqn/si.bqn :results none
@@ -85,7 +89,7 @@ foreign function interface:
 #+end_src
 
 But fear not, there’s no room for monotony here. After all,
-people much prefer dealing with machinery to dealing with bureaucracies[fn:4]:
+people much prefer dealing with machinery to dealing with bureaucracies[fn:5]:
 
 #+begin_src bqn :tangle ./bqn/si.bqn :exports both
   ("Not Compliant"⊸!Scheme≡R5RS)¨ "(+ 10 122)"‿"(* 4 2)"
@@ -101,9 +105,10 @@ solving all the problems in the book, but I haven't gotten very far.
 I believe there are some interesting Racket bits in my [[https://panadestein.github.io/solved-sicp/][solutions]], though.
 [fn:2] I am not alone in this view; for instance, the [[https://www.fluentpython.com/][Lizard Book]] dedicates
 an entire section to it.
-[fn:3] One of my favorite hacker guidelines is [[http://www.call-with-current-continuation.org/articles/brutalist-manifesto.txt][The Brutalist Programming Manifesto]],
+[fn:3] For instance [[https://craftinginterpreters.com][Crafting Interpreters]] and [[https://www3.nd.edu/~dthain/compilerbook/][Introduction to Compilers and Language Design]].
+[fn:4] One of my favorite hacker guidelines is [[http://www.call-with-current-continuation.org/articles/brutalist-manifesto.txt][The Brutalist Programming Manifesto]],
 written by the creator of Chicken Scheme.
-[fn:4] John McCarthy, [[http://jmc.stanford.edu/general/sayings.html][1986]].
+[fn:5] John McCarthy, [[http://jmc.stanford.edu/general/sayings.html][1986]].
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
