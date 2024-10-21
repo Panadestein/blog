@@ -1,6 +1,33 @@
-#+TITLE: Anthology of computational ideas in BQN 
+#+TITLE: Anthology of computational ideas
+#+AUTHOR: Panadestein
 
-Welcome to the source code from my blog [[https://panadestein.github.io/blog/][First atop infinity]].
-Here, I delve into solving computational problems across various
-disciplines using my preferred [[https://mlochbaum.github.io/BQN/][tool of thought]]. Every post is actually
-an =org-mode= literate programming computational notebook.
+#+BEGIN_HTML
+<a href="https://raw.githubusercontent.com/Panadestein/blog/main/LICENSE">
+<img alt="MIT" src="https://img.shields.io/github/license/Panadestein/blog" />
+</a>
+
+<a href="https://github.com/Panadestein/blog/actions/workflows/publish.yml">
+<img alt="Build status" src="https://github.com/Panadestein/blog/actions/workflows/publish.yml/badge.svg" />
+</a>
+
+<a href="https://github.com/Panadestein/emacsd">
+<img alt="Emacs" src="https://img.shields.io/badge/Emacs-%237F5AB6.svg?&style=for-the-badge&logo=gnu-emacs&logoColor=white">
+</a>
+#+END_HTML
+
+Welcome to the source code repository for [[https://panadestein.github.io/blog/][First Atop Infinity]]. In this blog, I delve into solving computational
+problems across various disciplines using my preferred [[https://mlochbaum.github.io/BQN/][tool of thought]]: BQN.
+
+** Technical aspects
+
+- *Low Dependency*: The blog is designed with minimal dependencies. It utilizes Emacs =org-mode= with a thin CSS layer to accommodate the BQN font and a minimal color scheme.
+- *Interactive Notebooks*: Each blog post is an =org-mode= computational notebook that can be opened and interacted with in Emacs.
+- *Focus on BQN*: All computational problems are approached using BQN, using an array and functional style whenever possible.
+
+** Contributing
+
+Please open an issue if you have you have ideas, suggestions, or corrections.
+
+** Title's meaning
+
+Let  Simone de Beauvoir [[https://mlochbaum.github.io/BQN/try.html#code=4oqR4oiY4oieICJJIGFtIGluY2FwYWJsZSBvZiBjb25jZWl2aW5nIGluZmluaXR5LCBhbmQgeWV0IEkgZG8gbm90IGFjY2VwdCBmaW5pdHkuIg==][tell]] you.
