@@ -229,9 +229,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN (WIP)</h1>
-<div id="outline-container-orgf19f5f9" class="outline-2">
-<h2 id="orgf19f5f9">Prelude</h2>
-<div class="outline-text-2" id="text-orgf19f5f9">
+<div id="outline-container-orgdc38888" class="outline-2">
+<h2 id="orgdc38888">Prelude</h2>
+<div class="outline-text-2" id="text-orgdc38888">
 <p>
 We will build and interpreter for a subset of the Scheme programming language,
 following a Peter Norvig's <a href="https://www.norvig.com/lispy.html">essay</a>. An alternative reference would
@@ -240,9 +240,9 @@ a very elegant implementation targeting a non-Lisp host<sup><a id="fnr.2" class=
 </p>
 </div>
 </div>
-<div id="outline-container-org25831bd" class="outline-2">
-<h2 id="org25831bd">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-org25831bd">
+<div id="outline-container-org278cfe8" class="outline-2">
+<h2 id="org278cfe8">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-org278cfe8">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -284,16 +284,21 @@ The interpreter:
 
 <div class="org-src-container">
 <pre class="src src-bqn">Scheme ← {
-  T ← ' '=(-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
-  T𝕩
+  T ← (-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
+  R ← {
+    𝕊⟨⟩: "Empty program"!0; 𝕊" ": ⟨⟩; 𝕊𝕩:
+    tk ← •ParseFloat⎊⊢ ⊑ h‿hs ← 1(↑⋈↓)𝕩
+    '('=⟜⊑◶
+  }
+  R∘T𝕩
 } ⋄ Scheme "(begin (+ 1 1) (* (+ 3 2) 1) (define a (+ 3 3)))"
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org7e30d3d" class="outline-2">
-<h2 id="org7e30d3d">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org7e30d3d">
+<div id="outline-container-org0bf765c" class="outline-2">
+<h2 id="org0bf765c">A Lisp quine</h2>
+<div class="outline-text-2" id="text-org0bf765c">
 <p>
 Given the title of this post, it seems only fitting to test our interpreter
 with a quine:
