@@ -18,6 +18,7 @@
 <img alt="Emacs" src="https://img.shields.io/badge/using-BQN-red">
 </a>
 <br>
+<br>
 #+END_HTML
 
 Welcome to the source code of my blog [[https://panadestein.github.io/blog/][First atop infinity]]. Here, I delve into solving computational
