@@ -229,9 +229,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN (WIP)</h1>
-<div id="outline-container-orgb9fb71b" class="outline-2">
-<h2 id="orgb9fb71b">Prelude</h2>
-<div class="outline-text-2" id="text-orgb9fb71b">
+<div id="outline-container-orgb866271" class="outline-2">
+<h2 id="orgb866271">Prelude</h2>
+<div class="outline-text-2" id="text-orgb866271">
 <p>
 We will build an interpreter for a subset of the Scheme programming language,
 following an <a href="https://www.norvig.com/lispy.html">essay</a> by Peter Norvig. An alternative reference would
@@ -245,9 +245,9 @@ language implementation comes from self-study of a handful of books<sup><a id="f
 </p>
 </div>
 </div>
-<div id="outline-container-org899ba60" class="outline-2">
-<h2 id="org899ba60">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-org899ba60">
+<div id="outline-container-orgc695c21" class="outline-2">
+<h2 id="orgc695c21">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-orgc695c21">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -291,10 +291,10 @@ The interpreter:
 <pre class="src src-bqn">Scheme ← {
   T ← (-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
   R ← {
-    𝕊⟨⟩: "Empty program"!0; 𝕊" ": @;
-    𝕊𝕩: {"("≡𝕩 ? l ← ⟨⟩ ⋄ {l ∾⟜R↩ 𝕩 ⋄ 1↓𝕩}•_while_(")"≢⊑) hs ⋄ l;
+    𝕊⟨⟩: "Empty program"!0; 𝕊" ": ∞;
+    𝕊𝕩: {"("≡𝕩 ? l ← ⟨⟩ ⋄ {l ⋈⟜R↩ 𝕩 ⋄ 1↓𝕩}•_while_(")"≢⊑) hs ⋄ l;
          ")"≡𝕩 ? "Unexpected )"!0 ;
-         •ParseFloat⎊⊢ 𝕩} ⊑ h‿hs ← 1(↑⋈↓)𝕩
+         •ParseFloat⎊⊢ 𝕩} ⊑⊑ h‿hs ← 1(↑⋈↓)𝕩
   }
   R∘T𝕩
 } ⋄ Scheme "(begin (+ 1 1) (* (+ 3 2) 1) (define a (+ 3 3)))"
@@ -302,9 +302,9 @@ The interpreter:
 </div>
 </div>
 </div>
-<div id="outline-container-orgd2a6794" class="outline-2">
-<h2 id="orgd2a6794">A Lisp quine</h2>
-<div class="outline-text-2" id="text-orgd2a6794">
+<div id="outline-container-orgb4cbb87" class="outline-2">
+<h2 id="orgb4cbb87">A Lisp quine</h2>
+<div class="outline-text-2" id="text-orgb4cbb87">
 <p>
 Given the title of this post, it seems only fitting to test our interpreter
 with a quine:
