@@ -6,31 +6,30 @@
 <img alt="Build status" src="https://github.com/Panadestein/blog/actions/workflows/publish.yml/badge.svg" />
 </a>
 
-<a href="https://github.com/Panadestein/emacsd">
-<img alt="Emacs" src="https://img.shields.io/badge/Emacs-%237F5AB6.svg?&style=for-the-badge&logo=gnu-emacs&logoColor=white">
-</a>
-
 <a href="https://raw.githubusercontent.com/Panadestein/blog/main/LICENSE">
 <img alt="MIT" src="https://img.shields.io/github/license/Panadestein/blog" />
+</a>
+
+<a href="https://github.com/Panadestein/emacsd">
+<img alt="Emacs" src="https://img.shields.io/badge/Emacs-%237F5AB6.svg?&style=for-the-badge&logo=gnu-emacs&logoColor=white">
 </a>
 #+END_HTML
 
 Welcome to the source code of my blog [[https://panadestein.github.io/blog/][First atop infinity]]. Here, I delve into solving computational
 problems across various disciplines using my preferred tool of thought: [[https://mlochbaum.github.io/BQN/][BQN]].
 
-** Technical aspects
+** Gestaltungsphilosophie
 
-- *Low Dependency*: the site is generated using Emacs' =ox-html= with a thin CSS layer, which accommodates the BQN font
-                    and sets a monochromatic color scheme[fn:1].
+- *Low Dependency*: the site is generated using only Emacs' =ox-html=, with a thin CSS layer to accommodate the [[https://dzaima.github.io/BQN386/][BQN386]] font.
 - *Literate programming*: each blog post is an =org-mode= computational notebook that can be opened and interacted with in Emacs.
-- *Focus on BQN*: all computational problems are approached using BQN, using an array and functional style as much as possible.
+- *Minimalist aesthetic*: the site has a monochromatic color theme, because it is [[https://mlochbaum.github.io/BQN/doc/expression.html#role-spellings][straightforward]] to read BQN without syntax highlighting.
+- *Focus on BQN*: all computational problems are treated exclusively in BQN, using an array and functional style as much as possible.
 
 ** Contributing
 
-Please open an issue if you have ideas, suggestions, or corrections.
+Please [[https://github.com/Panadestein/blog/issues][open]] an issue if you have ideas, suggestions, or corrections.
 
 ** Title's meaning
 
 Let  Simone de Beauvoir [[https://mlochbaum.github.io/BQN/try.html#code=4oqR4oiY4oieICJJIGFtIGluY2FwYWJsZSBvZiBjb25jZWl2aW5nIGluZmluaXR5LCBhbmQgeWV0IEkgZG8gbm90IGFjY2VwdCBmaW5pdHkuIg==][tell]] you.
 
-[fn:1] It is fairly easy to read BQN code without syntax highlighting, see [[https://mlochbaum.github.io/BQN/doc/expression.html#role-spellings][here]].
