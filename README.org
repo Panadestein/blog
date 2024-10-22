@@ -11,7 +11,11 @@
 </a>
 
 <a href="https://github.com/Panadestein/emacsd">
-<img alt="Emacs" src="https://img.shields.io/badge/Emacs-%237F5AB6.svg?&style=for-the-badge&logo=gnu-emacs&logoColor=white">
+<img alt="Emacs" src="https://img.shields.io/badge/powered_by-Emacs-blue">
+</a>
+
+<a href="https://mlochbaum.github.io/BQN/">
+<img alt="Emacs" src="https://img.shields.io/badge/powered_by-BQN-green">
 </a>
 #+END_HTML
 

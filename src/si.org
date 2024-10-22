@@ -10,8 +10,9 @@ following an [[https://www.norvig.com/lispy.html][essay]] by Peter Norvig. An al
 have been of course SICP's metacircular evaluator[fn:1], but I consider =lispy= to be
 a very elegant implementation targeting a non-Lisp host[fn:2].
 
-/Achtung/: this post is a learning exercise. Most of what I’ve learned about
-language implementation comes from self-study of a handful of books[fn:3].
+/Achtung/: this post is a learning exercise. Most of what I know about
+language implementation comes from self-study of a handful of books[fn:3]
+and blogs like Norvig's.
 
 ** A R5RS dialect
 
