@@ -42,5 +42,5 @@ Please [[https://github.com/Panadestein/blog/issues][open]] an issue if you have
 
 ** Title's meaning
 
-Let  Simone de Beauvoir [[https://mlochbaum.github.io/BQN/try.html#code=4oqR4oiY4oieICJJIGFtIGluY2FwYWJsZSBvZiBjb25jZWl2aW5nIGluZmluaXR5LCBhbmQgeWV0IEkgZG8gbm90IGFjY2VwdCBmaW5pdHkuIg==][tell]] you.
+Let Goethe [[https://mlochbaum.github.io/BQN/try.html#code=IldpbGxzdCBkdSBpbnMgVW5lbmRsaWNoZSBzY2hyZWl0ZW4sIiDiipHiiJjiiJ4gIkdlaCBudXIgaW0gRW5kbGljaGVuIG5hY2ggYWxsZW4gU2VpdGVuLiIKCgoK][tell]] you.
 
