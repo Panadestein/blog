@@ -241,12 +241,12 @@ This post is a rolling collection of algorithms and computational ideas I like, 
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org4fd2489">Z algorithm</a></li>
-<li><a href="#org759b7e9">Longest increasing sub-sequence</a></li>
-<li><a href="#org149b931">N-queens problem</a></li>
-<li><a href="#org0b05fed">Majority element</a></li>
-<li><a href="#orgb66e16a">An identity on the naturals</a></li>
-<li><a href="#orge7a7beb">Depth of nested lists</a></li>
+<li><a href="#orgdcbac1d">Z algorithm</a></li>
+<li><a href="#org7557420">Longest increasing sub-sequence</a></li>
+<li><a href="#orge25ed2e">N-queens problem</a></li>
+<li><a href="#orgefd0803">Majority element</a></li>
+<li><a href="#orgf4a0bb8">An identity on the naturals</a></li>
+<li><a href="#orge0c6c87">Depth of nested lists</a></li>
 </ul>
 </div>
 </div>
@@ -256,9 +256,9 @@ Extrapolating Perlis' remark<sup><a id="fnr.1" class="footref" href="#fn.1" role
 would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
 juxtapose my implementations with those of seasoned <i>BQNators</i><sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
-<div id="outline-container-org4fd2489" class="outline-2">
-<h2 id="org4fd2489">Z algorithm</h2>
-<div class="outline-text-2" id="text-org4fd2489">
+<div id="outline-container-orgdcbac1d" class="outline-2">
+<h2 id="orgdcbac1d">Z algorithm</h2>
+<div class="outline-text-2" id="text-orgdcbac1d">
 <p>
 This is a very efficient procedure that finds prefix strings in <a href="https://cp-algorithms.com/string/z-function.html">linear time</a>. The imperative
 implementation reads:
@@ -330,9 +330,9 @@ With further refinements, the earlier solutions can be transformed into:
 </pre>
 </div>
 </div>
-<div id="outline-container-org759b7e9" class="outline-2">
-<h2 id="org759b7e9">Longest increasing sub-sequence</h2>
-<div class="outline-text-2" id="text-org759b7e9">
+<div id="outline-container-org7557420" class="outline-2">
+<h2 id="org7557420">Longest increasing sub-sequence</h2>
+<div class="outline-text-2" id="text-org7557420">
 <p>
 This <a href="https://en.wikipedia.org/wiki/Longest_increasing_subsequence">problem</a> can be solved in \(O(n\log n)\) using dynamic programming. Here is an
 imperative implementation which is quadratic, but can be optimized:
@@ -372,7 +372,7 @@ LISA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿
 Let's <code>)explain</code> this optimized version, so we can truly appreciate its beauty:
 </p>
 
-<pre class="example" id="org2c933ff">
+<pre class="example" id="org34eed7b">
  +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽ 
  │ │ │ ││    │ │ │  │ │  │ 
  │ │ │ {┼────┼─┼─┼──┼─┼─´│ 
@@ -402,9 +402,9 @@ we pick the enclosed atom from this operation's result. So it goes<sup><a id="fn
 </p>
 </div>
 </div>
-<div id="outline-container-org149b931" class="outline-2">
-<h2 id="org149b931">N-queens problem</h2>
-<div class="outline-text-2" id="text-org149b931">
+<div id="outline-container-orge25ed2e" class="outline-2">
+<h2 id="orge25ed2e">N-queens problem</h2>
+<div class="outline-text-2" id="text-orge25ed2e">
 <p>
 This problem is the archetypal example of backtracking. Initially, I tried to solve it
 using a function to place the queens in the full board, hoping that it would lead to a
@@ -416,7 +416,7 @@ more array oriented solution:
 </pre>
 </div>
 
-<pre class="example" id="org76a70b4">
+<pre class="example" id="org99a9ad3">
 ┌─                 
 ╵ 0 1 0 1 0 1 0 0  
   0 0 1 1 1 0 0 0  
@@ -464,9 +464,9 @@ but I find the resulting validation and position functions very aesthetic the wa
 </p>
 </div>
 </div>
-<div id="outline-container-org0b05fed" class="outline-2">
-<h2 id="org0b05fed">Majority element</h2>
-<div class="outline-text-2" id="text-org0b05fed">
+<div id="outline-container-orgefd0803" class="outline-2">
+<h2 id="orgefd0803">Majority element</h2>
+<div class="outline-text-2" id="text-orgefd0803">
 <p>
 The <a href="https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm">Boyer–Moore</a> algorithm allows for finding the majority element (element that appears
 more than <code>⌊𝕩÷2</code> times in the array) in linear time. If such element exists, then it is
@@ -501,9 +501,9 @@ BM 6‿1‿3‿1‿3‿3‿4‿3‿3‿5
 </pre>
 </div>
 </div>
-<div id="outline-container-orgb66e16a" class="outline-2">
-<h2 id="orgb66e16a">An identity on the naturals</h2>
-<div class="outline-text-2" id="text-orgb66e16a">
+<div id="outline-container-orgf4a0bb8" class="outline-2">
+<h2 id="orgf4a0bb8">An identity on the naturals</h2>
+<div class="outline-text-2" id="text-orgf4a0bb8">
 <p>
 Some time ago, while working on performance optimization of linear algebra
 operations with Boolean arrays, I encountered an
@@ -538,9 +538,9 @@ and since <code>+´(/𝕩)=i ←→ i⊑𝕩</code>, the fold sums all the eleme
 </p>
 </div>
 </div>
-<div id="outline-container-orge7a7beb" class="outline-2">
-<h2 id="orge7a7beb">Depth of nested lists</h2>
-<div class="outline-text-2" id="text-orge7a7beb">
+<div id="outline-container-orge0c6c87" class="outline-2">
+<h2 id="orge0c6c87">Depth of nested lists</h2>
+<div class="outline-text-2" id="text-orge0c6c87">
 <p>
 Studying tree algorithms in APL, I learned about the depth vector <a href="https://asherbhs.github.io/apl-site/trees/representing-trees.html">representation</a>. If
 the nested object in consideration is a string, the best approach is using boolean <a href="https://mlochbaum.github.io/bqncrate/?q=depth%20of%20parens#">masks</a>.
