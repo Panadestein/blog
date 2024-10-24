@@ -27,7 +27,7 @@ and algorithmic problems across various disciplines using my preferred tool of t
 *Disclaimer*: I primarily write for myself, and these posts are a collection of ideas I've encountered during my intellectual wanderings.
 I've often challenged myself: "You're not a [[https://www.ee.ryerson.ca/~elf/hack/realmen.html][real programmer]] if you can't implement this from scratch." However, being too lazy to write hundreds
 of lines of code, this didn't happen until I discovered the terseness and expressive power of BQN, which offers me what I love from both Lisp and APL.
-And rest assured, the code on this site doesn't look like Brainfuck, nor does it conform to any of [[https://aplwiki.com/wiki/File:Aplbingo.png][this]] clichés.
+And rest assured, the code on this site doesn't look like Brainfuck, nor does it conform to any of [[https://aplwiki.com/wiki/File:Aplbingo.png][these]] clichés.
 
 ** Gestaltungsphilosophie
 
