@@ -22,14 +22,19 @@
 #+END_HTML
 
 Welcome to the source code of my blog [[https://panadestein.github.io/blog/][First atop infinity]]. Here, I delve into solving computational
-and algorithmic problems across various disciplines using my preferred tool of thought: [[https://mlochbaum.github.io/BQN/][BQN]].
+and algorithmic problems across various disciplines using my preferred tool of thought.
+
+*Disclaimer*: I primarily write for myself, and these posts are a collection of ideas I've encountered during my intellectual wanderings.
+I've often challenged myself: "You're not a [[https://www.ee.ryerson.ca/~elf/hack/realmen.html][real programmer]] if you can't implement this from scratch." However,
+being to lazy to write hundreds of LoCs, this didn't happen until I discovered the terseness and expressive power of BQN,
+which offers me what I love from both Lisp and APL.
 
 ** Gestaltungsphilosophie
 
 - *Low Dependency*: the site is generated using only Emacs' =ox-html=, with a thin CSS layer to accommodate the [[https://dzaima.github.io/BQN386/][BQN386]] font.
 - *Literate programming*: each blog post is an =org-mode= computational notebook that can be opened and interacted with in Emacs.
-- *Minimalist aesthetic*: the site has a monochromatic color theme, because it is [[https://mlochbaum.github.io/BQN/doc/expression.html#role-spellings][straightforward]] to read BQN without syntax highlighting.
-- *Focus on BQN*: all problems are treated exclusively in BQN, using array and functional style as much as possible.
+- *Minimalist aesthetic*: the site has a monochromatic theme, because it is [[https://mlochbaum.github.io/BQN/doc/expression.html#role-spellings][straightforward]] to read BQN without syntax highlighting.
+- *Focus on BQN*: all problems are treated in BQN, using array and functional style as much as possible.
 
 ** Contributing
 
