@@ -16,7 +16,7 @@
 #+HTML: <header class="header">
 #+HTML:   <div class="header-left"><a id="title" href="#" onclick="toggleTitle(); return false;">First atop infinity</a></div>
 #+HTML: <div class="header-right">
-#+HTML: ⟨<a href="https://github.com/Panadestein/blog">Src</a> ⋄ <a href="https://panadestein.github.io/">About</a>⟩
+#+HTML: <a href="https://github.com/Panadestein/blog">GitHub</a>
 #+HTML: </div>
 #+HTML: </header>
 #+HTML_HEAD: <!-- Google tag (gtag.js) -->
