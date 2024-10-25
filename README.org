@@ -1,4 +1,4 @@
-#+TITLE: Anthology of computational ideas
+#+TITLE: First atop infinity
 #+AUTHOR: Panadestein
 
 #+BEGIN_HTML
@@ -21,7 +21,7 @@
 <br>
 #+END_HTML
 
-Welcome to the source code of my blog [[https://panadestein.github.io/blog/][First atop infinity]]. Here, I delve into solving computational
+Welcome to the source code of my blog. Here, I delve into solving computational
 and algorithmic problems across various disciplines using my preferred tool of thought.
 
 *Disclaimer*:
