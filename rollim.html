@@ -241,12 +241,13 @@ This post is a rolling collection of algorithms and computational ideas I like, 
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org219a065">Z algorithm</a></li>
-<li><a href="#org1106327">Longest increasing sub-sequence</a></li>
-<li><a href="#org9a73ed9">N-queens problem</a></li>
-<li><a href="#orgc50bbcd">Majority element</a></li>
-<li><a href="#org4983ff9">An identity on the naturals</a></li>
-<li><a href="#org4aa5c18">Depth of nested lists</a></li>
+<li><a href="#org1453d3c">Z algorithm</a></li>
+<li><a href="#orgc777191">Longest increasing sub-sequence</a></li>
+<li><a href="#org04948ef">N-queens problem</a></li>
+<li><a href="#org6a0d544">Majority element</a></li>
+<li><a href="#orgf910147">An identity on the naturals</a></li>
+<li><a href="#org0b23dc9">Depth of nested lists</a></li>
+<li><a href="#orgad18b87">H-index</a></li>
 </ul>
 </div>
 </div>
@@ -256,9 +257,9 @@ Extrapolating Perlis' remark<sup><a id="fnr.1" class="footref" href="#fn.1" role
 would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
 juxtapose my implementations with those of seasoned <i>BQNators</i><sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
-<div id="outline-container-org219a065" class="outline-2">
-<h2 id="org219a065">Z algorithm</h2>
-<div class="outline-text-2" id="text-org219a065">
+<div id="outline-container-org1453d3c" class="outline-2">
+<h2 id="org1453d3c">Z algorithm</h2>
+<div class="outline-text-2" id="text-org1453d3c">
 <p>
 This is a very efficient procedure that finds prefix strings in <a href="https://cp-algorithms.com/string/z-function.html">linear time</a>. The imperative
 implementation reads:
@@ -321,18 +322,13 @@ With further refinements, the earlier solutions can be transformed into:
 
 <div class="org-src-container">
 <pre class="src src-bqn">ZAQ‿ZAC ← {(+´∧`)¨𝕏}¨ ⟨≠↑↓=⌽∘↑, &lt;=«⍟(↕∘≠)⟩
-(ZAQ≡ZAC)◶@‿ZAC "abacabadabacaba"
-</pre>
-</div>
-
-<pre class="example">
-⟨ 15 0 1 0 3 0 1 0 7 0 1 0 3 0 1 ⟩
 </pre>
 </div>
 </div>
-<div id="outline-container-org1106327" class="outline-2">
-<h2 id="org1106327">Longest increasing sub-sequence</h2>
-<div class="outline-text-2" id="text-org1106327">
+</div>
+<div id="outline-container-orgc777191" class="outline-2">
+<h2 id="orgc777191">Longest increasing sub-sequence</h2>
+<div class="outline-text-2" id="text-orgc777191">
 <p>
 This <a href="https://en.wikipedia.org/wiki/Longest_increasing_subsequence">problem</a> can be solved in \(O(n\log n)\) using dynamic programming. Here is an
 imperative implementation which is quadratic, but can be optimized:
@@ -372,7 +368,7 @@ LISA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿
 Let's <code>)explain</code> this optimized version, so we can truly appreciate its beauty:
 </p>
 
-<pre class="example" id="org65015d1">
+<pre class="example" id="org088d962">
  +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽ 
  │ │ │ ││    │ │ │  │ │  │ 
  │ │ │ {┼────┼─┼─┼──┼─┼─´│ 
@@ -402,9 +398,9 @@ we pick the enclosed atom from this operation's result. So it goes<sup><a id="fn
 </p>
 </div>
 </div>
-<div id="outline-container-org9a73ed9" class="outline-2">
-<h2 id="org9a73ed9">N-queens problem</h2>
-<div class="outline-text-2" id="text-org9a73ed9">
+<div id="outline-container-org04948ef" class="outline-2">
+<h2 id="org04948ef">N-queens problem</h2>
+<div class="outline-text-2" id="text-org04948ef">
 <p>
 This problem is the archetypal example of backtracking. Initially, I tried to solve it
 using a function to place the queens in the full board, hoping that it would lead to a
@@ -416,7 +412,7 @@ more array oriented solution:
 </pre>
 </div>
 
-<pre class="example" id="org5604c67">
+<pre class="example" id="org768b93a">
 ┌─                 
 ╵ 0 1 0 1 0 1 0 0  
   0 0 1 1 1 0 0 0  
@@ -464,9 +460,9 @@ but I find the resulting validation and position functions very aesthetic the wa
 </p>
 </div>
 </div>
-<div id="outline-container-orgc50bbcd" class="outline-2">
-<h2 id="orgc50bbcd">Majority element</h2>
-<div class="outline-text-2" id="text-orgc50bbcd">
+<div id="outline-container-org6a0d544" class="outline-2">
+<h2 id="org6a0d544">Majority element</h2>
+<div class="outline-text-2" id="text-org6a0d544">
 <p>
 The <a href="https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm">Boyer–Moore</a> algorithm allows for finding the majority element (element that appears
 more than <code>⌊𝕩÷2</code> times in the array) in linear time. If such element exists, then it is
@@ -501,9 +497,9 @@ BM 6‿1‿3‿1‿3‿3‿4‿3‿3‿5
 </pre>
 </div>
 </div>
-<div id="outline-container-org4983ff9" class="outline-2">
-<h2 id="org4983ff9">An identity on the naturals</h2>
-<div class="outline-text-2" id="text-org4983ff9">
+<div id="outline-container-orgf910147" class="outline-2">
+<h2 id="orgf910147">An identity on the naturals</h2>
+<div class="outline-text-2" id="text-orgf910147">
 <p>
 Some time ago, while working on performance optimization of linear algebra
 operations with Boolean arrays, I encountered an
@@ -538,9 +534,9 @@ and since <code>+´(/𝕩)=i ←→ i⊑𝕩</code>, the fold sums all the eleme
 </p>
 </div>
 </div>
-<div id="outline-container-org4aa5c18" class="outline-2">
-<h2 id="org4aa5c18">Depth of nested lists</h2>
-<div class="outline-text-2" id="text-org4aa5c18">
+<div id="outline-container-org0b23dc9" class="outline-2">
+<h2 id="org0b23dc9">Depth of nested lists</h2>
+<div class="outline-text-2" id="text-org0b23dc9">
 <p>
 Studying tree algorithms in APL, I learned about the depth vector <a href="https://asherbhs.github.io/apl-site/trees/representing-trees.html">representation</a>. If
 the nested object in consideration is a string, the best approach is using boolean <a href="https://mlochbaum.github.io/bqncrate/?q=depth%20of%20parens#">masks</a>.
@@ -558,6 +554,36 @@ the depth of nested elements. Here’s how it can be implemented:
 </pre>
 </div>
 </div>
+<div id="outline-container-orgad18b87" class="outline-2">
+<h2 id="orgad18b87">H-index</h2>
+<div class="outline-text-2" id="text-orgad18b87">
+<p>
+This metric is one of the reasons for the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2407748">deplorable</a> state of modern science,
+and the headaches for <i>outsiders</i> trying to get in. Consider that Peter Higgs
+has an estimated h-index of only <a href="https://www.semanticscholar.org/author/P.-W.-Higgs/50750305">12</a>. By contrast, a random professor nowadays 
+boast an h-index ten times as high, and exponentially less impact.
+Enough of ranting, let's concentrate on finding an elegant way to
+implement this useless thing:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">HL ← (+´∘«⊒˜≤+`⌾⌽)·/⁼≠⊸⌊
+HS ← +´∨≥1+⊒˜
+(HL≡HS)◶@‿HL 14‿14‿11‿9‿5‿5‿1‿1‿1‿1‿0
+</pre>
+</div>
+
+<pre class="example">
+5
+</pre>
+
+
+<p>
+A testament to the idea that the simplest solution in BQN is often the most efficient:
+I initially clip my citations array with <code>{≠¨⊔≠∘𝕩¨⌾(≥⟜≠∘𝕩⊸/)𝕩}</code>, which is just <code>/⁼≠⊸⌊</code>.
+</p>
+</div>
+</div>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
@@ -568,9 +594,10 @@ Alan J. Perlis (1978). From <a href="https://www.jsoftware.com/papers/perlis78.h
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-Initially, I intended to attribute all community contributions, but this would
-quickly fill the post with footnotes. I often get help from <a href="https://github.com/mlochbaum">Marshall Lochbaum</a> (the BQN creator),
-<a href="https://github.com/dzaima">dzaima</a> (the CBQN developer), and other fine folks from the BQN matrix <a href="https://app.element.io/#/room/%23array:matrix.org">room</a>.
+Initially, I intended to rigorously attribute all contributions, but this
+quickly filled the text with footnotes. I often get help streamlining my solutions
+from <a href="https://github.com/mlochbaum">Marshall Lochbaum</a> (the BQN creator), <a href="https://github.com/dzaima">dzaima</a> (the CBQN developer),
+and other fine folks from the BQN matrix <a href="https://app.element.io/#/room/%23array:matrix.org">room</a>, thank you all! Please check the <a href="https://github.com/dzaima/chatlogs">logs</a> for more context.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
