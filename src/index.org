@@ -1,6 +1,6 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <meta name="description" content="Anthology of computational ideas in BQN.">
-#+HTML_HEAD: <meta name="keywords" content="BQN, quantum computing, Hartree-Fock, array languages, APL, spotify analysis">
+#+HTML_HEAD: <meta name="keywords" content="BQN, APL, array language, computational science, quantum computing, Hartree-Fock, Org-mode blog, literate programming">
 #+HTML_HEAD: <script>
 #+HTML_HEAD:   function toggleTitle() {
 #+HTML_HEAD:     var titleElement = document.getElementById('title');

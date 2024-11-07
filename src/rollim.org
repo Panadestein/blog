@@ -63,13 +63,9 @@ I came up with two array versions, with quadratic and cubic time complexities re
 
 With further refinements, the earlier solutions can be transformed into:
 
-#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+#+begin_src bqn :tangle ./bqn/rollim.bqn
   ZAQ‿ZAC ← {(+´∧`)¨𝕏}¨ ⟨≠↑↓=⌽∘↑, <=«⍟(↕∘≠)⟩
-  (ZAQ≡ZAC)◶@‿ZAC "abacabadabacaba"
 #+end_src
-
-#+RESULTS:
-: ⟨ 15 0 1 0 3 0 1 0 7 0 1 0 3 0 1 ⟩
 
 ** Longest increasing sub-sequence
 
@@ -246,11 +242,33 @@ the depth of nested elements. Here’s how it can be implemented:
 #+RESULTS:
 : ⟨ 1 2 3 3 4 5 5 1 ⟩
 
+** H-index
+
+This metric is one of the reasons for the [[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2407748][deplorable]] state of modern science,
+and the headaches for /outsiders/ trying to get in. Consider that Peter Higgs
+has an estimated h-index of only [[https://www.semanticscholar.org/author/P.-W.-Higgs/50750305][12]]. By contrast, a random professor nowadays 
+boast an h-index ten times as high, and exponentially less impact.
+Enough of ranting, let's concentrate on finding an elegant way to
+implement this useless thing:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  HL ← (+´∘«⊒˜≤+`⌾⌽)·/⁼≠⊸⌊
+  HS ← +´∨≥1+⊒˜
+  (HL≡HS)◶@‿HL 14‿14‿11‿9‿5‿5‿1‿1‿1‿1‿0
+#+end_src
+
+#+RESULTS:
+: 5
+
+A testament to the idea that the simplest solution in BQN is often the most efficient:
+I initially clip my citations array with ={≠¨⊔≠∘𝕩¨⌾(≥⟜≠∘𝕩⊸/)𝕩}=, which is just =/⁼≠⊸⌊=.
+
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
-[fn:2] Initially, I intended to attribute all community contributions, but this would
-quickly fill the post with footnotes. I often get help from [[https://github.com/mlochbaum][Marshall Lochbaum]] (the BQN creator),
-[[https://github.com/dzaima][dzaima]] (the CBQN developer), and other fine folks from the BQN matrix [[https://app.element.io/#/room/%23array:matrix.org][room]].
+[fn:2] Initially, I intended to rigorously attribute all contributions, but this
+quickly filled the text with footnotes. I often get help streamlining my solutions
+from [[https://github.com/mlochbaum][Marshall Lochbaum]] (the BQN creator), [[https://github.com/dzaima][dzaima]] (the CBQN developer),
+and other fine folks from the BQN matrix [[https://app.element.io/#/room/%23array:matrix.org][room]], thank you all! Please check the [[https://github.com/dzaima/chatlogs][logs]] for more context.
 [fn:3] Don’t believe me? Just ask Kilgore Trout!
 
 #+BEGIN_EXPORT html
