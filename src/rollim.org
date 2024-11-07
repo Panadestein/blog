@@ -244,10 +244,10 @@ the depth of nested elements. Here’s how it can be implemented:
 
 ** H-index
 
-This metric is one of the reasons for the [[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2407748][deplorable]] state of modern science,
+This metric is one of the reasons for the [[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2407748][deplorable]] state of modern academia,
 and the headaches for /outsiders/ trying to get in. Consider that Peter Higgs
 has an estimated h-index of only [[https://www.semanticscholar.org/author/P.-W.-Higgs/50750305][12]]. By contrast, a random professor nowadays 
-boast an h-index ten times as high, and exponentially less impact.
+boasts an h-index ten times as high, and exponentially less impact.
 Enough of ranting, let's concentrate on finding an elegant way to
 implement this useless thing:
 
