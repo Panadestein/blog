@@ -260,6 +260,15 @@ implement this useless thing:
 #+RESULTS:
 : 5
 
+If someone ever published that much, sorting will eventually be slower:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  HL‿HS {𝕎•_timed𝕩}¨< 1e8 •rand.Range 1e3
+#+end_src
+
+#+RESULTS:
+: ⟨ 0.083824959 0.21801262700000001 ⟩
+
 A testament to the idea that the simplest solution in BQN is often the most efficient:
 I initially clip my citations array with ={≠¨⊔≠∘𝕩¨⌾(≥⟜≠∘𝕩⊸/)𝕩}=, which is just =/⁼≠⊸⌊=.
 
