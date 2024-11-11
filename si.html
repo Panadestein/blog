@@ -229,9 +229,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN (WIP)</h1>
-<div id="outline-container-org143314a" class="outline-2">
-<h2 id="org143314a">Prelude</h2>
-<div class="outline-text-2" id="text-org143314a">
+<div id="outline-container-org5ebe630" class="outline-2">
+<h2 id="org5ebe630">Prelude</h2>
+<div class="outline-text-2" id="text-org5ebe630">
 <p>
 We will build an interpreter for a subset of the Scheme programming language,
 following an <a href="https://www.norvig.com/lispy.html">essay</a> by Peter Norvig. An alternative reference would
@@ -246,9 +246,9 @@ and blogs like Norvig's.
 </p>
 </div>
 </div>
-<div id="outline-container-org7e7d7f6" class="outline-2">
-<h2 id="org7e7d7f6">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-org7e7d7f6">
+<div id="outline-container-orge2dd03a" class="outline-2">
+<h2 id="orge2dd03a">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-orge2dd03a">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -293,11 +293,10 @@ The interpreter:
   T ← (-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
   R ← {
     𝕊⟨⟩: "Empty program"!0;
-    #𝕊" ": ⟨⟩;
     𝕊𝕩: {
-      "("≡⊑𝕨 ? l ← ⟨⟩ ⋄ {𝕩 ⊣ l∾↩𝕩}∘R•_while_(")"≢⊑) 𝕩 ⋄ l;
+      "("≡⊑𝕨 ? l ← ⟨⟩ ⋄ l⋈1↓{𝕊t‿ts: l∾↩&lt;t ⋄ ts}∘R•_while_(")"≢⊑) 𝕩;
       ")"≡⊑𝕨 ? "Unexpected )"!0 ;
-      •ParseFloat⎊⊢ ⊑𝕨
+      𝕩 ⋈˜ •ParseFloat⎊⊢ ⊑𝕨
     }´ 1(↑⋈↓)𝕩
   }
   A ← {𝕩}
@@ -307,9 +306,9 @@ The interpreter:
 </div>
 </div>
 </div>
-<div id="outline-container-org8e79f1a" class="outline-2">
-<h2 id="org8e79f1a">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org8e79f1a">
+<div id="outline-container-org43bc0d4" class="outline-2">
+<h2 id="org43bc0d4">A Lisp quine</h2>
+<div class="outline-text-2" id="text-org43bc0d4">
 <p>
 Given the title of this post, it seems only fitting to test our interpreter
 with a quine:
