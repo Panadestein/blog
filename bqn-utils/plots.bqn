@@ -1,18 +1,19 @@
 # Plot utilities
 # Adapted from https://github.com/mlochbaum/BQN.git, ISC license
 
-# Import SVG utilities
+# Exports
+⟨ Plot, SetPlot ⟩⇐
 
+# Import SVG utilities
 At‿Enc‿Elt‿Pos‿FmtNum‿SVG ← •Import "svg.bqn"
 
 # Set plot type
-
 width ← 384
 pad   ← 2⥊10
 
 opts_type ← @
 InitPlot ← {𝕤⋄ opts_type ↩ "line" }
-SetPlot  ⇐ {𝕤⋄ opts_type ↩ 𝕩 }
+SetPlot  ← {𝕤⋄ opts_type ↩ 𝕩 }
 
 pa ← At "class=code|style=fill:none;stroke:black|stroke-width=2"
 pg ← At "class=code|style=fill:none;stroke:#267CB9|stroke-width=3"
@@ -30,7 +31,7 @@ PairRec ← {
   d ← 𝕨≍○≡𝕩
   𝕨 (2≤⌊´d)◶⟨Pair⊣"•Plot: invalid depth mixing"!·∧´1=d˙, ∾∘⥊𝕊¨⟩ 𝕩
 }
-Plot ⇐ {
+Plot ← {
   xy ← 1e300 (⊣-⊸⌈⌊) ⍉> 𝕨 PairRec 𝕩   # organize and clip
   pts ← <∘∾˘ xy
   AB ← {e←(÷5e15)(⊣×⌈´)|𝕩⋄(⌊≍⌈)˝⌾(-⟜0‿e)𝕩} # ensure 0 < window size
