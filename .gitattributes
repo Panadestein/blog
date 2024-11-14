@@ -9,3 +9,4 @@
 *.c linguist-vendored
 *.ipynb linguist-vendored
 *.lisp linguist-vendored
+*.fish linguist-vendored
