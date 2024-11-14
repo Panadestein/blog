@@ -1,5 +1,5 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
-#+TITLE: Scheming a mise-en-abîme in BQN (WIP)
+#+TITLE: Scheming a mise-en-abîme in BQN
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
@@ -30,18 +30,18 @@ A global environment:
 
 #+begin_src bqn :tangle ./bqn/si.bqn
   env ← ⟨
-    "sin", "cos", "tan", "asin", "acos", "atan",
+    "sin", "cos", "tan", "asin", "acos", "atan"
     "log", "+", "-", "*", "/", ">", "<", ">=", "<=", "="
     "abs", "append", "apply", "begin", "car", "cdr", "cons"
     "eq?", "expt", "equal?", "length", "list", "list?"
     "map", "max", "min", "not", "null?", "number?"
-    "print", "round", "symbol?", "nil"
+    "print", "round", "symbol?", "nil", "pi"
   ⟩ •HashMap ⟨
     ⋆⁼, +´, -´, ×´, ÷´, >´, <´, ≥´, ≤´, =´
     |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑, 1⊸↓, ⋈´
     ≡´_bool, ⋆´, =´_bool, ≠, ⋈, 0⊸=_bool{•Type•BQN⎊1𝕩}
     {𝕎¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, •BQN⎊1
-    •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}, @
+    •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}, @, π
   ⟩ ∾˜ •math •ns.Get¨ "sin"‿"cos"‿"tan"‿"asin"‿"acos"‿"atan"
 #+end_src
 
@@ -52,27 +52,29 @@ The interpreter:
 
 #+begin_src bqn :tangle ./bqn/si.bqn
   Scheme ← {
-    T ← (-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
+    T ← (⊢/˜·∨´¨' '⊸≠)(-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
     R ← {
       𝕊⟨⟩: "Empty program"!0;
       𝕊𝕩: {
-        "("≡⊑𝕨 ? l ← ⟨⟩ ⋄ l⋈1↓{𝕊t‿ts: l∾↩<t ⋄ ts}∘R•_while_(")"≢⊑) 𝕩;
+        "("≡⊑𝕨 ? l←⟨⟩ ⋄ l⋈1↓{t‿ts: ts⊣l∾↩<t}∘R•_while_(")"≢⊑) 𝕩;
         ")"≡⊑𝕨 ? "Unexpected )"!0 ;
         𝕩 ⋈˜ •ParseFloat⎊⊢ ⊑𝕨
       }´ 1(↑⋈↓)𝕩
     }
-    A ← {𝕩}
-    A∘R∘T𝕩
-  } ⋄ Scheme "(begin (+ 1 1) (* (+ 3 2) 1) (define a (+ 3 3)))"
+    E ← {
+      env.Has 𝕩 ? env.Get 𝕩;
+      1=•Type⊑⟨𝕩⟩ ? 𝕩;
+      "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
+      "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
+      f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩 
+    }
+    P ← (⊢+˝("()"-"⟨⟩")×"⟨⟩"=⌜⊢)∘•Fmt·1⊸=∘≠◶⊢‿⊑∾⎊⊢
+    P env⊸E⊑R∘T 𝕩
+  }
 #+end_src
 
 #+RESULTS:
-: ┌─                                                                                                                                   
-: · ┌─                                                                                                                             ⟨⟩  
-:   · "begin" " " ⟨ "+" " " 1 " " 1 ⟩ " " ⟨ "*" " " ⟨ "+" " " 3 " " 2 ⟩ " " 1 ⟩ " " ⟨ "define" " " "a" " " ⟨ "+" " " 3 " " 3 ⟩ ⟩       
-:                                                                                                                                ┘     
-:                                                                                                                                     ┘
-
+: (function block)
 
 ** A Lisp quine
 
@@ -85,8 +87,29 @@ with a quine:
 #+end_src
 
 #+RESULTS:
-: "((lambda (x) (list x (list (quote quote) x)))
-:          (quote (lambda (x) (list x (list (quote quote) x)))))"
+#+begin_example
+Error: Stack overflow
+at     "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
+                   ^
+at     "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
+               ^
+at     1=•Type⊑⟨𝕩⟩ ? 𝕩;
+                   ^
+at     env.Has 𝕩 ? env.Get 𝕩;
+                 ^
+at     f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩 
+              ^
+at     "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
+                   ^
+at     "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
+               ^
+at     1=•Type⊑⟨𝕩⟩ ? 𝕩;
+                   ^
+at     env.Has 𝕩 ? env.Get 𝕩;
+                 ^
+(4076 entries omitted)
+at     f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩
+#+end_example
 
 Naturally, we can do more rigorous tests by comparing to my favorite Scheme
 implementation[fn:4]. To achieve this, we'll leverage BQN's
@@ -94,20 +117,26 @@ foreign function interface:
 
 #+begin_src bqn :tangle ./bqn/si.bqn :results none
   ch ← "../supp/chicken/libchicken.so" •FFI "*u8"‿"eval_scheme"‿">*u8:c8"
-  R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch∾@
+  R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch
 #+end_src
 
 But fear not, there’s no room for monotony here. After all,
 people much prefer dealing with machinery to dealing with bureaucracies[fn:5]:
 
 #+begin_src bqn :tangle ./bqn/si.bqn :exports both
-  ("Not Compliant"⊸!Scheme≡R5RS)¨ "(+ 10 122)"‿"(* 4 2)"
+  ("Not Compliant"⊸!Scheme≡R5RS)¨ ⟨
+    "(+ 10 122)"
+    "(* 4 2)"
+    "(begin (define r 10) (+ (/ 4 2) (* r r)))"
+    "(if (> (* 11 11) 120) (* 7 6) oops)"
+  ⟩
 #+end_src
 
 #+RESULTS:
-: ⟨ ⟨ "(+ 10 122)" "132" ⟩ ⟨ "(* 4 2)" "8" ⟩ ⟩
+: ⟨ 1 1 1 1 ⟩
 
-If you manage to find any sneaky corner cases that break the interpreter, do let me know!
+If you manage to find any sneaky corner cases (modulo formatting, if you are comparing with Chicken)
+that break the interpreter, do let me know!
 
 [fn:1] I recommend SICP as further reading. Much like Louis Reasoner, I attempted
 solving all the problems in the book, but I haven't gotten very far.
