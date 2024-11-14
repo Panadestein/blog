@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Scheming a mise-en-abîme in BQN (WIP)</title>
+<title>Scheming a mise-en-abîme in BQN</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -228,10 +228,10 @@
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Scheming a mise-en-abîme in BQN (WIP)</h1>
-<div id="outline-container-org5ebe630" class="outline-2">
-<h2 id="org5ebe630">Prelude</h2>
-<div class="outline-text-2" id="text-org5ebe630">
+<h1 class="title">Scheming a mise-en-abîme in BQN</h1>
+<div id="outline-container-org51d559b" class="outline-2">
+<h2 id="org51d559b">Prelude</h2>
+<div class="outline-text-2" id="text-org51d559b">
 <p>
 We will build an interpreter for a subset of the Scheme programming language,
 following an <a href="https://www.norvig.com/lispy.html">essay</a> by Peter Norvig. An alternative reference would
@@ -246,9 +246,9 @@ and blogs like Norvig's.
 </p>
 </div>
 </div>
-<div id="outline-container-orge2dd03a" class="outline-2">
-<h2 id="orge2dd03a">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-orge2dd03a">
+<div id="outline-container-org1b9c47c" class="outline-2">
+<h2 id="org1b9c47c">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-org1b9c47c">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -268,18 +268,18 @@ A global environment:
 
 <div class="org-src-container">
 <pre class="src src-bqn">env ← ⟨
-  "sin", "cos", "tan", "asin", "acos", "atan",
+  "sin", "cos", "tan", "asin", "acos", "atan"
   "log", "+", "-", "*", "/", "&gt;", "&lt;", "&gt;=", "&lt;=", "="
   "abs", "append", "apply", "begin", "car", "cdr", "cons"
   "eq?", "expt", "equal?", "length", "list", "list?"
   "map", "max", "min", "not", "null?", "number?"
-  "print", "round", "symbol?", "nil"
+  "print", "round", "symbol?", "nil", "pi"
 ⟩ •HashMap ⟨
   ⋆⁼, +´, -´, ×´, ÷´, &gt;´, &lt;´, ≥´, ≤´, =´
   |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑, 1⊸↓, ⋈´
   ≡´_bool, ⋆´, =´_bool, ≠, ⋈, 0⊸=_bool{•Type•BQN⎊1𝕩}
   {𝕎¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, •BQN⎊1
-  •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}, @
+  •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}, @, π
 ⟩ ∾˜ •math •ns.Get¨ "sin"‿"cos"‿"tan"‿"asin"‿"acos"‿"atan"
 </pre>
 </div>
@@ -290,25 +290,32 @@ The interpreter:
 
 <div class="org-src-container">
 <pre class="src src-bqn">Scheme ← {
-  T ← (-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
+  T ← (⊢/˜·∨´¨' '⊸≠)(-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
   R ← {
     𝕊⟨⟩: "Empty program"!0;
     𝕊𝕩: {
-      "("≡⊑𝕨 ? l ← ⟨⟩ ⋄ l⋈1↓{𝕊t‿ts: l∾↩&lt;t ⋄ ts}∘R•_while_(")"≢⊑) 𝕩;
+      "("≡⊑𝕨 ? l←⟨⟩ ⋄ l⋈1↓{t‿ts: ts⊣l∾↩&lt;t}∘R•_while_(")"≢⊑) 𝕩;
       ")"≡⊑𝕨 ? "Unexpected )"!0 ;
       𝕩 ⋈˜ •ParseFloat⎊⊢ ⊑𝕨
     }´ 1(↑⋈↓)𝕩
   }
-  A ← {𝕩}
-  A∘R∘T𝕩
-} ⋄ Scheme "(begin (+ 1 1) (* (+ 3 2) 1) (define a (+ 3 3)))"
+  E ← {
+    env.Has 𝕩 ? env.Get 𝕩;
+    1=•Type⊑⟨𝕩⟩ ? 𝕩;
+    "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
+    "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
+    f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩 
+  }
+  P ← (⊢+˝("()"-"⟨⟩")×"⟨⟩"=⌜⊢)∘•Fmt·1⊸=∘≠◶⊢‿⊑∾⎊⊢
+  P env⊸E⊑R∘T 𝕩
+}
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org43bc0d4" class="outline-2">
-<h2 id="org43bc0d4">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org43bc0d4">
+<div id="outline-container-org8d0ca17" class="outline-2">
+<h2 id="org8d0ca17">A Lisp quine</h2>
+<div class="outline-text-2" id="text-org8d0ca17">
 <p>
 Given the title of this post, it seems only fitting to test our interpreter
 with a quine:
@@ -320,11 +327,29 @@ with a quine:
 </pre>
 </div>
 
-<pre class="example">
-"((lambda (x) (list x (list (quote quote) x)))
-         (quote (lambda (x) (list x (list (quote quote) x)))))"
+<pre class="example" id="orgf38747a">
+Error: Stack overflow
+at     "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
+                   ^
+at     "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
+               ^
+at     1=•Type⊑⟨𝕩⟩ ? 𝕩;
+                   ^
+at     env.Has 𝕩 ? env.Get 𝕩;
+                 ^
+at     f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩 
+              ^
+at     "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
+                   ^
+at     "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
+               ^
+at     1=•Type⊑⟨𝕩⟩ ? 𝕩;
+                   ^
+at     env.Has 𝕩 ? env.Get 𝕩;
+                 ^
+(4076 entries omitted)
+at     f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩
 </pre>
-
 
 <p>
 Naturally, we can do more rigorous tests by comparing to my favorite Scheme
@@ -334,7 +359,7 @@ foreign function interface:
 
 <div class="org-src-container">
 <pre class="src src-bqn">ch ← "../supp/chicken/libchicken.so" •FFI "*u8"‿"eval_scheme"‿"&gt;*u8:c8"
-R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch∾@
+R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch
 </pre>
 </div>
 
@@ -344,17 +369,23 @@ people much prefer dealing with machinery to dealing with bureaucracies<sup><a i
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">("Not Compliant"⊸!Scheme≡R5RS)¨ "(+ 10 122)"‿"(* 4 2)"
+<pre class="src src-bqn">("Not Compliant"⊸!Scheme≡R5RS)¨ ⟨
+  "(+ 10 122)"
+  "(* 4 2)"
+  "(begin (define r 10) (+ (/ 4 2) (* r r)))"
+  "(if (&gt; (* 11 11) 120) (* 7 6) oops)"
+⟩
 </pre>
 </div>
 
 <pre class="example">
-⟨ ⟨ "(+ 10 122)" "132" ⟩ ⟨ "(* 4 2)" "8" ⟩ ⟩
+⟨ 1 1 1 1 ⟩
 </pre>
 
 
 <p>
-If you manage to find any sneaky corner cases that break the interpreter, do let me know!
+If you manage to find any sneaky corner cases (modulo formatting, if you are comparing with Chicken)
+that break the interpreter, do let me know!
 </p>
 </div>
 </div>
