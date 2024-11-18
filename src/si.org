@@ -47,9 +47,9 @@ we leverage BQN primitives and system values, and in some specific cases, we def
     "print", "round", "symbol?", "nil", "pi"
   ⟩ ⋈ ⟨
     ⋆⁼, +´, -´, ×´, ÷´, >´, <´, ≥´, ≤´, =´
-    |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑, 1⊸↓, ∾´
-    ≡´_bool, ⋆´, =´_bool, ≠, ⋈´, 0⊸=_bool{•Type•BQN⎊1𝕩}
-    {𝕎∘⋈¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, (1⊣•ParseFloat)⎊0 _bool
+    |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑∘∾, 1⊸↓∘∾, <⊸∾´
+    ≡´_bool, ⋆´, =´_bool, ≠, ⊢, (0=•Type∘⊑)_bool
+    {𝕎∘⋈¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, (1=•Type∘⊑)_bool 
     •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}, @, π
   ⟩ ∾˜ •math •ns.Get¨ "sin"‿"cos"‿"tan"‿"asin"‿"acos"‿"atan"
 #+end_src
@@ -132,9 +132,10 @@ people much prefer dealing with machinery to dealing with bureaucracies[fn:5]:
     "(+ 10 122)"
     "(* 4 2)"
     "(begin (define r 10) (+ (/ 4 2) (* r r)))"
-    "(symbol? a)"
-    "(number? 333)"
+    "(number? (quote b))"
     "(if (> (* 11 11) 120) (* 7 6) oops)"
+    "(car (quote (1 2 3)))"
+    "(list? (quote (1 2 3)))"
     "(begin
        (define fib (lambda (n) (if (< n 2) 1 (+ (fib (- n 1)) (fib (- n 2))))))
        (define range (lambda (a b) (if (= a b) (quote ()) (cons a (range (+ a 1) b)))))
@@ -143,7 +144,8 @@ people much prefer dealing with machinery to dealing with bureaucracies[fn:5]:
 #+end_src
 
 #+RESULTS:
-: ⟨ ⟨ "132" "132" ⟩ ⟨ "8" "8" ⟩ ⟨ "102" "102" ⟩ ⟨ " #f " "#f" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "42" "42" ⟩ ⟨ "1 1 2 3 5 8 13 21 34 55" "(1 1 2 3 5 8 13 21 34 55)" ⟩ ⟩
+: ⟨ ⟨ "132" "132" ⟩ ⟨ "8" "8" ⟩ ⟨ "102" "102" ⟩ ⟨ " #f " "#f" ⟩ ⟨ "42" "42" ⟩ ⟨ "1" "1" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "1 1 2 3 5 8 13 21 34 55" "(1 1 2 3 5 8 13 21 34 55)" ⟩ ⟩
+
 
 If you manage to find any sneaky corner cases that break the interpreter in the given subset, let me know!
 And please forgive the formatting problems, I'm tired of fiddling with the printer at this point.
