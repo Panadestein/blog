@@ -48,7 +48,7 @@ we leverage BQN primitives and system values, and in some specific cases, we def
   ⟩ ⋈ ⟨
     ⋆⁼, +´, -´, ×´, ÷´, >´, <´, ≥´, ≤´, =´
     |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑, 1⊸↓, ∾´
-    ≡´_bool, ⋆´, =´_bool, ≠, ⋈, 0⊸=_bool{•Type•BQN⎊1𝕩}
+    ≡´_bool, ⋆´, =´_bool, ≠, ⋈´, 0⊸=_bool{•Type•BQN⎊1𝕩}
     {𝕎∘⋈¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, •BQN⎊1
     •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}, @, π
   ⟩ ∾˜ •math •ns.Get¨ "sin"‿"cos"‿"tan"‿"asin"‿"acos"‿"atan"
@@ -79,7 +79,7 @@ The interpreter is defined as a 1-modifier so we can create a function using dif
       "lambda"≡⊑𝕩 ? ·‿par‿bod ← 𝕩 ⋄ 𝕨{bod E˜ 𝕗 C par‿𝕩};
       f ← 𝕨𝕊⊑𝕩 ⋄ F 𝕨⊸𝕊¨1↓𝕩 
     }
-    P ← (⊢+˝("(  )"-"⟨"",⟩")×"⟨"",⟩"=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑∾⎊⊢
+    P ← (⊢+˝("(  )"-"⟨"",⟩")×"⟨"",⟩"=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑(0<≠¨)⊸/⎊⊢
     P 𝕗⊸E⊑R∘T 𝕩
   }
 #+end_src
@@ -110,7 +110,7 @@ was, for me, an exercise in bootstrapping the necessary machinery to produce thi
 #+end_src
 
 #+RESULTS:
-: "(( lambda  ( x ) ( list   x  ( list  ( quote   quote )  x ))) (( quote  ( lambda  ( x ) ( list   x  ( list  ( quote   quote )  x ))))))"
+: "(( lambda  ( x ) ( list   x  ( list  ( quote   quote )  x ))) ( quote  ( lambda  ( x ) ( list   x  ( list  ( quote   quote )  x )))))"
 
 Naturally, we can do more rigorous tests by comparing to my favorite Scheme
 implementation[fn:4]. To achieve this, we'll leverage BQN's
