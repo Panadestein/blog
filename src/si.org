@@ -8,51 +8,60 @@
 We will build an interpreter for a subset of the Scheme programming language,
 following an [[https://www.norvig.com/lispy.html][essay]] by Peter Norvig. An alternative reference would
 have been of course SICP's metacircular evaluator[fn:1], but I consider =lispy= to be
-a very elegant implementation targeting a non-Lisp host[fn:2].
-
-/Achtung/: this post is a learning exercise. Most of what I know about
-language implementation comes from self-study of a handful of books[fn:3]
-and blogs like Norvig's.
+a very elegant implementation targeting a non-Lisp host[fn:2]. Please beware this
+post is a learning exercise. Most of what I know about
+language implementation comes from self-study of a handful of books[fn:3].
 
 ** A R5RS dialect
 
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme ([[https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html][R5RS]]).
 However, seasoned schemers will quickly notice that our implementation still has
-quite some distance to cover in reaching full compliance. Let's start by defining some
-utilities. It is unfortunate that the 1-modifier is required,
-given that Booleans are not that [[https://mlochbaum.github.io/BQN/tutorial/combinator.html#booleans][special]].
+quite some distance to cover in reaching full compliance.
 
-#+begin_src bqn :tangle ./bqn/si.bqn :results none
-  _bool ← {𝔽◶"#f"‿"#t"}
-#+end_src
-
-A global environment:
+Let's start by defining some utilities. One aspect I don't like about Scheme is that it uses
+special values for Booleans, so we  [[https://mlochbaum.github.io/BQN/tutorial/combinator.html#booleans][unfortunately]]  need the 1-modifier. The function, on the other hand,
+is a fine example of the minimalistic OOP features BQN provides. It is used to create a class
+for the environment used in the Scheme interpreter.
 
 #+begin_src bqn :tangle ./bqn/si.bqn
-  env ← ⟨
+  _bool ← {𝔽◶"#f"‿"#t"}
+  C ← {𝕨𝕊p‿v:
+    o‿h ⇐ 𝕨 ⋈ p •HashMap v
+    F ⇐ {h.Has 𝕩 ? h; @≢o ? o.F 𝕩; 0}
+  }
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+We then define a global environment that serves as the base for the interpreter. Here,
+we leverage BQN primitives and system values, and in some specific cases, we define additional functions.
+
+#+begin_src bqn :tangle ./bqn/si.bqn
+  env ← @ C ⟨
     "sin", "cos", "tan", "asin", "acos", "atan"
     "log", "+", "-", "*", "/", ">", "<", ">=", "<=", "="
     "abs", "append", "apply", "begin", "car", "cdr", "cons"
     "eq?", "expt", "equal?", "length", "list", "list?"
     "map", "max", "min", "not", "null?", "number?"
     "print", "round", "symbol?", "nil", "pi"
-  ⟩ •HashMap ⟨
+  ⟩ ⋈ ⟨
     ⋆⁼, +´, -´, ×´, ÷´, >´, <´, ≥´, ≤´, =´
-    |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑, 1⊸↓, ⋈´
+    |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑, 1⊸↓, ∾´
     ≡´_bool, ⋆´, =´_bool, ≠, ⋈, 0⊸=_bool{•Type•BQN⎊1𝕩}
-    {𝕎¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, •BQN⎊1
+    {𝕎∘⋈¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, •BQN⎊1
     •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}, @, π
   ⟩ ∾˜ •math •ns.Get¨ "sin"‿"cos"‿"tan"‿"asin"‿"acos"‿"atan"
 #+end_src
 
 #+RESULTS:
-: {get‿has‿set‿delete‿count‿keys‿values⇐}
+: {o‿h‿f⇐}
 
-The interpreter:
+The interpreter is defined as a 1-modifier so we can create a function using different base environments:
 
 #+begin_src bqn :tangle ./bqn/si.bqn
-  Scheme ← {
-    T ← (⊢/˜·∨´¨' '⊸≠)(-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
+  _sch ← {
+    T ← (⊢/˜·∨´¨' '⊸≠)·(-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔(⊢+22×@=10-˜⊢)
     R ← {
       𝕊⟨⟩: "Empty program"!0;
       𝕊𝕩: {
@@ -62,24 +71,38 @@ The interpreter:
       }´ 1(↑⋈↓)𝕩
     }
     E ← {
-      env.Has 𝕩 ? env.Get 𝕩;
+      0≠𝕨.F 𝕩 ? (𝕨.F 𝕩).Get 𝕩;
       1=•Type⊑⟨𝕩⟩ ? 𝕩;
-      "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
-      "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
-      f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩 
+      "quote"≡⊑𝕩 ? ·‿arg ← 𝕩 ⋄ arg;
+      "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ 𝕨(⊣𝕊𝕊◶alt‿cnd)tst;
+      "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var 𝕨.h.Set 𝕨𝕊val;
+      "lambda"≡⊑𝕩 ? ·‿par‿bod ← 𝕩 ⋄ 𝕨{bod E˜ 𝕗 C par‿𝕩};
+      f ← 𝕨𝕊⊑𝕩 ⋄ F 𝕨⊸𝕊¨1↓𝕩 
     }
-    P ← (⊢+˝("()"-"⟨⟩")×"⟨⟩"=⌜⊢)∘•Fmt·1⊸=∘≠◶⊢‿⊑∾⎊⊢
-    P env⊸E⊑R∘T 𝕩
+    P ← (⊢+˝("(  )"-"⟨"",⟩")×"⟨"",⟩"=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑∾⎊⊢
+    P 𝕗⊸E⊑R∘T 𝕩
   }
 #+end_src
 
 #+RESULTS:
-: (function block)
+: (1-modifier block)
+
+And now for the climax. Our interpreter inherits all the limitations from the one in the reference essay,
+the most critical being the lack of proper error handling. Additionally,
+as the names of the functions inside the modifier suggest, the =L= is missing in =Read → Eval → Print=.
+In terms of golfing statistics, =lispy= has 117 non-comment non-blank lines, whereas =Scheme= has only 42.
+
+#+begin_src bqn :tangle ./bqn/si.bqn
+  Scheme ← env _sch
+#+end_src
+
+#+RESULTS:
+: {o‿h‿f⇐}(1-modifier block)
 
 ** A Lisp quine
 
-Given the title of this post, it seems only fitting to test our interpreter
-with a quine:
+Given the title of this post, it's only fitting that we test our interpreter with a quine. In fact, building this interpreter
+was, for me, an exercise in bootstrapping the necessary machinery to produce this recursive effect:
 
 #+begin_src bqn :tangle ./bqn/si.bqn :exports both
   Scheme "((lambda (x) (list x (list (quote quote) x)))
@@ -87,63 +110,49 @@ with a quine:
 #+end_src
 
 #+RESULTS:
-#+begin_example
-Error: Stack overflow
-at     "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
-                   ^
-at     "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
-               ^
-at     1=•Type⊑⟨𝕩⟩ ? 𝕩;
-                   ^
-at     env.Has 𝕩 ? env.Get 𝕩;
-                 ^
-at     f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩 
-              ^
-at     "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
-                   ^
-at     "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
-               ^
-at     1=•Type⊑⟨𝕩⟩ ? 𝕩;
-                   ^
-at     env.Has 𝕩 ? env.Get 𝕩;
-                 ^
-(4076 entries omitted)
-at     f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩
-#+end_example
+: "(( lambda  ( x ) ( list   x  ( list  ( quote   quote )  x ))) (( quote  ( lambda  ( x ) ( list   x  ( list  ( quote   quote )  x ))))))"
 
 Naturally, we can do more rigorous tests by comparing to my favorite Scheme
 implementation[fn:4]. To achieve this, we'll leverage BQN's
 foreign function interface:
 
-#+begin_src bqn :tangle ./bqn/si.bqn :results none
+#+begin_src bqn :tangle ./bqn/si.bqn
   ch ← "../supp/chicken/libchicken.so" •FFI "*u8"‿"eval_scheme"‿">*u8:c8"
   R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch
 #+end_src
+
+#+RESULTS:
+: (function block)(foreign function)
 
 But fear not, there’s no room for monotony here. After all,
 people much prefer dealing with machinery to dealing with bureaucracies[fn:5]:
 
 #+begin_src bqn :tangle ./bqn/si.bqn :exports both
-  ("Not Compliant"⊸!Scheme≡R5RS)¨ ⟨
+  (Scheme⋈R5RS)¨ ⟨
     "(+ 10 122)"
     "(* 4 2)"
     "(begin (define r 10) (+ (/ 4 2) (* r r)))"
     "(if (> (* 11 11) 120) (* 7 6) oops)"
+    "(begin
+       (define fib (lambda (n) (if (< n 2) 1 (+ (fib (- n 1)) (fib (- n 2))))))
+       (define range (lambda (a b) (if (= a b) (quote ()) (cons a (range (+ a 1) b)))))
+       (map fib (range 0 10)))"
   ⟩
 #+end_src
 
 #+RESULTS:
-: ⟨ 1 1 1 1 ⟩
+: ⟨ ⟨ "132" "132" ⟩ ⟨ "8" "8" ⟩ ⟨ "102" "102" ⟩ ⟨ "42" "42" ⟩ ⟨ "1‿1‿2‿3‿5‿8‿13‿21‿34‿55" "(1 1 2 3 5 8 13 21 34 55)" ⟩ ⟩
 
-If you manage to find any sneaky corner cases (modulo formatting, if you are comparing with Chicken)
-that break the interpreter, do let me know!
+If you manage to find any sneaky corner cases that break the interpreter in the given subset, do let me know!
+And please forgive the formatting issues, at this point, I've no more desire of fiddling with the printer.
 
 [fn:1] I recommend SICP as further reading. Much like Louis Reasoner, I attempted
 solving all the problems in the book, but I haven't gotten very far.
 I believe there are some interesting Racket bits in my [[https://panadestein.github.io/solved-sicp/][solutions]], though.
 [fn:2] I am not alone in this view; for instance, the [[https://www.fluentpython.com/][Lizard Book]] dedicates
 an entire section to it.
-[fn:3] For instance [[https://craftinginterpreters.com][Crafting Interpreters]] and [[https://www3.nd.edu/~dthain/compilerbook/][Introduction to Compilers and Language Design]].
+[fn:3] In addition to the great SICP, I also studied from [[https://craftinginterpreters.com][Crafting Interpreters]] and
+[[https://www3.nd.edu/~dthain/compilerbook/][Introduction to Compilers and Language Design]].
 [fn:4] One of my favorite hacker guidelines is [[http://www.call-with-current-continuation.org/articles/brutalist-manifesto.txt][The Brutalist Programming Manifesto]],
 written by the creator of Chicken Scheme.
 [fn:5] John McCarthy, [[http://jmc.stanford.edu/general/sayings.html][1986]].
