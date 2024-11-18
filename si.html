@@ -229,68 +229,74 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN</h1>
-<div id="outline-container-orgf4c5231" class="outline-2">
-<h2 id="orgf4c5231">Prelude</h2>
-<div class="outline-text-2" id="text-orgf4c5231">
+<div id="outline-container-orgce37ce1" class="outline-2">
+<h2 id="orgce37ce1">Prelude</h2>
+<div class="outline-text-2" id="text-orgce37ce1">
 <p>
 We will build an interpreter for a subset of the Scheme programming language,
 following an <a href="https://www.norvig.com/lispy.html">essay</a> by Peter Norvig. An alternative reference would
 have been of course SICP's metacircular evaluator<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, but I consider <code>lispy</code> to be
-a very elegant implementation targeting a non-Lisp host<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
-</p>
-
-<p>
-<i>Achtung</i>: this post is a learning exercise. Most of what I know about
-language implementation comes from self-study of a handful of books<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>
-and blogs like Norvig's.
+a very elegant implementation targeting a non-Lisp host<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>. Please beware this
+post is a learning exercise. Most of what I know about
+language implementation comes from self-study of a handful of books<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>.
 </p>
 </div>
 </div>
-<div id="outline-container-orge27e0e5" class="outline-2">
-<h2 id="orge27e0e5">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-orge27e0e5">
+<div id="outline-container-orga53f840" class="outline-2">
+<h2 id="orga53f840">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-orga53f840">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
-quite some distance to cover in reaching full compliance. Let's start by defining some
-utilities. It is unfortunate that the 1-modifier is required,
-given that Booleans are not that <a href="https://mlochbaum.github.io/BQN/tutorial/combinator.html#booleans">special</a>.
+quite some distance to cover in reaching full compliance.
+</p>
+
+<p>
+Let's start by defining some utilities. One aspect I don't like about Scheme is that it uses
+special values for Booleans, so we  <a href="https://mlochbaum.github.io/BQN/tutorial/combinator.html#booleans">unfortunately</a>  need the 1-modifier. The function, on the other hand,
+is a fine example of the minimalistic OOP features BQN provides. It is used to create a class
+for the environment used in the Scheme interpreter.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-bqn">_bool ← {𝔽◶"#f"‿"#t"}
+C ← {𝕨𝕊p‿v:
+  o‿h ⇐ 𝕨 ⋈ p •HashMap v
+  F ⇐ {h.Has 𝕩 ? h; @≢o ? o.F 𝕩; 0}
+}
 </pre>
 </div>
 
 <p>
-A global environment:
+We then define a global environment that serves as the base for the interpreter. Here,
+we leverage BQN primitives and system values, and in some specific cases, we define additional functions.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">env ← ⟨
+<pre class="src src-bqn">env ← @ C ⟨
   "sin", "cos", "tan", "asin", "acos", "atan"
   "log", "+", "-", "*", "/", "&gt;", "&lt;", "&gt;=", "&lt;=", "="
   "abs", "append", "apply", "begin", "car", "cdr", "cons"
   "eq?", "expt", "equal?", "length", "list", "list?"
   "map", "max", "min", "not", "null?", "number?"
   "print", "round", "symbol?", "nil", "pi"
-⟩ •HashMap ⟨
+⟩ ⋈ ⟨
   ⋆⁼, +´, -´, ×´, ÷´, &gt;´, &lt;´, ≥´, ≤´, =´
-  |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑, 1⊸↓, ⋈´
+  |, ∾´, {𝕎𝕩}´, {𝕩}, ⊑, 1⊸↓, ∾´
   ≡´_bool, ⋆´, =´_bool, ≠, ⋈, 0⊸=_bool{•Type•BQN⎊1𝕩}
-  {𝕎¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, •BQN⎊1
+  {𝕎∘⋈¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, •BQN⎊1
   •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}, @, π
 ⟩ ∾˜ •math •ns.Get¨ "sin"‿"cos"‿"tan"‿"asin"‿"acos"‿"atan"
 </pre>
 </div>
 
 <p>
-The interpreter:
+The interpreter is defined as a 1-modifier so we can create a function using different base environments:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">Scheme ← {
-  T ← (⊢/˜·∨´¨' '⊸≠)(-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔
+<pre class="src src-bqn">_sch ← {
+  T ← (⊢/˜·∨´¨' '⊸≠)·(-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔(⊢+22×@=10-˜⊢)
   R ← {
     𝕊⟨⟩: "Empty program"!0;
     𝕊𝕩: {
@@ -300,25 +306,39 @@ The interpreter:
     }´ 1(↑⋈↓)𝕩
   }
   E ← {
-    env.Has 𝕩 ? env.Get 𝕩;
+    0≠𝕨.F 𝕩 ? (𝕨.F 𝕩).Get 𝕩;
     1=•Type⊑⟨𝕩⟩ ? 𝕩;
-    "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
-    "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
-    f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩 
+    "quote"≡⊑𝕩 ? ·‿arg ← 𝕩 ⋄ arg;
+    "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ 𝕨(⊣𝕊𝕊◶alt‿cnd)tst;
+    "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var 𝕨.h.Set 𝕨𝕊val;
+    "lambda"≡⊑𝕩 ? ·‿par‿bod ← 𝕩 ⋄ 𝕨{bod E˜ 𝕗 C par‿𝕩};
+    f ← 𝕨𝕊⊑𝕩 ⋄ F 𝕨⊸𝕊¨1↓𝕩 
   }
-  P ← (⊢+˝("()"-"⟨⟩")×"⟨⟩"=⌜⊢)∘•Fmt·1⊸=∘≠◶⊢‿⊑∾⎊⊢
-  P env⊸E⊑R∘T 𝕩
+  P ← (⊢+˝("(  )"-"⟨"",⟩")×"⟨"",⟩"=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑∾⎊⊢
+  P 𝕗⊸E⊑R∘T 𝕩
 }
+</pre>
+</div>
+
+<p>
+And now for the climax. Our interpreter inherits all the limitations from the one in the reference essay,
+the most critical being the lack of proper error handling. Additionally,
+as the names of the functions inside the modifier suggest, the <code>L</code> is missing in <code>Read → Eval → Print</code>.
+In terms of golfing statistics, <code>lispy</code> has 117 non-comment non-blank lines, whereas <code>Scheme</code> has only 42.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">Scheme ← env _sch
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org7a63045" class="outline-2">
-<h2 id="org7a63045">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org7a63045">
+<div id="outline-container-org66ee9c8" class="outline-2">
+<h2 id="org66ee9c8">A Lisp quine</h2>
+<div class="outline-text-2" id="text-org66ee9c8">
 <p>
-Given the title of this post, it seems only fitting to test our interpreter
-with a quine:
+Given the title of this post, it's only fitting that we test our interpreter with a quine. In fact, building this interpreter
+was, for me, an exercise in bootstrapping the necessary machinery to produce this recursive effect:
 </p>
 
 <div class="org-src-container">
@@ -327,29 +347,10 @@ with a quine:
 </pre>
 </div>
 
-<pre class="example" id="orgb8bc490">
-Error: Stack overflow
-at     "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
-                   ^
-at     "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
-               ^
-at     1=•Type⊑⟨𝕩⟩ ? 𝕩;
-                   ^
-at     env.Has 𝕩 ? env.Get 𝕩;
-                 ^
-at     f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩 
-              ^
-at     "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var env.Set env𝕊val;
-                   ^
-at     "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ env(⊣𝕊𝕊◶alt‿cnd)tst;
-               ^
-at     1=•Type⊑⟨𝕩⟩ ? 𝕩;
-                   ^
-at     env.Has 𝕩 ? env.Get 𝕩;
-                 ^
-(4076 entries omitted)
-at     f ← env𝕊⊑𝕩 ⋄ F env⊸𝕊¨1↓𝕩
+<pre class="example">
+"(( lambda  ( x ) ( list   x  ( list  ( quote   quote )  x ))) (( quote  ( lambda  ( x ) ( list   x  ( list  ( quote   quote )  x ))))))"
 </pre>
+
 
 <p>
 Naturally, we can do more rigorous tests by comparing to my favorite Scheme
@@ -369,23 +370,27 @@ people much prefer dealing with machinery to dealing with bureaucracies<sup><a i
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">("Not Compliant"⊸!Scheme≡R5RS)¨ ⟨
+<pre class="src src-bqn">(Scheme⋈R5RS)¨ ⟨
   "(+ 10 122)"
   "(* 4 2)"
   "(begin (define r 10) (+ (/ 4 2) (* r r)))"
   "(if (&gt; (* 11 11) 120) (* 7 6) oops)"
+  "(begin
+     (define fib (lambda (n) (if (&lt; n 2) 1 (+ (fib (- n 1)) (fib (- n 2))))))
+     (define range (lambda (a b) (if (= a b) (quote ()) (cons a (range (+ a 1) b)))))
+     (map fib (range 0 10)))"
 ⟩
 </pre>
 </div>
 
 <pre class="example">
-⟨ 1 1 1 1 ⟩
+⟨ ⟨ "132" "132" ⟩ ⟨ "8" "8" ⟩ ⟨ "102" "102" ⟩ ⟨ "42" "42" ⟩ ⟨ "1‿1‿2‿3‿5‿8‿13‿21‿34‿55" "(1 1 2 3 5 8 13 21 34 55)" ⟩ ⟩
 </pre>
 
 
 <p>
-If you manage to find any sneaky corner cases (modulo formatting, if you are comparing with Chicken)
-that break the interpreter, do let me know!
+If you manage to find any sneaky corner cases that break the interpreter in the given subset, do let me know!
+And please forgive the formatting issues, at this point, I've no more desire of fiddling with the printer.
 </p>
 </div>
 </div>
@@ -405,7 +410,8 @@ an entire section to it.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-For instance <a href="https://craftinginterpreters.com">Crafting Interpreters</a> and <a href="https://www3.nd.edu/~dthain/compilerbook/">Introduction to Compilers and Language Design</a>.
+In addition to the great SICP, I also studied from <a href="https://craftinginterpreters.com">Crafting Interpreters</a> and
+<a href="https://www3.nd.edu/~dthain/compilerbook/">Introduction to Compilers and Language Design</a>.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
