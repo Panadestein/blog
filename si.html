@@ -229,9 +229,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN</h1>
-<div id="outline-container-org9126c74" class="outline-2">
-<h2 id="org9126c74">Prelude</h2>
-<div class="outline-text-2" id="text-org9126c74">
+<div id="outline-container-org88c0519" class="outline-2">
+<h2 id="org88c0519">Prelude</h2>
+<div class="outline-text-2" id="text-org88c0519">
 <p>
 We will build an interpreter for a subset of the Scheme programming language,
 following an <a href="https://www.norvig.com/lispy.html">essay</a> by Peter Norvig. An alternative reference would
@@ -242,9 +242,9 @@ language implementation comes from self-study of a handful of books<sup><a id="f
 </p>
 </div>
 </div>
-<div id="outline-container-org5f61dfa" class="outline-2">
-<h2 id="org5f61dfa">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-org5f61dfa">
+<div id="outline-container-org6b5deeb" class="outline-2">
+<h2 id="org6b5deeb">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-org6b5deeb">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -285,7 +285,7 @@ we leverage BQN primitives and system values, and in some specific cases, we def
   |, ∾´, {𝕎𝕩}´, {∾𝕩}, ⊑∘∾, 1⊸↓∘∾, &lt;⊸∾´
   ≡´_bool, ⋆´, =´_bool, ≠∘∾, ⊢, (0=•Type∘⊑)_bool
   {𝕎∘⋈¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, (1=•Type∘⊑)_bool 
-  •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑𝕩}, @, π
+  •Show, ⌊0.5+⊢, 2⊸=_bool{•Type⊑∾𝕩}, @, π
 ⟩ ∾˜ •math •ns.Get¨ "sin"‿"cos"‿"tan"‿"asin"‿"acos"‿"atan"
 </pre>
 </div>
@@ -333,9 +333,9 @@ In terms of golfing statistics, <code>lispy</code> has 117 non-comment non-blank
 </div>
 </div>
 </div>
-<div id="outline-container-org2a63c4c" class="outline-2">
-<h2 id="org2a63c4c">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org2a63c4c">
+<div id="outline-container-orgd03c729" class="outline-2">
+<h2 id="orgd03c729">A Lisp quine</h2>
+<div class="outline-text-2" id="text-orgd03c729">
 <p>
 Given the title of this post, it's only fitting that we test our interpreter with a quine. In fact, building this interpreter
 was, for me, an exercise in bootstrapping the necessary machinery to produce this recursive effect:
@@ -375,6 +375,7 @@ people much prefer dealing with machinery to dealing with bureaucracies<sup><a i
   "(* 4 2)"
   "(begin (define r 10) (+ (/ 4 2) (* r r)))"
   "(number? (quote b))"
+  "(symbol? (quote var))"
   "(if (&gt; (* 11 11) 120) (* 7 6) oops)"
   "(car (quote (1 2 3)))"
   "(list? (quote (1 2 3)))"
@@ -388,7 +389,7 @@ people much prefer dealing with machinery to dealing with bureaucracies<sup><a i
 </div>
 
 <pre class="example">
-⟨ ⟨ "132" "132" ⟩ ⟨ "8" "8" ⟩ ⟨ "102" "102" ⟩ ⟨ " #f " "#f" ⟩ ⟨ "42" "42" ⟩ ⟨ "1" "1" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "2" "2" ⟩ ⟨ "1 1 2 3 5 8 13 21 34 55" "(1 1 2 3 5 8 13 21 34 55)" ⟩ ⟩
+⟨ ⟨ "132" "132" ⟩ ⟨ "8" "8" ⟩ ⟨ "102" "102" ⟩ ⟨ " #f " "#f" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "42" "42" ⟩ ⟨ "1" "1" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "2" "2" ⟩ ⟨ "1 1 2 3 5 8 13 21 34 55" "(1 1 2 3 5 8 13 21 34 55)" ⟩ ⟩
 </pre>
 
 
