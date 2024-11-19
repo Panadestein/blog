@@ -34,8 +34,8 @@ for the environment used in the Scheme interpreter.
 #+RESULTS:
 : (function block)
 
-We then define a global environment that serves as the base for the interpreter. Here,
-we leverage BQN primitives and system values, and in some specific cases, we define additional functions.
+We then define a global environment (instance of the =C= class) with the Scheme primitives
+of the target subset, expressed as BQN functions:
 
 #+begin_src bqn :tangle ./bqn/si.bqn
   env ← @ C ⟨
@@ -57,7 +57,8 @@ we leverage BQN primitives and system values, and in some specific cases, we def
 #+RESULTS:
 : {o‿h‿f⇐}
 
-The interpreter is defined as a 1-modifier so we can create a function using different base environments:
+The interpreter is defined as a 1-modifier. This gives us the flexibility to create different
+subsets of the language by changing the input global environment:
 
 #+begin_src bqn :tangle ./bqn/si.bqn
   _sch ← {
@@ -87,10 +88,11 @@ The interpreter is defined as a 1-modifier so we can create a function using dif
 #+RESULTS:
 : (1-modifier block)
 
-And now for the climax. Our interpreter inherits all the limitations from the one in the reference essay,
+And now for the climax. Our interpreter inherits all the limitations of the one in the reference essay,
 the most critical being the lack of proper error handling. Additionally,
-as the names of the functions inside the modifier suggest, the =L= is missing in =Read → Eval → Print=.
-In terms of golfing statistics, =lispy= has 117 non-comment non-blank lines, whereas =Scheme= has only 42.
+as the names of the functions inside the modifier suggest, an =L= is missing to complete the
+=Read → Eval → Print= loop. In terms of golfing statistics, =lispy= has 117
+non-comment non-blank lines, whereas =Scheme= has only 42.
 
 #+begin_src bqn :tangle ./bqn/si.bqn
   Scheme ← env _sch
