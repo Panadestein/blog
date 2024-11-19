@@ -3,6 +3,20 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
+** Foreword
+
+** Bibliography
+
+These are my favorite books on numerical analysis, in descending order of preference.
+I use the first two very often, and consult the others to deepen my understanding:
+
+1. [[https://www.equalsharepress.com/][Numerical Methods for Scientific Computing: The Definitive Manual for Math Geeks]]
+2. [[https://link.springer.com/book/10.1007/978-3-031-08121-7][Numerical Analysis: A Graduate Course]]
+3. [[https://epubs.siam.org/doi/book/10.1137/1.9781421407944][Matrix computations]]
+4. [[https://numerical.recipes/book.html][Numerical Recipes]]
+5. [[https://epubs.siam.org/doi/10.1137/1.9781611976557][Numerical Linear Algebra with Julia]]
+6. [[https://link.springer.com/book/10.1007/978-0-387-40065-5][Numerical Optimization]]
+
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
     <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
