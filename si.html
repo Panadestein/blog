@@ -229,9 +229,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN</h1>
-<div id="outline-container-org88c0519" class="outline-2">
-<h2 id="org88c0519">Prelude</h2>
-<div class="outline-text-2" id="text-org88c0519">
+<div id="outline-container-org7f70312" class="outline-2">
+<h2 id="org7f70312">Prelude</h2>
+<div class="outline-text-2" id="text-org7f70312">
 <p>
 We will build an interpreter for a subset of the Scheme programming language,
 following an <a href="https://www.norvig.com/lispy.html">essay</a> by Peter Norvig. An alternative reference would
@@ -242,9 +242,9 @@ language implementation comes from self-study of a handful of books<sup><a id="f
 </p>
 </div>
 </div>
-<div id="outline-container-org6b5deeb" class="outline-2">
-<h2 id="org6b5deeb">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-org6b5deeb">
+<div id="outline-container-orgbbec3b5" class="outline-2">
+<h2 id="orgbbec3b5">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-orgbbec3b5">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -268,8 +268,8 @@ C ← {𝕨𝕊p‿v:
 </div>
 
 <p>
-We then define a global environment that serves as the base for the interpreter. Here,
-we leverage BQN primitives and system values, and in some specific cases, we define additional functions.
+We then define a global environment (instance of the <code>C</code> class) with the Scheme primitives
+of the target subset, expressed as BQN functions:
 </p>
 
 <div class="org-src-container">
@@ -291,7 +291,8 @@ we leverage BQN primitives and system values, and in some specific cases, we def
 </div>
 
 <p>
-The interpreter is defined as a 1-modifier so we can create a function using different base environments:
+The interpreter is defined as a 1-modifier. This gives us the flexibility to create different
+subsets of the language by changing the input global environment:
 </p>
 
 <div class="org-src-container">
@@ -321,10 +322,11 @@ The interpreter is defined as a 1-modifier so we can create a function using dif
 </div>
 
 <p>
-And now for the climax. Our interpreter inherits all the limitations from the one in the reference essay,
+And now for the climax. Our interpreter inherits all the limitations of the one in the reference essay,
 the most critical being the lack of proper error handling. Additionally,
-as the names of the functions inside the modifier suggest, the <code>L</code> is missing in <code>Read → Eval → Print</code>.
-In terms of golfing statistics, <code>lispy</code> has 117 non-comment non-blank lines, whereas <code>Scheme</code> has only 42.
+as the names of the functions inside the modifier suggest, an <code>L</code> is missing to complete the
+<code>Read → Eval → Print</code> loop. In terms of golfing statistics, <code>lispy</code> has 117
+non-comment non-blank lines, whereas <code>Scheme</code> has only 42.
 </p>
 
 <div class="org-src-container">
@@ -333,9 +335,9 @@ In terms of golfing statistics, <code>lispy</code> has 117 non-comment non-blank
 </div>
 </div>
 </div>
-<div id="outline-container-orgd03c729" class="outline-2">
-<h2 id="orgd03c729">A Lisp quine</h2>
-<div class="outline-text-2" id="text-orgd03c729">
+<div id="outline-container-org5110dd2" class="outline-2">
+<h2 id="org5110dd2">A Lisp quine</h2>
+<div class="outline-text-2" id="text-org5110dd2">
 <p>
 Given the title of this post, it's only fitting that we test our interpreter with a quine. In fact, building this interpreter
 was, for me, an exercise in bootstrapping the necessary machinery to produce this recursive effect:
