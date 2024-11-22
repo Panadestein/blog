@@ -5,9 +5,9 @@
 
 ** Preamble
 
-We will implement and test a compact quantum interpreter in the BQN[fn:1] programming language.
+We will implement and test a Schrödinger-style[fn:1] quantum simulator in the BQN[fn:2] programming language.
 Initially, we import the necessary system functions and define a 1-modifier for handling
-complex matrix products. Next, we define a namespace containing various quantum gates:
+complex-valued matrix products. Next, we define a namespace containing various quantum gates:
 
 #+name: preamble
 #+begin_src bqn :exports code :results none :tangle ./bqn/q.bqn
@@ -25,7 +25,7 @@ complex matrix products. Next, we define a namespace containing various quantum 
 
 ** Interpreter
 
-The (call_count-chars() chars[fn:2]) quantum interpreter is based on references [[https://arxiv.org/abs/1711.02086][arXiv:1711.02086]]
+The (call_count-chars() chars[fn:3]) quantum interpreter is based on references [[https://arxiv.org/abs/1711.02086][arXiv:1711.02086]]
 and [[https://arxiv.org/abs/1608.03355][arXiv:1608.03355]]. For simplicity, we always measure at the end of the execution:
 
 #+name: interpreter
@@ -67,7 +67,7 @@ Additionally, we define a classical post-processing function:
   C ← {n (⊣≡×´∘GCD) +‿-{𝕩𝕎1}¨ <a⋆(≠÷2×⊑∘⍒) 0⌾⊑+˝∘‿(2⋆qb-2)⥊𝕩}
 #+end_src
 
-Wir müssen wissen, wir werden wissen![fn:3]
+Wir müssen wissen, wir werden wissen![fn:4]
 
 #+name: run
 #+begin_src bqn :exports both :tangle ./bqn/q.bqn
@@ -180,8 +180,9 @@ Got 25361 samples
 </details>
 #+end_export
 
-Try running the simulation in the call_generate-bqn-link() and explore it! This post is also available as an =org-mode= computational
-notebook in a GitHub [[https://github.com/Panadestein/blog][repository]].
+Try running the simulation in the call_generate-bqn-link() and explore it!
+If you are an Emacs user, the =org-mode= computational notebook in
+the blog's [[https://github.com/Panadestein/blog][repository]] provides the best experience.
 
 #+name: generate-bqn-link
 #+begin_src emacs-lisp :noweb yes :noweb-prefix no :exports none :results raw :tangle no
@@ -195,9 +196,12 @@ notebook in a GitHub [[https://github.com/Panadestein/blog][repository]].
   (- (length "<<interpreter>>") 4)
 #+end_src
 
-[fn:1] This post's title is a playful recursive acronym that employs quantum computing terminology, without any specific significance beyond that.
-[fn:2] I optimized it up to this number, but I wasn't targeting the Kolmogorov complexity.
-[fn:3] Hilbert's [[https://maa.org/press/periodicals/convergence/david-hilberts-radio-address-english-translation][radio address]] in 1930.
+[fn:1] Although conceptually straightforward, a Hilbert space of size =2⋆n= makes this type of simulation a true computational challenge.
+For an efficient implementation, see [[https://arxiv.org/abs/1910.09534][arXiv:1910.09534]].
+[fn:2] This post's title is a playful recursive acronym that employs quantum computing terminology, without any specific significance
+beyond that.
+[fn:3] I optimized it up to this number, but I wasn't targeting the Kolmogorov complexity.
+[fn:4] Hilbert's [[https://maa.org/press/periodicals/convergence/david-hilberts-radio-address-english-translation][radio address]] in 1930.
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">

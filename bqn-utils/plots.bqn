@@ -17,19 +17,19 @@ SetPlot  ← {𝕤⋄ opts_type ↩ 𝕩 }
 
 pa ← At "class=code|style=fill:none;stroke:black|stroke-width=2"
 pg ← At "class=code|style=fill:none;stroke:#267CB9|stroke-width=3"
-pc ← At "class=code|r=4"
+pc ← At "class=code|style=fill:#267CB9|r=1"
 rc ← At "class=code|style=fill:none;stroke:black|stroke-width=1|rx=5"
 gr ← "g" At "font-family=BQN,monospace|font-size=18px"
 Path ← "path" Elt ⊣∾"d"⋈⊢
 
 Pair ← {
-  "•Plot: 𝕨 and 𝕩 must consist of rows of numbers" ! 𝕨 ⊢⊘∧○((1≤=)◶⟨0,∧´∘⥊@⊸>⟩) 𝕩
-  "•Plot: 𝕨 and 𝕩 must have the same length" ! 𝕨 1⊘(≡○(¯1⊑≢)) 𝕩
+  "Plot: 𝕨 and 𝕩 must consist of rows of numbers" ! 𝕨 ⊢⊘∧○((1≤=)◶⟨0,∧´∘⥊@⊸>⟩) 𝕩
+  "Plot: 𝕨 and 𝕩 must have the same length" ! 𝕨 1⊘(≡○(¯1⊑≢)) 𝕩
   ⥊ 𝕨 (< (↕¯1⊑≢)⊘⊣ ⋈ ⊢)⎉1 𝕩
 }
 PairRec ← {
   d ← 𝕨≍○≡𝕩
-  𝕨 (2≤⌊´d)◶⟨Pair⊣"•Plot: invalid depth mixing"!·∧´1=d˙, ∾∘⥊𝕊¨⟩ 𝕩
+  𝕨 (2≤⌊´d)◶⟨Pair⊣"Plot: invalid depth mixing"!·∧´1=d˙, ∾∘⥊𝕊¨⟩ 𝕩
 }
 Plot ← {
   xy ← 1e300 (⊣-⊸⌈⌊) ⍉> 𝕨 PairRec 𝕩   # organize and clip
