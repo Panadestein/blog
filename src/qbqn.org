@@ -197,7 +197,7 @@ the blog's [[https://github.com/Panadestein/blog][repository]] provides the best
 #+end_src
 
 [fn:1] Although conceptually straightforward, a Hilbert space of size =2⋆n= makes this type of simulation a true computational challenge.
-For an efficient implementation, see [[https://arxiv.org/abs/1910.09534][arXiv:1910.09534]].
+For an efficient implementation, see [[https://arxiv.org/abs/1710.05867v4][arXiv:1710.05867]].
 [fn:2] This post's title is a playful recursive acronym that employs quantum computing terminology, without any specific significance
 beyond that.
 [fn:3] I optimized it up to this number, but I wasn't targeting the Kolmogorov complexity.
