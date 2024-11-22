@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The miniaturist's tiny neural network</title>
+<title>The miniaturist's neural network</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -196,14 +196,37 @@
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">The miniaturist's tiny neural network</h1>
-<div id="outline-container-org2bd5dc5" class="outline-2">
-<h2 id="org2bd5dc5">Preface</h2>
+<h1 class="title">The miniaturist's neural network</h1>
+<div id="outline-container-org95d49bb" class="outline-2">
+<h2 id="org95d49bb">Preface</h2>
+<div class="outline-text-2" id="text-org95d49bb">
+<div class="org-src-container">
+<pre class="src src-bqn">Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb8a87cb" class="outline-2">
+<h2 id="orgb8a87cb">Tinn's diminution</h2>
 </div>
 
-<div id="outline-container-org37c37a0" class="outline-2">
-<h2 id="org37c37a0">TINN's diminution</h2>
-<div class="outline-text-2" id="text-org37c37a0">
+<div id="outline-container-org1ba4a35" class="outline-2">
+<h2 id="org1ba4a35">Learning the logistic map</h2>
+<div class="outline-text-2" id="text-org1ba4a35">
+<div class="org-src-container">
+<pre class="src src-bqn">L ← ⊣×1⊸-×⊢
+np‿ns‿ri‿rf‿dr ← 600‿50‿2.8‿4‿0.01
+
+r ← ↕∘⌈⌾((ri+dr×⊢)⁼)rf
+@ ⊣ m ← r L⍟((np-ns)+↕ns)¨ 0 •rand.Range˜ ≠r
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bqn">)r Setplot "scatter" ⋄ •Out¨ Plot´  m {ns←≠⊑𝕨 ⋄ (&gt;𝕨)⋈˜∘‿ns⥊ns/𝕩} r
+</pre>
+</div>
+
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
 </div>
