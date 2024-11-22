@@ -1,11 +1,39 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
-#+TITLE: The miniaturist's tiny neural network
+#+TITLE: The miniaturist's neural network
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 ** Preface
 
-** TINN's diminution
+#+begin_src bqn :tangle ./bqn/nn.bqn
+  Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
+#+end_src
+
+** Tinn's diminution
+
+** Learning the logistic map
+
+#+begin_src bqn
+  L ← ⊣×1⊸-×⊢
+  np‿ns‿ri‿rf‿dr ← 600‿50‿2.8‿4‿0.01
+
+  r ← ↕∘⌈⌾((ri+dr×⊢)⁼)rf
+  @ ⊣ m ← r L⍟((np-ns)+↕ns)¨ 0 •rand.Range˜ ≠r
+#+end_src
+
+#+NAME: attr_wrap
+#+BEGIN_SRC sh :var data="" :results output :exports none :tangle no
+  echo "<br/>"
+  echo '<div style="display: flex; justify-content: center; width: 100%;">'
+  echo '<div style="width: 40%;">'
+  echo "$data"
+  echo "</div>"
+  echo "</div>"
+#+END_SRC
+
+#+begin_src bqn :results html :exports both :tangle ./bqn/nn.bqn :post attr_wrap(data=*this*)
+  )r Setplot "scatter" ⋄ •Out¨ Plot´  m {ns←≠⊑𝕨 ⋄ (>𝕨)⋈˜∘‿ns⥊ns/𝕩} r
+#+end_src
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
