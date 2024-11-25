@@ -229,9 +229,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN</h1>
-<div id="outline-container-org9f0d1d9" class="outline-2">
-<h2 id="org9f0d1d9">Prelude</h2>
-<div class="outline-text-2" id="text-org9f0d1d9">
+<div id="outline-container-orgaade66b" class="outline-2">
+<h2 id="orgaade66b">Prelude</h2>
+<div class="outline-text-2" id="text-orgaade66b">
 <p>
 We will build an interpreter for a subset of the Scheme programming language,
 following an <a href="https://www.norvig.com/lispy.html">essay</a> by Peter Norvig. An alternative reference would
@@ -242,9 +242,9 @@ language implementation comes from self-study of a handful of books<sup><a id="f
 </p>
 </div>
 </div>
-<div id="outline-container-orgd7a9c76" class="outline-2">
-<h2 id="orgd7a9c76">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-orgd7a9c76">
+<div id="outline-container-orga415471" class="outline-2">
+<h2 id="orga415471">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-orga415471">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -315,7 +315,7 @@ subsets of the language by changing the input global environment:
     "lambda"≡⊑𝕩 ? ·‿par‿bod ← 𝕩 ⋄ 𝕨{bod E˜ 𝕗 C par‿𝕩};
     f ← 𝕨𝕊⊑𝕩 ⋄ F 𝕨⊸𝕊¨1↓𝕩 
   }
-  ps‿rs ← "(   )"‿"⟨"",‿⟩" ⋄ P ← (⊢+˝(ps-rs)×rs=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑(0&lt;≠¨)⊸/⎊⊢
+  ps‿rs ← "(   )"‿"⟨"",‿⟩" ⋄ P ← (⊢+˝(ps-rs)×rs=⌜⊢)∘•Repr(0&lt;≠¨)⊸/⎊⊢
   P 𝕗⊸E⊑R∘T 𝕩
 }
 </pre>
@@ -335,9 +335,9 @@ non-comment non-blank lines, whereas <code>Scheme</code> has only 42.
 </div>
 </div>
 </div>
-<div id="outline-container-org81d6627" class="outline-2">
-<h2 id="org81d6627">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org81d6627">
+<div id="outline-container-org38583ae" class="outline-2">
+<h2 id="org38583ae">A Lisp quine</h2>
+<div class="outline-text-2" id="text-org38583ae">
 <p>
 Given the title of this post, it's only fitting that we test our interpreter with a quine. In fact, building this interpreter
 was, for me, an exercise in bootstrapping the necessary machinery to produce this recursive effect:
@@ -392,7 +392,7 @@ people much prefer dealing with machinery to dealing with bureaucracies<sup><a i
 </div>
 
 <pre class="example">
-⟨ ⟨ "132" "132" ⟩ ⟨ "7" "7" ⟩ ⟨ "8" "8" ⟩ ⟨ "102" "102" ⟩ ⟨ " #f " "#f" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "42" "42" ⟩ ⟨ "1" "1" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "2" "2" ⟩ ⟨ "1 1 2 3 5 8 13 21 34 55" "(1 1 2 3 5 8 13 21 34 55)" ⟩ ⟩
+⟨ ⟨ "132" "132" ⟩ ⟨ "7" "7" ⟩ ⟨ "8" "8" ⟩ ⟨ "(102)" "102" ⟩ ⟨ " #f " "#f" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "42" "42" ⟩ ⟨ "1" "1" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "2" "2" ⟩ ⟨ "1 1 2 3 5 8 13 21 34 55" "(1 1 2 3 5 8 13 21 34 55)" ⟩ ⟩
 </pre>
 
 
