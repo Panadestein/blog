@@ -11,6 +11,12 @@
 
 ** Tinn's diminution
 
+#+begin_src bqn :tangle ./bqn/nn.bqn
+  _minn ← {
+    
+  }
+#+end_src
+
 ** Learning the logistic map
 
 #+begin_src bqn
