@@ -80,7 +80,7 @@ subsets of the language by changing the input global environment:
       "lambda"≡⊑𝕩 ? ·‿par‿bod ← 𝕩 ⋄ 𝕨{bod E˜ 𝕗 C par‿𝕩};
       f ← 𝕨𝕊⊑𝕩 ⋄ F 𝕨⊸𝕊¨1↓𝕩 
     }
-    ps‿rs ← "(   )"‿"⟨"",‿⟩" ⋄ P ← (⊢+˝(ps-rs)×rs=⌜⊢)∘•Repr(0<≠¨)⊸/⎊⊢
+    ps‿rs ← "(@  )"‿"⟨"",‿⟩" ⋄ P ← '@'⊸≠⊸/·(⊢+˝(ps-rs)×rs=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑(0<≠¨)⊸/⎊⊢
     P 𝕗⊸E⊑R∘T 𝕩
   }
 #+end_src
@@ -112,7 +112,7 @@ was, for me, an exercise in bootstrapping the necessary machinery to produce thi
 #+end_src
 
 #+RESULTS:
-: "(( lambda  ( x ) ( list   x  ( list  ( quote   quote )  x ))) ( quote  ( lambda  ( x ) ( list   x  ( list  ( quote   quote )  x )))))"
+: "((lambda (x) (list x (list (quote quote) x))) (quote (lambda (x) (list x (list (quote quote) x)))))"
 
 Naturally, we can do more rigorous tests by comparing to my favorite Scheme
 implementation[fn:4]. To achieve this, we'll leverage BQN's
@@ -130,7 +130,7 @@ But fear not, there’s no room for monotony here. After all,
 people much prefer dealing with machinery to dealing with bureaucracies[fn:5]:
 
 #+begin_src bqn :tangle ./bqn/si.bqn :exports both
-  (Scheme⋈R5RS)¨ ⟨
+  ("Not Compliant"⊸!Scheme≡R5RS)¨ ⟨
     "(+ 10 122)"
     "(max 5 6 7 1)"
     "(* 4 2)"
@@ -144,13 +144,12 @@ people much prefer dealing with machinery to dealing with bureaucracies[fn:5]:
     "(begin
        (define fib (lambda (n) (if (< n 2) 1 (+ (fib (- n 1)) (fib (- n 2))))))
        (define range (lambda (a b) (if (= a b) (quote ()) (cons a (range (+ a 1) b)))))
-       (map fib (range 0 10)))"
+       (apply + (map fib (range 0 10))))"
   ⟩
 #+end_src
 
 #+RESULTS:
-: ⟨ ⟨ "132" "132" ⟩ ⟨ "7" "7" ⟩ ⟨ "8" "8" ⟩ ⟨ "(102)" "102" ⟩ ⟨ " #f " "#f" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "42" "42" ⟩ ⟨ "1" "1" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "2" "2" ⟩ ⟨ "1 1 2 3 5 8 13 21 34 55" "(1 1 2 3 5 8 13 21 34 55)" ⟩ ⟩
-
+: ⟨ 1 1 1 1 1 1 1 1 1 1 1 ⟩
 
 If you manage to find any sneaky corner cases that break the interpreter in the given subset, let me know!
 And please forgive the formatting problems, I'm tired of fiddling with the printer at this point.

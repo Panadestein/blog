@@ -38,7 +38,7 @@ _sch ← {
     "lambda"≡⊑𝕩 ? ·‿par‿bod ← 𝕩 ⋄ 𝕨{bod E˜ 𝕗 C par‿𝕩};
     f ← 𝕨𝕊⊑𝕩 ⋄ F 𝕨⊸𝕊¨1↓𝕩 
   }
-  ps‿rs ← "(   )"‿"⟨"",‿⟩" ⋄ P ← (⊢+˝(ps-rs)×rs=⌜⊢)∘•Repr(0<≠¨)⊸/⎊⊢
+  ps‿rs ← "(@  )"‿"⟨"",‿⟩" ⋄ P ← '@'⊸≠⊸/·(⊢+˝(ps-rs)×rs=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑(0<≠¨)⊸/⎊⊢
   P 𝕗⊸E⊑R∘T 𝕩
 }
 
@@ -50,7 +50,7 @@ Scheme "((lambda (x) (list x (list (quote quote) x)))
 ch ← "../supp/chicken/libchicken.so" •FFI "*u8"‿"eval_scheme"‿">*u8:c8"
 R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch
 
-(Scheme⋈R5RS)¨ ⟨
+("Not Compliant"⊸!Scheme≡R5RS)¨ ⟨
   "(+ 10 122)"
   "(max 5 6 7 1)"
   "(* 4 2)"
@@ -64,5 +64,5 @@ R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch
   "(begin
      (define fib (lambda (n) (if (< n 2) 1 (+ (fib (- n 1)) (fib (- n 2))))))
      (define range (lambda (a b) (if (= a b) (quote ()) (cons a (range (+ a 1) b)))))
-     (map fib (range 0 10)))"
+     (apply + (map fib (range 0 10))))"
 ⟩
