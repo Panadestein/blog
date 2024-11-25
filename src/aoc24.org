@@ -1,0 +1,19 @@
+# -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
+#+TITLE: Coding an Advent riddle wreath
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
+#+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+
+** Foreword
+:PROPERTIES:
+:UNNUMBERED: notoc
+:END:
+
+These are my solutions to the problems in [[https://adventofcode.com/2024][AOC24]] that I have managed to solve.
+I will update them gradually, not necessarily matching the days the puzzles
+were published.
+
+#+BEGIN_EXPORT html
+  <div style="text-align: center; font-size: 2em; padding: 20px 0;">
+    <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
+  </div>
+#+END_EXPORT

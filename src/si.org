@@ -80,7 +80,7 @@ subsets of the language by changing the input global environment:
       "lambda"≡⊑𝕩 ? ·‿par‿bod ← 𝕩 ⋄ 𝕨{bod E˜ 𝕗 C par‿𝕩};
       f ← 𝕨𝕊⊑𝕩 ⋄ F 𝕨⊸𝕊¨1↓𝕩 
     }
-    ps‿rs ← "(   )"‿"⟨"",‿⟩" ⋄ P ← (⊢+˝(ps-rs)×rs=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑(0<≠¨)⊸/⎊⊢
+    ps‿rs ← "(   )"‿"⟨"",‿⟩" ⋄ P ← (⊢+˝(ps-rs)×rs=⌜⊢)∘•Repr(0<≠¨)⊸/⎊⊢
     P 𝕗⊸E⊑R∘T 𝕩
   }
 #+end_src
@@ -149,7 +149,7 @@ people much prefer dealing with machinery to dealing with bureaucracies[fn:5]:
 #+end_src
 
 #+RESULTS:
-: ⟨ ⟨ "132" "132" ⟩ ⟨ "7" "7" ⟩ ⟨ "8" "8" ⟩ ⟨ "102" "102" ⟩ ⟨ " #f " "#f" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "42" "42" ⟩ ⟨ "1" "1" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "2" "2" ⟩ ⟨ "1 1 2 3 5 8 13 21 34 55" "(1 1 2 3 5 8 13 21 34 55)" ⟩ ⟩
+: ⟨ ⟨ "132" "132" ⟩ ⟨ "7" "7" ⟩ ⟨ "8" "8" ⟩ ⟨ "(102)" "102" ⟩ ⟨ " #f " "#f" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "42" "42" ⟩ ⟨ "1" "1" ⟩ ⟨ " #t " "#t" ⟩ ⟨ "2" "2" ⟩ ⟨ "1 1 2 3 5 8 13 21 34 55" "(1 1 2 3 5 8 13 21 34 55)" ⟩ ⟩
 
 
 If you manage to find any sneaky corner cases that break the interpreter in the given subset, let me know!
