@@ -46,7 +46,7 @@ of the target subset, expressed as BQN functions:
     "map", "max", "min", "not", "null?", "number?"
     "print", "round", "symbol?", "nil", "pi"
   ⟩ ⋈ ⟨
-    ⋆⁼, +´, -´, ×´, ÷´, >´, <´, ≥´, ≤´, =´
+    ⋆⁼, +´, -˜´⌽, ×´, ÷˜´⌽, >´, <´, ≥´, ≤´, =´
     |, ∾´, {𝕎𝕩}´, {∾𝕩}, ⊑∘∾, 1⊸↓∘∾, <⊸∾´
     ≡´_bool, ⋆´, =´_bool, ≠∘∾, ⊢, (0=•Type∘⊑)_bool
     {𝕎∘⋈¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, (1=•Type∘⊑)_bool 
@@ -80,7 +80,7 @@ subsets of the language by changing the input global environment:
       "lambda"≡⊑𝕩 ? ·‿par‿bod ← 𝕩 ⋄ 𝕨{bod 𝕘˜ 𝕗 C par‿𝕩}𝕊;
       f ← 𝕨𝕊⊑𝕩 ⋄ F 𝕨⊸𝕊¨1↓𝕩 
     }∘⊑
-    P ← "(@  )" {'@'⊸≠⊸/·(⊢+˝(𝕗-𝕘)×𝕘=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑(0<≠¨)⊸/⎊⊢} "⟨"",‿⟩"
+    P ← "-(@  )" {'@'⊸≠⊸/·(⊢+˝(𝕗-𝕘)×𝕘=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑(0<≠¨)⊸/⎊⊢} "¯⟨"",‿⟩"
     P∘E∘R∘T 𝕩
   }
 #+end_src
@@ -144,7 +144,7 @@ people much prefer dealing with machinery to dealing with bureaucracies[fn:5]:
     "(begin
        (define fib (lambda (n) (if (< n 2) 1 (+ (fib (- n 1)) (fib (- n 2))))))
        (define range (lambda (a b) (if (= a b) (quote ()) (cons a (range (+ a 1) b)))))
-       (apply + (map fib (range 0 10))))"
+       (apply - (map fib (range 0 10))))"
   ⟩
 #+end_src
 
