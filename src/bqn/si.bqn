@@ -44,7 +44,6 @@ _sch ← {
 }
 
 Scheme ← env _sch
-Scheme "(quasiquote (apply + (list 1 1 2 (unquote (+ 1 2)))))"
 
 Scheme "((lambda (x) (list x (list (quote quote) x)))
          (quote (lambda (x) (list x (list (quote quote) x)))))"

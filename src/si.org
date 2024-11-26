@@ -98,11 +98,10 @@ because we include the basic [[https://www.oneofus.la/have-emacs-will-hack/files
 
 #+begin_src bqn :tangle ./bqn/si.bqn
   Scheme ← env _sch
-  Scheme "(quasiquote (apply + (list 1 1 2 (unquote (+ 1 2)))))"
 #+end_src
 
 #+RESULTS:
-: "(apply + (list 1 1 2 3))"
+: {o‿h‿f⇐}(1-modifier block)
 
 ** A Lisp quine
 
