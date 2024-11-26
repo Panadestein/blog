@@ -33,6 +33,7 @@ _sch ← {
     0≠𝕨.F 𝕩 ? (𝕨.F 𝕩).Get 𝕩;
     1=•Type⊑⟨𝕩⟩ ? 𝕩;
     "quote"≡⊑𝕩 ? ·‿arg ← 𝕩 ⋄ arg;
+    "quasiquote"≡⊑𝕩 ? ·‿arg ← 𝕩 ⋄ 𝕨{"unquote"≡⊑𝕩 ? 𝕗𝔾1↓𝕩; 2≤≠𝕩 ? 𝕗_𝕣_𝕘¨𝕩; 𝕩}𝕊arg;
     "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ 𝕨(⊣𝕊𝕊◶alt‿cnd)tst;
     "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var 𝕨.h.Set 𝕨𝕊val;
     "lambda"≡⊑𝕩 ? ·‿par‿bod ← 𝕩 ⋄ 𝕨{bod 𝕘˜ 𝕗 C par‿𝕩}𝕊;
@@ -43,6 +44,7 @@ _sch ← {
 }
 
 Scheme ← env _sch
+Scheme "(quasiquote (apply + (list 1 1 2 (unquote (+ 1 2)))))"
 
 Scheme "((lambda (x) (list x (list (quote quote) x)))
          (quote (lambda (x) (list x (list (quote quote) x)))))"
@@ -61,6 +63,11 @@ R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch
   "(car (quote (1 2 3)))"
   "(list? (quote (1 2 3)))"
   "(length (quote ((1 2) 3)))"
+  "(quasiquote (unquote (quote pointless)))"
+  "(quasiquote (apply + (list 1 1 2 (unquote (+ 1 2)))))"
+  "(begin
+     (define our-goal (quote macros))
+     (quasiquote (A little step towards (unquote our-goal) mate!)))"
   "(begin
      (define fib (lambda (n) (if (< n 2) 1 (+ (fib (- n 1)) (fib (- n 2))))))
      (define range (lambda (a b) (if (= a b) (quote ()) (cons a (range (+ a 1) b)))))
