@@ -229,9 +229,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN</h1>
-<div id="outline-container-orgbb808fd" class="outline-2">
-<h2 id="orgbb808fd">Prelude</h2>
-<div class="outline-text-2" id="text-orgbb808fd">
+<div id="outline-container-orgb4e28f0" class="outline-2">
+<h2 id="orgb4e28f0">Prelude</h2>
+<div class="outline-text-2" id="text-orgb4e28f0">
 <p>
 We will build an interpreter for a subset of the Scheme programming language,
 following an <a href="https://www.norvig.com/lispy.html">essay</a> by Peter Norvig. An alternative reference would
@@ -242,9 +242,9 @@ language implementation comes from self-study of a handful of books<sup><a id="f
 </p>
 </div>
 </div>
-<div id="outline-container-org799c58f" class="outline-2">
-<h2 id="org799c58f">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-org799c58f">
+<div id="outline-container-orgb8453be" class="outline-2">
+<h2 id="orgb8453be">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-orgb8453be">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -310,6 +310,7 @@ subsets of the language by changing the input global environment:
     0≠𝕨.F 𝕩 ? (𝕨.F 𝕩).Get 𝕩;
     1=•Type⊑⟨𝕩⟩ ? 𝕩;
     "quote"≡⊑𝕩 ? ·‿arg ← 𝕩 ⋄ arg;
+    "quasiquote"≡⊑𝕩 ? ·‿arg ← 𝕩 ⋄ 𝕨{"unquote"≡⊑𝕩 ? 𝕗𝔾1↓𝕩; 2≤≠𝕩 ? 𝕗_𝕣_𝕘¨𝕩; 𝕩}𝕊arg;
     "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ 𝕨(⊣𝕊𝕊◶alt‿cnd)tst;
     "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var 𝕨.h.Set 𝕨𝕊val;
     "lambda"≡⊑𝕩 ? ·‿par‿bod ← 𝕩 ⋄ 𝕨{bod 𝕘˜ 𝕗 C par‿𝕩}𝕊;
@@ -326,18 +327,20 @@ And now for the climax. Our interpreter inherits all the limitations of the one 
 the most critical being the lack of proper error handling. Additionally,
 as the names of the functions inside the modifier suggest, an <code>L</code> is missing to complete the
 <code>Read → Eval → Print</code> loop. In terms of golfing statistics, <code>lispy</code> has 117
-non-comment non-blank lines, whereas <code>Scheme</code> has only 42.
+non-comment non-blank lines, whereas <code>Scheme</code> has only 43. Ours, however, is a larger subset,
+because we include the basic <a href="https://www.oneofus.la/have-emacs-will-hack/files/bawden.pdf">metaprogramming</a> building blocks.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-bqn">Scheme ← env _sch
+Scheme "(quasiquote (apply + (list 1 1 2 (unquote (+ 1 2)))))"
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org235a069" class="outline-2">
-<h2 id="org235a069">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org235a069">
+<div id="outline-container-org9bcc47a" class="outline-2">
+<h2 id="org9bcc47a">A Lisp quine</h2>
+<div class="outline-text-2" id="text-org9bcc47a">
 <p>
 Given the title of this post, it's only fitting that we test our interpreter with a quine. In fact, building this interpreter
 was, for me, an exercise in bootstrapping the necessary machinery to produce this recursive effect:
@@ -383,6 +386,11 @@ people much prefer dealing with machinery to dealing with bureaucracies<sup><a i
   "(car (quote (1 2 3)))"
   "(list? (quote (1 2 3)))"
   "(length (quote ((1 2) 3)))"
+  "(quasiquote (unquote (quote pointless)))"
+  "(quasiquote (apply + (list 1 1 2 (unquote (+ 1 2)))))"
+  "(begin
+     (define our-goal (quote macros))
+     (quasiquote (A little step towards (unquote our-goal) mate!)))"
   "(begin
      (define fib (lambda (n) (if (&lt; n 2) 1 (+ (fib (- n 1)) (fib (- n 2))))))
      (define range (lambda (a b) (if (= a b) (quote ()) (cons a (range (+ a 1) b)))))
@@ -392,7 +400,7 @@ people much prefer dealing with machinery to dealing with bureaucracies<sup><a i
 </div>
 
 <pre class="example">
-⟨ 1 1 1 1 1 1 1 1 1 1 1 ⟩
+⟨ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 ⟩
 </pre>
 
 
