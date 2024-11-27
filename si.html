@@ -229,9 +229,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN</h1>
-<div id="outline-container-org5dfa955" class="outline-2">
-<h2 id="org5dfa955">Prelude</h2>
-<div class="outline-text-2" id="text-org5dfa955">
+<div id="outline-container-org14e2f17" class="outline-2">
+<h2 id="org14e2f17">Prelude</h2>
+<div class="outline-text-2" id="text-org14e2f17">
 <p>
 We will build an interpreter for a subset of the Scheme programming language,
 following an <a href="https://www.norvig.com/lispy.html">essay</a> by Peter Norvig. An alternative reference would
@@ -242,9 +242,9 @@ language implementation comes from self-study of a handful of books<sup><a id="f
 </p>
 </div>
 </div>
-<div id="outline-container-org7b5c827" class="outline-2">
-<h2 id="org7b5c827">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-org7b5c827">
+<div id="outline-container-orgf53c7da" class="outline-2">
+<h2 id="orgf53c7da">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-orgf53c7da">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -309,11 +309,11 @@ subsets of the language by changing the input global environment:
   E ← 𝕗⊸{
     0≠𝕨.F 𝕩 ? (𝕨.F 𝕩).Get 𝕩;
     1=•Type⊑⟨𝕩⟩ ? 𝕩;
-    "quote"≡⊑𝕩 ? ·‿arg ← 𝕩 ⋄ arg;
-    "quasiquote"≡⊑𝕩 ? ·‿arg ← 𝕩 ⋄ 𝕨{"unquote"≡⊑𝕩 ? 𝕗𝔾1↓𝕩; 2≤≠𝕩 ? 𝕗_𝕣_𝕘¨𝕩; 𝕩}𝕊arg;
-    "if"≡⊑𝕩 ? ·‿tst‿cnd‿alt ← 𝕩 ⋄ 𝕨(⊣𝕊𝕊◶alt‿cnd)tst;
-    "define"≡⊑𝕩 ? ·‿var‿val ← 𝕩 ⋄ ⟨⟩ ⊣ var 𝕨.h.Set 𝕨𝕊val;
-    "lambda"≡⊑𝕩 ? ·‿par‿bod ← 𝕩 ⋄ 𝕨{bod 𝕘˜ 𝕗 C par‿𝕩}𝕊;
+    𝕨𝕊"quote"‿arg: arg;
+    𝕨𝕊"quasiquote"‿arg: 𝕨{"unquote"≡⊑𝕩 ? 𝕗𝔾1↓𝕩; (2≤≠)◶⊢‿(𝕊¨)𝕩}𝕊arg;
+    𝕨𝕊"if"‿tst‿cnd‿alt: 𝕨(⊣𝕊𝕊◶alt‿cnd)tst;
+    𝕨𝕊"define"‿var‿val: ⟨⟩ ⊣ var 𝕨.h.Set 𝕨𝕊val;
+    𝕨𝕊"lambda"‿par‿bod: 𝕨{bod 𝕘˜ 𝕗 C par‿𝕩}𝕊;
     f ← 𝕨𝕊⊑𝕩 ⋄ F 𝕨⊸𝕊¨1↓𝕩 
   }∘⊑
   P ← "-(@  )" {'@'⊸≠⊸/·(⊢+˝(𝕗-𝕘)×𝕘=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑(0&lt;≠¨)⊸/⎊⊢} "¯⟨"",‿⟩"
@@ -337,9 +337,9 @@ because we include the basic <a href="https://www.oneofus.la/have-emacs-will-hac
 </div>
 </div>
 </div>
-<div id="outline-container-org2e90fe5" class="outline-2">
-<h2 id="org2e90fe5">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org2e90fe5">
+<div id="outline-container-orgce472b1" class="outline-2">
+<h2 id="orgce472b1">A Lisp quine</h2>
+<div class="outline-text-2" id="text-orgce472b1">
 <p>
 Given the title of this post, it's only fitting that we test our interpreter with a quine. In fact, building this interpreter
 was, for me, an exercise in bootstrapping the necessary machinery to produce this recursive effect:
