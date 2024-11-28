@@ -234,9 +234,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">The miniaturist's neural network</h1>
-<div id="outline-container-orga916b8e" class="outline-2">
-<h2 id="orga916b8e">Preface</h2>
-<div class="outline-text-2" id="text-orga916b8e">
+<div id="outline-container-org669b794" class="outline-2">
+<h2 id="org669b794">Preface</h2>
+<div class="outline-text-2" id="text-org669b794">
 <p>
 We will implement a fully-connected feed-forward neural network<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, in other words, a
 </p>
@@ -268,7 +268,7 @@ neuron in layer \(l\), \(N_l\) is the number of neurons in layer \(l\), and \(\s
 </details>
 
 <p>
-As a reference implementation, we will use <a href="https://github.com/glouw/tinn">Tinn</a>, which is a MLP of a single hidden layer, written in purely in C with
+As a reference implementation, we will use <a href="https://github.com/glouw/tinn">Tinn</a>, which is a MLP of a single hidden layer, written in pure C with
 no dependencies. As usual, we will set the stage by importing the necessary utility functions:
 </p>
 
@@ -278,9 +278,9 @@ no dependencies. As usual, we will set the stage by importing the necessary util
 </div>
 </div>
 </div>
-<div id="outline-container-org0c803a6" class="outline-2">
-<h2 id="org0c803a6">Tinn's diminution</h2>
-<div class="outline-text-2" id="text-org0c803a6">
+<div id="outline-container-orge3caae4" class="outline-2">
+<h2 id="orge3caae4">Tinn's diminution</h2>
+<div class="outline-text-2" id="text-orge3caae4">
 <div class="org-src-container">
 <pre class="src src-bqn">_minn ← {
 
@@ -300,9 +300,9 @@ even though it is only
 </details>
 </div>
 </div>
-<div id="outline-container-orge667642" class="outline-2">
-<h2 id="orge667642">Learning the logistic map</h2>
-<div class="outline-text-2" id="text-orge667642">
+<div id="outline-container-orgf13319a" class="outline-2">
+<h2 id="orgf13319a">Learning the logistic map</h2>
+<div class="outline-text-2" id="text-orgf13319a">
 <div class="org-src-container">
 <pre class="src src-bqn">L ← ⊣×1⊸-×⊢
 np‿ns‿ri‿rf‿dr ← 600‿50‿2.8‿4‿0.01
