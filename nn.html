@@ -234,9 +234,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">The miniaturist's neural network</h1>
-<div id="outline-container-org669b794" class="outline-2">
-<h2 id="org669b794">Preface</h2>
-<div class="outline-text-2" id="text-org669b794">
+<div id="outline-container-orgd8f465c" class="outline-2">
+<h2 id="orgd8f465c">Preface</h2>
+<div class="outline-text-2" id="text-orgd8f465c">
 <p>
 We will implement a fully-connected feed-forward neural network<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, in other words, a
 </p>
@@ -245,21 +245,20 @@ We will implement a fully-connected feed-forward neural network<sup><a id="fnr.1
 <summary>Multilayer perceptron</summary>
 
 <p>
-This is fundamentally an optimization problem of a function \(f: \mathbb{R}^n \rightarrow \mathbb{R}^m\)
+Essentially an optimization problem of a function \(f: \mathbb{R}^n \rightarrow \mathbb{R}^m\)
 that has exceptionally good properties for <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">approximating</a> other continuous functions on compact subsets of \(\mathbb{R}^n\).
-A MLP of \(L\) layers including inputs \(x_i\) and outputs \(y_i\) has the following recursive definition:
+A multilayer perceptron (MLP) of \(L\) layers, features \(x_i\), and targets \(y_i\) has the following recursive definition:
 </p>
 
 \begin{equation*}
   f = \begin{cases}
-    z_i^{0} = x_i & \\
-    z_i^{(l)} = \sigma\left( \sum_{j=1}^{N_{l-1}} w_{ij}^{(l)}\, z_j^{(l-1)} + b_i^{(l)} \right) & \\
-    z_i^{L} = y_i & 
+    a_i^{(0)} = x_i & \\
+    a_i^{(l)} = \sigma\left( \sum_{j=1}^{N_{l-1}} w_{ij}^{(l)}\, a_j^{(l-1)} + b_i^{(l)} \right) = \sigma\left( z_i^{(l)} \right) & l \in [1, L]
   \end{cases}
 \end{equation*}
 
 <p>
-where \(z_i^{(l)}\) is the activation of the layer \(l\), \(w_{ij}^{(l)}\) is the weight connecting the \(j\)-th
+where \(a_i^{(l)}\) is the activation of the layer \(l\), \(w_{ij}^{(l)}\) is the weight connecting the \(j\)-th
 neuron in layer \(l-1\) to the \(i\)-th neuron in layer \(l\), \(b_i^{(l)}\)​ is the bias for the \(i\)-th
 neuron in layer \(l\), \(N_l\) is the number of neurons in layer \(l\), and \(\sigma\) is the activation function
 (the <a href="https://en.wikipedia.org/wiki/Logistic_function">logistic function</a> in our case).
@@ -278,9 +277,13 @@ no dependencies. As usual, we will set the stage by importing the necessary util
 </div>
 </div>
 </div>
-<div id="outline-container-orge3caae4" class="outline-2">
-<h2 id="orge3caae4">Tinn's diminution</h2>
-<div class="outline-text-2" id="text-orge3caae4">
+<div id="outline-container-orge890018" class="outline-2">
+<h2 id="orge890018">Tinn's diminution</h2>
+<div class="outline-text-2" id="text-orge890018">
+<p>
+The original C implementation has 175 lines excluding the optimization loop. The BQN version has only
+</p>
+
 <div class="org-src-container">
 <pre class="src src-bqn">_minn ← {
 
@@ -290,19 +293,66 @@ no dependencies. As usual, we will set the stage by importing the necessary util
 
 <p>
 Training the MLP involves a two-stage process for each input: forward propagation followed by backpropagation,
-during which we compute the total error. The second step is usually introduced with an air of mystery,
-even though it is only
+during which the neural network's weight matrices are adjusted to minimize a cost function. The second step
+is often shrouded in mystery, despite being nothing more than
 </p>
 
 <details>
 <summary>An application of the chain rule</summary>
 
+<p>
+Before introducing a vectorized representation of the backpropagation algorithm, it is important to note that we use a
+quadratic loss function \( C = \frac{1}{2} \| a^{(L)} - y \|^2 \), and optimize the network using <a href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a>.
+Using the MLP definition in the first collapsible and the chain rule, we can compute the error at the output
+layer \(L\) with the following Hadamard product:
+</p>
+
+\begin{equation*}
+  \delta^{(L)} = \left( a^{(L)} - y \right) \odot \sigma'\left( z^{(L)} \right)
+\end{equation*}
+
+<p>
+The sigmoid is the solution to the logistic differential equation, can you work out what its derivative is? Then,
+the total derivative and the chain rule come to rescue once again to express the error of the hidden layers \(l\in [1,L)\):
+</p>
+
+\begin{equation*}
+  \delta^{(l)} = \left({W^{(l+1)}}^\top \delta^{(l+1)}\right) \odot \sigma'\left( z^{(l)} \right)
+\end{equation*}
+
+<p>
+where we have introduced the matrix form of the weights \(W^{(l)}\). The gradient of the cost function is:
+</p>
+
+\begin{equation*}
+  \nabla C = \left\{ \frac{\partial C}{\partial W^{(l)}} = \delta^{(l)} \left( a^{(l-1)} \right)^\top, \quad \frac{\partial C}{\partial b^{(l)}} = \delta^{(l)} \right\}_{l=1}^{L}
+\end{equation*}
+
+<p>
+Finally, we can do a gradient descent step with a learning rate \(\eta\), which can be possibly annealed:
+</p>
+
+\begin{equation*}
+  \left\{W^{(l)}, b^{(l)}\right\}_{l=1}^{L} = \left\{W^{(l)}, b^{(l)}\right\}_{l=1}^{L} -\eta\nabla C
+\end{equation*}
+
+<p>
+For full, no-nonsense derivation, see the dedicated section on Nielsen's <a href="http://neuralnetworksanddeeplearning.com/chap2.html#proof_of_the_four_fundamental_equations_(optional)">book</a>. 
+</p>
+
 </details>
 </div>
 </div>
-<div id="outline-container-orgf13319a" class="outline-2">
-<h2 id="orgf13319a">Learning the logistic map</h2>
-<div class="outline-text-2" id="text-orgf13319a">
+<div id="outline-container-org3c9d792" class="outline-2">
+<h2 id="org3c9d792">Learning the logistic map</h2>
+<div class="outline-text-2" id="text-org3c9d792">
+<p>
+<code>_minn</code> should handle digit recognition just fine<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>. However, I would like to switch clichés for the demonstration.
+Instead, we will use it to learn the logistic map<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. This is a quintessential example of how chaos can emerge from simple systems.
+Moreover, it is not so trivial to approximate: the recurrence lacks a <a href="https://mathworld.wolfram.com/LogisticMap.html">closed-form</a> solution, and has been the subject of
+neural network related studies<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>.
+</p>
+
 <div class="org-src-container">
 <pre class="src src-bqn">L ← ⊣×1⊸-×⊢
 np‿ns‿ri‿rf‿dr ← 600‿50‿2.8‿4‿0.01
@@ -313,7 +363,7 @@ r ← ↕∘⌈⌾((ri+dr×⊢)⁼)rf
 </div>
 
 <p>
-What is a number, that a man may know it<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>&#x2026;
+Let’s see if we’ve gotten the numbers right after learning. But then again, what is a number that a man may know it<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>&#x2026;
 </p>
 
 <div class="org-src-container">
@@ -329,11 +379,25 @@ What is a number, that a man may know it<sup><a id="fnr.2" class="footref" href=
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 This post is not intended to be an introduction to the topic. There are excellent
 <a href="https://www.3blue1brown.com/topics/neural-networks">videos</a>, <a href="https://compphysics.github.io/MachineLearning/doc/web/course.html">lecture notes</a>, and <a href="https://arxiv.org/abs/2107.09384">papers</a> that do this better than I could. I will provide just the
-necessary context to make the text amenable.
+necessary context to make the read self-contained.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-&#x2026; and a man that he may know a number? So <a href="https://www.nsl.com/k/parry/mcculloch_what-is-a-number.pdf">spoke</a> Warren McCulloch, a truly inspiring man.
+You can try using UCI's <a href="https://archive.ics.uci.edu/dataset/178/semeion+handwritten+digit">Semeion Handwritten Digit</a> dataset, like Tinn does.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Isn't it fascinating how closely related and yet so different the logistic map and the logistic function are?
+The former can be thought of as a discrete version of \(\dot{f} = f(1 - f)\), but whereas this ODE has a boring
+sigmoid solution, the logistic map yields beautiful bifurcation diagrams.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+See, for instance, <a href="https://arxiv.org/abs/2409.07468">arXiv:2409.07468</a>.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+&#x2026; and a man that he may know a number? So <a href="https://www.nsl.com/k/parry/mcculloch_what-is-a-number.pdf">spoke</a> Warren McCulloch, a truly inspiring figure.
 </p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
