@@ -1,5 +1,5 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
-#+TITLE: The miniaturist's neural network
+#+TITLE: The miniaturist's neural network (WIP)
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 #+HTML_HEAD: <style>
@@ -17,15 +17,15 @@ We will implement a fully-connected feed-forward neural network[fn:1], in other 
 <summary>Multilayer perceptron</summary>
 #+end_export
 
-This is fundamentally an optimization problem of a function \(f: \mathbb{R}^n \rightarrow \mathbb{R}^m\)
+Essentially an optimization problem of a function \(f: \mathbb{R}^n \rightarrow \mathbb{R}^m\)
 that has exceptionally good properties for [[https://en.wikipedia.org/wiki/Universal_approximation_theorem][approximating]] other continuous functions on compact subsets of \(\mathbb{R}^n\).
-A MLP of \(L\) layers including inputs \(x_i\) and outputs \(y_i\) has the following recursive definition:
+A multilayer perceptron (MLP) of \(L\) layers including inputs \(x_i\) and outputs \(y_i\) has the following recursive definition:
 
 \begin{equation*}
   f = \begin{cases}
-    z_i^{0} = x_i & \\
-    z_i^{(l)} = \sigma\left( \sum_{j=1}^{N_{l-1}} w_{ij}^{(l)}\, z_j^{(l-1)} + b_i^{(l)} \right) & \\
-    z_i^{L} = y_i & 
+    z_i^{(0)} = x_i & \\
+    z_i^{(l)} = \sigma\left( \sum_{j=1}^{N_{l-1}} w_{ij}^{(l)}\, z_j^{(l-1)} + b_i^{(l)} \right) & l \in [1, L]\\
+    z_i^{(L)} = y_i & 
   \end{cases}
 \end{equation*}
 
@@ -46,6 +46,8 @@ no dependencies. As usual, we will set the stage by importing the necessary util
 #+end_src
 
 ** Tinn's diminution
+
+The C implementation has 175 lines excluding the optimization loop. The BQN version has only
 
 #+begin_src bqn :tangle ./bqn/nn.bqn
   _minn ← {
@@ -68,6 +70,11 @@ even though it is only
 
 ** Learning the logistic map
 
+=_minn= should handle digit recognition just fine[fn:2]. However, I would like to switch clichés for the demonstration.
+Instead, we will use it to learn the logistic map[fn:3]. This is a quintessential example of how chaos can emerge from simple systems.
+Moreover, it is not so trivial to approximate: the recurrence lacks a [[https://mathworld.wolfram.com/LogisticMap.html][closed-form]] solution, and has been the subject of
+neural network research studies[fn:4].
+
 #+begin_src bqn
   L ← ⊣×1⊸-×⊢
   np‿ns‿ri‿rf‿dr ← 600‿50‿2.8‿4‿0.01
@@ -76,7 +83,7 @@ even though it is only
   @ ⊣ m ← r L⍟((np-ns)+↕ns)¨ 0 •rand.Range˜ ≠r
 #+end_src
 
-What is a number, that a man may know it[fn:2]...
+Let’s see if we’ve gotten the numbers right after learning. But then again, what is a number that a man may know it[fn:5]...
 
 #+NAME: attr_wrap
 #+BEGIN_SRC sh :var data="" :results output :exports none :tangle no
@@ -94,8 +101,13 @@ What is a number, that a man may know it[fn:2]...
 
 [fn:1] This post is not intended to be an introduction to the topic. There are excellent
 [[https://www.3blue1brown.com/topics/neural-networks][videos]], [[https://compphysics.github.io/MachineLearning/doc/web/course.html][lecture notes]], and [[https://arxiv.org/abs/2107.09384][papers]] that do this better than I could. I will provide just the
-necessary context to make the text amenable.
-[fn:2] ... and a man that he may know a number? So [[https://www.nsl.com/k/parry/mcculloch_what-is-a-number.pdf][spoke]] Warren McCulloch, a truly inspiring man.
+necessary context to make the read self-contained.
+[fn:2] You can try using UCI's [[https://archive.ics.uci.edu/dataset/178/semeion+handwritten+digit][Semeion Handwritten Digit]] dataset, like Tinn does.
+[fn:3]  Isn't it fascinating how closely related and yet so different the logistic map and the logistic function are?
+The former can be thought of as a discrete version of the logistic differential equation \(\dot{f} = f(1 - f)\),
+but whereas this ODE has a boring sigmoid solution, the logistic map yields beautiful bifurcation diagrams.
+[fn:4] See, for instance, [[https://arxiv.org/abs/2409.07468][arXiv:2409.07468]].
+[fn:5] ... and a man that he may know a number? So [[https://www.nsl.com/k/parry/mcculloch_what-is-a-number.pdf][spoke]] Warren McCulloch, a truly inspiring figure.
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
