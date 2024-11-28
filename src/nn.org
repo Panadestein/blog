@@ -2,8 +2,44 @@
 #+TITLE: The miniaturist's neural network
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+#+HTML_HEAD: <style>
+#+HTML_HEAD: mjx-container[jax="CHTML"] {
+#+HTML_HEAD:   overflow-x: auto !important;
+#+HTML_HEAD: }
+#+HTML_HEAD: </style>
 
 ** Preface
+
+We will implement a fully-connected feed-forward neural network[fn:1], in other words, a
+
+#+begin_export html
+<details>
+<summary>Multilayer perceptron</summary>
+#+end_export
+
+This is fundamentally an optimization problem of a function \(f: \mathbb{R}^n \rightarrow \mathbb{R}^m\)
+that has exceptionally good properties for [[https://en.wikipedia.org/wiki/Universal_approximation_theorem][approximating]] other continuous functions on compact subsets of \(\mathbb{R}^n\).
+A MLP of \(L\) layers including inputs \(x_i\) and outputs \(y_i\) has the following recursive definition:
+
+\begin{equation*}
+  f = \begin{cases}
+    z_i^{0} = x_i & \\
+    z_i^{(l)} = \sigma\left( \sum_{j=1}^{N_{l-1}} w_{ij}^{(l)}\, z_j^{(l-1)} + b_i^{(l)} \right) & \\
+    z_i^{L} = y_i & 
+  \end{cases}
+\end{equation*}
+
+where \(z_i^{(l)}\) is the activation of the layer \(l\), \(w_{ij}^{(l)}\) is the weight connecting the \(j\)-th
+neuron in layer \(l-1\) to the \(i\)-th neuron in layer \(l\), \(b_i^{(l)}\)​ is the bias for the \(i\)-th
+neuron in layer \(l\), \(N_l\) is the number of neurons in layer \(l\), and \(\sigma\) is the activation function
+(the [[https://en.wikipedia.org/wiki/Logistic_function][logistic function]] in our case).
+
+#+begin_export html
+</details>
+#+end_export
+
+As a reference implementation, we will use [[https://github.com/glouw/tinn][Tinn]], which is a MLP of a single hidden layer, written in purely in C with
+no dependencies. As usual, we will set the stage by importing the necessary utility functions:
 
 #+begin_src bqn :tangle ./bqn/nn.bqn
   Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
@@ -17,6 +53,19 @@
   }
 #+end_src
 
+Training the MLP involves a two-stage process for each input: forward propagation followed by backpropagation,
+during which we compute the total error. The second step is usually introduced with an air of mystery,
+even though it is only
+
+#+begin_export html
+<details>
+<summary>An application of the chain rule</summary>
+#+end_export
+
+#+begin_export html
+</details>
+#+end_export
+
 ** Learning the logistic map
 
 #+begin_src bqn
@@ -26,6 +75,8 @@
   r ← ↕∘⌈⌾((ri+dr×⊢)⁼)rf
   @ ⊣ m ← r L⍟((np-ns)+↕ns)¨ 0 •rand.Range˜ ≠r
 #+end_src
+
+What is a number, that a man may know it[fn:2]...
 
 #+NAME: attr_wrap
 #+BEGIN_SRC sh :var data="" :results output :exports none :tangle no
@@ -40,6 +91,11 @@
 #+begin_src bqn :results html :exports both :tangle ./bqn/nn.bqn :post attr_wrap(data=*this*)
   )r Setplot "scatter" ⋄ •Out¨ Plot´  m {ns←≠⊑𝕨 ⋄ (>𝕨)⋈˜∘‿ns⥊ns/𝕩} r
 #+end_src
+
+[fn:1] This post is not intended to be an introduction to the topic. There are excellent
+[[https://www.3blue1brown.com/topics/neural-networks][videos]], [[https://compphysics.github.io/MachineLearning/doc/web/course.html][lecture notes]], and [[https://arxiv.org/abs/2107.09384][papers]] that do this better than I could. I will provide just the
+necessary context to make the text amenable.
+[fn:2] ... and a man that he may know a number? So [[https://www.nsl.com/k/parry/mcculloch_what-is-a-number.pdf][spoke]] Warren McCulloch, a truly inspiring man.
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
