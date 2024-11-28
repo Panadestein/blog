@@ -1,5 +1,5 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
-#+TITLE: The miniaturist's neural network (WIP)
+#+TITLE: The miniaturist's neural network
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 #+HTML_HEAD: <style>
@@ -19,17 +19,16 @@ We will implement a fully-connected feed-forward neural network[fn:1], in other 
 
 Essentially an optimization problem of a function \(f: \mathbb{R}^n \rightarrow \mathbb{R}^m\)
 that has exceptionally good properties for [[https://en.wikipedia.org/wiki/Universal_approximation_theorem][approximating]] other continuous functions on compact subsets of \(\mathbb{R}^n\).
-A multilayer perceptron (MLP) of \(L\) layers including inputs \(x_i\) and outputs \(y_i\) has the following recursive definition:
+A multilayer perceptron (MLP) of \(L\) layers, features \(x_i\), and targets \(y_i\) has the following recursive definition:
 
 \begin{equation*}
   f = \begin{cases}
-    z_i^{(0)} = x_i & \\
-    z_i^{(l)} = \sigma\left( \sum_{j=1}^{N_{l-1}} w_{ij}^{(l)}\, z_j^{(l-1)} + b_i^{(l)} \right) & l \in [1, L]\\
-    z_i^{(L)} = y_i & 
+    a_i^{(0)} = x_i & \\
+    a_i^{(l)} = \sigma\left( \sum_{j=1}^{N_{l-1}} w_{ij}^{(l)}\, a_j^{(l-1)} + b_i^{(l)} \right) = \sigma\left( z_i^{(l)} \right) & l \in [1, L]
   \end{cases}
 \end{equation*}
 
-where \(z_i^{(l)}\) is the activation of the layer \(l\), \(w_{ij}^{(l)}\) is the weight connecting the \(j\)-th
+where \(a_i^{(l)}\) is the activation of the layer \(l\), \(w_{ij}^{(l)}\) is the weight connecting the \(j\)-th
 neuron in layer \(l-1\) to the \(i\)-th neuron in layer \(l\), \(b_i^{(l)}\)​ is the bias for the \(i\)-th
 neuron in layer \(l\), \(N_l\) is the number of neurons in layer \(l\), and \(\sigma\) is the activation function
 (the [[https://en.wikipedia.org/wiki/Logistic_function][logistic function]] in our case).
@@ -47,7 +46,7 @@ no dependencies. As usual, we will set the stage by importing the necessary util
 
 ** Tinn's diminution
 
-The C implementation has 175 lines excluding the optimization loop. The BQN version has only
+The original C implementation has 175 lines excluding the optimization loop. The BQN version has only
 
 #+begin_src bqn :tangle ./bqn/nn.bqn
   _minn ← {
@@ -56,13 +55,36 @@ The C implementation has 175 lines excluding the optimization loop. The BQN vers
 #+end_src
 
 Training the MLP involves a two-stage process for each input: forward propagation followed by backpropagation,
-during which we compute the total error. The second step is usually introduced with an air of mystery,
-even though it is only
+during which the neural network's weight matrices are adjusted to minimize a cost function. The second step
+is often shrouded in mystery, despite being nothing more than
 
 #+begin_export html
 <details>
 <summary>An application of the chain rule</summary>
 #+end_export
+
+Before introducing a vectorized representation of the backpropagation algorithm, it is important to note that we use a
+quadratic loss function \( C = \frac{1}{2} \| a^{(L)} - y \|^2 \), and optimize the network using [[https://en.wikipedia.org/wiki/Gradient_descent][gradient descent]].
+Using the MLP definition in the first collapsible and the chain rule, we can compute the error at the output
+layer \(L\) with the following Hadamard product:
+
+\begin{equation*}
+  \delta^{(L)} = \left( a^{(L)} - y \right) \odot \sigma'\left( z^{(L)} \right)
+\end{equation*}
+
+The sigmoid is the solution to the logistic differential equation, can you work out what its derivative is? Then,
+the total derivative and the chain rule come to rescue once again to express the error of the hidden layers \(l\in [1,L)\):
+
+\begin{equation*}
+  \delta^{(l)} = \left({W^{(l+1)}}^\top \delta^{(l+1)}\right) \odot \sigma'\left( z^{(l)} \right)
+\end{equation*}
+
+where we have introduced the matrix form of the weights \(W^{(l)}\). Finally, the gradient of the cost function is:
+
+\begin{equation*}
+  \nabla C = \left\{ \frac{\partial C}{\partial W^{(l)}} = \delta^{(l)} \left( a^{(l-1)} \right)^\top, \quad \frac{\partial C}{\partial b^{(l)}} = \delta^{(l)} \right\}_{l=1}^{L}
+\end{equation*}
+
 
 #+begin_export html
 </details>
@@ -73,7 +95,7 @@ even though it is only
 =_minn= should handle digit recognition just fine[fn:2]. However, I would like to switch clichés for the demonstration.
 Instead, we will use it to learn the logistic map[fn:3]. This is a quintessential example of how chaos can emerge from simple systems.
 Moreover, it is not so trivial to approximate: the recurrence lacks a [[https://mathworld.wolfram.com/LogisticMap.html][closed-form]] solution, and has been the subject of
-neural network research studies[fn:4].
+neural network related studies[fn:4].
 
 #+begin_src bqn
   L ← ⊣×1⊸-×⊢
@@ -104,8 +126,8 @@ Let’s see if we’ve gotten the numbers right after learning. But then again, 
 necessary context to make the read self-contained.
 [fn:2] You can try using UCI's [[https://archive.ics.uci.edu/dataset/178/semeion+handwritten+digit][Semeion Handwritten Digit]] dataset, like Tinn does.
 [fn:3]  Isn't it fascinating how closely related and yet so different the logistic map and the logistic function are?
-The former can be thought of as a discrete version of the logistic differential equation \(\dot{f} = f(1 - f)\),
-but whereas this ODE has a boring sigmoid solution, the logistic map yields beautiful bifurcation diagrams.
+The former can be thought of as a discrete version of \(\dot{f} = f(1 - f)\), but whereas this ODE has a boring
+sigmoid solution, the logistic map yields beautiful bifurcation diagrams.
 [fn:4] See, for instance, [[https://arxiv.org/abs/2409.07468][arXiv:2409.07468]].
 [fn:5] ... and a man that he may know a number? So [[https://www.nsl.com/k/parry/mcculloch_what-is-a-number.pdf][spoke]] Warren McCulloch, a truly inspiring figure.
 
