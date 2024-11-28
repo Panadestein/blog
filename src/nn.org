@@ -79,12 +79,19 @@ the total derivative and the chain rule come to rescue once again to express the
   \delta^{(l)} = \left({W^{(l+1)}}^\top \delta^{(l+1)}\right) \odot \sigma'\left( z^{(l)} \right)
 \end{equation*}
 
-where we have introduced the matrix form of the weights \(W^{(l)}\). Finally, the gradient of the cost function is:
+where we have introduced the matrix form of the weights \(W^{(l)}\). The gradient of the cost function is:
 
 \begin{equation*}
   \nabla C = \left\{ \frac{\partial C}{\partial W^{(l)}} = \delta^{(l)} \left( a^{(l-1)} \right)^\top, \quad \frac{\partial C}{\partial b^{(l)}} = \delta^{(l)} \right\}_{l=1}^{L}
 \end{equation*}
 
+Finally, we can do a gradient descent step with a learning rate \(\eta\), which can be possibly annealed:
+
+\begin{equation*}
+  \left\{W^{(l)}, b^{(l)}\right\}_{l=1}^{L} = \left\{W^{(l)}, b^{(l)}\right\}_{l=1}^{L} -\eta\nabla C
+\end{equation*}
+
+For full, no-nonsense derivation, see the dedicated section on Nielsen's [[http://neuralnetworksanddeeplearning.com/chap2.html#proof_of_the_four_fundamental_equations_(optional)][book]]. 
 
 #+begin_export html
 </details>
