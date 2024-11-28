@@ -38,7 +38,7 @@ neuron in layer \(l\), \(N_l\) is the number of neurons in layer \(l\), and \(\s
 </details>
 #+end_export
 
-As a reference implementation, we will use [[https://github.com/glouw/tinn][Tinn]], which is a MLP of a single hidden layer, written in purely in C with
+As a reference implementation, we will use [[https://github.com/glouw/tinn][Tinn]], which is a MLP of a single hidden layer, written in pure C with
 no dependencies. As usual, we will set the stage by importing the necessary utility functions:
 
 #+begin_src bqn :tangle ./bqn/nn.bqn
