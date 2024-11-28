@@ -193,33 +193,116 @@
 </style>
 <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+<style>
+mjx-container[jax="CHTML"] {
+overflow-x: auto !important;
+}
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="content" class="content">
 <h1 class="title">The miniaturist's neural network</h1>
-<div id="outline-container-orgca16fbd" class="outline-2">
-<h2 id="orgca16fbd">Preface</h2>
-<div class="outline-text-2" id="text-orgca16fbd">
+<div id="outline-container-orga916b8e" class="outline-2">
+<h2 id="orga916b8e">Preface</h2>
+<div class="outline-text-2" id="text-orga916b8e">
+<p>
+We will implement a fully-connected feed-forward neural network<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, in other words, a
+</p>
+
+<details>
+<summary>Multilayer perceptron</summary>
+
+<p>
+This is fundamentally an optimization problem of a function \(f: \mathbb{R}^n \rightarrow \mathbb{R}^m\)
+that has exceptionally good properties for <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">approximating</a> other continuous functions on compact subsets of \(\mathbb{R}^n\).
+A MLP of \(L\) layers including inputs \(x_i\) and outputs \(y_i\) has the following recursive definition:
+</p>
+
+\begin{equation*}
+  f = \begin{cases}
+    z_i^{0} = x_i & \\
+    z_i^{(l)} = \sigma\left( \sum_{j=1}^{N_{l-1}} w_{ij}^{(l)}\, z_j^{(l-1)} + b_i^{(l)} \right) & \\
+    z_i^{L} = y_i & 
+  \end{cases}
+\end{equation*}
+
+<p>
+where \(z_i^{(l)}\) is the activation of the layer \(l\), \(w_{ij}^{(l)}\) is the weight connecting the \(j\)-th
+neuron in layer \(l-1\) to the \(i\)-th neuron in layer \(l\), \(b_i^{(l)}\)​ is the bias for the \(i\)-th
+neuron in layer \(l\), \(N_l\) is the number of neurons in layer \(l\), and \(\sigma\) is the activation function
+(the <a href="https://en.wikipedia.org/wiki/Logistic_function">logistic function</a> in our case).
+</p>
+
+</details>
+
+<p>
+As a reference implementation, we will use <a href="https://github.com/glouw/tinn">Tinn</a>, which is a MLP of a single hidden layer, written in purely in C with
+no dependencies. As usual, we will set the stage by importing the necessary utility functions:
+</p>
+
 <div class="org-src-container">
 <pre class="src src-bqn">Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org667ad61" class="outline-2">
-<h2 id="org667ad61">Tinn's diminution</h2>
-<div class="outline-text-2" id="text-org667ad61">
+<div id="outline-container-org0c803a6" class="outline-2">
+<h2 id="org0c803a6">Tinn's diminution</h2>
+<div class="outline-text-2" id="text-org0c803a6">
 <div class="org-src-container">
 <pre class="src src-bqn">_minn ← {
 
 }
 </pre>
 </div>
+
+<p>
+Training the MLP involves a two-stage process for each input: forward propagation followed by backpropagation,
+during which we compute the total error. The second step is usually introduced with an air of mystery,
+even though it is only
+</p>
+
+<details>
+<summary>An application of the chain rule</summary>
+
+</details>
 </div>
 </div>
-<div id="outline-container-org382f33f" class="outline-2">
-<h2 id="org382f33f">Learning the logistic map</h2>
-<div class="outline-text-2" id="text-org382f33f">
+<div id="outline-container-orge667642" class="outline-2">
+<h2 id="orge667642">Learning the logistic map</h2>
+<div class="outline-text-2" id="text-orge667642">
 <div class="org-src-container">
 <pre class="src src-bqn">L ← ⊣×1⊸-×⊢
 np‿ns‿ri‿rf‿dr ← 600‿50‿2.8‿4‿0.01
@@ -229,16 +312,36 @@ r ← ↕∘⌈⌾((ri+dr×⊢)⁼)rf
 </pre>
 </div>
 
+<p>
+What is a number, that a man may know it<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>&#x2026;
+</p>
+
 <div class="org-src-container">
 <pre class="src src-bqn">)r Setplot "scatter" ⋄ •Out¨ Plot´  m {ns←≠⊑𝕨 ⋄ (&gt;𝕨)⋈˜∘‿ns⥊ns/𝕩} r
 </pre>
 </div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+This post is not intended to be an introduction to the topic. There are excellent
+<a href="https://www.3blue1brown.com/topics/neural-networks">videos</a>, <a href="https://compphysics.github.io/MachineLearning/doc/web/course.html">lecture notes</a>, and <a href="https://arxiv.org/abs/2107.09384">papers</a> that do this better than I could. I will provide just the
+necessary context to make the text amenable.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+&#x2026; and a man that he may know a number? So <a href="https://www.nsl.com/k/parry/mcculloch_what-is-a-number.pdf">spoke</a> Warren McCulloch, a truly inspiring man.
+</p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
+</div></div></div>
+
+
 </div>
-</div>
-</div>
-</div>
+</div></div>
 </body>
 </html>
