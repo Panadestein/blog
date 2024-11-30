@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The miniaturist's neural network</title>
+<title>The miniaturist's neural network (WIP)</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -233,10 +233,10 @@ overflow-x: auto !important;
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">The miniaturist's neural network</h1>
-<div id="outline-container-orgd8f465c" class="outline-2">
-<h2 id="orgd8f465c">Preface</h2>
-<div class="outline-text-2" id="text-orgd8f465c">
+<h1 class="title">The miniaturist's neural network (WIP)</h1>
+<div id="outline-container-orgdb067e8" class="outline-2">
+<h2 id="orgdb067e8">Preface</h2>
+<div class="outline-text-2" id="text-orgdb067e8">
 <p>
 We will implement a fully-connected feed-forward neural network<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, in other words, a
 </p>
@@ -268,25 +268,36 @@ neuron in layer \(l\), \(N_l\) is the number of neurons in layer \(l\), and \(\s
 
 <p>
 As a reference implementation, we will use <a href="https://github.com/glouw/tinn">Tinn</a>, which is a MLP of a single hidden layer, written in pure C with
-no dependencies. As usual, we will set the stage by importing the necessary utility functions:
+no dependencies<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>. As usual, we will set the stage by importing and defining some utility functions,
+namely plotting, random number generation, and matrix product: 
 </p>
 
 <div class="org-src-container">
 <pre class="src src-bqn">Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
+U ← 0.5-˜•rand.Range⟜0
+M ← +˝∘×⎉1‿∞
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orge890018" class="outline-2">
-<h2 id="orge890018">Tinn's diminution</h2>
-<div class="outline-text-2" id="text-orge890018">
+<div id="outline-container-orga81087f" class="outline-2">
+<h2 id="orga81087f">Tinn's diminution</h2>
+<div class="outline-text-2" id="text-orga81087f">
 <p>
 The original C implementation has 175 lines excluding the optimization loop. The BQN version has only
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">_minn ← {
-
+<pre class="src src-bqn">Minn ← {r‿l𝕊𝕩:
+  C ⇐ +`2÷˜·×˜-
+  A‿DA ← ⟨1÷1+⋆∘-, ⊢×1⊸-⟩
+  F ⇐ {𝕨𝕊b‿w: A¨b+w⊸M𝕨}`
+  B ← {
+    do ← (DA∘⊣×𝕗-⊢)´⊢´¨𝕨‿𝕩
+  }
+  l(U⚇1-⟜1∘≠⋈·&lt;˘2⊸↕)⊸{fs‿ts𝕊b‿w:
+    B fs F b⋈¨w
+  }´𝕩
 }
 </pre>
 </div>
@@ -333,24 +344,25 @@ Finally, we can do a gradient descent step with a learning rate \(\eta\), which 
 </p>
 
 \begin{equation*}
-  \left\{W^{(l)}, b^{(l)}\right\}_{l=1}^{L} = \left\{W^{(l)}, b^{(l)}\right\}_{l=1}^{L} -\eta\nabla C
+  \Delta\left\{W^{(l)}, b^{(l)}\right\}_{l=1}^{L} \gets -\eta\nabla C
 \end{equation*}
 
 <p>
-For full, no-nonsense derivation, see the dedicated section on Nielsen's <a href="http://neuralnetworksanddeeplearning.com/chap2.html#proof_of_the_four_fundamental_equations_(optional)">book</a>. 
+For a straightforward derivation, refer to the dedicated section in Nielsen's <a href="http://neuralnetworksanddeeplearning.com/chap2.html#proof_of_the_four_fundamental_equations_(optional)">book</a>. For a rigorous
+presentation, see <a href="https://arxiv.org/abs/2107.09384">arXiv:2107.09384</a>.
 </p>
 
 </details>
 </div>
 </div>
-<div id="outline-container-org3c9d792" class="outline-2">
-<h2 id="org3c9d792">Learning the logistic map</h2>
-<div class="outline-text-2" id="text-org3c9d792">
+<div id="outline-container-org00ed846" class="outline-2">
+<h2 id="org00ed846">Learning the logistic map</h2>
+<div class="outline-text-2" id="text-org00ed846">
 <p>
-<code>_minn</code> should handle digit recognition just fine<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>. However, I would like to switch clichés for the demonstration.
-Instead, we will use it to learn the logistic map<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. This is a quintessential example of how chaos can emerge from simple systems.
-Moreover, it is not so trivial to approximate: the recurrence lacks a <a href="https://mathworld.wolfram.com/LogisticMap.html">closed-form</a> solution, and has been the subject of
-neural network related studies<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>.
+<code>_minn</code> should handle digit recognition just fine<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. However, I would like to switch clichés for the demonstration.
+Instead, we will use it to learn the logistic map<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>. This is a quintessential example of how chaos can emerge from simple systems.
+Moreover, it is not so trivial to approximate: the recurrence lacks a <a href="https://mathworld.wolfram.com/LogisticMap.html">closed-form</a> solution, and has been a subject of study in
+the context of neural networks<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>.
 </p>
 
 <div class="org-src-container">
@@ -363,7 +375,7 @@ r ← ↕∘⌈⌾((ri+dr×⊢)⁼)rf
 </div>
 
 <p>
-Let’s see if we’ve gotten the numbers right after learning. But then again, what is a number that a man may know it<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>&#x2026;
+Let’s see if we’ve gotten the numbers right after learning. But then again, what is a number that a man may know it<sup><a id="fnr.6" class="footref" href="#fn.6" role="doc-backlink">6</a></sup>&#x2026;
 </p>
 
 <div class="org-src-container">
@@ -378,26 +390,30 @@ Let’s see if we’ve gotten the numbers right after learning. But then again, 
 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 This post is not intended to be an introduction to the topic. There are excellent
-<a href="https://www.3blue1brown.com/topics/neural-networks">videos</a>, <a href="https://compphysics.github.io/MachineLearning/doc/web/course.html">lecture notes</a>, and <a href="https://arxiv.org/abs/2107.09384">papers</a> that do this better than I could. I will provide just the
-necessary context to make the read self-contained.
+<a href="https://www.3blue1brown.com/topics/neural-networks">videos</a>, <a href="https://compphysics.github.io/MachineLearning/doc/web/course.html">lecture notes</a>, <a href="https://arxiv.org/pdf/2105.04026">papers</a>, and <a href="https://deeplearningtheory.com/">books</a> that do this better than I could. I will provide only
+the essential context to ensure the reading is self-contained.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-You can try using UCI's <a href="https://archive.ics.uci.edu/dataset/178/semeion+handwritten+digit">Semeion Handwritten Digit</a> dataset, like Tinn does.
+Programming by poking is the antithesis of this blog's ethos.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+You can try using UCI's <a href="https://archive.ics.uci.edu/dataset/178/semeion+handwritten+digit">Semeion Handwritten Digit</a> dataset, like Tinn does.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 Isn't it fascinating how closely related and yet so different the logistic map and the logistic function are?
 The former can be thought of as a discrete version of \(\dot{f} = f(1 - f)\), but whereas this ODE has a boring
 sigmoid solution, the logistic map yields beautiful bifurcation diagrams.
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 See, for instance, <a href="https://arxiv.org/abs/2409.07468">arXiv:2409.07468</a>.
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-&#x2026; and a man that he may know a number? So <a href="https://www.nsl.com/k/parry/mcculloch_what-is-a-number.pdf">spoke</a> Warren McCulloch, a truly inspiring figure.
+<div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6" role="doc-backlink">6</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+&#x2026; and a man that he may know a number? Thus <a href="https://www.nsl.com/k/parry/mcculloch_what-is-a-number.pdf">spoke</a> Warren McCulloch, a profoundly inspiring figure.
 </p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
