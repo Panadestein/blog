@@ -1,5 +1,5 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
-#+TITLE: The miniaturist's neural network
+#+TITLE: The miniaturist's neural network (WIP)
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 #+HTML_HEAD: <style>
@@ -38,19 +38,33 @@ neuron in layer \(l\), \(N_l\) is the number of neurons in layer \(l\), and \(\s
 #+end_export
 
 As a reference implementation, we will use [[https://github.com/glouw/tinn][Tinn]], which is a MLP of a single hidden layer, written in pure C with
-no dependencies. As usual, we will set the stage by importing the necessary utility functions:
+no dependencies[fn:2]. As usual, we will set the stage by importing and defining some utility functions,
+namely plotting, random number generation, and matrix product: 
 
 #+begin_src bqn :tangle ./bqn/nn.bqn
   Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
+  U ← 0.5-˜•rand.Range⟜0
+  M ← +˝∘×⎉1‿∞
 #+end_src
+
+#+RESULTS:
+: +˝∘×⎉⟨ 1 ∞ ⟩
 
 ** Tinn's diminution
 
 The original C implementation has 175 lines excluding the optimization loop. The BQN version has only
 
 #+begin_src bqn :tangle ./bqn/nn.bqn
-  _minn ← {
-    
+  Minn ← {r‿l𝕊𝕩:
+    C ⇐ +`2÷˜·×˜-
+    A‿DA ← ⟨1÷1+⋆∘-, ⊢×1⊸-⟩
+    F ⇐ {𝕨𝕊b‿w: A¨b+w⊸M𝕨}`
+    B ← {
+      do ← (DA∘⊣×𝕗-⊢)´⊢´¨𝕨‿𝕩
+    }
+    l(U⚇1-⟜1∘≠⋈·<˘2⊸↕)⊸{fs‿ts𝕊b‿w:
+      B fs F b⋈¨w
+    }´𝕩
   }
 #+end_src
 
@@ -88,10 +102,11 @@ where we have introduced the matrix form of the weights \(W^{(l)}\). The gradien
 Finally, we can do a gradient descent step with a learning rate \(\eta\), which can be possibly annealed:
 
 \begin{equation*}
-  \left\{W^{(l)}, b^{(l)}\right\}_{l=1}^{L} = \left\{W^{(l)}, b^{(l)}\right\}_{l=1}^{L} -\eta\nabla C
+  \Delta\left\{W^{(l)}, b^{(l)}\right\}_{l=1}^{L} \gets -\eta\nabla C
 \end{equation*}
 
-For full, no-nonsense derivation, see the dedicated section on Nielsen's [[http://neuralnetworksanddeeplearning.com/chap2.html#proof_of_the_four_fundamental_equations_(optional)][book]]. 
+For a straightforward derivation, refer to the dedicated section in Nielsen's [[http://neuralnetworksanddeeplearning.com/chap2.html#proof_of_the_four_fundamental_equations_(optional)][book]]. For a rigorous
+presentation, see [[https://arxiv.org/abs/2107.09384][arXiv:2107.09384]].
 
 #+begin_export html
 </details>
@@ -99,10 +114,10 @@ For full, no-nonsense derivation, see the dedicated section on Nielsen's [[http:
 
 ** Learning the logistic map
 
-=_minn= should handle digit recognition just fine[fn:2]. However, I would like to switch clichés for the demonstration.
-Instead, we will use it to learn the logistic map[fn:3]. This is a quintessential example of how chaos can emerge from simple systems.
-Moreover, it is not so trivial to approximate: the recurrence lacks a [[https://mathworld.wolfram.com/LogisticMap.html][closed-form]] solution, and has been the subject of
-neural network related studies[fn:4].
+=_minn= should handle digit recognition just fine[fn:3]. However, I would like to switch clichés for the demonstration.
+Instead, we will use it to learn the logistic map[fn:4]. This is a quintessential example of how chaos can emerge from simple systems.
+Moreover, it is not so trivial to approximate: the recurrence lacks a [[https://mathworld.wolfram.com/LogisticMap.html][closed-form]] solution, and has been a subject of study in
+the context of neural networks[fn:5].
 
 #+begin_src bqn
   L ← ⊣×1⊸-×⊢
@@ -112,7 +127,7 @@ neural network related studies[fn:4].
   @ ⊣ m ← r L⍟((np-ns)+↕ns)¨ 0 •rand.Range˜ ≠r
 #+end_src
 
-Let’s see if we’ve gotten the numbers right after learning. But then again, what is a number that a man may know it[fn:5]...
+Let’s see if we’ve gotten the numbers right after learning. But then again, what is a number that a man may know it[fn:6]...
 
 #+NAME: attr_wrap
 #+BEGIN_SRC sh :var data="" :results output :exports none :tangle no
@@ -129,14 +144,15 @@ Let’s see if we’ve gotten the numbers right after learning. But then again, 
 #+end_src
 
 [fn:1] This post is not intended to be an introduction to the topic. There are excellent
-[[https://www.3blue1brown.com/topics/neural-networks][videos]], [[https://compphysics.github.io/MachineLearning/doc/web/course.html][lecture notes]], and [[https://arxiv.org/abs/2107.09384][papers]] that do this better than I could. I will provide just the
-necessary context to make the read self-contained.
-[fn:2] You can try using UCI's [[https://archive.ics.uci.edu/dataset/178/semeion+handwritten+digit][Semeion Handwritten Digit]] dataset, like Tinn does.
-[fn:3]  Isn't it fascinating how closely related and yet so different the logistic map and the logistic function are?
+[[https://www.3blue1brown.com/topics/neural-networks][videos]], [[https://compphysics.github.io/MachineLearning/doc/web/course.html][lecture notes]], [[https://arxiv.org/pdf/2105.04026][papers]], and [[https://deeplearningtheory.com/][books]] that do this better than I could. I will provide only
+the essential context to ensure the reading is self-contained.
+[fn:2] Programming by poking is the antithesis of this blog's ethos.
+[fn:3] You can try using UCI's [[https://archive.ics.uci.edu/dataset/178/semeion+handwritten+digit][Semeion Handwritten Digit]] dataset, like Tinn does.
+[fn:4]  Isn't it fascinating how closely related and yet so different the logistic map and the logistic function are?
 The former can be thought of as a discrete version of \(\dot{f} = f(1 - f)\), but whereas this ODE has a boring
 sigmoid solution, the logistic map yields beautiful bifurcation diagrams.
-[fn:4] See, for instance, [[https://arxiv.org/abs/2409.07468][arXiv:2409.07468]].
-[fn:5] ... and a man that he may know a number? So [[https://www.nsl.com/k/parry/mcculloch_what-is-a-number.pdf][spoke]] Warren McCulloch, a truly inspiring figure.
+[fn:5] See, for instance, [[https://arxiv.org/abs/2409.07468][arXiv:2409.07468]].
+[fn:6] ... and a man that he may know a number? Thus [[https://www.nsl.com/k/parry/mcculloch_what-is-a-number.pdf][spoke]] Warren McCulloch, a profoundly inspiring figure.
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">

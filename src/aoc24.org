@@ -3,11 +3,21 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 #+HTML_HEAD: <style>
-#+HTML_HEAD:   #table-of-contents > h2 { display: none; } /* Hide the default TOC heading */
-#+HTML_HEAD:   #table-of-contents > ul { display: block; } /* Ensure TOC content is shown */
+#+HTML_HEAD:   #table-of-contents > h2 { display: none; }
+#+HTML_HEAD:   #text-table-of-contents > ul { 
+#+HTML_HEAD:     display: grid;
+#+HTML_HEAD:     grid-template-columns: repeat(5, 1fr);
+#+HTML_HEAD:     gap: 10px;
+#+HTML_HEAD:     list-style: none;
+#+HTML_HEAD:     padding: 0;
+#+HTML_HEAD:     margin: 0;
+#+HTML_HEAD:   }
+#+HTML_HEAD:   #table-of-contents > ul > li {
+#+HTML_HEAD:     text-align: center;
+#+HTML_HEAD:   }
 #+HTML_HEAD: </style>
 
-These are my solutions to some of the problems in [[https://adventofcode.com/2024][AOC24]].
+My [[https://adventofcode.com/2024][Advent of Code]] solutions.
 
 #+TOC: headlines 1 :ignore-title t
 
@@ -19,6 +29,31 @@ These are my solutions to some of the problems in [[https://adventofcode.com/202
 
 #+RESULTS:
 : (function block)
+
+** II
+** III
+** IV
+** V
+** VI
+** VII
+** VIII
+** IX
+** X
+** XI
+** XII
+** XIII
+** XIV
+** XV
+** XVI
+** XVII
+** XVIII
+** XIX
+** XX
+** XXI
+** XXII
+** XXIII
+** XXIV
+** XXV
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
