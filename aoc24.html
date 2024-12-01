@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Coding in Advent of 2024</title>
+<title>Coding in Advent</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -210,124 +210,139 @@ text-align: center;
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Coding in Advent of 2024</h1>
+<h1 class="title">Coding in Advent</h1>
 <p>
-My <a href="https://adventofcode.com/2024">Advent of Code</a> solutions.
+These are my <a href="https://adventofcode.com/2024">Advent of Code</a> solutions for the year 2024. The following top level definitions and imports
+are shared by the various puzzles:
 </p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">Split ← (¬-˜⊢×·+`»⊸&gt;)∘≠⊔⊢
+Input ← •Flines{"../supp/aoc/2024/"∾".inp"∾˜•Fmt𝕩}
+</pre>
+</div>
 
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org6936e3a">I</a></li>
-<li><a href="#orgf1edcf1">II</a></li>
-<li><a href="#orge2f171c">III</a></li>
-<li><a href="#orgf2a5e72">IV</a></li>
-<li><a href="#org9cb19cf">V</a></li>
-<li><a href="#org946c5e4">VI</a></li>
-<li><a href="#org17f78da">VII</a></li>
-<li><a href="#org148c35f">VIII</a></li>
-<li><a href="#org0e543b4">IX</a></li>
-<li><a href="#org9553490">X</a></li>
-<li><a href="#org363950b">XI</a></li>
-<li><a href="#org3c2cc55">XII</a></li>
-<li><a href="#org46d65e5">XIII</a></li>
-<li><a href="#org0e0fd4e">XIV</a></li>
-<li><a href="#org948b576">XV</a></li>
-<li><a href="#org7aad706">XVI</a></li>
-<li><a href="#org0581acf">XVII</a></li>
-<li><a href="#org4a0e64e">XVIII</a></li>
-<li><a href="#org8940e9c">XIX</a></li>
-<li><a href="#org0cf8e78">XX</a></li>
-<li><a href="#orgdde3132">XXI</a></li>
-<li><a href="#org36c29c3">XXII</a></li>
-<li><a href="#org70feab3">XXIII</a></li>
-<li><a href="#orgfd6ebb2">XXIV</a></li>
-<li><a href="#org168568e">XXV</a></li>
+<li><a href="#org9aa5692">I</a></li>
+<li><a href="#org6adb52d">II</a></li>
+<li><a href="#org81e9fbb">III</a></li>
+<li><a href="#orgf70ad8a">IV</a></li>
+<li><a href="#orge33419a">V</a></li>
+<li><a href="#orge6afdcb">VI</a></li>
+<li><a href="#org9be8699">VII</a></li>
+<li><a href="#org0310028">VIII</a></li>
+<li><a href="#org0cdeef9">IX</a></li>
+<li><a href="#org89a05f8">X</a></li>
+<li><a href="#org07a8f72">XI</a></li>
+<li><a href="#org677c4da">XII</a></li>
+<li><a href="#org63d6a37">XIII</a></li>
+<li><a href="#orgf9b726b">XIV</a></li>
+<li><a href="#org3a51bcd">XV</a></li>
+<li><a href="#org9f3c309">XVI</a></li>
+<li><a href="#org5fa82f5">XVII</a></li>
+<li><a href="#orgf55e3c8">XVIII</a></li>
+<li><a href="#orgfd7c75f">XIX</a></li>
+<li><a href="#orgadbe6d3">XX</a></li>
+<li><a href="#org07ac086">XXI</a></li>
+<li><a href="#org3ff9137">XXII</a></li>
+<li><a href="#orgcb2d2f8">XXIII</a></li>
+<li><a href="#org3e78724">XXIV</a></li>
+<li><a href="#orgbf4f594">XXV</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org6936e3a" class="outline-2">
-<h2 id="org6936e3a">I</h2>
-<div class="outline-text-2" id="text-org6936e3a">
+<div id="outline-container-org9aa5692" class="outline-2">
+<h2 id="org9aa5692">I</h2>
+<div class="outline-text-2" id="text-org9aa5692">
 <div class="org-src-container">
-<pre class="src src-bqn">I ← {𝕩}
+<pre class="src src-bqn">I ← {
+  inp ← &gt;(•ParseFloat¨' '⊸Split)¨Input𝕩
+  eins ⇐ +´|-´˘∧˘⌾⍉inp
+  zwei ⇐ {
+    +´𝕨×-´(∧𝕩)⊸⍋¨(⊢⋈-⟜1)𝕨
+  }´&lt;˘⍉inp
+}
+
+(I 1).zwei
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orgf1edcf1" class="outline-2">
-<h2 id="orgf1edcf1">II</h2>
+<div id="outline-container-org6adb52d" class="outline-2">
+<h2 id="org6adb52d">II</h2>
 </div>
-<div id="outline-container-orge2f171c" class="outline-2">
-<h2 id="orge2f171c">III</h2>
+<div id="outline-container-org81e9fbb" class="outline-2">
+<h2 id="org81e9fbb">III</h2>
 </div>
-<div id="outline-container-orgf2a5e72" class="outline-2">
-<h2 id="orgf2a5e72">IV</h2>
+<div id="outline-container-orgf70ad8a" class="outline-2">
+<h2 id="orgf70ad8a">IV</h2>
 </div>
-<div id="outline-container-org9cb19cf" class="outline-2">
-<h2 id="org9cb19cf">V</h2>
+<div id="outline-container-orge33419a" class="outline-2">
+<h2 id="orge33419a">V</h2>
 </div>
-<div id="outline-container-org946c5e4" class="outline-2">
-<h2 id="org946c5e4">VI</h2>
+<div id="outline-container-orge6afdcb" class="outline-2">
+<h2 id="orge6afdcb">VI</h2>
 </div>
-<div id="outline-container-org17f78da" class="outline-2">
-<h2 id="org17f78da">VII</h2>
+<div id="outline-container-org9be8699" class="outline-2">
+<h2 id="org9be8699">VII</h2>
 </div>
-<div id="outline-container-org148c35f" class="outline-2">
-<h2 id="org148c35f">VIII</h2>
+<div id="outline-container-org0310028" class="outline-2">
+<h2 id="org0310028">VIII</h2>
 </div>
-<div id="outline-container-org0e543b4" class="outline-2">
-<h2 id="org0e543b4">IX</h2>
+<div id="outline-container-org0cdeef9" class="outline-2">
+<h2 id="org0cdeef9">IX</h2>
 </div>
-<div id="outline-container-org9553490" class="outline-2">
-<h2 id="org9553490">X</h2>
+<div id="outline-container-org89a05f8" class="outline-2">
+<h2 id="org89a05f8">X</h2>
 </div>
-<div id="outline-container-org363950b" class="outline-2">
-<h2 id="org363950b">XI</h2>
+<div id="outline-container-org07a8f72" class="outline-2">
+<h2 id="org07a8f72">XI</h2>
 </div>
-<div id="outline-container-org3c2cc55" class="outline-2">
-<h2 id="org3c2cc55">XII</h2>
+<div id="outline-container-org677c4da" class="outline-2">
+<h2 id="org677c4da">XII</h2>
 </div>
-<div id="outline-container-org46d65e5" class="outline-2">
-<h2 id="org46d65e5">XIII</h2>
+<div id="outline-container-org63d6a37" class="outline-2">
+<h2 id="org63d6a37">XIII</h2>
 </div>
-<div id="outline-container-org0e0fd4e" class="outline-2">
-<h2 id="org0e0fd4e">XIV</h2>
+<div id="outline-container-orgf9b726b" class="outline-2">
+<h2 id="orgf9b726b">XIV</h2>
 </div>
-<div id="outline-container-org948b576" class="outline-2">
-<h2 id="org948b576">XV</h2>
+<div id="outline-container-org3a51bcd" class="outline-2">
+<h2 id="org3a51bcd">XV</h2>
 </div>
-<div id="outline-container-org7aad706" class="outline-2">
-<h2 id="org7aad706">XVI</h2>
+<div id="outline-container-org9f3c309" class="outline-2">
+<h2 id="org9f3c309">XVI</h2>
 </div>
-<div id="outline-container-org0581acf" class="outline-2">
-<h2 id="org0581acf">XVII</h2>
+<div id="outline-container-org5fa82f5" class="outline-2">
+<h2 id="org5fa82f5">XVII</h2>
 </div>
-<div id="outline-container-org4a0e64e" class="outline-2">
-<h2 id="org4a0e64e">XVIII</h2>
+<div id="outline-container-orgf55e3c8" class="outline-2">
+<h2 id="orgf55e3c8">XVIII</h2>
 </div>
-<div id="outline-container-org8940e9c" class="outline-2">
-<h2 id="org8940e9c">XIX</h2>
+<div id="outline-container-orgfd7c75f" class="outline-2">
+<h2 id="orgfd7c75f">XIX</h2>
 </div>
-<div id="outline-container-org0cf8e78" class="outline-2">
-<h2 id="org0cf8e78">XX</h2>
+<div id="outline-container-orgadbe6d3" class="outline-2">
+<h2 id="orgadbe6d3">XX</h2>
 </div>
-<div id="outline-container-orgdde3132" class="outline-2">
-<h2 id="orgdde3132">XXI</h2>
+<div id="outline-container-org07ac086" class="outline-2">
+<h2 id="org07ac086">XXI</h2>
 </div>
-<div id="outline-container-org36c29c3" class="outline-2">
-<h2 id="org36c29c3">XXII</h2>
+<div id="outline-container-org3ff9137" class="outline-2">
+<h2 id="org3ff9137">XXII</h2>
 </div>
-<div id="outline-container-org70feab3" class="outline-2">
-<h2 id="org70feab3">XXIII</h2>
+<div id="outline-container-orgcb2d2f8" class="outline-2">
+<h2 id="orgcb2d2f8">XXIII</h2>
 </div>
-<div id="outline-container-orgfd6ebb2" class="outline-2">
-<h2 id="orgfd6ebb2">XXIV</h2>
+<div id="outline-container-org3e78724" class="outline-2">
+<h2 id="org3e78724">XXIV</h2>
 </div>
-<div id="outline-container-org168568e" class="outline-2">
-<h2 id="org168568e">XXV</h2>
-<div class="outline-text-2" id="text-org168568e">
+<div id="outline-container-orgbf4f594" class="outline-2">
+<h2 id="orgbf4f594">XXV</h2>
+<div class="outline-text-2" id="text-orgbf4f594">
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
 </div>
