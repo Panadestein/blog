@@ -96,7 +96,7 @@ the total derivative and the chain rule come to rescue once again to express the
 where we have introduced the matrix form of the weights \(W^{(l)}\). The gradient of the cost function is:
 
 \begin{equation*}
-  \nabla C = \left\{ \frac{\partial C}{\partial W^{(l)}} = \delta^{(l)} \left( a^{(l-1)} \right)^\top, \quad \frac{\partial C}{\partial b^{(l)}} = \delta^{(l)} \right\}_{l=1}^{L}
+  \nabla C = \left\{ \frac{\partial C}{\partial W^{(l)}} = \delta^{(l)} {a^{(l-1)}}^\top, \quad \frac{\partial C}{\partial b^{(l)}} = \delta^{(l)} \right\}_{l=1}^{L}
 \end{equation*}
 
 Finally, we can do a gradient descent step with a learning rate \(\eta\), which can be possibly annealed:

@@ -1,3 +1,4 @@
 .packages
 supp/spdat/data.json
 supp/hf_so/hfso*
+supp/aoc/*

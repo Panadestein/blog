@@ -10,3 +10,5 @@
 *.ipynb linguist-vendored
 *.lisp linguist-vendored
 *.fish linguist-vendored
+*.inp linguist-vendored
+

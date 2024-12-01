@@ -1,5 +1,5 @@
 # -*- eval: (face-remap-add-relative 'default '(:family "BQN386 Unicode" :height 180)); -*-
-#+TITLE: Coding in Advent of 2024
+#+TITLE: Coding in Advent
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 #+HTML_HEAD: <style>
@@ -17,18 +17,35 @@
 #+HTML_HEAD:   }
 #+HTML_HEAD: </style>
 
-My [[https://adventofcode.com/2024][Advent of Code]] solutions.
+These are my [[https://adventofcode.com/2024][Advent of Code]] solutions for the year 2024. The following top level definitions and imports
+are shared by the various puzzles:
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn
+  Split ← (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
+  Input ← •Flines{"../supp/aoc/2024/"∾".inp"∾˜•Fmt𝕩}
+#+end_src
+
+#+RESULTS:
+: (file).Lines(function block)
 
 #+TOC: headlines 1 :ignore-title t
 
 ** I
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn 
-  I ← {𝕩}
+  I ← {
+    inp ← >(•ParseFloat¨' '⊸Split)¨Input𝕩
+    eins ⇐ +´|-´˘∧˘⌾⍉inp
+    zwei ⇐ {
+      +´𝕨×-´(∧𝕩)⊸⍋¨(⊢⋈-⟜1)𝕨
+    }´<˘⍉inp
+  }
+
+  (I 1).zwei
 #+end_src
 
 #+RESULTS:
-: (function block)
+: 23177084
 
 ** II
 ** III
