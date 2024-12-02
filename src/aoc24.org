@@ -24,7 +24,7 @@
 :UNNUMBERED: notoc
 :END:
 
-These are my [[https://adventofcode.com/2024][Advent of Code]] solutions for the year 2024. The following top level definitions and imports
+These are my [[https://adventofcode.com/2024][Advent of Code]] solutions for the year 2024. The following definitions and imports
 are shared by the various puzzles:
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn
@@ -36,15 +36,19 @@ are shared by the various puzzles:
 #+RESULTS:
 : (1-modifier block)
 
+The top level export tracks the progress:
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :results none
+  ⟨I, II⟩⇐
+#+end_src
+
 ** I
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn 
   I ← {
     inp ← >(•ParseFloat¨' '⊸Split)¨Input𝕩
     eins ⇐ +´|-´˘∧˘⌾⍉inp
-    zwei ⇐ {
-      +´𝕨×-´(∧𝕩)⊸⍋¨(⊢⋈-⟜1)𝕨
-    }´<˘⍉inp
+    zwei ⇐ {+´𝕨×-´(∧𝕩)⊸⍋¨(⊢⋈-⟜1)𝕨}´<˘⍉inp
   }
   I _is 1
 #+end_src
@@ -62,9 +66,7 @@ are shared by the various puzzles:
     F3 ← ≠⊸=⟜(|+´∘×)∧1=·+´3>|
     s ← (-´˘2⊸↕)¨inp
     eins ⇐ +´F1¨s
-    zwei ⇐ eins + {
-      {p‿q‿pq: pq-˜q+p} ≠¨ ⟨F3¨⊸/, F2¨⊸/, (F2∧F3)¨⊸/⟩ {𝕎𝕩}¨ <(¬F1¨)⊸/s
-    }
+    zwei ⇐ eins + {p‿q‿pq: pq-˜q+p} ⟨F2, F3, F2∧F3⟩ {≠𝕎¨⊸/𝕩}¨ <(¬F1¨)⊸/s
   }
   II _is 2
 #+end_src
