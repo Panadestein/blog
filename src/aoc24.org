@@ -30,10 +30,11 @@ are shared by the various puzzles:
 #+begin_src bqn :tangle ./bqn/aoc24.bqn
   Split ← (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
   Input ← •Flines{"../supp/aoc/2024/"∾".inp"∾˜•Fmt𝕩}
+  _is ← {(𝔽𝕩).eins⋈(𝔽𝕩).zwei}
 #+end_src
 
 #+RESULTS:
-: (file).Lines(function block)
+: (1-modifier block)
 
 ** I
 
@@ -45,14 +46,32 @@ are shared by the various puzzles:
       +´𝕨×-´(∧𝕩)⊸⍋¨(⊢⋈-⟜1)𝕨
     }´<˘⍉inp
   }
-
-  (I 1).zwei
+  I _is 1
 #+end_src
 
 #+RESULTS:
-: 23177084
+: ⟨ 2057374 23177084 ⟩
 
 ** II
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn
+  II ← {
+    inp ← (•ParseFloat¨' '⊸Split)¨Input𝕩
+    F1 ← (3≥⌈´∘|)∧≠=(|+´∘×)
+    F2 ← (3≥⌈´∘|)∧1=≠-·|·+´×
+    F3 ← ≠⊸=⟜(|+´∘×)∧1=·+´3>|
+    s ← (-´˘2⊸↕)¨inp
+    eins ⇐ +´F1¨s
+    zwei ⇐ eins + {
+      {p‿q‿pq: pq-˜q+p} ≠¨ ⟨F3¨⊸/, F2¨⊸/, (F2∧F3)¨⊸/⟩ {𝕎𝕩}¨ <(¬F1¨)⊸/s
+    }
+  }
+  II _is 2
+#+end_src
+
+#+RESULTS:
+: ⟨ 483 528 ⟩
+
 ** III
 ** IV
 ** V
