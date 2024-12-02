@@ -60,7 +60,7 @@ The top level export tracks the progress:
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn
   II ← {
-    inp ← (-´˘2⊸↕)¨(•ParseFloat¨' '⊸Split)¨Input𝕩
+    inp ← (-´˘·2⊸↕·•ParseFloat¨' '⊸Split)¨Input𝕩
     P‿Q ← ⟨3≥⌈´∘|, ≠=·|+´∘×⟩
     F1‿F2‿F3 ← P‿P‿Q {𝕎∧𝕏}¨ ⟨Q, 1=≠-·|·+´×, 1=·+´3>|⟩   
     eins ⇐ +´F1¨inp
