@@ -23,12 +23,11 @@ II _is 2
 III ← {
   mem ← •FChars Input𝕩
   prg ← mem/˜1{·𝕊¯1:0;·𝕊1:1;𝕨𝕊0:𝕨}`-´"do()"‿"don't()"(≢∘⊢↑⍷)¨<mem
-  mul‿cmd ← {(12↑↓⟜𝕩)¨4+"mul("/∘(≢∘⊢↑⍷)𝕩}¨mem‿prg
+  mul‿cmd ← {(12↑↓⟜𝕩)¨4+/"mul("(≢∘⊢↑⍷)𝕩}¨mem‿prg
   V ← {
     l‿r←⊑⎊0¨1(↑⋈↓)','Split𝕩
     l×○•ParseFloat⎊0 (∨´⎊0')'⊸=)◶⟨0, ⊑')'⊸Split⟩r
   }
-  eins ⇐ +´V¨mul
-  zwei ⇐ +´V¨cmd
+  eins‿zwei ⇐ (+´V¨)¨ mul‿cmd
 }
 III _is 3
