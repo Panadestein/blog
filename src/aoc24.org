@@ -98,7 +98,7 @@ These definitions and imports are shared by the various puzzles:
   IV ← {
     inp ← >•FLines Input 𝕩
     t‿ts ← ⟨"XMAS"‿"SAMX", "MSAMS"‿"SMASM"‿"SSAMM"‿"MMASS"⟩
-    eins ⇐ t ⍷{+´+´∘⥊¨⟨+´𝕨𝔽¨<𝕩, +´𝕨𝔽¨<⍉𝕩, ∾+˝𝕨𝔽⌜𝔾𝕩, ∾+˝𝕨𝔽⌜𝔾⌽⍉𝕩⟩}(⊢⊔˜·+⌜´↕¨∘≢) inp
+    eins ⇐ t ⍷{+´+´∘⥊¨⟨+´𝕨𝔽¨<𝕩, +´𝕨𝔽¨<⍉𝕩, ∾+˝𝕨𝔽⌜𝔾𝕩, ∾+˝𝕨𝔽⌜𝔾⌽𝕩⟩}(⊢⊔˜·+⌜´↕¨∘≢) inp
     xm ← ⌽˘⊸∨=⌜˜↕3 ⋄ zwei ⇐ +´⥊{ts≡¨<xm/○⥊𝕩}⎉2 3‿3↕inp
   }
   IV _is 4
