@@ -241,13 +241,13 @@ This post is a rolling collection of algorithms and computational ideas I like, 
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org676d036">Z algorithm</a></li>
-<li><a href="#orgfc1cc76">Longest increasing sub-sequence</a></li>
-<li><a href="#org12ed096">N-queens problem</a></li>
-<li><a href="#orgf877fcc">Majority element</a></li>
-<li><a href="#orgdf166ce">An identity on the naturals</a></li>
-<li><a href="#orge87fc33">Depth of nested lists</a></li>
-<li><a href="#org9077267">H-index</a></li>
+<li><a href="#org3c0015e">Z algorithm</a></li>
+<li><a href="#org71a7376">Longest increasing sub-sequence</a></li>
+<li><a href="#org3887737">N-queens problem</a></li>
+<li><a href="#orgfffc08d">Majority element</a></li>
+<li><a href="#org35058c3">An identity on the naturals</a></li>
+<li><a href="#org6a40e23">Depth of nested lists</a></li>
+<li><a href="#org25bfa77">H-index</a></li>
 </ul>
 </div>
 </div>
@@ -257,9 +257,9 @@ Extrapolating Perlis' remark<sup><a id="fnr.1" class="footref" href="#fn.1" role
 would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
 juxtapose my implementations with those of seasoned <i>BQNators</i><sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
-<div id="outline-container-org676d036" class="outline-2">
-<h2 id="org676d036">Z algorithm</h2>
-<div class="outline-text-2" id="text-org676d036">
+<div id="outline-container-org3c0015e" class="outline-2">
+<h2 id="org3c0015e">Z algorithm</h2>
+<div class="outline-text-2" id="text-org3c0015e">
 <p>
 This is a very efficient procedure that finds prefix strings in <a href="https://cp-algorithms.com/string/z-function.html">linear time</a>. The imperative
 implementation reads:
@@ -326,9 +326,9 @@ With further refinements, the earlier solutions can be transformed into:
 </div>
 </div>
 </div>
-<div id="outline-container-orgfc1cc76" class="outline-2">
-<h2 id="orgfc1cc76">Longest increasing sub-sequence</h2>
-<div class="outline-text-2" id="text-orgfc1cc76">
+<div id="outline-container-org71a7376" class="outline-2">
+<h2 id="org71a7376">Longest increasing sub-sequence</h2>
+<div class="outline-text-2" id="text-org71a7376">
 <p>
 This <a href="https://en.wikipedia.org/wiki/Longest_increasing_subsequence">problem</a> can be solved in \(O(n\log n)\) using dynamic programming. Here is an
 imperative implementation which is quadratic, but can be optimized:
@@ -368,7 +368,7 @@ LISA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿
 Let's <code>)explain</code> this optimized version, so we can truly appreciate its beauty:
 </p>
 
-<pre class="example" id="org7354454">
+<pre class="example" id="org0240667">
  +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽ 
  │ │ │ ││    │ │ │  │ │  │ 
  │ │ │ {┼────┼─┼─┼──┼─┼─´│ 
@@ -398,9 +398,9 @@ we pick the enclosed atom from this operation's result. So it goes<sup><a id="fn
 </p>
 </div>
 </div>
-<div id="outline-container-org12ed096" class="outline-2">
-<h2 id="org12ed096">N-queens problem</h2>
-<div class="outline-text-2" id="text-org12ed096">
+<div id="outline-container-org3887737" class="outline-2">
+<h2 id="org3887737">N-queens problem</h2>
+<div class="outline-text-2" id="text-org3887737">
 <p>
 This problem is the archetypal example of backtracking. Initially, I tried to solve it
 using a function to place the queens in the full board, hoping that it would lead to a
@@ -412,7 +412,7 @@ more array oriented solution:
 </pre>
 </div>
 
-<pre class="example" id="org69e161a">
+<pre class="example" id="orga94da2b">
 ┌─                 
 ╵ 0 1 0 1 0 1 0 0  
   0 0 1 1 1 0 0 0  
@@ -460,9 +460,9 @@ but I find the resulting validation and position functions very aesthetic the wa
 </p>
 </div>
 </div>
-<div id="outline-container-orgf877fcc" class="outline-2">
-<h2 id="orgf877fcc">Majority element</h2>
-<div class="outline-text-2" id="text-orgf877fcc">
+<div id="outline-container-orgfffc08d" class="outline-2">
+<h2 id="orgfffc08d">Majority element</h2>
+<div class="outline-text-2" id="text-orgfffc08d">
 <p>
 The <a href="https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm">Boyer–Moore</a> algorithm allows for finding the majority element (element that appears
 more than <code>⌊𝕩÷2</code> times in the array) in linear time. If such element exists, then it is
@@ -497,9 +497,9 @@ BM 6‿1‿3‿1‿3‿3‿4‿3‿3‿5
 </pre>
 </div>
 </div>
-<div id="outline-container-orgdf166ce" class="outline-2">
-<h2 id="orgdf166ce">An identity on the naturals</h2>
-<div class="outline-text-2" id="text-orgdf166ce">
+<div id="outline-container-org35058c3" class="outline-2">
+<h2 id="org35058c3">An identity on the naturals</h2>
+<div class="outline-text-2" id="text-org35058c3">
 <p>
 Some time ago, while working on performance optimization of linear algebra
 operations with Boolean arrays, I encountered an
@@ -534,9 +534,9 @@ and since <code>+´(/𝕩)=i ←→ i⊑𝕩</code>, the fold sums all the eleme
 </p>
 </div>
 </div>
-<div id="outline-container-orge87fc33" class="outline-2">
-<h2 id="orge87fc33">Depth of nested lists</h2>
-<div class="outline-text-2" id="text-orge87fc33">
+<div id="outline-container-org6a40e23" class="outline-2">
+<h2 id="org6a40e23">Depth of nested lists</h2>
+<div class="outline-text-2" id="text-org6a40e23">
 <p>
 Studying tree algorithms in APL, I learned about the depth vector <a href="https://asherbhs.github.io/apl-site/trees/representing-trees.html">representation</a>. If
 the nested object in consideration is a string, the best approach is using boolean <a href="https://mlochbaum.github.io/bqncrate/?q=depth%20of%20parens#">masks</a>.
@@ -554,9 +554,9 @@ the depth of nested elements. Here’s how it can be implemented:
 </pre>
 </div>
 </div>
-<div id="outline-container-org9077267" class="outline-2">
-<h2 id="org9077267">H-index</h2>
-<div class="outline-text-2" id="text-org9077267">
+<div id="outline-container-org25bfa77" class="outline-2">
+<h2 id="org25bfa77">H-index</h2>
+<div class="outline-text-2" id="text-org25bfa77">
 <p>
 This metric is one of the reasons for the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2407748">deplorable</a> state of modern academia,
 and the headaches for <i>outsiders</i> trying to get in. Consider that Peter Higgs
