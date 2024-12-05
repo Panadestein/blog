@@ -113,14 +113,14 @@ These definitions and imports are shared by the various puzzles:
   V ← {
     p‿r ← ",|" •ParseFloat⚇1∘(Split¨)¨ 1↓(∧`⊸+⟨⟩⊸≢¨)⊸⊔ •FLines Input𝕩
     M ← ⊢⊏¨˜(⍒∊⟜(>r)∘⋈⌜˜)¨
-    srt ← p (2=·+´∘⥊=⌜)◶0‿{𝕩(⊣≡⊢/˜·+˝=⌜)𝕨?1;∞}⌜ r
-    eins‿zwei ⇐ (+´(⊢⊑˜·⌊2÷˜≠)¨)¨ p⊔˜∞=+´˘srt
+    g‿b ← p⊔˜∞=+´˘ p (2=·+´∘⥊=⌜)◶0‿{𝕩(⊣≡⊢/˜·+˝=⌜)𝕨?1;∞}⌜ r
+    eins‿zwei ⇐ (+´(⊢⊑˜·⌊2÷˜≠)¨)¨ g⋈M b
   }
   V _is 5
 #+end_src
 
 #+RESULTS:
-: ⟨ 6242 4714 ⟩
+: ⟨ 6242 5169 ⟩
 
 ** VI
 ** VII
