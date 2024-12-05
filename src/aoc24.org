@@ -29,7 +29,7 @@ to get more context. Each day corresponds to a function, and the following top-l
 additional purpose of tracking my progress:
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :results none
-  ⟨I, II, III, IV⟩⇐
+  ⟨I, II, III, IV, V⟩⇐
 #+end_src
 
 These definitions and imports are shared by the various puzzles:
