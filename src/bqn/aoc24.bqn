@@ -49,13 +49,12 @@ V _is 5
 VI ← {
   hinp ← (↕∘≢•HashMap○⥊⊢) inp ← >•Flines Input𝕩
   g ← ⊑/○⥊⟜(↕≢)'^'= inp ⋄ r ← ⟨¯1, 0⟩‿⟨0, 1⟩‿⟨1, 0⟩‿⟨0, ¯1⟩
-  Sym ← {𝕊m:
-    s ← •HashMap˜⟨⟩
-    {𝕊p‿d: s.Set˜p‿d ⋄ '#'=◶{𝕊:d⋈˜p+d⊑r}‿{𝕊:p⋈4|d+1} m.Get⎊@ p+d⊑r
-    }•_while_{𝕊𝕩: (m.Has⊑𝕩) ∧ ¬s.Has𝕩} g‿0 ⋄ s.Keys@
+  Sym ← {𝕊m: s ← •HashMap˜⟨⟩
+    (s.Keys@) ⋈ s.Has {𝕊p‿d:
+      s.Set˜p‿d ⋄ '#'=◶{𝕊:d⋈˜p+d⊑r}‿{𝕊:p⋈4|d+1} m.Get⎊@ p+d⊑r
+    }•_while_{𝕊𝕩: (m.Has⊑𝕩) ∧ ¬s.Has𝕩} g‿0
   }
-  pos ← ⍷⊏⍉>Sym hinp
-  eins ← ≠pos
+  eins‿zwei ⇐ (≠pos) ⋈ +´{nm ← (hinp.Keys@) •HashMap hinp.Values@
+                          𝕩nm.Set '#' ⋄ ⊢´Sym nm }¨ pos ← ⍷⊏⍉>⊑Sym hinp
 }
-
-VI 6
+VI _is 6
