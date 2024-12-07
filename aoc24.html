@@ -215,18 +215,18 @@ text-align: center;
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgbf691e1">I</a></li>
-<li><a href="#org0d4f80c">II</a></li>
-<li><a href="#org65a0804">III</a></li>
-<li><a href="#org7393c67">IV</a></li>
-<li><a href="#orgb475be3">V</a></li>
-<li><a href="#orgc3f9f67">VI</a></li>
+<li><a href="#org6ffc31a">I</a></li>
+<li><a href="#orgdbc4250">II</a></li>
+<li><a href="#orge4c486f">III</a></li>
+<li><a href="#org38a1b38">IV</a></li>
+<li><a href="#org25049f9">V</a></li>
+<li><a href="#orge3344be">VI</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org462035e" class="outline-2">
-<h2 id="org462035e">Foreword</h2>
-<div class="outline-text-2" id="text-org462035e">
+<div id="outline-container-org128f391" class="outline-2">
+<h2 id="org128f391">Foreword</h2>
+<div class="outline-text-2" id="text-org128f391">
 <p>
 Welcome to my <a href="https://adventofcode.com/2024">Advent of Code</a> solutions for the year 2024. Please read the puzzles' descriptions upstream
 to get more context. These definitions and imports are shared by the various puzzles:
@@ -240,9 +240,9 @@ _is ← {(𝔽𝕩).eins⋈(𝔽𝕩).zwei}
 </div>
 </div>
 </div>
-<div id="outline-container-orgbf691e1" class="outline-2">
-<h2 id="orgbf691e1">I</h2>
-<div class="outline-text-2" id="text-orgbf691e1">
+<div id="outline-container-org6ffc31a" class="outline-2">
+<h2 id="org6ffc31a">I</h2>
+<div class="outline-text-2" id="text-org6ffc31a">
 <div class="org-src-container">
 <pre class="src src-bqn">I ← {
   inp ← &gt;(•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -254,9 +254,9 @@ I _is 1
 </div>
 </div>
 </div>
-<div id="outline-container-org0d4f80c" class="outline-2">
-<h2 id="org0d4f80c">II</h2>
-<div class="outline-text-2" id="text-org0d4f80c">
+<div id="outline-container-orgdbc4250" class="outline-2">
+<h2 id="orgdbc4250">II</h2>
+<div class="outline-text-2" id="text-orgdbc4250">
 <div class="org-src-container">
 <pre class="src src-bqn">II ← {
   inp ← (-´˘·2⊸↕·•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -270,9 +270,9 @@ II _is 2
 </div>
 </div>
 </div>
-<div id="outline-container-org65a0804" class="outline-2">
-<h2 id="org65a0804">III</h2>
-<div class="outline-text-2" id="text-org65a0804">
+<div id="outline-container-orge4c486f" class="outline-2">
+<h2 id="orge4c486f">III</h2>
+<div class="outline-text-2" id="text-orge4c486f">
 <div class="org-src-container">
 <pre class="src src-bqn">III ← {
   mem ← •FChars Input𝕩
@@ -289,9 +289,9 @@ III _is 3
 </div>
 </div>
 </div>
-<div id="outline-container-org7393c67" class="outline-2">
-<h2 id="org7393c67">IV</h2>
-<div class="outline-text-2" id="text-org7393c67">
+<div id="outline-container-org38a1b38" class="outline-2">
+<h2 id="org38a1b38">IV</h2>
+<div class="outline-text-2" id="text-org38a1b38">
 <div class="org-src-container">
 <pre class="src src-bqn">IV ← {
   inp ← &gt;•FLines Input 𝕩
@@ -304,9 +304,9 @@ IV _is 4
 </div>
 </div>
 </div>
-<div id="outline-container-orgb475be3" class="outline-2">
-<h2 id="orgb475be3">V</h2>
-<div class="outline-text-2" id="text-orgb475be3">
+<div id="outline-container-org25049f9" class="outline-2">
+<h2 id="org25049f9">V</h2>
+<div class="outline-text-2" id="text-org25049f9">
 <div class="org-src-container">
 <pre class="src src-bqn">V ← {
   p‿r ← ",|" •ParseFloat⚇1∘(Split¨)¨ 1↓(∧`⊸+⟨⟩⊸≢¨)⊸⊔ •FLines Input𝕩
@@ -319,23 +319,22 @@ V _is 5
 </div>
 </div>
 </div>
-<div id="outline-container-orgc3f9f67" class="outline-2">
-<h2 id="orgc3f9f67">VI</h2>
-<div class="outline-text-2" id="text-orgc3f9f67">
+<div id="outline-container-orge3344be" class="outline-2">
+<h2 id="orge3344be">VI</h2>
+<div class="outline-text-2" id="text-orge3344be">
 <div class="org-src-container">
 <pre class="src src-bqn">VI ← {
   hinp ← (↕∘≢•HashMap○⥊⊢) inp ← &gt;•Flines Input𝕩
   g ← ⊑/○⥊⟜(↕≢)'^'= inp ⋄ r ← ⟨¯1, 0⟩‿⟨0, 1⟩‿⟨1, 0⟩‿⟨0, ¯1⟩
-  Sym ← {𝕊m:
-    s ← •HashMap˜⟨⟩
-    {𝕊p‿d: s.Set˜p‿d ⋄ '#'=◶{𝕊:d⋈˜p+d⊑r}‿{𝕊:p⋈4|d+1} m.Get⎊@ p+d⊑r
-    }•_while_{𝕊𝕩: (m.Has⊑𝕩) ∧ ¬s.Has𝕩} g‿0 ⋄ s.Keys@
+  Sym ← {𝕊m: s ← •HashMap˜⟨⟩
+    (s.Keys@) ⋈ s.Has {𝕊p‿d:
+      s.Set˜p‿d ⋄ '#'=◶{𝕊:d⋈˜p+d⊑r}‿{𝕊:p⋈4|d+1} m.Get⎊@ p+d⊑r
+    }•_while_{𝕊𝕩: (m.Has⊑𝕩) ∧ ¬s.Has𝕩} g‿0
   }
-  pos ← ⍷⊏⍉&gt;Sym hinp
-  eins ← ≠pos
+  eins‿zwei ⇐ (≠pos) ⋈ +´{nm ← (hinp.Keys@) •HashMap hinp.Values@
+                          𝕩nm.Set '#' ⋄ ⊢´Sym nm }¨ pos ← ⍷⊏⍉&gt;⊑Sym hinp
 }
-
-VI 6
+VI _is 6
 </pre>
 </div>
 
