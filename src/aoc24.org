@@ -25,14 +25,7 @@
 :END:
 
 Welcome to my [[https://adventofcode.com/2024][Advent of Code]] solutions for the year 2024. Please read the puzzles' descriptions upstream
-to get more context. Each day corresponds to a function, and the following top-level export serves the
-additional purpose of tracking my progress:
-
-#+begin_src bqn :tangle ./bqn/aoc24.bqn :results none
-  ⟨I, II, III, IV, V⟩⇐
-#+end_src
-
-These definitions and imports are shared by the various puzzles:
+to get more context. These definitions and imports are shared by the various puzzles:
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn
   Split ← (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
@@ -123,25 +116,28 @@ These definitions and imports are shared by the various puzzles:
 : ⟨ 6242 5169 ⟩
 
 ** VI
-** VII
-** VIII
-** IX
-** X
-** XI
-** XII
-** XIII
-** XIV
-** XV
-** XVI
-** XVII
-** XVIII
-** XIX
-** XX
-** XXI
-** XXII
-** XXIII
-** XXIV
-** XXV
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn
+  VI ← {
+    hinp ← (↕∘≢•HashMap○⥊⊢) inp ← >•Flines Input𝕩
+    g ← ⊑/○⥊⟜(↕≢)'^'= inp ⋄ r ← ⟨¯1, 0⟩‿⟨0, 1⟩‿⟨1, 0⟩‿⟨0, ¯1⟩
+    Sym ← {𝕊m:
+      p‿d ← g‿0 ⋄ s ← •HashMap˜⟨⟩
+      {𝕊: p‿d s.Set@
+        '#'=◶{𝕊:p+↩d⊑r}‿{𝕊:d↩4|d+1} {m.Has𝕩? m.Get𝕩;@} p+d⊑r
+      }•_while_{𝕊: (m.Has p) ∧ ¬s.Has p‿d}@
+      s.Count@
+    }
+    Sym hinp
+  }
+
+  VI 6
+#+end_src
+
+#+RESULTS:
+: 6204
+
+5444 1946
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
