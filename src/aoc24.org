@@ -119,16 +119,12 @@ to get more context. These definitions and imports are shared by the various puz
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn
   VI ← {
-    hinp ← (↕∘≢•HashMap○⥊⊢) inp ← >•Flines Input𝕩
+    m ← (↕∘≢•HashMap○⥊⊢) inp ← >•Flines Input𝕩
     g ← ⊑/○⥊⟜(↕≢)'^'= inp ⋄ r ← ⟨¯1, 0⟩‿⟨0, 1⟩‿⟨1, 0⟩‿⟨0, ¯1⟩
-    Sym ← {𝕊m:
-      p‿d ← g‿0 ⋄ s ← •HashMap˜⟨⟩
-      {𝕊: p‿d s.Set@
-        '#'=◶{𝕊:p+↩d⊑r}‿{𝕊:d↩4|d+1} {m.Has𝕩? m.Get𝕩;@} p+d⊑r
-      }•_while_{𝕊: (m.Has p) ∧ ¬s.Has p‿d}@
-      s.Count@
-    }
-    Sym hinp
+    s ← •HashMap˜⟨⟩
+    {𝕊p‿d: s.Set˜p‿d ⋄ '#'=◶{𝕊:d⋈˜p+d⊑r}‿{𝕊:p⋈4|d+1} m.Get⎊@ p+d⊑r
+    }•_while_{𝕊𝕩: (m.Has⊑𝕩) ∧ ¬s.Has𝕩} g‿0
+    s.Count@
   }
 
   VI 6
@@ -136,8 +132,6 @@ to get more context. These definitions and imports are shared by the various puz
 
 #+RESULTS:
 : 6204
-
-5444 1946
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
