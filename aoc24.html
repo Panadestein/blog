@@ -215,50 +215,21 @@ text-align: center;
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org81086a2">I</a></li>
-<li><a href="#org4bd5cca">II</a></li>
-<li><a href="#orgf634dc2">III</a></li>
-<li><a href="#org6659104">IV</a></li>
-<li><a href="#org2023b6e">V</a></li>
-<li><a href="#org3f79b1b">VI</a></li>
-<li><a href="#org08c2226">VII</a></li>
-<li><a href="#orgd845991">VIII</a></li>
-<li><a href="#org39fb0d4">IX</a></li>
-<li><a href="#orgd4ddb04">X</a></li>
-<li><a href="#org44efada">XI</a></li>
-<li><a href="#orgbe647b9">XII</a></li>
-<li><a href="#org95c2b3f">XIII</a></li>
-<li><a href="#org0739036">XIV</a></li>
-<li><a href="#orgc567a28">XV</a></li>
-<li><a href="#orgdb3aff2">XVI</a></li>
-<li><a href="#orgd4bf190">XVII</a></li>
-<li><a href="#orgd1ca636">XVIII</a></li>
-<li><a href="#orgbf6313c">XIX</a></li>
-<li><a href="#org685bcc4">XX</a></li>
-<li><a href="#orgb5b812d">XXI</a></li>
-<li><a href="#org25e18ec">XXII</a></li>
-<li><a href="#orgb5a92b9">XXIII</a></li>
-<li><a href="#org75a1452">XXIV</a></li>
-<li><a href="#orgb14e6b9">XXV</a></li>
+<li><a href="#org4c720be">I</a></li>
+<li><a href="#org93c74e8">II</a></li>
+<li><a href="#org62fc08f">III</a></li>
+<li><a href="#org4a8127c">IV</a></li>
+<li><a href="#org52a2b1a">V</a></li>
+<li><a href="#org72a1609">VI</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgdfe310c" class="outline-2">
-<h2 id="orgdfe310c">Foreword</h2>
-<div class="outline-text-2" id="text-orgdfe310c">
+<div id="outline-container-org68a567c" class="outline-2">
+<h2 id="org68a567c">Foreword</h2>
+<div class="outline-text-2" id="text-org68a567c">
 <p>
 Welcome to my <a href="https://adventofcode.com/2024">Advent of Code</a> solutions for the year 2024. Please read the puzzles' descriptions upstream
-to get more context. Each day corresponds to a function, and the following top-level export serves the
-additional purpose of tracking my progress:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-bqn">⟨I, II, III, IV, V⟩⇐
-</pre>
-</div>
-
-<p>
-These definitions and imports are shared by the various puzzles:
+to get more context. These definitions and imports are shared by the various puzzles:
 </p>
 
 <div class="org-src-container">
@@ -269,9 +240,9 @@ _is ← {(𝔽𝕩).eins⋈(𝔽𝕩).zwei}
 </div>
 </div>
 </div>
-<div id="outline-container-org81086a2" class="outline-2">
-<h2 id="org81086a2">I</h2>
-<div class="outline-text-2" id="text-org81086a2">
+<div id="outline-container-org4c720be" class="outline-2">
+<h2 id="org4c720be">I</h2>
+<div class="outline-text-2" id="text-org4c720be">
 <div class="org-src-container">
 <pre class="src src-bqn">I ← {
   inp ← &gt;(•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -283,9 +254,9 @@ I _is 1
 </div>
 </div>
 </div>
-<div id="outline-container-org4bd5cca" class="outline-2">
-<h2 id="org4bd5cca">II</h2>
-<div class="outline-text-2" id="text-org4bd5cca">
+<div id="outline-container-org93c74e8" class="outline-2">
+<h2 id="org93c74e8">II</h2>
+<div class="outline-text-2" id="text-org93c74e8">
 <div class="org-src-container">
 <pre class="src src-bqn">II ← {
   inp ← (-´˘·2⊸↕·•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -299,9 +270,9 @@ II _is 2
 </div>
 </div>
 </div>
-<div id="outline-container-orgf634dc2" class="outline-2">
-<h2 id="orgf634dc2">III</h2>
-<div class="outline-text-2" id="text-orgf634dc2">
+<div id="outline-container-org62fc08f" class="outline-2">
+<h2 id="org62fc08f">III</h2>
+<div class="outline-text-2" id="text-org62fc08f">
 <div class="org-src-container">
 <pre class="src src-bqn">III ← {
   mem ← •FChars Input𝕩
@@ -318,9 +289,9 @@ III _is 3
 </div>
 </div>
 </div>
-<div id="outline-container-org6659104" class="outline-2">
-<h2 id="org6659104">IV</h2>
-<div class="outline-text-2" id="text-org6659104">
+<div id="outline-container-org4a8127c" class="outline-2">
+<h2 id="org4a8127c">IV</h2>
+<div class="outline-text-2" id="text-org4a8127c">
 <div class="org-src-container">
 <pre class="src src-bqn">IV ← {
   inp ← &gt;•FLines Input 𝕩
@@ -333,9 +304,9 @@ IV _is 4
 </div>
 </div>
 </div>
-<div id="outline-container-org2023b6e" class="outline-2">
-<h2 id="org2023b6e">V</h2>
-<div class="outline-text-2" id="text-org2023b6e">
+<div id="outline-container-org52a2b1a" class="outline-2">
+<h2 id="org52a2b1a">V</h2>
+<div class="outline-text-2" id="text-org52a2b1a">
 <div class="org-src-container">
 <pre class="src src-bqn">V ← {
   p‿r ← ",|" •ParseFloat⚇1∘(Split¨)¨ 1↓(∧`⊸+⟨⟩⊸≢¨)⊸⊔ •FLines Input𝕩
@@ -348,66 +319,31 @@ V _is 5
 </div>
 </div>
 </div>
-<div id="outline-container-org3f79b1b" class="outline-2">
-<h2 id="org3f79b1b">VI</h2>
+<div id="outline-container-org72a1609" class="outline-2">
+<h2 id="org72a1609">VI</h2>
+<div class="outline-text-2" id="text-org72a1609">
+<div class="org-src-container">
+<pre class="src src-bqn">VI ← {
+  hinp ← (↕∘≢•HashMap○⥊⊢) inp ← &gt;•Flines Input𝕩
+  g ← ⊑/○⥊⟜(↕≢)'^'= inp ⋄ r ← ⟨¯1, 0⟩‿⟨0, 1⟩‿⟨1, 0⟩‿⟨0, ¯1⟩
+  Sym ← {𝕊m:
+    p‿d ← g‿0 ⋄ s ← •HashMap˜⟨⟩
+    {𝕊: p‿d s.Set@
+      '#'=◶{𝕊:p+↩d⊑r}‿{𝕊:d↩4|d+1} {m.Has𝕩? m.Get𝕩;@} p+d⊑r
+    }•_while_{𝕊: (m.Has p) ∧ ¬s.Has p‿d}@
+    s.Count@
+  }
+  Sym hinp
+}
+
+VI 6
+</pre>
 </div>
-<div id="outline-container-org08c2226" class="outline-2">
-<h2 id="org08c2226">VII</h2>
-</div>
-<div id="outline-container-orgd845991" class="outline-2">
-<h2 id="orgd845991">VIII</h2>
-</div>
-<div id="outline-container-org39fb0d4" class="outline-2">
-<h2 id="org39fb0d4">IX</h2>
-</div>
-<div id="outline-container-orgd4ddb04" class="outline-2">
-<h2 id="orgd4ddb04">X</h2>
-</div>
-<div id="outline-container-org44efada" class="outline-2">
-<h2 id="org44efada">XI</h2>
-</div>
-<div id="outline-container-orgbe647b9" class="outline-2">
-<h2 id="orgbe647b9">XII</h2>
-</div>
-<div id="outline-container-org95c2b3f" class="outline-2">
-<h2 id="org95c2b3f">XIII</h2>
-</div>
-<div id="outline-container-org0739036" class="outline-2">
-<h2 id="org0739036">XIV</h2>
-</div>
-<div id="outline-container-orgc567a28" class="outline-2">
-<h2 id="orgc567a28">XV</h2>
-</div>
-<div id="outline-container-orgdb3aff2" class="outline-2">
-<h2 id="orgdb3aff2">XVI</h2>
-</div>
-<div id="outline-container-orgd4bf190" class="outline-2">
-<h2 id="orgd4bf190">XVII</h2>
-</div>
-<div id="outline-container-orgd1ca636" class="outline-2">
-<h2 id="orgd1ca636">XVIII</h2>
-</div>
-<div id="outline-container-orgbf6313c" class="outline-2">
-<h2 id="orgbf6313c">XIX</h2>
-</div>
-<div id="outline-container-org685bcc4" class="outline-2">
-<h2 id="org685bcc4">XX</h2>
-</div>
-<div id="outline-container-orgb5b812d" class="outline-2">
-<h2 id="orgb5b812d">XXI</h2>
-</div>
-<div id="outline-container-org25e18ec" class="outline-2">
-<h2 id="org25e18ec">XXII</h2>
-</div>
-<div id="outline-container-orgb5a92b9" class="outline-2">
-<h2 id="orgb5a92b9">XXIII</h2>
-</div>
-<div id="outline-container-org75a1452" class="outline-2">
-<h2 id="org75a1452">XXIV</h2>
-</div>
-<div id="outline-container-orgb14e6b9" class="outline-2">
-<h2 id="orgb14e6b9">XXV</h2>
-<div class="outline-text-2" id="text-orgb14e6b9">
+
+<p>
+5444 1946
+</p>
+
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
 </div>
