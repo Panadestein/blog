@@ -215,18 +215,18 @@ text-align: center;
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org4c720be">I</a></li>
-<li><a href="#org93c74e8">II</a></li>
-<li><a href="#org62fc08f">III</a></li>
-<li><a href="#org4a8127c">IV</a></li>
-<li><a href="#org52a2b1a">V</a></li>
-<li><a href="#org72a1609">VI</a></li>
+<li><a href="#orge498eee">I</a></li>
+<li><a href="#orgcb75f71">II</a></li>
+<li><a href="#org0e47f59">III</a></li>
+<li><a href="#org05ed1e0">IV</a></li>
+<li><a href="#orgc3801e4">V</a></li>
+<li><a href="#org6abb2ed">VI</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org68a567c" class="outline-2">
-<h2 id="org68a567c">Foreword</h2>
-<div class="outline-text-2" id="text-org68a567c">
+<div id="outline-container-org776b508" class="outline-2">
+<h2 id="org776b508">Foreword</h2>
+<div class="outline-text-2" id="text-org776b508">
 <p>
 Welcome to my <a href="https://adventofcode.com/2024">Advent of Code</a> solutions for the year 2024. Please read the puzzles' descriptions upstream
 to get more context. These definitions and imports are shared by the various puzzles:
@@ -240,9 +240,9 @@ _is ← {(𝔽𝕩).eins⋈(𝔽𝕩).zwei}
 </div>
 </div>
 </div>
-<div id="outline-container-org4c720be" class="outline-2">
-<h2 id="org4c720be">I</h2>
-<div class="outline-text-2" id="text-org4c720be">
+<div id="outline-container-orge498eee" class="outline-2">
+<h2 id="orge498eee">I</h2>
+<div class="outline-text-2" id="text-orge498eee">
 <div class="org-src-container">
 <pre class="src src-bqn">I ← {
   inp ← &gt;(•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -254,9 +254,9 @@ I _is 1
 </div>
 </div>
 </div>
-<div id="outline-container-org93c74e8" class="outline-2">
-<h2 id="org93c74e8">II</h2>
-<div class="outline-text-2" id="text-org93c74e8">
+<div id="outline-container-orgcb75f71" class="outline-2">
+<h2 id="orgcb75f71">II</h2>
+<div class="outline-text-2" id="text-orgcb75f71">
 <div class="org-src-container">
 <pre class="src src-bqn">II ← {
   inp ← (-´˘·2⊸↕·•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -270,9 +270,9 @@ II _is 2
 </div>
 </div>
 </div>
-<div id="outline-container-org62fc08f" class="outline-2">
-<h2 id="org62fc08f">III</h2>
-<div class="outline-text-2" id="text-org62fc08f">
+<div id="outline-container-org0e47f59" class="outline-2">
+<h2 id="org0e47f59">III</h2>
+<div class="outline-text-2" id="text-org0e47f59">
 <div class="org-src-container">
 <pre class="src src-bqn">III ← {
   mem ← •FChars Input𝕩
@@ -289,9 +289,9 @@ III _is 3
 </div>
 </div>
 </div>
-<div id="outline-container-org4a8127c" class="outline-2">
-<h2 id="org4a8127c">IV</h2>
-<div class="outline-text-2" id="text-org4a8127c">
+<div id="outline-container-org05ed1e0" class="outline-2">
+<h2 id="org05ed1e0">IV</h2>
+<div class="outline-text-2" id="text-org05ed1e0">
 <div class="org-src-container">
 <pre class="src src-bqn">IV ← {
   inp ← &gt;•FLines Input 𝕩
@@ -304,9 +304,9 @@ IV _is 4
 </div>
 </div>
 </div>
-<div id="outline-container-org52a2b1a" class="outline-2">
-<h2 id="org52a2b1a">V</h2>
-<div class="outline-text-2" id="text-org52a2b1a">
+<div id="outline-container-orgc3801e4" class="outline-2">
+<h2 id="orgc3801e4">V</h2>
+<div class="outline-text-2" id="text-orgc3801e4">
 <div class="org-src-container">
 <pre class="src src-bqn">V ← {
   p‿r ← ",|" •ParseFloat⚇1∘(Split¨)¨ 1↓(∧`⊸+⟨⟩⊸≢¨)⊸⊔ •FLines Input𝕩
@@ -319,30 +319,22 @@ V _is 5
 </div>
 </div>
 </div>
-<div id="outline-container-org72a1609" class="outline-2">
-<h2 id="org72a1609">VI</h2>
-<div class="outline-text-2" id="text-org72a1609">
+<div id="outline-container-org6abb2ed" class="outline-2">
+<h2 id="org6abb2ed">VI</h2>
+<div class="outline-text-2" id="text-org6abb2ed">
 <div class="org-src-container">
 <pre class="src src-bqn">VI ← {
-  hinp ← (↕∘≢•HashMap○⥊⊢) inp ← &gt;•Flines Input𝕩
+  m ← (↕∘≢•HashMap○⥊⊢) inp ← &gt;•Flines Input𝕩
   g ← ⊑/○⥊⟜(↕≢)'^'= inp ⋄ r ← ⟨¯1, 0⟩‿⟨0, 1⟩‿⟨1, 0⟩‿⟨0, ¯1⟩
-  Sym ← {𝕊m:
-    p‿d ← g‿0 ⋄ s ← •HashMap˜⟨⟩
-    {𝕊: p‿d s.Set@
-      '#'=◶{𝕊:p+↩d⊑r}‿{𝕊:d↩4|d+1} {m.Has𝕩? m.Get𝕩;@} p+d⊑r
-    }•_while_{𝕊: (m.Has p) ∧ ¬s.Has p‿d}@
-    s.Count@
-  }
-  Sym hinp
+  s ← •HashMap˜⟨⟩
+  {𝕊p‿d: s.Set˜p‿d ⋄ '#'=◶{𝕊:d⋈˜p+d⊑r}‿{𝕊:p⋈4|d+1} m.Get⎊@ p+d⊑r
+  }•_while_{𝕊𝕩: (m.Has⊑𝕩) ∧ ¬s.Has𝕩} g‿0
+  s.Count@
 }
 
 VI 6
 </pre>
 </div>
-
-<p>
-5444 1946
-</p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
