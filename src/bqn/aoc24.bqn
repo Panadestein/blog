@@ -54,7 +54,15 @@ VI ← {
       s.Set˜p‿d ⋄ '#'=◶{𝕊:d⋈˜p+d⊑r}‿{𝕊:p⋈4|d+1} m.Get⎊@ p+d⊑r
     }•_while_{𝕊𝕩: (m.Has⊑𝕩) ∧ ¬s.Has𝕩} g‿0
   }
-  eins‿zwei ⇐ (≠pos) ⋈ +´{nm ← (hinp.Keys@) •HashMap hinp.Values@
-                          𝕩nm.Set '#' ⋄ ⊢´Sym nm }¨ pos ← ⍷⊏⍉>⊑Sym hinp
+  eins‿zwei ⇐ (≠⋈·+´{nm ← (hinp.Keys@) •HashMap hinp.Values@
+                     𝕩nm.Set '#' ⋄ ⊢´Sym nm }¨) ⍷⊏⍉>⊑Sym hinp
 }
 VI _is 6
+
+VII ← {
+  inp ← (⋈○(•ParseFloat¨' '⊸Split)´':'⊸Split)¨•FLines Input𝕩
+  C ← ⊢+⊣×10⊸⋆⟜(⌊1+10⋆⁼1⌈|)
+  eins ⇐ +´{⊑𝕨∊(+∾×)˜´⌽𝕩?⊑𝕨;0}´¨ inp
+  zwei ⇐ +´{⊑𝕨∊(∾C⋈+∾×)˜´⌽𝕩?⊑𝕨;0}´¨ inp
+}
+VII _is 7

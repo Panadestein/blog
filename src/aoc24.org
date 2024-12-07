@@ -126,14 +126,29 @@ to get more context. These definitions and imports are shared by the various puz
         s.Set˜p‿d ⋄ '#'=◶{𝕊:d⋈˜p+d⊑r}‿{𝕊:p⋈4|d+1} m.Get⎊@ p+d⊑r
       }•_while_{𝕊𝕩: (m.Has⊑𝕩) ∧ ¬s.Has𝕩} g‿0
     }
-    eins‿zwei ⇐ (≠pos) ⋈ +´{nm ← (hinp.Keys@) •HashMap hinp.Values@
-                            𝕩nm.Set '#' ⋄ ⊢´Sym nm }¨ pos ← ⍷⊏⍉>⊑Sym hinp
+    eins‿zwei ⇐ (≠⋈·+´{nm ← (hinp.Keys@) •HashMap hinp.Values@
+                       𝕩nm.Set '#' ⋄ ⊢´Sym nm }¨) ⍷⊏⍉>⊑Sym hinp
   }
   VI _is 6
 #+end_src
 
 #+RESULTS:
 : ⟨ 5444 1946 ⟩
+
+** VII
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn
+  VII ← {
+    inp ← (⋈○(•ParseFloat¨' '⊸Split)´':'⊸Split)¨•FLines Input𝕩
+    C ← ⊢+⊣×10⊸⋆⟜(⌊1+10⋆⁼1⌈|)
+    eins ⇐ +´{⊑𝕨∊(+∾×)˜´⌽𝕩?⊑𝕨;0}´¨ inp
+    zwei ⇐ +´{⊑𝕨∊(∾C⋈+∾×)˜´⌽𝕩?⊑𝕨;0}´¨ inp
+  }
+  VII _is 7
+#+end_src
+
+#+RESULTS:
+: ⟨ 6231007345478 333027885676693 ⟩
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
