@@ -155,7 +155,7 @@ to get more context. These definitions and imports are shared by the various puz
   VIII ← {
     n ← ≠⊑inp‿ant ← (⊢⋈1↓⍷∘⥊)>•FLines Input𝕩
     _tcd ← {(𝕨⊸×-(𝕨-1)×⊣)⌜˜⊸𝔽/○⥊⟜(↕≢)𝕩}
-    eins ⇐ +´(∧´≥⟜0∧<⟜n)¨⍷∾ 2 (⥊∘⊣/˜·¬⥊⊸∊)_tcd¨ ant=<inp
+    eins ⇐ ≠⍷(∧´≥⟜0∧<⟜n)⊸/∾ 2 (⥊∘⊣/˜·¬⥊⊸∊)_tcd¨ ant=<inp
     zwei ⇐ +´(∧´≥⟜0∧<⟜n)¨⍷∾∾ (↕n) ⥊∘⊣_tcd¨⌜<ant=<inp
   }
   VIII _is 8
@@ -163,6 +163,24 @@ to get more context. These definitions and imports are shared by the various puz
 
 #+RESULTS:
 : ⟨ 291 1015 ⟩
+
+** IX
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn
+  IX ← {
+     f‿s ← <˘⍉↑‿2⥊•ParseFloat∘⋈¨ ⊑•FLines Input𝕩
+     m ← ¯1=d ← ∾⥊⍉ds ← (⊔˜/f)≍¯1¨∘↕¨s
+     ds ⊣ {n𝕊cf: (p<n)∧(≠f)>p←⊑1⊐˜(≠cf)≤+´¨¯1=1⊸⊏ds?
+       ds↩{cf«𝕩}⌾(1‿p⊸⊑){¯1¨𝕩}⌾(0‿n⊸⊑)ds⋄@
+     ;@}´˘(⊢≍˘˜·⌽⊒˜)⌽⊏ds
+     eins ⇐ {+´/(𝕩-˜≠d)↑(d×¬m)+(𝕩↑⌽/f)⌾(m⊸/)m}+´s
+     zwei ⇐ +´/(⊢×¯1⊸≠)∾⥊⍉{𝕊⟨⟩:𝕩;(⌽∘⊣∾⊢)´𝕩⊔˜𝕩=¯1}¨⌾(1⊸⊏)ds
+  }
+  IX _is 9
+#+end_src
+
+#+RESULTS:
+: ⟨ 6378826667552 6413328569890 ⟩
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
