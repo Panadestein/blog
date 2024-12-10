@@ -215,21 +215,22 @@ text-align: center;
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgb1d5782">I</a></li>
-<li><a href="#orgc4fa7a9">II</a></li>
-<li><a href="#orgadd5289">III</a></li>
-<li><a href="#org06c47e9">IV</a></li>
-<li><a href="#orga9bc09f">V</a></li>
-<li><a href="#orgd61fee5">VI</a></li>
-<li><a href="#org814c9e7">VII</a></li>
-<li><a href="#org290ee29">VIII</a></li>
-<li><a href="#orgc2539e0">IX</a></li>
+<li><a href="#org7959feb">I</a></li>
+<li><a href="#orga1ee50b">II</a></li>
+<li><a href="#org6bb11ff">III</a></li>
+<li><a href="#org66ca9d0">IV</a></li>
+<li><a href="#org071fbde">V</a></li>
+<li><a href="#org512d795">VI</a></li>
+<li><a href="#orgb10ad26">VII</a></li>
+<li><a href="#org96f44d7">VIII</a></li>
+<li><a href="#orgeb48c65">IX</a></li>
+<li><a href="#org7f266ab">X</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgaf8507b" class="outline-2">
-<h2 id="orgaf8507b">Foreword</h2>
-<div class="outline-text-2" id="text-orgaf8507b">
+<div id="outline-container-org0c72f13" class="outline-2">
+<h2 id="org0c72f13">Foreword</h2>
+<div class="outline-text-2" id="text-org0c72f13">
 <p>
 Welcome to my <a href="https://adventofcode.com/2024">Advent of Code</a> solutions for the year 2024. Please read the puzzles' descriptions upstream
 to get more context. These definitions and imports are shared by the various puzzles:
@@ -243,9 +244,9 @@ _is ← {(𝔽𝕩).eins⋈(𝔽𝕩).zwei}
 </div>
 </div>
 </div>
-<div id="outline-container-orgb1d5782" class="outline-2">
-<h2 id="orgb1d5782">I</h2>
-<div class="outline-text-2" id="text-orgb1d5782">
+<div id="outline-container-org7959feb" class="outline-2">
+<h2 id="org7959feb">I</h2>
+<div class="outline-text-2" id="text-org7959feb">
 <div class="org-src-container">
 <pre class="src src-bqn">I ← {
   inp ← &gt;(•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -257,9 +258,9 @@ I _is 1
 </div>
 </div>
 </div>
-<div id="outline-container-orgc4fa7a9" class="outline-2">
-<h2 id="orgc4fa7a9">II</h2>
-<div class="outline-text-2" id="text-orgc4fa7a9">
+<div id="outline-container-orga1ee50b" class="outline-2">
+<h2 id="orga1ee50b">II</h2>
+<div class="outline-text-2" id="text-orga1ee50b">
 <div class="org-src-container">
 <pre class="src src-bqn">II ← {
   inp ← (-´˘·2⊸↕·•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -273,9 +274,9 @@ II _is 2
 </div>
 </div>
 </div>
-<div id="outline-container-orgadd5289" class="outline-2">
-<h2 id="orgadd5289">III</h2>
-<div class="outline-text-2" id="text-orgadd5289">
+<div id="outline-container-org6bb11ff" class="outline-2">
+<h2 id="org6bb11ff">III</h2>
+<div class="outline-text-2" id="text-org6bb11ff">
 <div class="org-src-container">
 <pre class="src src-bqn">III ← {
   mem ← •FChars Input𝕩
@@ -292,9 +293,9 @@ III _is 3
 </div>
 </div>
 </div>
-<div id="outline-container-org06c47e9" class="outline-2">
-<h2 id="org06c47e9">IV</h2>
-<div class="outline-text-2" id="text-org06c47e9">
+<div id="outline-container-org66ca9d0" class="outline-2">
+<h2 id="org66ca9d0">IV</h2>
+<div class="outline-text-2" id="text-org66ca9d0">
 <div class="org-src-container">
 <pre class="src src-bqn">IV ← {
   inp ← &gt;•FLines Input 𝕩
@@ -307,9 +308,9 @@ IV _is 4
 </div>
 </div>
 </div>
-<div id="outline-container-orga9bc09f" class="outline-2">
-<h2 id="orga9bc09f">V</h2>
-<div class="outline-text-2" id="text-orga9bc09f">
+<div id="outline-container-org071fbde" class="outline-2">
+<h2 id="org071fbde">V</h2>
+<div class="outline-text-2" id="text-org071fbde">
 <div class="org-src-container">
 <pre class="src src-bqn">V ← {
   p‿r ← ",|" •ParseFloat⚇1∘(Split¨)¨ 1↓(∧`⊸+⟨⟩⊸≢¨)⊸⊔ •FLines Input𝕩
@@ -322,9 +323,9 @@ V _is 5
 </div>
 </div>
 </div>
-<div id="outline-container-orgd61fee5" class="outline-2">
-<h2 id="orgd61fee5">VI</h2>
-<div class="outline-text-2" id="text-orgd61fee5">
+<div id="outline-container-org512d795" class="outline-2">
+<h2 id="org512d795">VI</h2>
+<div class="outline-text-2" id="text-org512d795">
 <div class="org-src-container">
 <pre class="src src-bqn">VI ← {
   hm ← (↕∘≢•HashMap○⥊⊢) inp ← &gt;•Flines Input𝕩
@@ -341,9 +342,9 @@ VI _is 6
 </div>
 </div>
 </div>
-<div id="outline-container-org814c9e7" class="outline-2">
-<h2 id="org814c9e7">VII</h2>
-<div class="outline-text-2" id="text-org814c9e7">
+<div id="outline-container-orgb10ad26" class="outline-2">
+<h2 id="orgb10ad26">VII</h2>
+<div class="outline-text-2" id="text-orgb10ad26">
 <div class="org-src-container">
 <pre class="src src-bqn">VII ← {
   inp ← (⊑⊸⋈○(•ParseFloat¨' '⊸Split)´':'⊸Split)¨•FLines Input𝕩
@@ -356,9 +357,9 @@ VII _is 7
 </div>
 </div>
 </div>
-<div id="outline-container-org290ee29" class="outline-2">
-<h2 id="org290ee29">VIII</h2>
-<div class="outline-text-2" id="text-org290ee29">
+<div id="outline-container-org96f44d7" class="outline-2">
+<h2 id="org96f44d7">VIII</h2>
+<div class="outline-text-2" id="text-org96f44d7">
 <div class="org-src-container">
 <pre class="src src-bqn">VIII ← {
   n ← ≠⊑inp‿ant ← (⊢⋈1↓⍷∘⥊)&gt;•FLines Input𝕩
@@ -371,9 +372,9 @@ VIII _is 8
 </div>
 </div>
 </div>
-<div id="outline-container-orgc2539e0" class="outline-2">
-<h2 id="orgc2539e0">IX</h2>
-<div class="outline-text-2" id="text-orgc2539e0">
+<div id="outline-container-orgeb48c65" class="outline-2">
+<h2 id="orgeb48c65">IX</h2>
+<div class="outline-text-2" id="text-orgeb48c65">
 <div class="org-src-container">
 <pre class="src src-bqn">IX ← {
    f‿s ← &lt;˘⍉↑‿2⥊•ParseFloat∘⋈¨⊑•FLines Input𝕩
@@ -387,7 +388,11 @@ VIII _is 8
 IX _is 9
 </pre>
 </div>
-
+</div>
+</div>
+<div id="outline-container-org7f266ab" class="outline-2">
+<h2 id="org7f266ab">X</h2>
+<div class="outline-text-2" id="text-org7f266ab">
 <div class="org-src-container">
 <pre class="src src-bqn">X ← {
   inp ← &gt;'0'-˜•FLines Input𝕩
