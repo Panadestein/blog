@@ -87,7 +87,7 @@ IX _is 9
 
 X ← {
   inp ← >'0'-˜•FLines Input𝕩
-  I ← {(𝕨⊸=/○⥊⟜(↕≢)⊢)𝕩} ⋄ th ← 0 I inp ⋄ up ← 9=inp
+  I ← {(𝕨⊸=/○⥊⟜(↕≢)⊢)𝕩} ⋄ ct ← 9=inp
   P ← {(4/≍≢inp)(⊢/˜·∧´˘>∧0⊸≤)>⟨¯1‿0, 0‿1, 1‿0, 0‿¯1⟩+<𝕩}
   BFS ← {
     v‿r ← •HashMap{⟨𝕩𝔽○⋈@, 𝔽˜⟨⟩⟩}𝕩
@@ -95,8 +95,8 @@ X ← {
       𝕩∾@⊸≢¨⊸/⥊{(h=1-˜𝕩⊑inp)∧¬v.Has𝕩}◶⟨@⟩‿{@v.Set˜𝕩⋄⋈𝕩⋈˜h+1}˘P c
     }•_while_{𝕊:0≠≠𝕩} ⋈0‿𝕩
   }
-  DP ← {𝕊h: {sss←+˝{h=1-˜𝕩⊑inp?𝕩⊑up;0}˘P𝕩 ⋄ up sss⌾(𝕩⊸⊑)↩}¨𝕩I inp}
-  eins ⇐ +´BFS¨ th
-  zwei ⇐ ⊑+´⥊(inp=0)×up⊣DP¨ ⌽↕9
+  DP ← {𝕊h: {ct(+´{h=1-˜𝕩⊑inp?𝕩⊑ct;0}˘P𝕩)⌾(𝕩⊸⊑)↩}¨𝕩I inp}
+  eins ⇐ +´BFS¨ 0 I inp
+  zwei ⇐ +´⥊(inp=0)×ct⊣DP¨⌽↕9
 }
 X _is 10
