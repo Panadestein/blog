@@ -182,6 +182,8 @@ to get more context. These definitions and imports are shared by the various puz
 #+RESULTS:
 : ⟨ 6378826667552 6413328569890 ⟩
 
+** X
+
 #+begin_src bqn :tangle ./bqn/aoc24.bqn
   X ← {
     inp ← >'0'-˜•FLines Input𝕩
