@@ -205,6 +205,27 @@ to get more context. These definitions and imports are shared by the various puz
 #+RESULTS:
 : ⟨ 776 1657 ⟩
 
+** XI
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn
+  XI ← {
+    inp ← •ParseFloat¨' 'Split⊑•Flines Input𝕩 ⋄ m ← •HashMap˜⟨⟩
+    B ← {
+      𝕨𝕊𝕩: m.Has𝕨‿𝕩 ? m.Get𝕨‿𝕩;
+      ·𝕊0: 1;      
+      0𝕊𝕩: 𝕩{𝕩 ⊣ 𝕨m.Set𝕩}1𝕊𝕩-1;
+      e𝕊c: l‿r ← e (⌊∘÷⋈|˜) 10⋆⌊2÷˜d ← ⌊1+10⋆⁼e 
+      {𝕩⊣e‿c m.Set𝕩} 2⊸|◶{𝕊: (l⊸B+r⊸B)c-1}‿{𝕊: (2024×e) B c-1} d
+    }
+    zwei ⇐ +´inp B¨ 75
+    eins ⇐ +´inp B¨ 25
+  }
+  XI _is 11
+#+end_src
+
+#+RESULTS:
+: ⟨ 199982 237149922829154 ⟩
+
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
     <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
