@@ -30,7 +30,10 @@ to get more context. These definitions and imports are shared by the various puz
 #+begin_src bqn :tangle ./bqn/aoc24.bqn
   Split ← (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
   Input ← {"../supp/aoc/2024/"∾".inp"∾˜•Fmt𝕩}
-  _is ← {(𝔽𝕩).eins⋈(𝔽𝕩).zwei}
+  _is ← {
+   ∾⟨"Computed ", •Fmt(𝔽𝕩).eins, " and ",
+      •Fmt(𝔽𝕩).zwei, " in ", •Fmt 10𝔽•_timed𝕩, "s"⟩
+  }
 #+end_src
 
 #+RESULTS:
@@ -38,7 +41,7 @@ to get more context. These definitions and imports are shared by the various puz
 
 ** I
 
-#+begin_src bqn :tangle ./bqn/aoc24.bqn 
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   I ← {
     inp ← >(•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
     eins ⇐ +´|-´˘∧˘⌾⍉inp
@@ -48,11 +51,11 @@ to get more context. These definitions and imports are shared by the various puz
 #+end_src
 
 #+RESULTS:
-: ⟨ 2057374 23177084 ⟩
+: "Computed 2057374 and 23177084 in 0.0002433342s"
 
 ** II
 
-#+begin_src bqn :tangle ./bqn/aoc24.bqn
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   II ← {
     inp ← (-´˘·2⊸↕·•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
     P‿Q ← ⟨3≥⌈´∘|, ≠=·|+´∘×⟩
@@ -64,11 +67,11 @@ to get more context. These definitions and imports are shared by the various puz
 #+end_src
 
 #+RESULTS:
-: ⟨ 483 528 ⟩
+: "Computed 483 and 528 in 0.0006116174s"
 
 ** III
 
-#+begin_src bqn :tangle ./bqn/aoc24.bqn
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   III ← {
     mem ← •FChars Input𝕩
     prg ← mem/˜1=×∘+`2×-´"do()"‿"don't()"(≢∘⊢↑⍷)¨<mem
@@ -83,11 +86,11 @@ to get more context. These definitions and imports are shared by the various puz
 #+end_src
 
 #+RESULTS:
-: ⟨ 165225049 108830766 ⟩
+: "Computed 165225049 and 108830766 in 0.0008441142s"
 
 ** IV
 
-#+begin_src bqn :tangle ./bqn/aoc24.bqn
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   IV ← {
     inp ← >•FLines Input 𝕩
     t‿ts ← ⟨"XMAS"‿"SAMX", "MSAMS"‿"SMASM"‿"SSAMM"‿"MMASS"⟩
@@ -98,11 +101,11 @@ to get more context. These definitions and imports are shared by the various puz
 #+end_src
 
 #+RESULTS:
-: ⟨ 2397 1824 ⟩
+: "Computed 2397 and 1824 in 0.0044790454s"
 
 ** V
 
-#+begin_src bqn :tangle ./bqn/aoc24.bqn
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   V ← {
     p‿r ← ",|" •ParseFloat⚇1∘(Split¨)¨ 1↓(∧`⊸+⟨⟩⊸≢¨)⊸⊔ •FLines Input𝕩
     M ← (⍒∊⟜(>r)∘⋈⌜˜)¨⊏¨⊢
@@ -113,11 +116,11 @@ to get more context. These definitions and imports are shared by the various puz
 #+end_src
 
 #+RESULTS:
-: ⟨ 6242 5169 ⟩
+: "Computed 6242 and 5169 in 0.2089791522s"
 
 ** VI
 
-#+begin_src bqn :tangle ./bqn/aoc24.bqn
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   VI ← {
     hm ← (↕∘≢•HashMap○⥊⊢) inp ← >•Flines Input𝕩
     g ← ⊑/○⥊⟜(↕≢)'^'= inp ⋄ r ← ⟨¯1, 0⟩‿⟨0, 1⟩‿⟨1, 0⟩‿⟨0, ¯1⟩
@@ -132,11 +135,11 @@ to get more context. These definitions and imports are shared by the various puz
 #+end_src
 
 #+RESULTS:
-: ⟨ 5444 1946 ⟩
+: "Computed 5444 and 1946 in 11.5659486128s"
 
 ** VII
 
-#+begin_src bqn :tangle ./bqn/aoc24.bqn
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   VII ← {
     inp ← (⊑⊸⋈○(•ParseFloat¨' '⊸Split)´':'⊸Split)¨•FLines Input𝕩
     C ← ⊢+⊣×10⊸⋆⟜(⌊1+10⋆⁼1⌈|)
@@ -147,26 +150,26 @@ to get more context. These definitions and imports are shared by the various puz
 #+end_src
 
 #+RESULTS:
-: ⟨ 6231007345478 333027885676693 ⟩
+: "Computed 6231007345478 and 333027885676693 in 0.0148443502s"
 
 ** VIII
 
-#+begin_src bqn :tangle ./bqn/aoc24.bqn
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   VIII ← {
     n ← ≠⊑inp‿ant ← (⊢⋈1↓⍷∘⥊)>•FLines Input𝕩
     _tcd ← {(𝕨⊸×-(𝕨-1)×⊣)⌜˜⊸𝔽/○⥊⟜(↕≢)𝕩}
-    eins ⇐ ≠⍷(∧´≥⟜0∧<⟜n)⊸/∾ 2 (⥊∘⊣/˜·¬⥊⊸∊)_tcd¨ ant=<inp
+    eins ⇐ +´(∧´≥⟜0∧<⟜n)¨⍷∾ 2 (⥊∘⊣/˜·¬⥊⊸∊)_tcd¨ ant=<inp
     zwei ⇐ +´(∧´≥⟜0∧<⟜n)¨⍷∾∾ (↕n) ⥊∘⊣_tcd¨⌜<ant=<inp
   }
   VIII _is 8
 #+end_src
 
 #+RESULTS:
-: ⟨ 291 1015 ⟩
+: "Computed 291 and 1015 in 0.0386348246s"
 
 ** IX
 
-#+begin_src bqn :tangle ./bqn/aoc24.bqn
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   IX ← {
      f‿s ← <˘⍉↑‿2⥊•ParseFloat∘⋈¨⊑•FLines Input𝕩
      m ← ¯1=d ← ∾⥊⍉ds ← (⊔˜/f)≍¯1¨∘↕¨sm ← s
@@ -180,11 +183,14 @@ to get more context. These definitions and imports are shared by the various puz
 #+end_src
 
 #+RESULTS:
-: ⟨ 6378826667552 6413328569890 ⟩
+: "Computed 6378826667552 and 6413328569890 in 0.008265096s"
 
 ** X
 
-#+begin_src bqn :tangle ./bqn/aoc24.bqn
+In this problem I have included additional functions to solve it in an array way using the
+powers of the adjacency matrix. This is method is unfortunately slower than simple dynamic programming.
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   X ← {
     inp ← >'0'-˜•FLines Input𝕩
     I ← {(𝕨⊸=/○⥊⟜(↕≢)⊢)𝕩}
@@ -201,20 +207,20 @@ to get more context. These definitions and imports are shared by the various puz
     }
     AMP ← {
       am ← (1=-⌜˜⥊𝕩)∧1=+´∘|∘-⌜˜⥊↕≢𝕩
-      +´⥊ am +˝∘×⎉1‿∞˜⍟9 9=⥊𝕩
+      +´⥊(0=⥊𝕩)/⌾⍉(9=⥊𝕩)/{𝕩𝕨⊸𝕊⍟≢𝕨+𝕨+˝∘×⎉1‿∞𝕩}˜am
     }
     eins ⇐ +´BFS¨ 0 I inp
-    zwei ⇐ (DP≡AMP)◶@‿DP inp
+    zwei ⇐ DP inp
   }
   X _is 10
 #+end_src
 
 #+RESULTS:
-: ⟨ 776 1657 ⟩
+: "Computed 776 and 1657 in 0.0073447794s"
 
 ** XI
 
-#+begin_src bqn :tangle ./bqn/aoc24.bqn
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   XI ← {
     inp ← •ParseFloat¨' 'Split⊑•Flines Input𝕩 ⋄ m ← •HashMap˜⟨⟩
     B ← {
@@ -231,7 +237,30 @@ to get more context. These definitions and imports are shared by the various puz
 #+end_src
 
 #+RESULTS:
-: ⟨ 199982 237149922829154 ⟩
+: "Computed 199982 and 237149922829154 in 0.0604116584s"
+
+** XII
+
+#+begin_src  bqn :tangle ./bqn/aoc24.bqn :exports both
+  XII ← {
+     n‿inp ← ≠⊸⋈>•FLines Input𝕩
+     cf‿cn ← ⟨»˘, », «˘, «⟩‿⟨0‿¯1, ¯1‿0, 0‿1, 1‿0⟩
+     nb‿pr ← (∾¨´⋈·+´¬) inp<⊸=nud ← cf{𝕎𝕩}¨<inp
+     cr ← +´ 1‿1‿3‿3 {n1‿n2←𝕨‿𝕩⊏nud ⋄ n3←n1{𝕏𝕨}𝕩⊑cf
+          ((inp≠n3)∧(inp=n2)∧inp=n1)∨(n1≠inp)∧inp≠n2}¨ 0‿2‿0‿2
+     DFS ← {
+       +´{𝕩⊑v?0; v 1⌾(𝕩⊸⊑)↩ ⋄ a‿p‿c ← 0‿0‿0
+         1⊸↓∘{𝕊: h←⊑𝕩 ⋄ a+↩1 ⋄ p+↩h⊑pr ⋄ c+↩h⊑cr
+   	       𝕩∾{𝕩⊣v 1¨⌾(𝕩⊸⊑)↩}{𝕩/˜(0=𝕩⊑⎊∞¨<v)∧(h⊑nb)∧(∧´≥⟜0∧<⟜n)¨𝕩}cn+<h
+         }•_while_{𝕊: 0<≠𝕩} ⋈𝕩 ⋄ a×p‿c}¨⥊↕≢ v ← 0¨𝕩
+     }
+     eins‿zwei ⇐ DFS inp
+   }
+  XII _is 12
+#+end_src
+
+#+RESULTS:
+: "Computed 1473620 and 902620 in 0.018642635s"
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
