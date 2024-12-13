@@ -241,26 +241,42 @@ powers of the adjacency matrix. This is method is unfortunately slower than simp
 
 ** XII
 
-#+begin_src  bqn :tangle ./bqn/aoc24.bqn :exports both
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   XII ← {
      n‿inp ← ≠⊸⋈>•FLines Input𝕩
-     cf‿cn ← ⟨»˘, », «˘, «⟩‿⟨0‿¯1, ¯1‿0, 0‿1, 1‿0⟩
-     nb‿pr ← (∾¨´⋈·+´¬) inp<⊸=nud ← cf{𝕎𝕩}¨<inp
-     cr ← +´ 1‿1‿3‿3 {n1‿n2←𝕨‿𝕩⊏nud ⋄ n3←n1{𝕏𝕨}𝕩⊑cf
-          ((inp≠n3)∧(inp=n2)∧inp=n1)∨(n1≠inp)∧inp≠n2}¨ 0‿2‿0‿2
-     DFS ← {
+     sf‿sp‿sc ← ⟨»˘, », «˘, «⟩‿⟨0‿¯1, ¯1‿0, 0‿1, 1‿0⟩‿⟨1‿0, 1‿2, 3‿0, 3‿2⟩
+     mn‿mp ← (∾¨´⋈·+´¬) inp<⊸=nud ← sf{𝕎𝕩}¨<inp
+     mc ← +´sc{hv←(sf⊑˜⊢´𝕨){𝔽}⊑h‿v←𝕨⊏nud ⋄ ((𝕩≠h)∧𝕩≠v)∨(𝕩≠hv)∧(𝕩=v)∧𝕩=h}¨<inp
+     BFS ← {
        +´{𝕩⊑v?0; v 1⌾(𝕩⊸⊑)↩ ⋄ a‿p‿c ← 0‿0‿0
-         1⊸↓∘{𝕊: h←⊑𝕩 ⋄ a+↩1 ⋄ p+↩h⊑pr ⋄ c+↩h⊑cr
-   	       𝕩∾{𝕩⊣v 1¨⌾(𝕩⊸⊑)↩}{𝕩/˜(0=𝕩⊑⎊∞¨<v)∧(h⊑nb)∧(∧´≥⟜0∧<⟜n)¨𝕩}cn+<h
+         1⊸↓∘{𝕊: h←⊑𝕩 ⋄ a+↩1 ⋄ p+↩h⊑mp ⋄ c+↩h⊑mc
+   	       𝕩∾{𝕩⊣v 1¨⌾(𝕩⊸⊑)↩}{𝕩/˜(0=𝕩⊑⎊∞¨<v)∧(h⊑mn)∧(∧´≥⟜0∧<⟜n)¨𝕩}sp+<h
          }•_while_{𝕊: 0<≠𝕩} ⋈𝕩 ⋄ a×p‿c}¨⥊↕≢ v ← 0¨𝕩
      }
-     eins‿zwei ⇐ DFS inp
+     eins‿zwei ⇐ BFS inp
    }
   XII _is 12
 #+end_src
 
 #+RESULTS:
-: "Computed 1473620 and 902620 in 0.018642635s"
+: "Computed 1473620 and 902620 in 0.0179634179s"
+
+** XIII
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
+  XIII ← {
+   inp ← {𝕊p‿q‿pq:
+     e ← ∾{∾•Parsefloat⎊⟨⟩¨∾'+'Split¨','Split𝕩}¨ p‿q
+     3‿2⥊e∾∾•Parsefloat⎊⟨⟩¨∾'='Split¨','Split pq
+   }˘∘‿3⥊⟨⟩⊸≢¨⊸/•FLines Input 𝕩
+   C ← (-´×⟜⌽˝){𝕨𝔽_𝕣[a,b,c]: (𝔽÷˜·𝔽¨(𝕨+c)⌾(⊏⍉)⋈(𝕨+c)⌾(⊏⌽∘⍉))⍉a≍b} 
+   eins‿zwei ⇐ {+´⥊3‿1×⎉1(∧´⌊⊸=)˘⊸/𝕩⊸C˘inp}¨ 0‿1e13
+  }
+  XIII _is 13
+#+end_src
+
+#+RESULTS:
+: "Computed 32026 and 89013607072065 in 0.0046754515s"
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
