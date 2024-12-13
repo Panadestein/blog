@@ -269,14 +269,14 @@ powers of the adjacency matrix. This is method is unfortunately slower than simp
      e ← ∾{∾•Parsefloat⎊⟨⟩¨∾'+'Split¨','Split𝕩}¨ p‿q
      3‿2⥊e∾∾•Parsefloat⎊⟨⟩¨∾'='Split¨','Split pq
    }˘∘‿3⥊⟨⟩⊸≢¨⊸/•FLines Input 𝕩
-   C ← (-´×⟜⌽˝){𝕨𝔽_𝕣[a,b,c]: (𝔽÷˜·𝔽¨(𝕨+c)⌾(⊏⍉)⋈(𝕨+c)⌾(⊏⌽∘⍉))⍉a≍b} 
+   C ← (-´×⟜⌽˝){𝕨𝔽_𝕣[a,b,c]: (𝔽÷˜(𝕨+c)⌾⊏⋈○𝔽(𝕨+c)⌾(⊏⌽))a≍b} 
    eins‿zwei ⇐ {+´⥊3‿1×⎉1(∧´⌊⊸=)˘⊸/𝕩⊸C˘inp}¨ 0‿1e13
   }
   XIII _is 13
 #+end_src
 
 #+RESULTS:
-: "Computed 32026 and 89013607072065 in 0.0046754515s"
+: "Computed 32026 and 89013607072065 in 0.0044758065s"
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
