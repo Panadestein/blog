@@ -39,6 +39,26 @@ to get more context. These definitions and imports are shared by the various puz
 #+RESULTS:
 : (1-modifier block)
 
+The 1 modifier prints the solution for the two parts, and the 10 runs average the total runtime (including parsing).
+For reference, this is the CPU that was used:
+
+#+begin_export html
+<br/>
+<details>
+<summary>inxi -C</summary>
+#+end_export
+
+#+begin_src bash
+  CPU:
+    Info: 8-core model: AMD Ryzen 7 PRO 7840U w/ Radeon 780M Graphics bits: 64
+      type: MT MCP cache: L2: 8 MiB
+    Speed (MHz): avg: 2048 min/max: 400/5132
+#+end_src
+
+#+begin_export html
+</details>
+#+end_export
+
 ** I
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
