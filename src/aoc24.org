@@ -40,12 +40,12 @@ to get more context. These definitions and imports are shared by the various puz
 : (1-modifier block)
 
 The 1 modifier prints the solution for the two parts, and the 10 runs average the total runtime (including parsing).
-For reference, this is the CPU that was used:
+For reference, these are my CPU's specs:
 
 #+begin_export html
-<br/>
 <details>
 <summary>inxi -C</summary>
+<br/>
 #+end_export
 
 #+begin_src bash
