@@ -39,7 +39,7 @@ to get more context. These definitions and imports are shared by the various puz
 #+RESULTS:
 : (1-modifier block)
 
-The 1 modifier prints the solution for the two parts, and the 10 runs average the total runtime (including parsing).
+The 1-modifier prints the solution for the two parts, and a 10-runs average total runtime (including parsing).
 For reference, these are my CPU's specs:
 
 #+begin_export html
@@ -48,7 +48,7 @@ For reference, these are my CPU's specs:
 <br/>
 #+end_export
 
-#+begin_src bash
+#+begin_src
   CPU:
     Info: 8-core model: AMD Ryzen 7 PRO 7840U w/ Radeon 780M Graphics bits: 64
       type: MT MCP cache: L2: 8 MiB
