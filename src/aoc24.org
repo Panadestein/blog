@@ -188,7 +188,7 @@ to get more context. These definitions and imports are shared by the various puz
 ** X
 
 In this problem I have included additional functions to solve it in an array way using the
-powers of the adjacency matrix. This is method is unfortunately slower than simple dynamic programming.
+powers of the adjacency matrix. This method is unfortunately slower than simple dynamic programming.
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   X ← {
