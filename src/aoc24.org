@@ -297,6 +297,8 @@ powers of the adjacency matrix. This method is unfortunately slower than simple 
 #+RESULTS:
 : "Computed 480 and 875318608908 in 0.0003234552s"
 
+** XIV
+
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   XIV ← {
     sm ← 0⥊˜s ← 101‿103 ⋄ inp ← 2‿2⊸⥊˘>SInts¨•FLines Input𝕩
