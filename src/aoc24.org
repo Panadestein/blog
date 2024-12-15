@@ -304,13 +304,13 @@ powers of the adjacency matrix. This method is unfortunately slower than simple 
     sm ← 0⥊˜s ← 101‿103 ⋄ inp ← 2‿2⊸⥊˘>SInts¨•FLines Input𝕩
     Q ← {𝕊r: ×´+´∘⥊¨0‿2‿6‿8⊏⥊(({/𝕩∾1∾𝕩}·⌊÷⟜2)¨s)⊔+˝{1⌾((s|𝕨+r×𝕩)⊸⊑)sm}˝˘inp}
     eins ⇐ Q 100
-    zwei ⇐ ⊑⍋Q¨↕×´s
+    zwei ⇐ ⊑⍋Q¨↕•math.LCM´s
   }
   XIV _is 14
 #+end_src
 
 #+RESULTS:
-: "Computed 229069152 and 7383 in 5.2198944132s"
+: "Computed 229069152 and 7383 in 5.588899306s"
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
