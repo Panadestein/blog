@@ -29,8 +29,7 @@ to get more context. These definitions and imports are shared by the various puz
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn
   Split ← (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
-  Ints ← {•ParseFloat¨((¯1+⊢×·+`»⊸<)𝕩∊'0'+↕10)⊔𝕩}
-  SInts ← {•ParseFloat¨((¯1+⊢×·+`»⊸<)𝕩∊'-'∾'0'+↕10)⊔𝕩}
+  Ints ← {•ParseFloat¨((¯1+⊢×·+`»⊸<)𝕩∊𝕨∾'0'+↕10)⊔𝕩}
   Input ← {"../supp/aoc/2024/"∾".inp"∾˜•Fmt𝕩}
   _is ← {
    ∾⟨"Computed ", •Fmt(𝔽𝕩).eins, " and ",
@@ -301,7 +300,7 @@ powers of the adjacency matrix. This method is unfortunately slower than simple 
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   XIV ← {
-    sm ← 0⥊˜s ← 101‿103 ⋄ inp ← 2‿2⊸⥊˘>SInts¨•FLines Input𝕩
+    sm ← 0⥊˜s ← 101‿103 ⋄ inp ← 2‿2⊸⥊˘>'-'⊸Ints¨•FLines Input𝕩
     Q ← {𝕊r: ×´+´∘⥊¨0‿2‿6‿8⊏⥊(({/𝕩∾1∾𝕩}·⌊÷⟜2)¨s)⊔+˝{1⌾((s|𝕨+r×𝕩)⊸⊑)sm}˝˘inp}
     eins ⇐ Q 100
     zwei ⇐ ⊑⍋Q¨↕•math.LCM´s
@@ -310,7 +309,35 @@ powers of the adjacency matrix. This method is unfortunately slower than simple 
 #+end_src
 
 #+RESULTS:
-: "Computed 229069152 and 7383 in 5.588899306s"
+: "Computed 229069152 and 7383 in 5.4615302822s"
+
+** XV
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
+  XV ← {
+    ri ← ⊑/○⥊⟜(↕≢)'@'=⊑w‿m ← >⊸⋈⟜∾´(⊢⊔˜·+`⟨⟩⊸≡¨)•FLines Input𝕩
+    m{<˘⌽⍉>"v^"‿"><"(-˝=⌜)¨<𝕩}↩
+    oid ← ∘‿2⥊/○⥊⟜(↕≢) 'O'=wd ← (⊢/˜2×1⥊˜≠)˘w ⋄ rid‿ridp ← /○⥊⟜(↕≢) '@'=wd
+    wd '.'⌾(ridp⊸⊑)↩ ⋄ {@ ⊣ wd(']'⌾(𝕩⊸⊑)'['⌾(𝕨⊸⊑))↩}´˘oid
+    DFS ← {dr𝕊r:
+      Step ← {
+        '#'=w⊑˜𝕩+dr ? 1;
+        '['=w⊑˜𝕩+dr ? 𝕊𝕩+dr+0‿1 ? 1;
+        ']'=w⊑˜𝕩+dr ? 𝕊𝕩+dr-0‿1 ? 1;
+        ⊑"[O]"∊˜w⊑˜𝕩+dr ? 𝕊𝕩+dr ? 1;
+        0 ⊣ w('.'⌾(𝕩⊸⊑)(𝕩⊑w)⌾((𝕩+dr)⊸⊑))↩
+      }
+      cw ← w ⋄ Step◶{𝕊: 𝕩+dr}‿{𝕊: w↩cw ⋄ 𝕩} r
+    }
+    ri DFS´m ⋄ eins ⇐ +´⥊100‿1×⎉1>/○⥊⟜(↕≢)'O'=w
+    w↩wd ⋄ rid DFS´m ⋄ zwei ⇐ +´⥊100‿1×⎉1>/○⥊⟜(↕≢)'['=w
+  }
+  XV _is 15
+#+end_src
+
+#+RESULTS:
+: "Computed 1446158 and 1446175 in 0.0177348094s"
+
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
