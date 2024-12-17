@@ -208,7 +208,7 @@ For reference, these are my CPU's specs:
 
 ** X
 
-In this problem I have included additional functions to solve it in an array way using the
+For this problem I have included additional functions to solve it in an array way using the
 powers of the adjacency matrix. This method is unfortunately slower than simple dynamic programming.
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
@@ -340,24 +340,78 @@ powers of the adjacency matrix. This method is unfortunately slower than simple 
 
 ** XVI
 
-I dislike graph algorithms for their messy, imperative solutions with impurities and fancy data structures.
-This problem is usually solved with Dijkstra, but after days of "Fortranized" DFS and BFS, I turned to an
-expert array programmer's [[https://github.com/dzaima/aoc][solution]] and reworked mine:
+I dislike implementing graph algorithms with their messy, imperative solutions, side effects, and fancy data structures.
+Usually, a problem like this is solved using Dijkstra's algorithm, but after days of implementing “Fortranized” DFS and BFS,
+I decided to borrow ideas from an expert array programmer's [[https://github.com/dzaima/aoc][solutions]] and rework mine into a more elegant, array-oriented style:
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   XVI ← {
     r‿s‿e ← ⟨'#'⊸≠, 'S'⊸=, 'E'⊸=⟩{𝕎𝕩}¨<inp ← >•FLines Input𝕩
     _fp ← {𝔽∘⊢⍟≢⟜𝔽_𝕣∘⊢⍟≢⟜𝔽𝕩} ⋄ _m ← {𝕩{𝕏𝕨}¨𝔽⟨»,»˘,«,«˘⟩} ⋄ inf ← -2⋆31
     dij ← ⌊´∘{⟨⊢_m, 1⊸⌽⌊1⊸⌽⁼, ⊢⟩{r<⊸×𝕎𝕩}¨⟨𝕩+1, 𝕩+1e3, 𝕩⟩}_fp 0‿inf‿0‿0×<s
-    mn‿mr‿mrc ← r⊸∧¨¨ {⟨¯1+2⊸⌽_m𝕩, 1⌽𝕩-1e3, 1⌽⁼𝕩-1e3⟩=<𝕩}dij
+    mn‿mr‿mrc ← r⊸∧¨¨ {⟨2⊸⌽_m𝕩-1, 1⌽𝕩-1e3, 1⌽⁼𝕩-1e3⟩=<𝕩}dij
     eins ⇐ inf -˜ opt ← (⌊´dij) ⊑˜⊑/○⥊⟜(↕≢)e
-    zwei ⇐ +´⥊∨´ {∨´⟨mn∧2⊸⌽𝕩, mr∧1⌽𝕩, mrc∧1⌽⁼𝕩, 𝕩⟩}_fp e<⊸∧dij=opt
+    zwei ⇐ +´⥊∨´ ∨´∘{⟨mn∧2⊸⌽_m𝕩, mr∧1⌽𝕩, mrc∧1⌽⁼𝕩, 𝕩⟩}_fp e<⊸∧dij=opt
   }
   XVI _is 16
 #+end_src
 
 #+RESULTS:
-: "Computed 99448 and 1 in 0.049628195s"
+: "Computed 99448 and 498 in 0.0590324928s"
+
+As a note to myself and anyone interested in learning the craft, I will describe how the above code works.
+We start by parsing the map and getting boolean masks for the walls, start and end positions (=r‿s‿p=). We then defined
+a fixed point modifier =_fp=, and a motion modifier =_m=. The latter performs nudge operations on the array,
+simulating cardinal coordinate steps up, left, down and right. By operating in the appropriate function,
+we can take these steps in any order. In addition, we need the initial position to be =¯∞=,
+but for efficient (and correct) arithmetic we define it as the minimum =i32= negative integer.
+
+For part one, we start with four copies of the input array, all zeros except the second one which has the value =inf=
+in the start's index. Those arrays correspond to the four directions. Then we apply the following procedure until
+the input stabilizes:
+
+1. Apply the four nudges with a cost of 1
+2. Apply both clockwise and counterclockwise 90° rotations, each with a cost of 1e3,
+   and select the minimal-cost configuration in each direction. A bit difficult to see, but this helped me understand it:
+   
+#+begin_src bqn :exports both
+  >⟨⊢, 1⊸⌽, 1⊸⌽⁼, 2⊸⌽⟩ {𝕎𝕩}⌜ <⟨»,»˘,«,«˘⟩
+#+end_src
+
+#+RESULTS:
+: ┌─             
+: ╵ »  »˘ «  «˘  
+:   »˘ «  «˘ »   
+:   «˘ »  »˘ «   
+:   «  «˘ »  »˘  
+:               ┘
+
+3. [@3] Combine these new states with the original input state, and mask them by the walls so only valid paths remain.
+4. Take the minimal-cost state from each of the four directions.
+5. Find the fixed point, the stable configuration with minimal cost. The minimum value at the end position across
+   the four-direction array is the solution, offset by =inf=. In effect, we have implemented a variant of
+   Dijkstra’s algorithm purely with array operations and functional transformations,
+   without explicit loops or priority queues.
+
+Some important remarks:
+
+- At any given point, the shortest path to a particular tile may arrive from a different orientation than
+  previously considered. Minimizing across the four directional arrays at each step ensures that one consistently
+  chooses the lowest possible cost for each position, no matter how it is reached.
+- Once reached the fixed point, the four orientation-based configurations represent stable minimal costs
+  for approaching each tile from each direction. The final step is to minimize across all four directional
+  costs for the end tile to get the absolute minimal cost path.
+
+For part two, we already know the minimal costs and directions for every tile, so we now want to find
+which tiles lie on at least one best path. To do this, we trace the solution backward from the end tile.
+First, we consider the inverse of our forward steps and rotations: we look at moving backwards and applying
+inverse rotations, which are identical for 90° turns since they are their own inverses. Using the final
+minimal cost configuration, we create masks indicating which tiles, if we moved from them in reverse,
+would correctly reproduce the forward cost offsets. We still apply the walls mask to avoid invalid positions.
+Starting with an array initialized such that only the end tile (in the appropriate direction) and
+with optimal value is marked, we propagate backwards, selecting tiles that could have led to the minimal
+cost at the end. This backward propagation continues until it stabilizes, reaching a new fixed point.
+At the end, we have identified all tiles that are part of at least one best path.
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
