@@ -405,8 +405,9 @@ Some important remarks:
 For part two, we already know the minimal costs and directions for every tile, so we now want to find
 which tiles lie on at least one best path. To do this, we trace the solution backward from the end tile.
 First, we consider the inverse of our forward steps and rotations: we look at moving backwards and applying
-inverse rotations, which are identical for 90° turns since they are their own inverses. Using the final
-minimal cost configuration, we create masks indicating which tiles, if we moved from them in reverse,
+inverse rotations, which are identical for 90° turns since they are their own inverses.
+
+Using the final minimal cost configuration, we create masks indicating which tiles, if we moved from them in reverse,
 would correctly reproduce the forward cost offsets. We still apply the walls mask to avoid invalid positions.
 Starting with an array initialized such that only the end tile (in the appropriate direction) and
 with optimal value is marked, we propagate backwards, selecting tiles that could have led to the minimal
