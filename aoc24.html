@@ -215,28 +215,28 @@ text-align: center;
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgced91ad">I</a></li>
-<li><a href="#org1487e7c">II</a></li>
-<li><a href="#org4f99add">III</a></li>
-<li><a href="#org5b84f48">IV</a></li>
-<li><a href="#org99ccadb">V</a></li>
-<li><a href="#org9469602">VI</a></li>
-<li><a href="#orga7b3a9e">VII</a></li>
-<li><a href="#org226db6b">VIII</a></li>
-<li><a href="#orgb942f24">IX</a></li>
-<li><a href="#org566d958">X</a></li>
-<li><a href="#orgb256a79">XI</a></li>
-<li><a href="#org4dd466b">XII</a></li>
-<li><a href="#org2058fae">XIII</a></li>
-<li><a href="#org20b0e1f">XIV</a></li>
-<li><a href="#orgca4d497">XV</a></li>
-<li><a href="#orgbae358e">XVI</a></li>
+<li><a href="#org169d4ba">I</a></li>
+<li><a href="#org6e6b4fd">II</a></li>
+<li><a href="#orga96a03a">III</a></li>
+<li><a href="#org313174a">IV</a></li>
+<li><a href="#orgabbe165">V</a></li>
+<li><a href="#org684bde1">VI</a></li>
+<li><a href="#org03bec7c">VII</a></li>
+<li><a href="#org4a9f530">VIII</a></li>
+<li><a href="#org5a26ab5">IX</a></li>
+<li><a href="#org4858f25">X</a></li>
+<li><a href="#orgb77479a">XI</a></li>
+<li><a href="#org9c9dbb9">XII</a></li>
+<li><a href="#org405a9a2">XIII</a></li>
+<li><a href="#org4a285d2">XIV</a></li>
+<li><a href="#org1ae9815">XV</a></li>
+<li><a href="#org1263768">XVI</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org1caceb2" class="outline-2">
-<h2 id="org1caceb2">Foreword</h2>
-<div class="outline-text-2" id="text-org1caceb2">
+<div id="outline-container-org12e18c2" class="outline-2">
+<h2 id="org12e18c2">Foreword</h2>
+<div class="outline-text-2" id="text-org12e18c2">
 <p>
 Welcome to my <a href="https://adventofcode.com/2024">Advent of Code</a> solutions for the year 2024. Please read the puzzles' descriptions upstream
 to get more context. These definitions and imports are shared by the various puzzles:
@@ -273,9 +273,9 @@ For reference, these are my CPU's specs:
 </details>
 </div>
 </div>
-<div id="outline-container-orgced91ad" class="outline-2">
-<h2 id="orgced91ad">I</h2>
-<div class="outline-text-2" id="text-orgced91ad">
+<div id="outline-container-org169d4ba" class="outline-2">
+<h2 id="org169d4ba">I</h2>
+<div class="outline-text-2" id="text-org169d4ba">
 <div class="org-src-container">
 <pre class="src src-bqn">I ← {
   inp ← &gt;(•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -291,9 +291,9 @@ I _is 1
 </pre>
 </div>
 </div>
-<div id="outline-container-org1487e7c" class="outline-2">
-<h2 id="org1487e7c">II</h2>
-<div class="outline-text-2" id="text-org1487e7c">
+<div id="outline-container-org6e6b4fd" class="outline-2">
+<h2 id="org6e6b4fd">II</h2>
+<div class="outline-text-2" id="text-org6e6b4fd">
 <div class="org-src-container">
 <pre class="src src-bqn">II ← {
   inp ← (-´˘·2⊸↕·•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -311,9 +311,9 @@ II _is 2
 </pre>
 </div>
 </div>
-<div id="outline-container-org4f99add" class="outline-2">
-<h2 id="org4f99add">III</h2>
-<div class="outline-text-2" id="text-org4f99add">
+<div id="outline-container-orga96a03a" class="outline-2">
+<h2 id="orga96a03a">III</h2>
+<div class="outline-text-2" id="text-orga96a03a">
 <div class="org-src-container">
 <pre class="src src-bqn">III ← {
   mem ← •FChars Input𝕩
@@ -334,9 +334,9 @@ III _is 3
 </pre>
 </div>
 </div>
-<div id="outline-container-org5b84f48" class="outline-2">
-<h2 id="org5b84f48">IV</h2>
-<div class="outline-text-2" id="text-org5b84f48">
+<div id="outline-container-org313174a" class="outline-2">
+<h2 id="org313174a">IV</h2>
+<div class="outline-text-2" id="text-org313174a">
 <div class="org-src-container">
 <pre class="src src-bqn">IV ← {
   inp ← &gt;•FLines Input 𝕩
@@ -353,9 +353,9 @@ IV _is 4
 </pre>
 </div>
 </div>
-<div id="outline-container-org99ccadb" class="outline-2">
-<h2 id="org99ccadb">V</h2>
-<div class="outline-text-2" id="text-org99ccadb">
+<div id="outline-container-orgabbe165" class="outline-2">
+<h2 id="orgabbe165">V</h2>
+<div class="outline-text-2" id="text-orgabbe165">
 <div class="org-src-container">
 <pre class="src src-bqn">V ← {
   p‿r ← ",|" •ParseFloat⚇1∘(Split¨)¨ 1↓(∧`⊸+⟨⟩⊸≢¨)⊸⊔ •FLines Input𝕩
@@ -372,9 +372,9 @@ V _is 5
 </pre>
 </div>
 </div>
-<div id="outline-container-org9469602" class="outline-2">
-<h2 id="org9469602">VI</h2>
-<div class="outline-text-2" id="text-org9469602">
+<div id="outline-container-org684bde1" class="outline-2">
+<h2 id="org684bde1">VI</h2>
+<div class="outline-text-2" id="text-org684bde1">
 <div class="org-src-container">
 <pre class="src src-bqn">VI ← {
   hm ← (↕∘≢•HashMap○⥊⊢) inp ← &gt;•Flines Input𝕩
@@ -395,9 +395,9 @@ VI _is 6
 </pre>
 </div>
 </div>
-<div id="outline-container-orga7b3a9e" class="outline-2">
-<h2 id="orga7b3a9e">VII</h2>
-<div class="outline-text-2" id="text-orga7b3a9e">
+<div id="outline-container-org03bec7c" class="outline-2">
+<h2 id="org03bec7c">VII</h2>
+<div class="outline-text-2" id="text-org03bec7c">
 <div class="org-src-container">
 <pre class="src src-bqn">VII ← {
   inp ← (⊑⊸⋈○(•ParseFloat¨' '⊸Split)´':'⊸Split)¨•FLines Input𝕩
@@ -414,9 +414,9 @@ VII _is 7
 </pre>
 </div>
 </div>
-<div id="outline-container-org226db6b" class="outline-2">
-<h2 id="org226db6b">VIII</h2>
-<div class="outline-text-2" id="text-org226db6b">
+<div id="outline-container-org4a9f530" class="outline-2">
+<h2 id="org4a9f530">VIII</h2>
+<div class="outline-text-2" id="text-org4a9f530">
 <div class="org-src-container">
 <pre class="src src-bqn">VIII ← {
   n ← ≠⊑inp‿ant ← (⊢⋈1↓⍷∘⥊)&gt;•FLines Input𝕩
@@ -433,9 +433,9 @@ VIII _is 8
 </pre>
 </div>
 </div>
-<div id="outline-container-orgb942f24" class="outline-2">
-<h2 id="orgb942f24">IX</h2>
-<div class="outline-text-2" id="text-orgb942f24">
+<div id="outline-container-org5a26ab5" class="outline-2">
+<h2 id="org5a26ab5">IX</h2>
+<div class="outline-text-2" id="text-org5a26ab5">
 <div class="org-src-container">
 <pre class="src src-bqn">IX ← {
    f‿s ← &lt;˘⍉↑‿2⥊•ParseFloat∘⋈¨⊑•FLines Input𝕩
@@ -455,11 +455,11 @@ IX _is 9
 </pre>
 </div>
 </div>
-<div id="outline-container-org566d958" class="outline-2">
-<h2 id="org566d958">X</h2>
-<div class="outline-text-2" id="text-org566d958">
+<div id="outline-container-org4858f25" class="outline-2">
+<h2 id="org4858f25">X</h2>
+<div class="outline-text-2" id="text-org4858f25">
 <p>
-In this problem I have included additional functions to solve it in an array way using the
+For this problem I have included additional functions to solve it in an array way using the
 powers of the adjacency matrix. This method is unfortunately slower than simple dynamic programming.
 </p>
 
@@ -494,9 +494,9 @@ X _is 10
 </pre>
 </div>
 </div>
-<div id="outline-container-orgb256a79" class="outline-2">
-<h2 id="orgb256a79">XI</h2>
-<div class="outline-text-2" id="text-orgb256a79">
+<div id="outline-container-orgb77479a" class="outline-2">
+<h2 id="orgb77479a">XI</h2>
+<div class="outline-text-2" id="text-orgb77479a">
 <div class="org-src-container">
 <pre class="src src-bqn">XI ← {
   inp ← •ParseFloat¨' 'Split⊑•Flines Input𝕩 ⋄ m ← •HashMap˜⟨⟩
@@ -519,9 +519,9 @@ XI _is 11
 </pre>
 </div>
 </div>
-<div id="outline-container-org4dd466b" class="outline-2">
-<h2 id="org4dd466b">XII</h2>
-<div class="outline-text-2" id="text-org4dd466b">
+<div id="outline-container-org9c9dbb9" class="outline-2">
+<h2 id="org9c9dbb9">XII</h2>
+<div class="outline-text-2" id="text-org9c9dbb9">
 <div class="org-src-container">
 <pre class="src src-bqn">XII ← {
    n‿inp ← ≠⊸⋈&gt;•FLines Input𝕩
@@ -545,9 +545,9 @@ XII _is 12
 </pre>
 </div>
 </div>
-<div id="outline-container-org2058fae" class="outline-2">
-<h2 id="org2058fae">XIII</h2>
-<div class="outline-text-2" id="text-org2058fae">
+<div id="outline-container-org405a9a2" class="outline-2">
+<h2 id="org405a9a2">XIII</h2>
+<div class="outline-text-2" id="text-org405a9a2">
 <div class="org-src-container">
 <pre class="src src-bqn">XIII ← {
  ∘‿3‿2⥊∾Ints¨⟨⟩⊸≢¨⊸/•FLines Input 𝕩
@@ -563,9 +563,9 @@ XIII _is 13
 </pre>
 </div>
 </div>
-<div id="outline-container-org20b0e1f" class="outline-2">
-<h2 id="org20b0e1f">XIV</h2>
-<div class="outline-text-2" id="text-org20b0e1f">
+<div id="outline-container-org4a285d2" class="outline-2">
+<h2 id="org4a285d2">XIV</h2>
+<div class="outline-text-2" id="text-org4a285d2">
 <div class="org-src-container">
 <pre class="src src-bqn">XIV ← {
   sm ← 0⥊˜s ← 101‿103 ⋄ inp ← 2‿2⊸⥊˘&gt;'-'⊸Ints¨•FLines Input𝕩
@@ -582,9 +582,9 @@ XIV _is 14
 </pre>
 </div>
 </div>
-<div id="outline-container-orgca4d497" class="outline-2">
-<h2 id="orgca4d497">XV</h2>
-<div class="outline-text-2" id="text-orgca4d497">
+<div id="outline-container-org1ae9815" class="outline-2">
+<h2 id="org1ae9815">XV</h2>
+<div class="outline-text-2" id="text-org1ae9815">
 <div class="org-src-container">
 <pre class="src src-bqn">XV ← {
   ri ← ⊑/○⥊⟜(↕≢)'@'=⊑w‿m ← &gt;⊸⋈⟜∾´(⊢⊔˜·+`⟨⟩⊸≡¨)•FLines Input𝕩
@@ -613,13 +613,13 @@ XV _is 15
 </pre>
 </div>
 </div>
-<div id="outline-container-orgbae358e" class="outline-2">
-<h2 id="orgbae358e">XVI</h2>
-<div class="outline-text-2" id="text-orgbae358e">
+<div id="outline-container-org1263768" class="outline-2">
+<h2 id="org1263768">XVI</h2>
+<div class="outline-text-2" id="text-org1263768">
 <p>
-I dislike graph algorithms for their messy, imperative solutions with impurities and fancy data structures.
-This problem is usually solved with Dijkstra, but after days of "Fortranized" DFS and BFS, I turned to an
-expert array programmer's <a href="https://github.com/dzaima/aoc">solution</a> and reworked mine:
+I dislike implementing graph algorithms with their messy, imperative solutions, side effects, and fancy data structures.
+Usually, a problem like this is solved using Dijkstra's algorithm, but after days of implementing “Fortranized” DFS and BFS,
+I decided to borrow ideas from an expert array programmer's <a href="https://github.com/dzaima/aoc">solutions</a> and rework mine into a more elegant, array-oriented style:
 </p>
 
 <div class="org-src-container">
@@ -627,18 +627,89 @@ expert array programmer's <a href="https://github.com/dzaima/aoc">solution</a> a
   r‿s‿e ← ⟨'#'⊸≠, 'S'⊸=, 'E'⊸=⟩{𝕎𝕩}¨&lt;inp ← &gt;•FLines Input𝕩
   _fp ← {𝔽∘⊢⍟≢⟜𝔽_𝕣∘⊢⍟≢⟜𝔽𝕩} ⋄ _m ← {𝕩{𝕏𝕨}¨𝔽⟨»,»˘,«,«˘⟩} ⋄ inf ← -2⋆31
   dij ← ⌊´∘{⟨⊢_m, 1⊸⌽⌊1⊸⌽⁼, ⊢⟩{r&lt;⊸×𝕎𝕩}¨⟨𝕩+1, 𝕩+1e3, 𝕩⟩}_fp 0‿inf‿0‿0×&lt;s
-  mn‿mr‿mrc ← r⊸∧¨¨ {⟨¯1+2⊸⌽_m𝕩, 1⌽𝕩-1e3, 1⌽⁼𝕩-1e3⟩=&lt;𝕩}dij
+  mn‿mr‿mrc ← r⊸∧¨¨ {⟨2⊸⌽_m𝕩-1, 1⌽𝕩-1e3, 1⌽⁼𝕩-1e3⟩=&lt;𝕩}dij
   eins ⇐ inf -˜ opt ← (⌊´dij) ⊑˜⊑/○⥊⟜(↕≢)e
-  zwei ⇐ +´⥊∨´ {∨´⟨mn∧2⊸⌽𝕩, mr∧1⌽𝕩, mrc∧1⌽⁼𝕩, 𝕩⟩}_fp e&lt;⊸∧dij=opt
+  zwei ⇐ +´⥊∨´ ∨´∘{⟨mn∧2⊸⌽_m𝕩, mr∧1⌽𝕩, mrc∧1⌽⁼𝕩, 𝕩⟩}_fp e&lt;⊸∧dij=opt
 }
 XVI _is 16
 </pre>
 </div>
 
 <pre class="example">
-"Computed 99448 and 1 in 0.049628195s"
+"Computed 99448 and 498 in 0.0590324928s"
 </pre>
 
+
+<p>
+As a note to myself and anyone interested in learning the craft, I will describe how the above code works.
+We start by parsing the map and getting boolean masks for the walls, start and end positions (<code>r‿s‿p</code>). We then defined
+a fixed point modifier <code>_fp</code>, and a motion modifier <code>_m</code>. The latter performs nudge operations on the array,
+simulating cardinal coordinate steps up, left, down and right. By operating in the appropriate function,
+we can take these steps in any order. In addition, we need the initial position to be <code>¯∞</code>,
+but for efficient (and correct) arithmetic we define it as the minimum <code>i32</code> negative integer.
+</p>
+
+<p>
+For part one, we start with four copies of the input array, all zeros except the second one which has the value <code>inf</code>
+in the start's index. Those arrays correspond to the four directions. Then we apply the following procedure until
+the input stabilizes:
+</p>
+
+<ol class="org-ol">
+<li>Apply the four nudges with a cost of 1</li>
+<li>Apply both clockwise and counterclockwise 90° rotations, each with a cost of 1e3,
+and select the minimal-cost configuration in each direction. A bit difficult to see, but this helped me understand it:</li>
+</ol>
+
+<div class="org-src-container">
+<pre class="src src-bqn">&gt;⟨⊢, 1⊸⌽, 1⊸⌽⁼, 2⊸⌽⟩ {𝕎𝕩}⌜ &lt;⟨»,»˘,«,«˘⟩
+</pre>
+</div>
+
+<pre class="example">
+┌─             
+╵ »  »˘ «  «˘  
+  »˘ «  «˘ »   
+  «˘ »  »˘ «   
+  «  «˘ »  »˘  
+              ┘
+</pre>
+
+
+<ol class="org-ol">
+<li value="3">Combine these new states with the original input state, and mask them by the walls so only valid paths remain.</li>
+<li>Take the minimal-cost state from each of the four directions.</li>
+<li>Find the fixed point, the stable configuration with minimal cost. The minimum value at the end position across
+the four-direction array is the solution, offset by <code>inf</code>. In effect, we have implemented a variant of
+Dijkstra’s algorithm purely with array operations and functional transformations,
+without explicit loops or priority queues.</li>
+</ol>
+
+<p>
+Some important remarks:
+</p>
+
+<ul class="org-ul">
+<li>At any given point, the shortest path to a particular tile may arrive from a different orientation than
+previously considered. Minimizing across the four directional arrays at each step ensures that one consistently
+chooses the lowest possible cost for each position, no matter how it is reached.</li>
+<li>Once reached the fixed point, the four orientation-based configurations represent stable minimal costs
+for approaching each tile from each direction. The final step is to minimize across all four directional
+costs for the end tile to get the absolute minimal cost path.</li>
+</ul>
+
+<p>
+For part two, we already know the minimal costs and directions for every tile, so we now want to find
+which tiles lie on at least one best path. To do this, we trace the solution backward from the end tile.
+First, we consider the inverse of our forward steps and rotations: we look at moving backwards and applying
+inverse rotations, which are identical for 90° turns since they are their own inverses. Using the final
+minimal cost configuration, we create masks indicating which tiles, if we moved from them in reverse,
+would correctly reproduce the forward cost offsets. We still apply the walls mask to avoid invalid positions.
+Starting with an array initialized such that only the end tile (in the appropriate direction) and
+with optimal value is marked, we propagate backwards, selecting tiles that could have led to the minimal
+cost at the end. This backward propagation continues until it stabilizes, reaching a new fixed point.
+At the end, we have identified all tiles that are part of at least one best path.
+</p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
