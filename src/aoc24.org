@@ -208,9 +208,6 @@ For reference, these are my CPU's specs:
 
 ** X
 
-For this problem I have included additional functions to solve it in an array way using the
-powers of the adjacency matrix. This method is unfortunately slower than simple dynamic programming.
-
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   X ← {
     inp ← >'0'-˜•FLines Input𝕩
@@ -238,6 +235,19 @@ powers of the adjacency matrix. This method is unfortunately slower than simple 
 
 #+RESULTS:
 : "Computed 776 and 1657 in 0.0073447794s"
+
+#+begin_export html
+<details>
+<summary>Commentary</summary>
+<br/>
+#+end_export
+
+For this problem I have included additional functions to solve it in an array way using the
+powers of the adjacency matrix. This method is unfortunately slower than simple dynamic programming.
+
+#+begin_export html
+</details>
+#+end_export
 
 ** XI
 
@@ -340,15 +350,11 @@ powers of the adjacency matrix. This method is unfortunately slower than simple 
 
 ** XVI
 
-I dislike implementing graph algorithms with their messy, imperative solutions, side effects, and fancy data structures.
-Usually, a problem like this is solved using Dijkstra's algorithm, but after days of implementing “Fortranized” DFS and BFS,
-I decided to borrow ideas from an expert array programmer's [[https://github.com/dzaima/aoc][solutions]] and rework mine into a more elegant, array-oriented style:
-
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   XVI ← {
     r‿s‿e ← ⟨'#'⊸≠, 'S'⊸=, 'E'⊸=⟩{𝕎𝕩}¨<inp ← >•FLines Input𝕩
     _fp ← {𝔽∘⊢⍟≢⟜𝔽_𝕣∘⊢⍟≢⟜𝔽𝕩} ⋄ _m ← {𝕩{𝕏𝕨}¨𝔽⟨»,»˘,«,«˘⟩} ⋄ inf ← -2⋆31
-    dij ← ⌊´∘{⟨⊢_m, 1⊸⌽⌊1⊸⌽⁼, ⊢⟩{r<⊸×𝕎𝕩}¨⟨𝕩+1, 𝕩+1e3, 𝕩⟩}_fp 0‿inf‿0‿0×<s
+    dij ← ⌊´∘{⟨⊢_m, 1⊸⌽, 1⊸⌽⁼, ⊢⟩{r<⊸×𝕎𝕩}¨⟨𝕩+1, 𝕩+1e3, 𝕩+1e3, 𝕩⟩}_fp 0‿inf‿0‿0×<s
     mn‿mr‿mrc ← r⊸∧¨¨ {⟨2⊸⌽_m𝕩-1, 1⌽𝕩-1e3, 1⌽⁼𝕩-1e3⟩=<𝕩}dij
     eins ⇐ inf -˜ opt ← (⌊´dij) ⊑˜⊑/○⥊⟜(↕≢)e
     zwei ⇐ +´⥊∨´ ∨´∘{⟨mn∧2⊸⌽_m𝕩, mr∧1⌽𝕩, mrc∧1⌽⁼𝕩, 𝕩⟩}_fp e<⊸∧dij=opt
@@ -357,10 +363,20 @@ I decided to borrow ideas from an expert array programmer's [[https://github.com
 #+end_src
 
 #+RESULTS:
-: "Computed 99448 and 498 in 0.0590324928s"
+: "Computed 99448 and 498 in 0.0639844209s"
 
+#+begin_export html
+<details>
+<summary>Commentary</summary>
+<br/>
+#+end_export
+
+I dislike implementing graph algorithms with their messy, imperative solutions, side effects, and fancy data structures.
+Usually, a problem like this is solved using Dijkstra's algorithm, but after days of implementing “Fortranized” DFS and BFS,
+I decided to borrow ideas from an expert array programmer's [[https://github.com/dzaima/aoc][solutions]] and rework mine into a more elegant, array-oriented style.
 As a note to myself and anyone interested in learning the craft, I will describe how the above code works.
-We start by parsing the map and getting boolean masks for the walls, start and end positions (=r‿s‿p=). We then defined
+
+We start by parsing the map and getting boolean masks for the walls, start and end positions (=r‿s‿e=). We then defined
 a fixed point modifier =_fp=, and a motion modifier =_m=. The latter performs nudge operations on the array,
 simulating cardinal coordinate steps up, left, down and right. By operating in the appropriate function,
 we can take these steps in any order. In addition, we need the initial position to be =¯∞=,
@@ -413,6 +429,10 @@ Starting with an array initialized such that only the end tile (in the appropria
 with optimal value is marked, we propagate backwards, selecting tiles that could have led to the minimal
 cost at the end. This backward propagation continues until it stabilizes, reaching a new fixed point.
 At the end, we have identified all tiles that are part of at least one best path.
+
+#+begin_export html
+</details>
+#+end_export
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
