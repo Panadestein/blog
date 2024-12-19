@@ -215,28 +215,30 @@ text-align: center;
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgaf59104">I</a></li>
-<li><a href="#orgfebac27">II</a></li>
-<li><a href="#orge87bf89">III</a></li>
-<li><a href="#orgc40b3ac">IV</a></li>
-<li><a href="#org710013f">V</a></li>
-<li><a href="#orgb0fab6a">VI</a></li>
-<li><a href="#org19e0038">VII</a></li>
-<li><a href="#org51b9331">VIII</a></li>
-<li><a href="#org0589360">IX</a></li>
-<li><a href="#orgc95e44d">X</a></li>
-<li><a href="#org7aaaaa2">XI</a></li>
-<li><a href="#org9f014d8">XII</a></li>
-<li><a href="#orga43175b">XIII</a></li>
-<li><a href="#org1c1ae21">XIV</a></li>
-<li><a href="#org986d2de">XV</a></li>
-<li><a href="#org8cae46b">XVI</a></li>
+<li><a href="#org6732313">I</a></li>
+<li><a href="#orgf8da2ab">II</a></li>
+<li><a href="#org0234958">III</a></li>
+<li><a href="#orgb8adb26">IV</a></li>
+<li><a href="#org13b5bdb">V</a></li>
+<li><a href="#orgbe89f2c">VI</a></li>
+<li><a href="#org30a348a">VII</a></li>
+<li><a href="#org1b99126">VIII</a></li>
+<li><a href="#orgee1a4c6">IX</a></li>
+<li><a href="#org6e967a7">X</a></li>
+<li><a href="#orgb07069e">XI</a></li>
+<li><a href="#org24ec3e0">XII</a></li>
+<li><a href="#org9bb1fb4">XIII</a></li>
+<li><a href="#orgc6a3efa">XIV</a></li>
+<li><a href="#org6ee03c5">XV</a></li>
+<li><a href="#org8e9f437">XVI</a></li>
+<li><a href="#orga8aae68">XVII</a></li>
+<li><a href="#org033fdc9">XVIII</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org07b47e8" class="outline-2">
-<h2 id="org07b47e8">Foreword</h2>
-<div class="outline-text-2" id="text-org07b47e8">
+<div id="outline-container-orgd83e0f8" class="outline-2">
+<h2 id="orgd83e0f8">Foreword</h2>
+<div class="outline-text-2" id="text-orgd83e0f8">
 <p>
 Welcome to my <a href="https://adventofcode.com/2024">Advent of Code</a> solutions for the year 2024. Please read the puzzles' descriptions upstream
 to get more context. These definitions and imports are shared by the various puzzles:
@@ -246,6 +248,8 @@ to get more context. These definitions and imports are shared by the various puz
 <pre class="src src-bqn">Split ← (¬-˜⊢×·+`»⊸&gt;)∘≠⊔⊢
 Ints ← {•ParseFloat¨((¯1+⊢×·+`»⊸&lt;)𝕩∊𝕨∾'0'+↕10)⊔𝕩}
 Input ← {"../supp/aoc/2024/"∾".inp"∾˜•Fmt𝕩}
+_fp ← {𝔽∘⊢⍟≢⟜𝔽_𝕣∘⊢⍟≢⟜𝔽𝕩}
+_cnu ← {𝕩{𝕏𝕨}¨𝔽⟨»,»˘,«,«˘⟩}
 _is ← {
  ∾⟨"Computed ", •Fmt(𝔽𝕩).eins, " and ",
     •Fmt(𝔽𝕩).zwei, " in ", •Fmt 10𝔽•_timed𝕩, "s"⟩
@@ -254,7 +258,7 @@ _is ← {
 </div>
 
 <p>
-The 1-modifier prints the solution for the two parts, and a 10-runs average total runtime (including parsing).
+The <code>_is</code> modifier prints the solution for the two parts, and a 10-runs average total runtime (including parsing).
 For reference, these are my CPU's specs:
 </p>
 
@@ -273,9 +277,9 @@ For reference, these are my CPU's specs:
 </details>
 </div>
 </div>
-<div id="outline-container-orgaf59104" class="outline-2">
-<h2 id="orgaf59104">I</h2>
-<div class="outline-text-2" id="text-orgaf59104">
+<div id="outline-container-org6732313" class="outline-2">
+<h2 id="org6732313">I</h2>
+<div class="outline-text-2" id="text-org6732313">
 <div class="org-src-container">
 <pre class="src src-bqn">I ← {
   inp ← &gt;(•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -291,9 +295,9 @@ I _is 1
 </pre>
 </div>
 </div>
-<div id="outline-container-orgfebac27" class="outline-2">
-<h2 id="orgfebac27">II</h2>
-<div class="outline-text-2" id="text-orgfebac27">
+<div id="outline-container-orgf8da2ab" class="outline-2">
+<h2 id="orgf8da2ab">II</h2>
+<div class="outline-text-2" id="text-orgf8da2ab">
 <div class="org-src-container">
 <pre class="src src-bqn">II ← {
   inp ← (-´˘·2⊸↕·•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -311,9 +315,9 @@ II _is 2
 </pre>
 </div>
 </div>
-<div id="outline-container-orge87bf89" class="outline-2">
-<h2 id="orge87bf89">III</h2>
-<div class="outline-text-2" id="text-orge87bf89">
+<div id="outline-container-org0234958" class="outline-2">
+<h2 id="org0234958">III</h2>
+<div class="outline-text-2" id="text-org0234958">
 <div class="org-src-container">
 <pre class="src src-bqn">III ← {
   mem ← •FChars Input𝕩
@@ -334,9 +338,9 @@ III _is 3
 </pre>
 </div>
 </div>
-<div id="outline-container-orgc40b3ac" class="outline-2">
-<h2 id="orgc40b3ac">IV</h2>
-<div class="outline-text-2" id="text-orgc40b3ac">
+<div id="outline-container-orgb8adb26" class="outline-2">
+<h2 id="orgb8adb26">IV</h2>
+<div class="outline-text-2" id="text-orgb8adb26">
 <div class="org-src-container">
 <pre class="src src-bqn">IV ← {
   inp ← &gt;•FLines Input 𝕩
@@ -353,9 +357,9 @@ IV _is 4
 </pre>
 </div>
 </div>
-<div id="outline-container-org710013f" class="outline-2">
-<h2 id="org710013f">V</h2>
-<div class="outline-text-2" id="text-org710013f">
+<div id="outline-container-org13b5bdb" class="outline-2">
+<h2 id="org13b5bdb">V</h2>
+<div class="outline-text-2" id="text-org13b5bdb">
 <div class="org-src-container">
 <pre class="src src-bqn">V ← {
   p‿r ← ",|" •ParseFloat⚇1∘(Split¨)¨ 1↓(∧`⊸+⟨⟩⊸≢¨)⊸⊔ •FLines Input𝕩
@@ -372,9 +376,9 @@ V _is 5
 </pre>
 </div>
 </div>
-<div id="outline-container-orgb0fab6a" class="outline-2">
-<h2 id="orgb0fab6a">VI</h2>
-<div class="outline-text-2" id="text-orgb0fab6a">
+<div id="outline-container-orgbe89f2c" class="outline-2">
+<h2 id="orgbe89f2c">VI</h2>
+<div class="outline-text-2" id="text-orgbe89f2c">
 <div class="org-src-container">
 <pre class="src src-bqn">VI ← {
   hm ← (↕∘≢•HashMap○⥊⊢) inp ← &gt;•Flines Input𝕩
@@ -395,9 +399,9 @@ VI _is 6
 </pre>
 </div>
 </div>
-<div id="outline-container-org19e0038" class="outline-2">
-<h2 id="org19e0038">VII</h2>
-<div class="outline-text-2" id="text-org19e0038">
+<div id="outline-container-org30a348a" class="outline-2">
+<h2 id="org30a348a">VII</h2>
+<div class="outline-text-2" id="text-org30a348a">
 <div class="org-src-container">
 <pre class="src src-bqn">VII ← {
   inp ← (⊑⊸⋈○(•ParseFloat¨' '⊸Split)´':'⊸Split)¨•FLines Input𝕩
@@ -414,9 +418,9 @@ VII _is 7
 </pre>
 </div>
 </div>
-<div id="outline-container-org51b9331" class="outline-2">
-<h2 id="org51b9331">VIII</h2>
-<div class="outline-text-2" id="text-org51b9331">
+<div id="outline-container-org1b99126" class="outline-2">
+<h2 id="org1b99126">VIII</h2>
+<div class="outline-text-2" id="text-org1b99126">
 <div class="org-src-container">
 <pre class="src src-bqn">VIII ← {
   n ← ≠⊑inp‿ant ← (⊢⋈1↓⍷∘⥊)&gt;•FLines Input𝕩
@@ -433,9 +437,9 @@ VIII _is 8
 </pre>
 </div>
 </div>
-<div id="outline-container-org0589360" class="outline-2">
-<h2 id="org0589360">IX</h2>
-<div class="outline-text-2" id="text-org0589360">
+<div id="outline-container-orgee1a4c6" class="outline-2">
+<h2 id="orgee1a4c6">IX</h2>
+<div class="outline-text-2" id="text-orgee1a4c6">
 <div class="org-src-container">
 <pre class="src src-bqn">IX ← {
    f‿s ← &lt;˘⍉↑‿2⥊•ParseFloat∘⋈¨⊑•FLines Input𝕩
@@ -455,9 +459,9 @@ IX _is 9
 </pre>
 </div>
 </div>
-<div id="outline-container-orgc95e44d" class="outline-2">
-<h2 id="orgc95e44d">X</h2>
-<div class="outline-text-2" id="text-orgc95e44d">
+<div id="outline-container-org6e967a7" class="outline-2">
+<h2 id="org6e967a7">X</h2>
+<div class="outline-text-2" id="text-org6e967a7">
 <div class="org-src-container">
 <pre class="src src-bqn">X ← {
   inp ← &gt;'0'-˜•FLines Input𝕩
@@ -491,7 +495,6 @@ X _is 10
 
 <details>
 <summary>Commentary</summary>
-<br/>
 
 <p>
 For this problem I have included additional functions to solve it in an array way using the
@@ -501,9 +504,9 @@ powers of the adjacency matrix. This method is unfortunately slower than simple 
 </details>
 </div>
 </div>
-<div id="outline-container-org7aaaaa2" class="outline-2">
-<h2 id="org7aaaaa2">XI</h2>
-<div class="outline-text-2" id="text-org7aaaaa2">
+<div id="outline-container-orgb07069e" class="outline-2">
+<h2 id="orgb07069e">XI</h2>
+<div class="outline-text-2" id="text-orgb07069e">
 <div class="org-src-container">
 <pre class="src src-bqn">XI ← {
   inp ← •ParseFloat¨' 'Split⊑•Flines Input𝕩 ⋄ m ← •HashMap˜⟨⟩
@@ -526,23 +529,23 @@ XI _is 11
 </pre>
 </div>
 </div>
-<div id="outline-container-org9f014d8" class="outline-2">
-<h2 id="org9f014d8">XII</h2>
-<div class="outline-text-2" id="text-org9f014d8">
+<div id="outline-container-org24ec3e0" class="outline-2">
+<h2 id="org24ec3e0">XII</h2>
+<div class="outline-text-2" id="text-org24ec3e0">
 <div class="org-src-container">
 <pre class="src src-bqn">XII ← {
-   n‿inp ← ≠⊸⋈&gt;•FLines Input𝕩
-   sf‿sp‿sc ← ⟨»˘, », «˘, «⟩‿⟨0‿¯1, ¯1‿0, 0‿1, 1‿0⟩‿⟨1‿0, 1‿2, 3‿0, 3‿2⟩
-   mn‿mp ← (∾¨´⋈·+´¬) inp&lt;⊸=nud ← sf{𝕎𝕩}¨&lt;inp
-   mc ← +´sc{hv←(sf⊑˜⊢´𝕨){𝔽}⊑h‿v←𝕨⊏nud ⋄ ((𝕩≠h)∧𝕩≠v)∨(𝕩≠hv)∧(𝕩=v)∧𝕩=h}¨&lt;inp
-   BFS ← {
-     +´{𝕩⊑v?0; v 1⌾(𝕩⊸⊑)↩ ⋄ a‿p‿c ← 0‿0‿0
-       1⊸↓∘{𝕊: h←⊑𝕩 ⋄ a+↩1 ⋄ p+↩h⊑mp ⋄ c+↩h⊑mc
-               𝕩∾{𝕩⊣v 1¨⌾(𝕩⊸⊑)↩}{𝕩/˜(0=𝕩⊑⎊∞¨&lt;v)∧(h⊑mn)∧(∧´≥⟜0∧&lt;⟜n)¨𝕩}sp+&lt;h
-       }•_while_{𝕊: 0&lt;≠𝕩} ⋈𝕩 ⋄ a×p‿c}¨⥊↕≢ v ← 0¨𝕩
-   }
-   eins‿zwei ⇐ BFS inp
- }
+  n‿inp ← ≠⊸⋈&gt;•FLines Input𝕩
+  sf‿sp‿sc ← ⟨»˘, », «˘, «⟩‿⟨0‿¯1, ¯1‿0, 0‿1, 1‿0⟩‿⟨1‿0, 1‿2, 3‿0, 3‿2⟩
+  mn‿mp ← (∾¨´⋈·+´¬) inp&lt;⊸=nud ← sf{𝕎𝕩}¨&lt;inp
+  mc ← +´sc{hv←(sf⊑˜⊢´𝕨){𝔽}⊑h‿v←𝕨⊏nud ⋄ ((𝕩≠h)∧𝕩≠v)∨(𝕩≠hv)∧(𝕩=v)∧𝕩=h}¨&lt;inp
+  BFS ← {
+    +´{𝕩⊑v?0; v 1⌾(𝕩⊸⊑)↩ ⋄ a‿p‿c ← 0‿0‿0
+      1⊸↓∘{𝕊: h←⊑𝕩 ⋄ a+↩1 ⋄ p+↩h⊑mp ⋄ c+↩h⊑mc
+        𝕩∾{𝕩⊣v 1¨⌾(𝕩⊸⊑)↩}{𝕩/˜(0=𝕩⊑⎊∞¨&lt;v)∧(h⊑mn)∧(∧´≥⟜0∧&lt;⟜n)¨𝕩}sp+&lt;h
+      }•_while_{𝕊: 0&lt;≠𝕩} ⋈𝕩 ⋄ a×p‿c}¨⥊↕≢ v ← 0¨𝕩
+  }
+  eins‿zwei ⇐ BFS inp
+}
 XII _is 12
 </pre>
 </div>
@@ -552,14 +555,14 @@ XII _is 12
 </pre>
 </div>
 </div>
-<div id="outline-container-orga43175b" class="outline-2">
-<h2 id="orga43175b">XIII</h2>
-<div class="outline-text-2" id="text-orga43175b">
+<div id="outline-container-org9bb1fb4" class="outline-2">
+<h2 id="org9bb1fb4">XIII</h2>
+<div class="outline-text-2" id="text-org9bb1fb4">
 <div class="org-src-container">
 <pre class="src src-bqn">XIII ← {
- ∘‿3‿2⥊∾Ints¨⟨⟩⊸≢¨⊸/•FLines Input 𝕩
- C ← (-´×⟜⌽˝){𝕨𝔽_𝕣[a,b,c]: (𝔽÷˜(𝕨+c)⌾⊏⋈○𝔽(𝕨+c)⌾(⊏⌽))a≍b} 
- eins‿zwei ⇐ {+´⥊3‿1×⎉1(∧´⌊⊸=)˘⊸/𝕩⊸C˘inp}¨ 0‿1e13
+  ∘‿3‿2⥊∾Ints¨⟨⟩⊸≢¨⊸/•FLines Input 𝕩
+  C ← (-´×⟜⌽˝){𝕨𝔽_𝕣[a,b,c]: (𝔽÷˜(𝕨+c)⌾⊏⋈○𝔽(𝕨+c)⌾(⊏⌽))a≍b} 
+  eins‿zwei ⇐ {+´⥊3‿1×⎉1(∧´⌊⊸=)˘⊸/𝕩⊸C˘inp}¨ 0‿1e13
 }
 XIII _is 13
 </pre>
@@ -570,9 +573,9 @@ XIII _is 13
 </pre>
 </div>
 </div>
-<div id="outline-container-org1c1ae21" class="outline-2">
-<h2 id="org1c1ae21">XIV</h2>
-<div class="outline-text-2" id="text-org1c1ae21">
+<div id="outline-container-orgc6a3efa" class="outline-2">
+<h2 id="orgc6a3efa">XIV</h2>
+<div class="outline-text-2" id="text-orgc6a3efa">
 <div class="org-src-container">
 <pre class="src src-bqn">XIV ← {
   sm ← 0⥊˜s ← 101‿103 ⋄ inp ← 2‿2⊸⥊˘&gt;'-'⊸Ints¨•FLines Input𝕩
@@ -589,9 +592,9 @@ XIV _is 14
 </pre>
 </div>
 </div>
-<div id="outline-container-org986d2de" class="outline-2">
-<h2 id="org986d2de">XV</h2>
-<div class="outline-text-2" id="text-org986d2de">
+<div id="outline-container-org6ee03c5" class="outline-2">
+<h2 id="org6ee03c5">XV</h2>
+<div class="outline-text-2" id="text-org6ee03c5">
 <div class="org-src-container">
 <pre class="src src-bqn">XV ← {
   ri ← ⊑/○⥊⟜(↕≢)'@'=⊑w‿m ← &gt;⊸⋈⟜∾´(⊢⊔˜·+`⟨⟩⊸≡¨)•FLines Input𝕩
@@ -620,30 +623,28 @@ XV _is 15
 </pre>
 </div>
 </div>
-<div id="outline-container-org8cae46b" class="outline-2">
-<h2 id="org8cae46b">XVI</h2>
-<div class="outline-text-2" id="text-org8cae46b">
+<div id="outline-container-org8e9f437" class="outline-2">
+<h2 id="org8e9f437">XVI</h2>
+<div class="outline-text-2" id="text-org8e9f437">
 <div class="org-src-container">
 <pre class="src src-bqn">XVI ← {
-  r‿s‿e ← ⟨'#'⊸≠, 'S'⊸=, 'E'⊸=⟩{𝕎𝕩}¨&lt;inp ← &gt;•FLines Input𝕩
-  _fp ← {𝔽∘⊢⍟≢⟜𝔽_𝕣∘⊢⍟≢⟜𝔽𝕩} ⋄ _m ← {𝕩{𝕏𝕨}¨𝔽⟨»,»˘,«,«˘⟩} ⋄ inf ← -2⋆31
-  dij ← ⌊´∘{⟨⊢_m, 1⊸⌽, 1⊸⌽⁼, ⊢⟩{r&lt;⊸×𝕎𝕩}¨⟨𝕩+1, 𝕩+1e3, 𝕩+1e3, 𝕩⟩}_fp 0‿inf‿0‿0×&lt;s
-  mn‿mr‿mrc ← r⊸∧¨¨ {⟨2⊸⌽_m𝕩-1, 1⌽𝕩-1e3, 1⌽⁼𝕩-1e3⟩=&lt;𝕩}dij
+  inf ← -2⋆31 ⋄ r‿s‿e ← ⟨'#'⊸≠, 'S'⊸=, 'E'⊸=⟩{𝕎𝕩}¨&lt;inp ← &gt;•FLines Input𝕩
+  dij ← ⌊´∘{⟨⊢_cnu, 1⊸⌽, 1⊸⌽⁼, ⊢⟩{r&lt;⊸×𝕎𝕩}¨⟨𝕩+1, 𝕩+1e3, 𝕩+1e3, 𝕩⟩}_fp 0‿inf‿0‿0×&lt;s
+  mn‿mr‿mrc ← r⊸∧¨¨ {⟨2⊸⌽_cnu𝕩-1, 1⌽𝕩-1e3, 1⌽⁼𝕩-1e3⟩=&lt;𝕩}dij
   eins ⇐ inf -˜ opt ← (⌊´dij) ⊑˜⊑/○⥊⟜(↕≢)e
-  zwei ⇐ +´⥊∨´ ∨´∘{⟨mn∧2⊸⌽_m𝕩, mr∧1⌽𝕩, mrc∧1⌽⁼𝕩, 𝕩⟩}_fp e&lt;⊸∧dij=opt
+  zwei ⇐ +´⥊∨´ ∨´∘{⟨mn∧2⊸⌽_cnu𝕩, mr∧1⌽𝕩, mrc∧1⌽⁼𝕩, 𝕩⟩}_fp e&lt;⊸∧dij=opt
 }
 XVI _is 16
 </pre>
 </div>
 
 <pre class="example">
-"Computed 99448 and 498 in 0.0639844209s"
+"Computed 99448 and 498 in 0.0625257885s"
 </pre>
 
 
 <details>
 <summary>Commentary</summary>
-<br/>
 
 <p>
 I dislike implementing graph algorithms with their messy, imperative solutions, side effects, and fancy data structures.
@@ -654,7 +655,7 @@ As a note to myself and anyone interested in learning the craft, I will describe
 
 <p>
 We start by parsing the map and getting boolean masks for the walls, start and end positions (<code>r‿s‿e</code>). We then defined
-a fixed point modifier <code>_fp</code>, and a motion modifier <code>_m</code>. The latter performs nudge operations on the array,
+a fixed point modifier <code>_fp</code>, and a motion modifier <code>_cnu</code>. The latter performs nudge operations on the array,
 simulating cardinal coordinate steps up, left, down and right. By operating in the appropriate function,
 we can take these steps in any order. In addition, we need the initial position to be <code>¯∞</code>,
 but for efficient (and correct) arithmetic we define it as the minimum <code>i32</code> negative integer.
@@ -726,6 +727,65 @@ At the end, we have identified all tiles that are part of at least one best path
 </p>
 
 </details>
+</div>
+</div>
+<div id="outline-container-orga8aae68" class="outline-2">
+<h2 id="orga8aae68">XVII</h2>
+<div class="outline-text-2" id="text-orga8aae68">
+<div class="org-src-container">
+<pre class="src src-bqn">XVII ← {
+  s32 ← 2⋆31 ⋄ inp ← 3(↑⋈∘‿2⥊↓)∾⟨⟩⊸Ints¨•FLines Input𝕩
+  Xor ← s32⊸×⊸+´32•bit._xor○(s32⊸(⌊∘÷˜⋈|))
+  M ← {r𝕊p:
+    Cmb ← {𝕩≤3? 𝕩; r⊑˜𝕩-4}
+    out←⟨⟩ ⋄ out ⊣ {
+      0‿op𝕊pc: arg←Cmb op ⋄ r(⌊(⊑r)÷2⋆arg)⌾⊑↩ ⋄ pc+1;
+      1‿op𝕊pc: r(op Xor ⊢)⌾(1⊸⊑)↩ ⋄ pc+1;
+      2‿op𝕊pc: arg←Cmb op ⋄ r(8|arg)⌾(1⊸⊑)↩ ⋄ pc+1;
+      3‿op𝕊pc: 0≠◶(pc+1)‿op ⊑r;
+      4‿·𝕊pc:  r((2⊑r)Xor⊢)⌾(1⊸⊑)↩ ⋄ pc+1;
+      5‿op𝕊pc: out∾↩8|Cmb op ⋄ pc+1;
+      6‿op𝕊pc: arg←Cmb op ⋄ r(⌊(⊑r)÷2⋆arg)⌾(1⊸⊑)↩ ⋄ pc+1;
+      7‿op𝕊pc: arg←Cmb op ⋄ r(⌊(⊑r)÷2⋆arg)⌾(2⊸⊑)↩ ⋄ pc+1
+    }´∘{𝕩⋈˜𝕩⊏p}•_while_{𝕊: 𝕩≠≠p}0
+  }
+  Q ← {
+    ·‿b‿c ← ⊑r‿p ← 𝕩
+    {(⥊p) ≡ 𝕩‿b‿c M p ? 𝕩;
+     (0=𝕨) ∨ ((-𝕨)↑⥊p) ≡ 𝕩‿b‿c M p ? ⌊´(&lt;𝕨)𝕊{(𝕨+1)𝔽𝕩+8×𝕘}𝕩¨⊒˜p;∞}´0‿0
+  }
+  eins ⇐ 1↓∾','⊸∾¨('0'-@)+@+M´inp
+  zwei ⇐ Q inp
+}
+XVII _is 17
+</pre>
+</div>
+
+<pre class="example">
+"Computed ""2,0,1,3,4,0,2,1,7"" and 236580836040301 in 0.0484539675s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org033fdc9" class="outline-2">
+<h2 id="org033fdc9">XVIII</h2>
+<div class="outline-text-2" id="text-org033fdc9">
+<div class="org-src-container">
+<pre class="src src-bqn">XVIII ← {
+  n‿inf ← 70⋈1e9 ⋄ inp ← &gt;⟨⟩⊸Ints¨•FLines Input𝕩
+  g ← 1⌾⊑0¨ b ← (1⥊˜1+n‿n) {0⌾(𝕨⊸⊑)𝕩}´&lt;˘1024↑inp
+  _sym ← {M _𝕣𝕩: ⊑{(𝕨+1)⋈m∧∨´⊢_cnu⊸∾&lt;𝕩}´•_while_{𝕊c‿g: (c&lt;inf)∧¬⊢´⊢˝g} 0‿𝕩}
+  _bs ← {Fs _𝕣 l‿r: ⊑{𝕊l‿r: m ← l+⌊2÷˜r-l ⋄ ⟨l‿m,m‿r⟩⊑˜Fs m}_fp𝕩}
+  eins ⇐ b _sym g
+  zwei ⇐ inp⊏˜{𝕊𝕩: p←inp⊏˜𝕩+1024 ⋄ inf &gt; (b 0⌾(p⊸⊑)↩) _sym g}_bs 0⋈1024-˜≠inp
+}
+XVIII _is 18
+</pre>
+</div>
+
+<pre class="example">
+"Computed 248 and ⟨ 17 45 ⟩ in 0.0035222522s"
+</pre>
+
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
