@@ -470,18 +470,20 @@ At the end, we have identified all tiles that are part of at least one best path
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   XVIII ← {
-    n‿inf ← 70⋈1e9 ⋄ inp ← >⟨⟩⊸Ints¨•FLines Input𝕩
+    n ← 70 ⋄ inp ← >⟨⟩⊸Ints¨•FLines Input𝕩
     g ← 1⌾⊑0¨ b ← (1⥊˜1+n‿n) {0⌾(𝕨⊸⊑)𝕩}´<˘1024↑inp
-    _sym ← {M _𝕣𝕩: ⊑{(𝕨+1)⋈m∧∨´⊢_cnu⊸∾<𝕩}´•_while_{𝕊c‿g: (c<inf)∧¬⊢´⊢˝g} 0‿𝕩}
-    _bs ← {Fs _𝕣 l‿r: ⊑{𝕊l‿r: m ← l+⌊2÷˜r-l ⋄ ⟨l‿m,m‿r⟩⊑˜Fs m}_fp𝕩}
+    _sym ← {M _𝕣𝕩: ⊑{(𝕨+1)⋈m∧∨´⊢_cnu⊸∾<𝕩}´•_while_{𝕊: ¬⊢´⊢˝⊢´𝕩} 0‿𝕩}
+    _symv ← {M _𝕣𝕩: 1=⊢´⊢˝{m∧∨´⊢_cnu⊸∾<𝕩}_fp𝕩}
     eins ⇐ b _sym g
-    zwei ⇐ inp⊏˜{𝕊𝕩: p←inp⊏˜𝕩+1024 ⋄ inf > (b 0⌾(p⊸⊑)↩) _sym g}_bs 0⋈1024-˜≠inp
+    zwei ⇐ inp⊏˜⊑{
+      m ← ⌊𝕨+2÷˜𝕩-𝕨 ⋄ ⟨𝕨‿m,m‿𝕩⟩⊑˜{b 0⌾((𝕩⊏inp)⊸⊑)↩ ⋄ b _symv g}m
+    }´_fp 1025⋈≠inp
   }
   XVIII _is 18
 #+end_src
 
 #+RESULTS:
-: "Computed 248 and ⟨ 17 45 ⟩ in 0.0035222522s"
+: "Computed 248 and ⟨ 29 40 ⟩ in 0.0036658128s"
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
