@@ -485,6 +485,41 @@ At the end, we have identified all tiles that are part of at least one best path
 #+RESULTS:
 : "Computed 248 and ⟨ 32 55 ⟩ in 0.0038696174s"
 
+** XIX
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
+  XIX ← {
+    p‿d ← (1⊸↑⋈2⊸↓) •FLines Input𝕩
+    dp ← •HashMap˜⟨⟩ ⋄ p(','⊸≢¨⊸/¨·' '⊸Split∾)↩
+    C ← {
+      dp.Has 𝕩 ? dp.Get 𝕩;
+      𝕩{𝕩⊣𝕨dp.Set𝕩}(𝕩≡⟨⟩)∨+´p𝕊{h‿hs←𝕨(↑⋈↓)˜≠𝕩 ⋄ h≡𝕩 ? 𝔽hs; 0}¨˜<𝕩
+    }
+    zwei‿eins ⇐ (+´⋈·+´0⊸≠)C¨d
+  }
+  XIX _is 19
+#+end_src
+
+#+RESULTS:
+: "Computed 285 and 636483903099279 in 0.4877095598s"
+
+** XX
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
+  XX ← {
+    r‿s ← ⟨'#'⊸≠, 'S'⊸=⟩{𝕎𝕩}¨<inp ← >•FLines Input𝕩
+    Sym ← {ms𝕊𝕩: s←0¨𝕩
+      s(⊢⋈⊑˜)/○⥊⟜(↕≢){{s+↩𝕩⋄𝕩}ms∧∨´⊢_cnu⊸∾<𝕩}_fp𝕩
+    }
+    diff ← (-⌜˜ctn)-mh ← (+´|∘-)⌜˜⊑pth‿ctn ← r Sym s
+    eins‿zwei ⇐ +´¨⟨mh=2, mh≤20⟩{⥊100≤𝕨×𝕩}¨<diff
+  }
+  XX _is 20
+#+end_src
+
+#+RESULTS:
+: "Computed 1463 and 985329 in 2.9507289863s"
+
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
     <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
