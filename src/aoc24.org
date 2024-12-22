@@ -518,7 +518,30 @@ At the end, we have identified all tiles that are part of at least one best path
 #+end_src
 
 #+RESULTS:
-: "Computed 1463 and 985332 in 2.8664751945s"
+: "Computed 1463 and 985332 in 2.9748486369s"
+
+** XXI
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
+  XXI ← {
+    inp ← 3⊸↑¨•FLines Input𝕩
+    kbs ← ["789","456","123"," 0A"]‿[" ^A","<v>"] ⋄ dp ← •HashMap˜⟨⟩
+    F ← {
+      𝕊s‿k‿r: k>r ? ≠s; dp.Has 𝕩 ? dp.Get 𝕩;
+      𝕊s‿k‿r:
+      𝕩{𝕩⊣𝕨dp.Set𝕩}⊑+˝{
+        p‿q‿nl ← (𝕩∾' ')(⊑=/○⥊·↕∘≢⊢)¨<kbs⊑˜k>0
+        ns ← {0<+´×⟜⌽˝q‿p>∘=nl?⌽𝕩;𝕩}"<v^>"/˜0⌈∾¯1‿1⊸×¨⋈⟜⌽q-p
+        F⟨ns∾'A', k+1, r⟩
+      }˘2↕'A'∾s
+    }
+    eins‿zwei ⇐ 2‿25 {+´𝕨{(•ParseFloat𝕩)×F𝕩‿0‿𝕨}¨𝕩}⌜ <inp
+  }
+  XXI _is 21
+#+end_src
+
+#+RESULTS:
+: "Computed 195224 and 308034893632420 in 0.0011020566s"
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
