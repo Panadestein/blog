@@ -28,6 +28,7 @@ Welcome to my [[https://adventofcode.com/2024][Advent of Code]] solutions for th
 to get more context. These definitions and imports are shared by the various puzzles:
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn
+  Xor ← {s32 ← 2⋆31 ⋄ 𝕨(s32⊸×⊸+´32•bit._xor○(s32⊸(⌊∘÷˜⋈|)))𝕩}
   Split ← (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
   Ints ← {•ParseFloat¨((¯1+⊢×·+`»⊸<)𝕩∊𝕨∾'0'+↕10)⊔𝕩}
   Input ← {"../supp/aoc/2024/"∾".inp"∾˜•Fmt𝕩}
@@ -437,8 +438,7 @@ At the end, we have identified all tiles that are part of at least one best path
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   XVII ← {
-    s32 ← 2⋆31 ⋄ inp ← 3(↑⋈∘‿2⥊↓)∾⟨⟩⊸Ints¨•FLines Input𝕩
-    Xor ← s32⊸×⊸+´32•bit._xor○(s32⊸(⌊∘÷˜⋈|))
+    inp ← 3(↑⋈∘‿2⥊↓)∾⟨⟩⊸Ints¨•FLines Input𝕩
     M ← {r𝕊p:
       Cmb ← {𝕩≤3? 𝕩; r⊑˜𝕩-4}
       out←⟨⟩ ⋄ out ⊣ {
@@ -464,7 +464,7 @@ At the end, we have identified all tiles that are part of at least one best path
 #+end_src
 
 #+RESULTS:
-: "Computed ""2,0,1,3,4,0,2,1,7"" and 236580836040301 in 0.0484539675s"
+: "Computed ""2,0,1,3,4,0,2,1,7"" and 236580836040301 in 0.0570494434s"
 
 ** XVIII
 
@@ -524,24 +524,41 @@ At the end, we have identified all tiles that are part of at least one best path
 
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   XXI ← {
-    inp ← 3⊸↑¨•FLines Input𝕩
+    inp ← •FLines Input𝕩
     kbs ← ["789","456","123"," 0A"]‿[" ^A","<v>"] ⋄ dp ← •HashMap˜⟨⟩
     F ← {
-      𝕊s‿k‿r: k>r ? ≠s; dp.Has 𝕩 ? dp.Get 𝕩;
+      >´1↓𝕩 ? ≠⊑𝕩; dp.Has 𝕩 ? dp.Get 𝕩;
       𝕊s‿k‿r:
       𝕩{𝕩⊣𝕨dp.Set𝕩}⊑+˝{
-        p‿q‿nl ← (𝕩∾' ')(⊑=/○⥊·↕∘≢⊢)¨<kbs⊑˜k>0
-        ns ← {0<+´×⟜⌽˝q‿p>∘=nl?⌽𝕩;𝕩}"<v^>"/˜0⌈∾¯1‿1⊸×¨⋈⟜⌽q-p
-        F⟨ns∾'A', k+1, r⟩
+        p‿q‿nl ← (𝕩∾' ')(⊑=/○⥊·↕∘≢⊢)¨<⍉kbs⊑˜k>0
+        F⟨'A'∾˜{0≠+´×⟜⌽˝q‿p>∘=<nl?⌽𝕩;𝕩}"<v^>"/˜0⌈∾¯1‿1⊸×¨⋈⟜⌽q-p, k+1, r⟩
       }˘2↕'A'∾s
     }
-    eins‿zwei ⇐ 2‿25 {+´𝕨{(•ParseFloat𝕩)×F𝕩‿0‿𝕨}¨𝕩}⌜ <inp
+    eins‿zwei ⇐ 2‿25 {+´𝕨{(•ParseFloat 3↑𝕩)×F𝕩‿0‿𝕨}¨𝕩}⌜ <inp
   }
   XXI _is 21
 #+end_src
 
 #+RESULTS:
-: "Computed 195224 and 308034893632420 in 0.0011020566s"
+: "Computed 246990 and 306335137543664 in 0.0011588057s"
+
+** XXII
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
+  XXII ← {
+    dp ← •HashMap˜⟨⟩ ⋄ inp ← •ParseFloat¨ •FLines Input𝕩
+    Ev ← {{16777216|𝕩Xor𝕎𝕩}´⟨2048×⊢, ⌊32÷˜⊢, 64×⊢, 𝕩⟩}
+    Ctn ← dp.Has∘⊢◶⟨dp.Set˜,⊢dp.Set+⟜dp.Get⟩
+    sn ← Ev⍟(↕2001)¨ inp
+    {𝕩{@⊣(4↓𝕨) ⊑⊸Ctn˘○((∊w)⊸/)w←4↕𝕩}¨{-´˘2↕𝕩}¨𝕩} 10|sn
+    eins ⇐ +´⊢´¨sn
+    zwei ⇐ ⌈´dp.Values@
+  }
+  XXII _is 22
+#+end_src
+
+#+RESULTS:
+: "Computed 18317943467 and 2018 in 2.3386385084s"
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
