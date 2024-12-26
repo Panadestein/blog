@@ -559,6 +559,21 @@ At the end, we have identified all tiles that are part of at least one best path
 #+RESULTS:
 : "Computed 18317943467 and 2018 in 2.4735878518s"
 
+** XXIII
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
+  XXIII ← {
+    p‿c ← (⊢⋈·⍷∾)'-'⊸Split¨•FLines Input𝕩
+    m ← +˝∘×⎉1‿∞˜⊸×(⌽¨⊸∾p)∊˜⋈⌜˜c
+    eins ⇐ (2÷˜+´⥊tm)-+´⥊×tm←m/˜('t'=⊑)¨c
+    zwei ⇐ 1↓∾','⊸∾¨∧c/˜⌈´⊸=⌈˝+˝∘×⎉1‿∞˜⊸×m
+  }
+  XXIII _is 23
+#+end_src
+
+#+RESULTS:
+: "Computed 1139 and ""aw,fk,gv,hi,hp,ip,jy,kc,lk,og,pj,re,sr"" in 0.2091337031s"
+
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
     <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
