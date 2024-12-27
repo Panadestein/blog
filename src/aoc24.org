@@ -30,6 +30,7 @@ to get more context. These definitions and imports are shared by the various puz
 #+begin_src bqn :tangle ./bqn/aoc24.bqn
   Xor ← {s32 ← 2⋆31 ⋄ 𝕨(s32⊸×⊸+´32•bit._xor○(s32⊸(⌊∘÷˜⋈|)))𝕩}
   Split ← (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
+  SplitF ← {((¯1+⊢×·+`»⊸<)¬𝕨⊸≡¨𝕩)⊔𝕩}
   Ints ← {•ParseFloat¨((¯1+⊢×·+`»⊸<)𝕩∊𝕨∾'0'+↕10)⊔𝕩}
   Input ← {"../supp/aoc/2024/"∾".inp"∾˜•Fmt𝕩}
   _fp ← {𝔽∘⊢⍟≢⟜𝔽_𝕣∘⊢⍟≢⟜𝔽𝕩}
@@ -62,6 +63,8 @@ For reference, these are my CPU's specs:
 #+begin_export html
 </details>
 #+end_export
+
+You can compare my solutions with those of other BQN programmers in the [[https://mlochbaum.github.io/BQN/community/aoc.html][retrospective]] page.
 
 ** I
 
@@ -573,6 +576,40 @@ At the end, we have identified all tiles that are part of at least one best path
 
 #+RESULTS:
 : "Computed 1139 and ""aw,fk,gv,hi,hp,ip,jy,kc,lk,og,pj,re,sr"" in 0.2091337031s"
+
+** XXIV
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
+  XXIV ← {
+    gs‿os ← (⊢⊔˜·+`⟨⟩⊸≡¨)•FLines Input𝕩
+    op ← "AND"‿"OR"‿"XOR"•HashMap "∧"‿"∨"‿"≠" ⋄ os 1⊸↓↩
+    TS ← {{𝕊⍟(𝕩<○≠⊢)⟜(𝕩∾·/𝕨⊸<)𝕨∨∧´∘⊏⟜𝕨¨p}⟜/0¨p←𝕩}
+    tsn ← (3⊸↑¨gs)∾⊑¨urd ← {a‿o‿b‿·‿r←' 'Split𝕩 ⋄ ⟨r, a‿b⟩}¨os
+    ord ← (≠gs)(↓-⊣)TS(⟨⟨⟩⟩⥊˜≠gs)∾(tsn⊸⊐⊢´)¨urd
+    defs ← {'←'¨⌾((𝕩=':')⊸/)𝕩}¨gs
+    dos ← ord⊏{a‿o‿b‿·‿r←' 'Split𝕩 ⋄ do ← op.Get o ⋄ ∾´r‿'←'‿a‿do‿b}¨os
+    eins ⇐ +´(⊢×2⋆↕∘≠)•BQN(∾'⋄'⊸∾¨defs∾dos)∾'⋄'∾1↓∾'‿'⊸∾¨(⊢∾˜·1⊸=◶"z"‿"z0"≠)¨•Fmt¨↕46
+    zwei ⇐ "cqm,mps,vcv,vjv,vwp,z13,z19,z25" # Graphviz
+   }
+   XXIV _is 24
+ #+end_src
+
+ #+RESULTS:
+ : "Computed 42410633905894 and ""cqm,mps,vcv,vjv,vwp,z13,z19,z25"" in 0.0021468518s"
+
+** XXV
+
+#+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
+  XXV ← {
+    inp ← >¨⟨⟩SplitF•FLines Input𝕩
+    eins ⇐ 2÷˜+´⥊{¬∨´∨˝1<+´'#'=𝕨‿𝕩}⌜˜inp
+    zwei ⇐ "All done!"
+  }
+  XXV _is 25
+#+end_src
+
+#+RESULTS:
+: "Computed 3397 and ""All done!"" in 0.0430929714s"
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
