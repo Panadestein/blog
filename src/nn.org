@@ -52,21 +52,23 @@ namely plotting, random number generation, and matrix product:
 
 ** Tinn's diminution
 
-The original C implementation has 175 lines excluding the optimization loop. The BQN version has only
+The original C implementation has 175 lines excluding the optimization loop. The BQN version has only 10.
 
 #+begin_src bqn :tangle ./bqn/nn.bqn
   Minn ← {r‿l𝕊𝕩:
-    C ⇐ +`2÷˜·×˜-
     A‿DA ← ⟨1÷1+⋆∘-, ⊢×1⊸-⟩
-    F ⇐ {𝕨𝕊b‿w: A¨b+w⊸M𝕨}`
-    B ← {
-      do ← (DA∘⊣×𝕗-⊢)´⊢´¨𝕨‿𝕩
+    B ← {ts‿w𝕊𝕩:
+      do ← (-⟜ts×DA)⊢´𝕩
+      𝕩×⌜¨do∾do{d𝕊w‿ly: (DA ly)×w⍉⊸M d}`w⋈¨1↓⌽𝕩
     }
-    l(U⚇1-⟜1∘≠⋈·<˘2⊸↕)⊸{fs‿ts𝕊b‿w:
-      B fs F b⋈¨w
-    }´𝕩
+    F ← {𝕨𝕊b‿w: A¨b+𝕨M w}`⟜(⋈¨´)
+    nn ← 𝕩{fs‿ts𝕊b‿w: b⋈w-r× ts‿w B fs F𝕩}´˜(U⚇1-⟜1∘≠⋈·<˘2⊸↕)l
+    E ⇐ ⊢´F⟜nn  
   }
 #+end_src
+
+#+RESULTS:
+: (function block)
 
 Training the MLP involves a two-stage process for each input: forward propagation followed by backpropagation,
 during which the neural network's weight matrices are adjusted to minimize a cost function. The second step
@@ -114,18 +116,30 @@ presentation, see [[https://arxiv.org/abs/2107.09384][arXiv:2107.09384]].
 
 ** Learning the logistic map
 
-=_minn= should handle digit recognition just fine[fn:3]. However, I would like to switch clichés for the demonstration.
+=Minn= should handle digit recognition just fine[fn:3]. However, I would like to switch clichés for the demonstration.
 Instead, we will use it to learn the logistic map[fn:4]. This is a quintessential example of how chaos can emerge from simple systems.
 Moreover, it is not so trivial to approximate: the recurrence lacks a [[https://mathworld.wolfram.com/LogisticMap.html][closed-form]] solution, and has been a subject of study in
-the context of neural networks[fn:5].
+the context of neural networks[fn:5]. First let's generate some reference data:
 
-#+begin_src bqn
+#+begin_src bqn :tangle ./bqn/nn.bqn
   L ← ⊣×1⊸-×⊢
-  np‿ns‿ri‿rf‿dr ← 600‿50‿2.8‿4‿0.01
-
-  r ← ↕∘⌈⌾((ri+dr×⊢)⁼)rf
-  @ ⊣ m ← r L⍟((np-ns)+↕ns)¨ 0 •rand.Range˜ ≠r
+  n‿ri‿rf‿dr ← 1000‿2.8‿4‿0.001
+  @ ⊣ m ← {𝕩(⊣∾L⍟n)¨0 •rand.Range˜≠𝕩} ↕∘⌈⌾((ri+dr×⊢)⁼)rf
 #+end_src
+
+#+RESULTS:
+: @
+
+Then we can train =Minn=, and generate some approximated data with the perceptron:
+
+#+begin_src bqn :tangle ./bqn/nn.bqn
+  lm ← 0.01‿⟨1, 10, 1⟩ Minn m
+  ≠lm.E 2.9
+#+end_src
+
+#+RESULTS:
+: 1201
+: 1201
 
 Let’s see if we’ve gotten the numbers right after learning. But then again, what is a number that a man may know it[fn:6]...
 

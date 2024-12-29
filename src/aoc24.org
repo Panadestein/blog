@@ -575,7 +575,7 @@ At the end, we have identified all tiles that are part of at least one best path
 #+end_src
 
 #+RESULTS:
-: "Computed 1346 and ""aw,fk,gv,hi,hp,ip,jy,kc,lk,og,pj,re,sr"" in 0.1349495999s"
+: "Computed 1346 and ""aw,fk,gv,hi,hp,ip,jy,kc,lk,og,pj,re,sr"" in 0.2376645072s"
 
 ** XXIV
 

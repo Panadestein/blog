@@ -3,15 +3,21 @@ U ← 0.5-˜•rand.Range⟜0
 M ← +˝∘×⎉1‿∞
 
 Minn ← {r‿l𝕊𝕩:
-  C ⇐ +`2÷˜·×˜-
   A‿DA ← ⟨1÷1+⋆∘-, ⊢×1⊸-⟩
-  F ⇐ {𝕨𝕊b‿w: A¨b+w⊸M𝕨}`
-  B ← {
-    do ← (DA∘⊣×𝕗-⊢)´⊢´¨𝕨‿𝕩
+  B ← {ts‿w𝕊𝕩:
+    do ← (-⟜ts×DA)⊢´𝕩
+    𝕩×⌜¨do∾do{d𝕊w‿ly: (DA ly)×w⍉⊸M d}`w⋈¨1↓⌽𝕩
   }
-  l(U⚇1-⟜1∘≠⋈·<˘2⊸↕)⊸{fs‿ts𝕊b‿w:
-    B fs F b⋈¨w
-  }´𝕩
+  F ← {𝕨𝕊b‿w: A¨b+𝕨M w}`⟜(⋈¨´)
+  nn ← 𝕩{fs‿ts𝕊b‿w: b⋈w-r× ts‿w B fs F𝕩}´˜(U⚇1-⟜1∘≠⋈·<˘2⊸↕)l
+  E ⇐ ⊢´F⟜nn  
 }
+
+L ← ⊣×1⊸-×⊢
+n‿ri‿rf‿dr ← 1000‿2.8‿4‿0.001
+@ ⊣ m ← {𝕩(⊣∾L⍟n)¨0 •rand.Range˜≠𝕩} ↕∘⌈⌾((ri+dr×⊢)⁼)rf
+
+lm ← 0.01‿⟨1, 10, 1⟩ Minn m
+≠lm.E 2.9
 
 )r Setplot "scatter" ⋄ •Out¨ Plot´  m {ns←≠⊑𝕨 ⋄ (>𝕨)⋈˜∘‿ns⥊ns/𝕩} r
