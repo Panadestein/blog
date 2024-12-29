@@ -234,9 +234,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">The miniaturist's neural network (WIP)</h1>
-<div id="outline-container-orgcdf57b5" class="outline-2">
-<h2 id="orgcdf57b5">Preface</h2>
-<div class="outline-text-2" id="text-orgcdf57b5">
+<div id="outline-container-orgd409cd4" class="outline-2">
+<h2 id="orgd409cd4">Preface</h2>
+<div class="outline-text-2" id="text-orgd409cd4">
 <p>
 We will implement a fully-connected feed-forward neural network<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, in other words, a
 </p>
@@ -280,24 +280,23 @@ M ← +˝∘×⎉1‿∞
 </div>
 </div>
 </div>
-<div id="outline-container-orgd1720fc" class="outline-2">
-<h2 id="orgd1720fc">Tinn's diminution</h2>
-<div class="outline-text-2" id="text-orgd1720fc">
+<div id="outline-container-orga581dcd" class="outline-2">
+<h2 id="orga581dcd">Tinn's diminution</h2>
+<div class="outline-text-2" id="text-orga581dcd">
 <p>
-The original C implementation has 175 lines excluding the optimization loop. The BQN version has only
+The original C implementation has 175 lines excluding the optimization loop. The BQN version has only 10.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-bqn">Minn ← {r‿l𝕊𝕩:
-  C ⇐ +`2÷˜·×˜-
   A‿DA ← ⟨1÷1+⋆∘-, ⊢×1⊸-⟩
-  F ⇐ {𝕨𝕊b‿w: A¨b+w⊸M𝕨}`
-  B ← {
-    do ← (DA∘⊣×𝕗-⊢)´⊢´¨𝕨‿𝕩
+  B ← {ts‿w𝕊𝕩:
+    do ← (-⟜ts×DA)⊢´𝕩
+    𝕩×⌜¨do∾do{d𝕊w‿ly: (DA ly)×w⍉⊸M d}`w⋈¨1↓⌽𝕩
   }
-  l(U⚇1-⟜1∘≠⋈·&lt;˘2⊸↕)⊸{fs‿ts𝕊b‿w:
-    B fs F b⋈¨w
-  }´𝕩
+  F ← {𝕨𝕊b‿w: A¨b+𝕨M w}`⟜(⋈¨´)
+  nn ← 𝕩{fs‿ts𝕊b‿w: b⋈w-r× ts‿w B fs F𝕩}´˜(U⚇1-⟜1∘≠⋈·&lt;˘2⊸↕)l
+  E ⇐ ⊢´F⟜nn  
 }
 </pre>
 </div>
@@ -355,22 +354,30 @@ presentation, see <a href="https://arxiv.org/abs/2107.09384">arXiv:2107.09384</a
 </details>
 </div>
 </div>
-<div id="outline-container-org819b090" class="outline-2">
-<h2 id="org819b090">Learning the logistic map</h2>
-<div class="outline-text-2" id="text-org819b090">
+<div id="outline-container-orge44196e" class="outline-2">
+<h2 id="orge44196e">Learning the logistic map</h2>
+<div class="outline-text-2" id="text-orge44196e">
 <p>
-<code>_minn</code> should handle digit recognition just fine<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. However, I would like to switch clichés for the demonstration.
+<code>Minn</code> should handle digit recognition just fine<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. However, I would like to switch clichés for the demonstration.
 Instead, we will use it to learn the logistic map<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>. This is a quintessential example of how chaos can emerge from simple systems.
 Moreover, it is not so trivial to approximate: the recurrence lacks a <a href="https://mathworld.wolfram.com/LogisticMap.html">closed-form</a> solution, and has been a subject of study in
-the context of neural networks<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>.
+the context of neural networks<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>. First let's generate some reference data:
 </p>
 
 <div class="org-src-container">
 <pre class="src src-bqn">L ← ⊣×1⊸-×⊢
-np‿ns‿ri‿rf‿dr ← 600‿50‿2.8‿4‿0.01
+n‿ri‿rf‿dr ← 1000‿2.8‿4‿0.001
+@ ⊣ m ← {𝕩(⊣∾L⍟n)¨0 •rand.Range˜≠𝕩} ↕∘⌈⌾((ri+dr×⊢)⁼)rf
+</pre>
+</div>
 
-r ← ↕∘⌈⌾((ri+dr×⊢)⁼)rf
-@ ⊣ m ← r L⍟((np-ns)+↕ns)¨ 0 •rand.Range˜ ≠r
+<p>
+Then we can train <code>Minn</code>, and generate some approximated data with the perceptron:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">lm ← 0.01‿⟨1, 10, 1⟩ Minn m
+≠lm.E 2.9
 </pre>
 </div>
 
