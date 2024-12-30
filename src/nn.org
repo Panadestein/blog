@@ -57,13 +57,13 @@ The original C implementation has 175 lines excluding the optimization loop. The
 #+begin_src bqn :tangle ./bqn/nn.bqn
   Minn ← {r‿l𝕊𝕩:
     A‿DA ← ⟨1÷1+⋆∘-, ⊢×1⊸-⟩
-    B ← {ts‿w𝕊𝕩:
+    BP ← {ts‿w𝕊𝕩:
       do ← (-⟜ts×DA)⊢´𝕩
-      𝕩×⌜¨do∾do{d𝕊w‿ly: (DA ly)×w⍉⊸M d}`w⋈¨1↓⌽𝕩
+      𝕩×⌜¨do∾(⊑do){d𝕊w‿ly: (DA ly)×d M w}`⋈¨´(1↓⌽)¨w‿𝕩
     }
-    F ← {𝕨𝕊b‿w: A¨b+𝕨M w}`⟜(⋈¨´)
-    nn ← 𝕩{fs‿ts𝕊b‿w: b⋈w-r× ts‿w B fs F𝕩}´˜(U⚇1-⟜1∘≠⋈·<˘2⊸↕)l
-    E ⇐ ⊢´F⟜nn  
+    FP ← {𝕨𝕊b‿w: A¨b+𝕨M w}`⟜(⋈¨´)
+    nn ← 𝕩{fs‿ts𝕊b‿w: b⋈w-r× ts‿w BP fs FP𝕩}´˜(U⚇1-⟜1∘≠⋈·<˘2⊸↕)l
+    E ⇐ ⊢´FP⟜nn  
   }
 #+end_src
 
@@ -122,9 +122,8 @@ Moreover, it is not so trivial to approximate: the recurrence lacks a [[https://
 the context of neural networks[fn:5]. First let's generate some reference data:
 
 #+begin_src bqn :tangle ./bqn/nn.bqn
-  L ← ⊣×1⊸-×⊢
   n‿ri‿rf‿dr ← 1000‿2.8‿4‿0.001
-  @ ⊣ m ← {𝕩(⊣∾L⍟n)¨0 •rand.Range˜≠𝕩} ↕∘⌈⌾((ri+dr×⊢)⁼)rf
+  @ ⊣ td ← {𝕩(⊣∾(⊣×1⊸-×⊢)⍟n)¨0 •rand.Range˜≠𝕩} ↕∘⌈⌾((ri+dr×⊢)⁼)rf
 #+end_src
 
 #+RESULTS:
@@ -133,13 +132,18 @@ the context of neural networks[fn:5]. First let's generate some reference data:
 Then we can train =Minn=, and generate some approximated data with the perceptron:
 
 #+begin_src bqn :tangle ./bqn/nn.bqn
-  lm ← 0.01‿⟨1, 10, 1⟩ Minn m
+  lm ← 0.01‿⟨1, 10, 1⟩ Minn td
   ≠lm.E 2.9
 #+end_src
 
 #+RESULTS:
-: 1201
-: 1201
+: Error: Mapping: Expected equal shape prefix (1‿10 ≡ ≢𝕨, ⟨10⟩ ≡ ≢𝕩)
+: at   nn ← 𝕩{fs‿ts𝕊b‿w: b⋈w-r× ts‿w BP fs FP𝕩}´˜(U⚇1-⟜1∘≠⋈·<˘2⊸↕)l
+:                           ^
+: at   nn ← 𝕩{fs‿ts𝕊b‿w: b⋈w-r× ts‿w BP fs FP𝕩}´˜(U⚇1-⟜1∘≠⋈·<˘2⊸↕)l
+:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+: at lm ← 0.01‿⟨1, 10, 1⟩ Minn td
+:                         ^^^^
 
 Let’s see if we’ve gotten the numbers right after learning. But then again, what is a number that a man may know it[fn:6]...
 

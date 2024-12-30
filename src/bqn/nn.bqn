@@ -4,20 +4,19 @@ M ← +˝∘×⎉1‿∞
 
 Minn ← {r‿l𝕊𝕩:
   A‿DA ← ⟨1÷1+⋆∘-, ⊢×1⊸-⟩
-  B ← {ts‿w𝕊𝕩:
+  BP ← {ts‿w𝕊𝕩:
     do ← (-⟜ts×DA)⊢´𝕩
-    𝕩×⌜¨do∾do{d𝕊w‿ly: (DA ly)×w⍉⊸M d}`w⋈¨1↓⌽𝕩
+    𝕩×⌜¨do∾(⊑do){d𝕊w‿ly: (DA ly)×d M w}`⋈¨´(1↓⌽)¨w‿𝕩
   }
-  F ← {𝕨𝕊b‿w: A¨b+𝕨M w}`⟜(⋈¨´)
-  nn ← 𝕩{fs‿ts𝕊b‿w: b⋈w-r× ts‿w B fs F𝕩}´˜(U⚇1-⟜1∘≠⋈·<˘2⊸↕)l
-  E ⇐ ⊢´F⟜nn  
+  FP ← {𝕨𝕊b‿w: A¨b+𝕨M w}`⟜(⋈¨´)
+  nn ← 𝕩{fs‿ts𝕊b‿w: b⋈w-r× ts‿w BP fs FP𝕩}´˜(U⚇1-⟜1∘≠⋈·<˘2⊸↕)l
+  E ⇐ ⊢´FP⟜nn  
 }
 
-L ← ⊣×1⊸-×⊢
 n‿ri‿rf‿dr ← 1000‿2.8‿4‿0.001
-@ ⊣ m ← {𝕩(⊣∾L⍟n)¨0 •rand.Range˜≠𝕩} ↕∘⌈⌾((ri+dr×⊢)⁼)rf
+@ ⊣ td ← {𝕩(⊣∾(⊣×1⊸-×⊢)⍟n)¨0 •rand.Range˜≠𝕩} ↕∘⌈⌾((ri+dr×⊢)⁼)rf
 
-lm ← 0.01‿⟨1, 10, 1⟩ Minn m
+lm ← 0.01‿⟨1, 10, 1⟩ Minn td
 ≠lm.E 2.9
 
 )r Setplot "scatter" ⋄ •Out¨ Plot´  m {ns←≠⊑𝕨 ⋄ (>𝕨)⋈˜∘‿ns⥊ns/𝕩} r
