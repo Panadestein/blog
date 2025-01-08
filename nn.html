@@ -234,9 +234,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">The miniaturist's neural network</h1>
-<div id="outline-container-org2d773dc" class="outline-2">
-<h2 id="org2d773dc">Preface</h2>
-<div class="outline-text-2" id="text-org2d773dc">
+<div id="outline-container-orgd58e1fb" class="outline-2">
+<h2 id="orgd58e1fb">Preface</h2>
+<div class="outline-text-2" id="text-orgd58e1fb">
 <p>
 We will implement a fully-connected feed-forward neural network<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, in other words, a
 </p>
@@ -281,9 +281,9 @@ RMS ← √≠∘⊢÷˜·+´×˜∘-
 </div>
 </div>
 </div>
-<div id="outline-container-org9630181" class="outline-2">
-<h2 id="org9630181">Tinn's diminution</h2>
-<div class="outline-text-2" id="text-org9630181">
+<div id="outline-container-org527e478" class="outline-2">
+<h2 id="org527e478">Tinn's diminution</h2>
+<div class="outline-text-2" id="text-org527e478">
 <p>
 The original C implementation has 175 lines, excluding the optimisation loop. The BQN version has only 11,
 and is more general as it supports an arbitrary number of hidden layers. The biases are left unoptimised
@@ -299,7 +299,7 @@ variational freedom with the weights.
     do ← &lt;(-⟜ts×DA)⊑⊑hx‿tx ← ¯1(↑⋈↓)𝕩
     (fs&lt;⊸∾tx)×⌜˜¨do∾˜do⊸({d𝕊w‿z: z DA⊸×d M˜⍉w}`)⌾⌽tx⋈¨˜1↓we
   }
-  FP ← {z𝕊b‿we: A¨b+we M z}`⟜(⋈¨´)
+  FP ← {z𝕊bi‿we: A¨bi+we M z}`⟜(⋈¨´)
   nn ← dat{𝕨𝕊bi‿we: fs‿ts ← 𝕨(↑⋈↓)˜⊑ly
     bi⋈we-rt× fs‿ts‿we BP fs&lt;⊸FP𝕩}˝˜(U⚇1-⟜1∘≠⋈·&lt;∘⌽˘2⊸↕)ly
   E ⇐ ⊢´&lt;⊸FP⟜nn
@@ -360,9 +360,9 @@ presentation, see <a href="https://arxiv.org/abs/2107.09384">arXiv:2107.09384</a
 </details>
 </div>
 </div>
-<div id="outline-container-org9407dd5" class="outline-2">
-<h2 id="org9407dd5">Learning the logistic map</h2>
-<div class="outline-text-2" id="text-org9407dd5">
+<div id="outline-container-org8528d08" class="outline-2">
+<h2 id="org8528d08">Learning the logistic map</h2>
+<div class="outline-text-2" id="text-org8528d08">
 <p>
 <code>Minn</code> should handle digit recognition just fine<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. However, I would like to switch clichés for the demonstration.
 Instead, we will use it to learn the logistic map<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>. This is a quintessential example of how chaos can emerge from simple systems.
