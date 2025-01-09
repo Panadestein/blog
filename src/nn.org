@@ -66,7 +66,7 @@ variational freedom with the weights.
       do ← <(-⟜ts×DA)⊑⊑hx‿tx ← ¯1(↑⋈↓)𝕩
       (fs<⊸∾tx)×⌜˜¨do∾˜do⊸({d𝕊w‿z: z DA⊸×d M˜⍉w}`)⌾⌽tx⋈¨˜1↓we
     }
-    FP ← {z𝕊bi‿we: A¨bi+we M z}`⟜(⋈¨´)
+    FP ← {z𝕊bi‿we: A bi+we M z}`⟜(⋈¨´)
     nn ← dat{𝕨𝕊bi‿we: fs‿ts ← 𝕨(↑⋈↓)˜⊑ly
       bi⋈we-rt× fs‿ts‿we BP fs<⊸FP𝕩}˝˜(U⚇1-⟜1∘≠⋈·<∘⌽˘2⊸↕)ly
     E ⇐ ⊢´<⊸FP⟜nn
@@ -146,7 +146,7 @@ are system dependent and susceptible to change. One has to experiment with them 
 #+end_src
 
 #+RESULTS:
-: 0.14864877333082208
+: 0.14839151901691489
 
 Let’s see if we’ve gotten the numbers right after learning. But then again, what is a number that a man may know it[fn:6]...
 
