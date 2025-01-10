@@ -24,4 +24,4 @@ tr ← •rand.Deal∘≠⊸⊏⊸∾⍟(e-1)˜∾{𝕩∾˘2↕𝕩L ntr}¨I 0.
 lm ← 0.001‿⟨2, 500, 1⟩ Minn td
 (⊢RMS⟜∾·lm.E¨⊣)˝⍉td
 
-)r Setplot "scatter" ⋄ •Out¨ Plot˝⍉(⊑∾lm.E)˘pd
+)r Setplot "scatter" ⋄ •Out¨ Plot˝⍉(⊑∾lm.E)˘te
