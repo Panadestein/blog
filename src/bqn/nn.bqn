@@ -5,8 +5,7 @@ RMS ← √≠∘⊢÷˜·+´×˜∘-
 
 Minn ← {rt‿ly𝕊dat:
   A‿DA ← ⟨1÷1+⋆∘-, ⊢×1⊸-⟩
-  BP ← {fs‿ts‿we𝕊𝕩:
-    do ← <(-⟜ts×DA)⊑⊑hx‿tx ← ¯1(↑⋈↓)𝕩
+  BP ← {fs‿ts‿we𝕊𝕩: do ← <(-⟜ts×DA)⊑⊑hx‿tx ← ¯1(↑⋈↓)𝕩
     (fs<⊸∾tx)×⌜˜¨do∾˜{d𝕊w‿z: z DA⊸×d M˜⍉w}`˜⟜do⌾⌽tx⋈¨˜1↓we
   }
   FP ← {z𝕊bi‿we: A bi+we M z}`⟜(⋈¨´)
