@@ -5,7 +5,7 @@ RMS ← √≠∘⊢÷˜·+´×˜∘-
 
 Minn ← {rt‿ly𝕊dat:
   A‿DA ← ⟨1÷1+⋆∘-, ⊢×1⊸-⟩
-  BP ← {fs‿ts‿we𝕊𝕩: do ← <(-⟜ts×DA)⊑⊑hx‿tx ← ¯1(↑⋈↓)𝕩
+  BP ← {fs‿ts‿we𝕊𝕩: do ← (<-⟜ts×DA)⊑⊑hx‿tx ← ¯1(↑⋈↓)𝕩
     (fs<⊸∾tx)×⌜˜¨do∾˜{d𝕊w‿z: z DA⊸×d M˜⍉w}`˜⟜do⌾⌽tx⋈¨˜1↓we
   }
   FP ← {z𝕊bi‿we: A bi+we M z}`⟜(⋈¨´)
@@ -14,10 +14,12 @@ Minn ← {rt‿ly𝕊dat:
   E ⇐ ⊢´<⊸FP⟜nn
 }
 
-neq‿ntd‿npd‿e‿ri‿rf ← 600‿100‿50‿100‿2.8‿4
-pd ← ∾{𝕩∾˘⊏⍉2↕𝕩(⊣×1⊸-×⊢)⍟((neq-npd)+↕npd)•rand.Range 0}¨↕∘⌈⌾((ri+0.01×⊢)⁼)rf
-td ← ∾⍟(e-1)˜∾{𝕩∾˘2↕𝕩(⊣×1⊸-×⊢)⍟((neq-ntd)+↕ntd)•rand.Range 0}¨↕∘⌈⌾((ri+0.1×⊢)⁼)rf
-≠¨td‿pd
+neq‿ntr‿nte‿e ← 600‿100‿50‿100
+I ← {↕∘⌈⌾((2.8+𝕩×⊢)⁼)4}
+L ← {𝕨(⊣×1⊸-×⊢)⍟((neq-𝕩)+↕𝕩)•rand.Range 0}
+te ← ∾{𝕩∾˘⊏⍉2↕𝕩L nte}¨I 0.01
+tr ← •rand.Deal∘≠⊸⊏⊸∾⍟(e-1)˜∾{𝕩∾˘2↕𝕩L ntr}¨I 0.1
+≠¨tr‿te
 
 lm ← 0.001‿⟨2, 500, 1⟩ Minn td
 (⊢RMS⟜∾·lm.E¨⊣)˝⍉td

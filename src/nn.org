@@ -39,7 +39,7 @@ neuron in layer \(l\), \(N_l\) is the number of neurons in layer \(l\), and \(\s
 
 As a reference implementation, we will use [[https://github.com/glouw/tinn][Tinn]], which is a MLP of a single hidden layer, written in pure C with
 no dependencies[fn:2]. As usual, we will set the stage by importing and defining some utility functions,
-namely plotting, random number generation, and matrix product: 
+namely plotting, random number generation, matrix product, and root mean square error: 
 
 #+begin_src bqn :tangle ./bqn/nn.bqn
   Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
@@ -62,7 +62,7 @@ variational freedom with the weights.
 #+begin_src bqn :tangle ./bqn/nn.bqn
   Minn ← {rt‿ly𝕊dat:
     A‿DA ← ⟨1÷1+⋆∘-, ⊢×1⊸-⟩
-    BP ← {fs‿ts‿we𝕊𝕩: do ← <(-⟜ts×DA)⊑⊑hx‿tx ← ¯1(↑⋈↓)𝕩
+    BP ← {fs‿ts‿we𝕊𝕩: do ← (<-⟜ts×DA)⊑⊑hx‿tx ← ¯1(↑⋈↓)𝕩
       (fs<⊸∾tx)×⌜˜¨do∾˜{d𝕊w‿z: z DA⊸×d M˜⍉w}`˜⟜do⌾⌽tx⋈¨˜1↓we
     }
     FP ← {z𝕊bi‿we: A bi+we M z}`⟜(⋈¨´)
@@ -124,13 +124,16 @@ presentation, see [[https://arxiv.org/abs/2107.09384][arXiv:2107.09384]].
 =Minn= should handle digit recognition just fine[fn:3]. However, I would like to switch clichés for the demonstration.
 Instead, we will use it to learn the logistic map[fn:4]. This is a quintessential example of how chaos can emerge from simple systems.
 Moreover, it is not so trivial to approximate: the recurrence lacks a [[https://mathworld.wolfram.com/LogisticMap.html][closed-form]] solution, and has been a subject of study in
-the context of neural networks[fn:5]. First let's generate some test and training data:
+the context of neural networks[fn:5]. First let's generate some training and test data, ensuring shuffling after each epoch
+to reduce correlation:
 
 #+begin_src bqn :tangle ./bqn/nn.bqn :exports both
-  neq‿ntd‿npd‿e‿ri‿rf ← 600‿100‿50‿100‿2.8‿4
-  pd ← ∾{𝕩∾˘⊏⍉2↕𝕩(⊣×1⊸-×⊢)⍟((neq-npd)+↕npd)•rand.Range 0}¨↕∘⌈⌾((ri+0.01×⊢)⁼)rf
-  td ← ∾⍟(e-1)˜∾{𝕩∾˘2↕𝕩(⊣×1⊸-×⊢)⍟((neq-ntd)+↕ntd)•rand.Range 0}¨↕∘⌈⌾((ri+0.1×⊢)⁼)rf
-  ≠¨td‿pd
+  neq‿ntr‿nte‿e ← 600‿100‿50‿100
+  I ← {↕∘⌈⌾((2.8+𝕩×⊢)⁼)4}
+  L ← {𝕨(⊣×1⊸-×⊢)⍟((neq-𝕩)+↕𝕩)•rand.Range 0}
+  te ← ∾{𝕩∾˘⊏⍉2↕𝕩L nte}¨I 0.01
+  tr ← •rand.Deal∘≠⊸⊏⊸∾⍟(e-1)˜∾{𝕩∾˘2↕𝕩L ntr}¨I 0.1
+  ≠¨tr‿te
 #+end_src
 
 #+RESULTS:
@@ -145,7 +148,7 @@ and epochs =e= are system-dependent and susceptible to change. You have to exper
 #+end_src
 
 #+RESULTS:
-: 0.14040810449126903
+: 0.1316225736700553
 
 Let’s see if we’ve gotten the numbers right after learning. But then again, what is a number that a man may know it[fn:6]...
 
