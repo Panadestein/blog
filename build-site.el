@@ -53,6 +53,12 @@
 	     :publishing-directory "./public/assets"
 	     :publishing-function 'org-publish-attachment
 	     :recursive t)
+       (list "feed"
+	     :base-directory "."
+	     :base-extension "json"
+	     :publishing-directory "./public"
+	     :publishing-function 'org-publish-attachment
+	     :recursive nil)
        (list "supp"
 	     :base-directory "./supp"
 	     :base-extension 'any
