@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>A numerical bonsai display</title>
+<title>Navier-Stokes simulator (WIP)</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -193,30 +193,80 @@
 </style>
 <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+<style>
+mjx-container[jax="CHTML"] {
+overflow-x: auto !important;
+}
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">A numerical bonsai display</h1>
-<div id="outline-container-org2d6af49" class="outline-2">
-<h2 id="org2d6af49">Foreword</h2>
-</div>
-
-<div id="outline-container-org0736408" class="outline-2">
-<h2 id="org0736408">Bibliography</h2>
-<div class="outline-text-2" id="text-org0736408">
+<h1 class="title">Navier-Stokes simulator (WIP)</h1>
+<div id="outline-container-orge92368b" class="outline-2">
+<h2 id="orge92368b">Foreword</h2>
+<div class="outline-text-2" id="text-orge92368b">
 <p>
-These are my favorite books on numerical analysis, in descending order of preference.
-I use the first two very often, and consult the others to deepen my understanding:
+We want to solve the following <a href="https://en.wikipedia.org/wiki/Derivation_of_the_Navier%E2%80%93Stokes_equations">system</a> of partial differential equations
+in two dimensions for an incompressible fluid, imposing periodic boundary conditions:
 </p>
 
-<ol class="org-ol">
-<li><a href="https://www.equalsharepress.com/">Numerical Methods for Scientific Computing: The Definitive Manual for Math Geeks</a></li>
-<li><a href="https://link.springer.com/book/10.1007/978-3-031-08121-7">Numerical Analysis: A Graduate Course</a></li>
-<li><a href="https://epubs.siam.org/doi/book/10.1137/1.9781421407944">Matrix computations</a></li>
-<li><a href="https://numerical.recipes/book.html">Numerical Recipes</a></li>
-<li><a href="https://epubs.siam.org/doi/10.1137/1.9781611976557">Numerical Linear Algebra with Julia</a></li>
-<li><a href="https://link.springer.com/book/10.1007/978-0-387-40065-5">Numerical Optimization</a></li>
-</ol>
+\begin{equation*}
+  \begin{aligned}
+    \nabla \cdot \mathbf{q} &= 0,\\
+    \frac{\partial \mathbf{q}}{\partial t}
+    + \nabla \cdot (\mathbf{q} \otimes \mathbf{q}) &=
+    -\nabla p + \frac{1}{\text{Re}} \nabla^2 \mathbf{q},
+  \end{aligned}
+\end{equation*}
+</div>
+</div>
+<div id="outline-container-org78a90e4" class="outline-2">
+<h2 id="org78a90e4">Simulator</h2>
+<div class="outline-text-2" id="text-org78a90e4">
+<p>
+The numerical solution will be obtained using this zero-dependency BQN code:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">cn ← {
+  _p ⇐ {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
+  Cis ⇐ (⍉•math.Cos≍•math.Sin)¯π×↕⊸÷
+}
+FFT ← {𝕊⁼: ⋈⟜-´˘{≠÷˜·𝔽𝔾∘𝔽}𝕊𝕩; (1=≠)◶⟨(+∾-)⟜(⊢×cn._p˘cn.Cis∘≠)´(𝕊¨⊢⊔˜2|⊒˜), ⊢⟩𝕩}
+</pre>
+</div>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
