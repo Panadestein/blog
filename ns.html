@@ -234,9 +234,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Navier-Stokes simulator (WIP)</h1>
-<div id="outline-container-orge92368b" class="outline-2">
-<h2 id="orge92368b">Foreword</h2>
-<div class="outline-text-2" id="text-orge92368b">
+<div id="outline-container-org4e3563d" class="outline-2">
+<h2 id="org4e3563d">Foreword</h2>
+<div class="outline-text-2" id="text-org4e3563d">
 <p>
 We want to solve the following <a href="https://en.wikipedia.org/wiki/Derivation_of_the_Navier%E2%80%93Stokes_equations">system</a> of partial differential equations
 in two dimensions for an incompressible fluid, imposing periodic boundary conditions:
@@ -252,19 +252,19 @@ in two dimensions for an incompressible fluid, imposing periodic boundary condit
 \end{equation*}
 </div>
 </div>
-<div id="outline-container-org78a90e4" class="outline-2">
-<h2 id="org78a90e4">Simulator</h2>
-<div class="outline-text-2" id="text-org78a90e4">
+<div id="outline-container-org91b386a" class="outline-2">
+<h2 id="org91b386a">Simulator</h2>
+<div class="outline-text-2" id="text-org91b386a">
 <p>
 The numerical solution will be obtained using this zero-dependency BQN code:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">cn ← {
+<pre class="src src-bqn">z ← {
   _p ⇐ {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
-  Cis ⇐ (⍉•math.Cos≍•math.Sin)¯π×↕⊸÷
+  C‿E ⇐ ⟨⋈⟜-´˘, ⍉•math.Cos≍•math.Sin⟩
 }
-FFT ← {𝕊⁼: ⋈⟜-´˘{≠÷˜·𝔽𝔾∘𝔽}𝕊𝕩; (1=≠)◶⟨(+∾-)⟜(⊢×cn._p˘cn.Cis∘≠)´(𝕊¨⊢⊔˜2|⊒˜), ⊢⟩𝕩}
+FFT ← {𝕊⁼: z.C{≠÷˜·𝔽𝔾∘𝔽}𝕊𝕩; (1=≠)◶⟨(+∾-)⟜(⊢×z._p˘·z.E∘-π×↕⊸÷∘≠)´(𝕊¨⊢⊔˜2|⊒˜), ⊢⟩𝕩}
 </pre>
 </div>
 
