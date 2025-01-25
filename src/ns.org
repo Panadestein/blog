@@ -27,15 +27,15 @@ in two dimensions for an incompressible fluid, imposing periodic boundary condit
 The numerical solution will be obtained using this zero-dependency BQN code:
 
 #+begin_src bqn :tangle bqn/ns.bqn :exports code
-  cn ← {
+  z ← {
     _p ⇐ {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
-    Cis ⇐ (⍉•math.Cos≍•math.Sin)¯π×↕⊸÷
+    C‿E ⇐ ⟨⋈⟜-´˘, ⍉•math.Cos≍•math.Sin⟩
   }
-  FFT ← {𝕊⁼: ⋈⟜-´˘{≠÷˜·𝔽𝔾∘𝔽}𝕊𝕩; (1=≠)◶⟨(+∾-)⟜(⊢×cn._p˘cn.Cis∘≠)´(𝕊¨⊢⊔˜2|⊒˜), ⊢⟩𝕩}
+  FFT ← {𝕊⁼: z.C{≠÷˜·𝔽𝔾∘𝔽}𝕊𝕩; (1=≠)◶⟨(+∾-)⟜(⊢×z._p˘·z.E∘-π×↕⊸÷∘≠)´(𝕊¨⊢⊔˜2|⊒˜), ⊢⟩𝕩}
 #+end_src
 
 #+RESULTS:
-: (function block)
+: 1
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
