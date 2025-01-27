@@ -29,7 +29,7 @@ The numerical solution will be obtained using this zero-dependency BQN code:
 #+begin_src bqn :tangle bqn/ns.bqn :exports code
   z ← {
     _p ⇐ {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
-    C‿E ⇐ ⟨⋈⟜-´˘, •math.Cos≍˘•math.Sin⟩
+    C‿E ⇐ ⟨⋈⟜-´˘, •math{𝕗.Cos≍˘𝕗.Sin}⟩
   }
   FFT ← {𝕊⁼: z.C{≠÷˜·𝔽𝔾∘𝔽}𝕊𝕩; (1=≠)◶⟨(+∾-)⟜(⊢×z._p˘·z.E∘-π×↕⊸÷∘≠)´(𝕊¨⊢⊔˜2|⊒˜), ⊢⟩𝕩}
 #+end_src
