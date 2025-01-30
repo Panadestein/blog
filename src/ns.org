@@ -10,8 +10,8 @@
 
 ** Foreword
 
-We want to solve the following [[https://en.wikipedia.org/wiki/Derivation_of_the_Navier%E2%80%93Stokes_equations][system]] of partial differential equations
-in two dimensions for an incompressible fluid, imposing periodic boundary conditions:
+Under classical, non-relativistic continuum mechanics, effectively incompressible Newtonian fluids
+are governed with remarkable accuracy by the following [[https://en.wikipedia.org/wiki/Derivation_of_the_Navier%E2%80%93Stokes_equations][system]] of partial differential equations:
 
 \begin{equation*}
   \begin{aligned}
@@ -22,9 +22,13 @@ in two dimensions for an incompressible fluid, imposing periodic boundary condit
   \end{aligned}
 \end{equation*}
 
+where \(\mathbf{q}\) is the velocity vector, \(p\) is the pressure, and \(\text{Re}\) is the
+Reynolds number. We will craft a tiny solver for this system in BQN, considering a 2D domain
+with periodic boundary conditions.
+
 ** Simulator
 
-The numerical solution will be obtained using this zero-dependency BQN code:
+The simulator is based on the material from [[https://doi.org/10.1007/978-3-031-35032-0][this book]], but aiming for a zero dependency implementation.
 
 #+begin_src bqn :tangle bqn/ns.bqn :exports code
   z ← {
