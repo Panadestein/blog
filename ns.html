@@ -234,12 +234,12 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Navier-Stokes simulator (WIP)</h1>
-<div id="outline-container-org11f30bd" class="outline-2">
-<h2 id="org11f30bd">Foreword</h2>
-<div class="outline-text-2" id="text-org11f30bd">
+<div id="outline-container-orgdc9dd1e" class="outline-2">
+<h2 id="orgdc9dd1e">Foreword</h2>
+<div class="outline-text-2" id="text-orgdc9dd1e">
 <p>
-We want to solve the following <a href="https://en.wikipedia.org/wiki/Derivation_of_the_Navier%E2%80%93Stokes_equations">system</a> of partial differential equations
-in two dimensions for an incompressible fluid, imposing periodic boundary conditions:
+Under classical, non-relativistic continuum mechanics, effectively incompressible Newtonian fluids
+are governed with remarkable accuracy by the following <a href="https://en.wikipedia.org/wiki/Derivation_of_the_Navier%E2%80%93Stokes_equations">system</a> of partial differential equations:
 </p>
 
 \begin{equation*}
@@ -250,13 +250,19 @@ in two dimensions for an incompressible fluid, imposing periodic boundary condit
     -\nabla p + \frac{1}{\text{Re}} \nabla^2 \mathbf{q},
   \end{aligned}
 \end{equation*}
-</div>
-</div>
-<div id="outline-container-org579a1d6" class="outline-2">
-<h2 id="org579a1d6">Simulator</h2>
-<div class="outline-text-2" id="text-org579a1d6">
+
 <p>
-The numerical solution will be obtained using this zero-dependency BQN code:
+where \(\mathbf{q}\) is the velocity vector, \(p\) is the pressure, and \(\text{Re}\) is the
+Reynolds number. We will craft a tiny solver for this system in BQN, considering a 2D domain
+with periodic boundary conditions.
+</p>
+</div>
+</div>
+<div id="outline-container-orgdff7847" class="outline-2">
+<h2 id="orgdff7847">Simulator</h2>
+<div class="outline-text-2" id="text-orgdff7847">
+<p>
+The simulator is based on the material from <a href="https://doi.org/10.1007/978-3-031-35032-0">this book</a>, but aiming for a zero dependency implementation.
 </p>
 
 <div class="org-src-container">
