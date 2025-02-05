@@ -285,15 +285,15 @@ it admits a very elegant array solution:
 : 6
 
 That is, we take the minimum of max scans from the left and from the right, and subtract the corresponding height.
-Folding sum over the result gives the answer. A closely related problem is [[https://leetcode.com/problems/container-with-most-water/][container with most water]], which can
-be solved in linear time as well:
+Folding sum over the result gives the answer. A closely related problem is [[https://leetcode.com/problems/container-with-most-water/][container with most water]], here is a
+slow but short quadratic solution:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
-  (+´⊢-˜⌈`⌾⌽⌊⌈`) [1,8,6,2,5,4,8,3,7]
+  (⌈´∘⥊⌊⌜˜×·-⌜˜⊒˜) [1,8,6,2,5,4,8,3,7]
 #+end_src
 
 #+RESULTS:
-: 19
+: 49
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
