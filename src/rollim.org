@@ -274,7 +274,7 @@ I initially clip my citations array with ={≠¨⊔≠∘𝕩¨⌾(≥⟜≠∘�
 
 ** Trapping rain water
 
-This is a classical interview problem that can be solved in linear time. Interestingly,
+This is a classical interview [[https://leetcode.com/problems/trapping-rain-water/][problem]] that can be solved in linear time. Interestingly,
 it admits a very elegant array solution:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
@@ -284,16 +284,20 @@ it admits a very elegant array solution:
 #+RESULTS:
 : 6
 
-That is, we take the minimum of max scans from the left and from the right, and subtract the corresponding height.
-Folding sum over the result gives the answer. A closely related problem is [[https://leetcode.com/problems/container-with-most-water/][container with most water]], here is a
-slow but short quadratic solution:
+That is, we take the minimum of max-scans from the left and from the right, and subtract the corresponding height.
+Reducing the resulting array gives the amount of trapped water.
+
+A closely related problem is [[https://leetcode.com/problems/container-with-most-water/][container with most water]], which unfortunately is not so easy to solve in linear
+time using an array approach (one can easily implement the imperative two pointers solution in BQN, but it
+will probably be slow). Here are two solutions, one \(O(n^2)\) and the other \(O(n\log n)\), both tacit:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
-  (⌈´∘⥊⌊⌜˜×·-⌜˜⊒˜) [1,8,6,2,5,4,8,3,7]
+  ⟨⌈´∘⥊⌊⌜˜×·-⌜˜⊒˜, ⌈´∨×(⌈`⊸-⌈⊢-⌊`)∘⍒⟩ {10 𝕎•_timed𝕩}¨< •rand.Range˜1e4
 #+end_src
 
 #+RESULTS:
-: 49
+: ⟨ 0.080050875 4.14558e¯5 ⟩
+
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
