@@ -64,7 +64,8 @@ For reference, these are my CPU's specs:
 </details>
 #+end_export
 
-You can compare my solutions with those of other BQN programmers in the [[https://mlochbaum.github.io/BQN/community/aoc.html][retrospective]] page.
+You can compare my solutions with those of other BQN programmers in the [[https://mlochbaum.github.io/BQN/community/aoc.html][retrospective]] page. The
+BQN module containing all 25 solutions has exactly 300 lines of code.
 
 ** I
 
@@ -602,14 +603,13 @@ At the end, we have identified all tiles that are part of at least one best path
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   XXV ← {
     inp ← >¨⟨⟩SplitF•FLines Input𝕩
-    eins ⇐ 2÷˜+´⥊{¬∨´⥊1<+´'#'=𝕨‿𝕩}⌜˜inp
-    zwei ⇐ "All done!"
+    eins‿zwei ⇐ "All done!"⋈˜2÷˜+´⥊{¬∨´⥊1<+´'#'=𝕨‿𝕩}⌜˜inp
   }
   XXV _is 25
 #+end_src
 
 #+RESULTS:
-: "Computed 3397 and ""All done!"" in 0.020670356s"
+: "Computed 3397 and ""All done!"" in 0.0214779937s"
 
 #+BEGIN_EXPORT html
   <div style="text-align: center; font-size: 2em; padding: 20px 0;">
