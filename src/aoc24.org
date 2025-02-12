@@ -567,15 +567,15 @@ At the end, we have identified all tiles that are part of at least one best path
 #+begin_src bqn :tangle ./bqn/aoc24.bqn :exports both
   XXIII ← {
     p‿c ← (⊢⋈·⍷∾)'-'⊸Split¨•FLines Input𝕩
-    m ← +˝∘×⎉1‿∞˜⊸×(⌽¨⊸∾p)∊˜⋈⌜˜c
-    eins ⇐ (2÷˜+´⥊tm)-+´0⌈1-˜+˝×tm←m/˜('t'=⊑)¨c
-    zwei ⇐ 1↓∾','⊸∾¨∧c/˜⌈´⊸=⌈˝+˝∘×⎉1‿∞˜⊸×m
+    am ← (⌽¨⊸∾p)∊˜⋈⌜˜c
+    eins ⇐ -○(6÷˜·+´0‿0⍉+˝∘×⎉1‿∞⍟2˜)´ am(⊣⋈/˜)⋈˜('t'≠⊑)¨c
+    zwei ⇐ 1↓∾','⊸∾¨∧c/˜⌈´⊸=⌈˝+˝∘×⎉1‿∞˜⊸×⍟2 am
   }
   XXIII _is 23
 #+end_src
 
 #+RESULTS:
-: "Computed 1346 and ""aw,fk,gv,hi,hp,ip,jy,kc,lk,og,pj,re,sr"" in 0.2376645072s"
+: "Computed 1337 and ""aw,fk,gv,hi,hp,ip,jy,kc,lk,og,pj,re,sr"" in 0.143743779s"
 
 ** XXIV
 
