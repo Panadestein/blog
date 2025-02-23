@@ -241,15 +241,15 @@ This post is a rolling collection of algorithms and computational ideas I like, 
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgd04924d">Z algorithm</a></li>
-<li><a href="#orgb6a4eb8">Longest increasing sub-sequence</a></li>
-<li><a href="#org032728b">N-queens problem</a></li>
-<li><a href="#org75c0d11">Majority element</a></li>
-<li><a href="#org840269c">An identity on the naturals</a></li>
-<li><a href="#orgb16b868">Depth of nested lists</a></li>
-<li><a href="#org1cafafd">H-index</a></li>
-<li><a href="#org309a6cc">Trapping rain water</a></li>
-<li><a href="#org181a5e6">Computing edit distances</a></li>
+<li><a href="#orga08f2af">Z algorithm</a></li>
+<li><a href="#org18d93da">Longest increasing sub-sequence</a></li>
+<li><a href="#org2b03c25">N-queens problem</a></li>
+<li><a href="#org73a723e">Majority element</a></li>
+<li><a href="#orgcaacd33">An identity on the naturals</a></li>
+<li><a href="#org6e36c31">Depth of nested lists</a></li>
+<li><a href="#orgcd0b4c8">H-index</a></li>
+<li><a href="#org3235de9">Trapping rain water</a></li>
+<li><a href="#org8970b6d">Computing edit distances</a></li>
 </ul>
 </div>
 </div>
@@ -259,9 +259,9 @@ Extrapolating Perlis' remark<sup><a id="fnr.1" class="footref" href="#fn.1" role
 would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
 juxtapose my implementations with those of seasoned <i>BQNators</i><sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
-<div id="outline-container-orgd04924d" class="outline-2">
-<h2 id="orgd04924d">Z algorithm</h2>
-<div class="outline-text-2" id="text-orgd04924d">
+<div id="outline-container-orga08f2af" class="outline-2">
+<h2 id="orga08f2af">Z algorithm</h2>
+<div class="outline-text-2" id="text-orga08f2af">
 <p>
 This is a very efficient procedure that finds prefix strings in <a href="https://cp-algorithms.com/string/z-function.html">linear time</a>. The imperative
 implementation reads:
@@ -328,9 +328,9 @@ With further refinements, the earlier solutions can be transformed into:
 </div>
 </div>
 </div>
-<div id="outline-container-orgb6a4eb8" class="outline-2">
-<h2 id="orgb6a4eb8">Longest increasing sub-sequence</h2>
-<div class="outline-text-2" id="text-orgb6a4eb8">
+<div id="outline-container-org18d93da" class="outline-2">
+<h2 id="org18d93da">Longest increasing sub-sequence</h2>
+<div class="outline-text-2" id="text-org18d93da">
 <p>
 This <a href="https://en.wikipedia.org/wiki/Longest_increasing_subsequence">problem</a> can be solved in \(O(n\log n)\) using dynamic programming. Here is an
 imperative implementation which is quadratic, but can be optimized:
@@ -370,7 +370,7 @@ LISA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿
 Let's <code>)explain</code> this optimized version, so we can truly appreciate its beauty:
 </p>
 
-<pre class="example" id="org6595f68">
+<pre class="example" id="orgafcdac7">
  +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽ 
  │ │ │ ││    │ │ │  │ │  │ 
  │ │ │ {┼────┼─┼─┼──┼─┼─´│ 
@@ -400,9 +400,9 @@ we pick the enclosed atom from this operation's result. So it goes<sup><a id="fn
 </p>
 </div>
 </div>
-<div id="outline-container-org032728b" class="outline-2">
-<h2 id="org032728b">N-queens problem</h2>
-<div class="outline-text-2" id="text-org032728b">
+<div id="outline-container-org2b03c25" class="outline-2">
+<h2 id="org2b03c25">N-queens problem</h2>
+<div class="outline-text-2" id="text-org2b03c25">
 <p>
 This problem is the archetypal example of backtracking. Initially, I tried to solve it
 using a function to place the queens in the full board, hoping that it would lead to a
@@ -414,7 +414,7 @@ more array oriented solution:
 </pre>
 </div>
 
-<pre class="example" id="orgab3a387">
+<pre class="example" id="org158cb1b">
 ┌─                 
 ╵ 0 1 0 1 0 1 0 0  
   0 0 1 1 1 0 0 0  
@@ -462,9 +462,9 @@ but I find the resulting validation and position functions very aesthetic the wa
 </p>
 </div>
 </div>
-<div id="outline-container-org75c0d11" class="outline-2">
-<h2 id="org75c0d11">Majority element</h2>
-<div class="outline-text-2" id="text-org75c0d11">
+<div id="outline-container-org73a723e" class="outline-2">
+<h2 id="org73a723e">Majority element</h2>
+<div class="outline-text-2" id="text-org73a723e">
 <p>
 The <a href="https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm">Boyer–Moore</a> algorithm allows for finding the majority element (element that appears
 more than <code>⌊𝕩÷2</code> times in the array) in linear time. If such element exists, then it is
@@ -499,9 +499,9 @@ BM 6‿1‿3‿1‿3‿3‿4‿3‿3‿5
 </pre>
 </div>
 </div>
-<div id="outline-container-org840269c" class="outline-2">
-<h2 id="org840269c">An identity on the naturals</h2>
-<div class="outline-text-2" id="text-org840269c">
+<div id="outline-container-orgcaacd33" class="outline-2">
+<h2 id="orgcaacd33">An identity on the naturals</h2>
+<div class="outline-text-2" id="text-orgcaacd33">
 <p>
 Some time ago, while working on performance optimization of linear algebra
 operations with Boolean arrays, I encountered an
@@ -536,9 +536,9 @@ and since <code>+´(/𝕩)=i ←→ i⊑𝕩</code>, the fold sums all the eleme
 </p>
 </div>
 </div>
-<div id="outline-container-orgb16b868" class="outline-2">
-<h2 id="orgb16b868">Depth of nested lists</h2>
-<div class="outline-text-2" id="text-orgb16b868">
+<div id="outline-container-org6e36c31" class="outline-2">
+<h2 id="org6e36c31">Depth of nested lists</h2>
+<div class="outline-text-2" id="text-org6e36c31">
 <p>
 Studying tree algorithms in APL, I learned about the depth vector <a href="https://asherbhs.github.io/apl-site/trees/representing-trees.html">representation</a>. If
 the nested object in consideration is a string, the best approach is using boolean <a href="https://mlochbaum.github.io/bqncrate/?q=depth%20of%20parens#">masks</a>.
@@ -556,9 +556,9 @@ the depth of nested elements. Here’s how it can be implemented:
 </pre>
 </div>
 </div>
-<div id="outline-container-org1cafafd" class="outline-2">
-<h2 id="org1cafafd">H-index</h2>
-<div class="outline-text-2" id="text-org1cafafd">
+<div id="outline-container-orgcd0b4c8" class="outline-2">
+<h2 id="orgcd0b4c8">H-index</h2>
+<div class="outline-text-2" id="text-orgcd0b4c8">
 <p>
 This metric is one of the reasons for the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2407748">deplorable</a> state of modern academia,
 and the headaches for <i>outsiders</i> trying to get in. Consider that Peter Higgs
@@ -600,9 +600,9 @@ I initially clip my citations array with <code>{≠¨⊔≠∘𝕩¨⌾(≥⟜�
 </p>
 </div>
 </div>
-<div id="outline-container-org309a6cc" class="outline-2">
-<h2 id="org309a6cc">Trapping rain water</h2>
-<div class="outline-text-2" id="text-org309a6cc">
+<div id="outline-container-org3235de9" class="outline-2">
+<h2 id="org3235de9">Trapping rain water</h2>
+<div class="outline-text-2" id="text-org3235de9">
 <p>
 This is a classical interview <a href="https://leetcode.com/problems/trapping-rain-water/">problem</a> that can be solved in linear time. Interestingly,
 it admits a very elegant array solution:
@@ -639,9 +639,9 @@ will probably be slow). Here are two solutions, one \(O(n^2)\) and the other \(O
 </pre>
 </div>
 </div>
-<div id="outline-container-org181a5e6" class="outline-2">
-<h2 id="org181a5e6">Computing edit distances</h2>
-<div class="outline-text-2" id="text-org181a5e6">
+<div id="outline-container-org8970b6d" class="outline-2">
+<h2 id="org8970b6d">Computing edit distances</h2>
+<div class="outline-text-2" id="text-org8970b6d">
 <p>
 The Levenshtein (or edit) <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">distance</a> is a measure of the similarity between two strings. It is defined
 by the following recurrence, which is the basis of dynamic programming algorithms like Wagner-Fisher:
@@ -653,7 +653,7 @@ by the following recurrence, which is the basis of dynamic programming algorithm
 \end{align*}
 
 <p>
-There is an elegant implementation of a variation of the Wagner–Fischer algorithm in the BQNcrate.
+There is an elegant <a href="https://mlochbaum.github.io/bqncrate/?q=leven#">implementation</a> of a variation of the Wagner–Fischer algorithm in the BQNcrate.
 It has been particularly challenging for me to understand it—not due to the clarity
 of the primitives, but rather because of the clever transformation employed.
 I believe that this variant can be derived by shifting the distance matrix.
@@ -682,9 +682,9 @@ to get the deletions, which yields a vectorized implementation.
 </p>
 
 <p>
-Now the only piece I cannot put together is the contruction of the table of costs, which is done
-by reversing \(t\), but since the final result on \(pij\) is located in the bottom right corner,
-and we do a foldr, I would expect it to be \(s\) the one reversed. They both work, thought, as
+Now the only piece I cannot put together is the construction of the table of costs, which is done
+by reversing \(t\), but since the final result on \(p_{ij}\) is located in the bottom right corner,
+and we do a <code>foldr</code>, I would expect it to be \(s\) the one reversed. They both work, thought, as
 the following code shows:
 </p>
 
