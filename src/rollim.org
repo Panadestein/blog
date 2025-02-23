@@ -323,7 +323,7 @@ Under this transformation, the recurrence relation becomes:
 
 \begin{align*}
   p_{i0} &= p_{0j} = m + n, \\
-  p_{ij} &= \min \begin{cases} p_{i-1,j-1} - (\mathbf{1}_{s_i \neq t_j} + 2) \\ p_{i-1,j} \\ p_{i,j-1} \end{cases}
+  p_{ij} &= \min \begin{cases} p_{i-1,j-1} + \mathbf{1}_{s_i \neq t_j} - 2 \\ p_{i-1,j} \\ p_{i,j-1} \end{cases}
 \end{align*}
 
 The above recurrence can be easily identified in the central function of the three train, which is
@@ -331,7 +331,7 @@ folded over the table of the costs (table comparing the characters). For this on
 notice that we compare insertions and substitutions, and then we can do a min scan over the result
 to get the deletions, which yields a vectorized implementation.
 
-Now the only piece I cannot put together is the construction of the table of costs, which is done
+The only piece I cannot put together is the construction of the table of costs, which is done
 by reversing \(t\), but since the final result on \(p_{ij}\) is located in the bottom right corner,
 and we do a =foldr=, I would expect it to be \(s\) the one reversed. They both work, thought, as
 the following code shows:
@@ -345,7 +345,8 @@ the following code shows:
 #+RESULTS:
 : 1
 
-My hypothesis that this can be put together using this properties of the Levenshtein distance:
+My conjecture is that this can be understood using the following properties
+of the Levenshtein distance:
 
 - \(L(s,t) = L(t,s)\)
 - \(L(s,t) = L(\text{rev}(s),\text{rev}(t))\)
