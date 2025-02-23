@@ -298,6 +298,60 @@ will probably be slow). Here are two solutions, one \(O(n^2)\) and the other \(O
 #+RESULTS:
 : ⟨ 0.080050875 4.14558e¯5 ⟩
 
+** Computing edit distances
+
+The Levenshtein (or edit) [[https://en.wikipedia.org/wiki/Levenshtein_distance][distance]] is a measure of the similarity between two strings. It is defined
+by the following recurrence, which is the basis of dynamic programming algorithms like Wagner-Fisher:
+
+\begin{align*}
+  d_{i0} &= i, \quad d_{0j} = j, \\
+  d_{ij} &= \min \begin{cases} d_{i-1,j-1} + \mathbf{1}_{s_i \neq t_j} \\ d_{i-1,j} + 1 \\ d_{i,j-1} + 1 \end{cases}
+\end{align*}
+
+There is an elegant implementation of a variation of the Wagner–Fischer algorithm in the BQNcrate.
+It has been particularly challenging for me to understand it—not due to the clarity
+of the primitives, but rather because of the clever transformation employed.
+I believe that this variant can be derived by shifting the distance matrix.
+Given two strings \(s\) and \(t\) of lengths \(n\) and \(m\), respectively,
+we define a new distance matrix as follows:
+
+\begin{equation*}
+  p_{ij} = d_{ij} + n - i + m - j
+\end{equation*}
+
+Under this transformation, the recurrence relation becomes:
+
+\begin{align*}
+  p_{i0} &= p_{0j} = m + n, \\
+  p_{ij} &= \min \begin{cases} p_{i-1,j-1} - (\mathbf{1}_{s_i \neq t_j} + 2) \\ p_{i-1,j} \\ p_{i,j-1} \end{cases}
+\end{align*}
+
+The above recurrence can be easily identified in the central function of the three train, which is
+folded over the table of the costs (table comparing the characters). For this one has to
+notice that we compare insertions and substitutions, and then we can do a min scan over the result
+to get the deletions, which yields a vectorized implementation.
+
+Now the only piece I cannot put together is the contruction of the table of costs, which is done
+by reversing \(t\), but since the final result on \(pij\) is located in the bottom right corner,
+and we do a foldr, I would expect it to be \(s\) the one reversed. They both work, thought, as
+the following code shows:
+
+#+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
+  _l ← {¯1⊑(1⊸+⥊+)○≠(⌊`⊢⌊⊏⊸»∘⊢-0∾1+⊣)˝𝔽}
+  T ← ⌽⊸(=⌜)_l≡=⌜⟜⌽_l
+  T○{@+97+𝕩•rand.Range 25}´ 1e4‿1e5
+#+end_src
+
+#+RESULTS:
+: 1
+
+My hypothesis that this can be put together using this properties of the Levenshtein distance:
+
+- \(L(s,t) = L(t,s)\)
+- \(L(s,t) = L(\text{rev}(s),\text{rev}(t))\)
+- \(L(\text{rev}(s),t) = L(s,\text{rev}(t))\)
+
+If you know how to do it, please let me know!
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
