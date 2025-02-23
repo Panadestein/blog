@@ -326,15 +326,15 @@ Under this transformation, the recurrence relation becomes:
   p_{ij} &= \min \begin{cases} p_{i-1,j-1} + \mathbf{1}_{s_i \neq t_j} - 2 \\ p_{i-1,j} \\ p_{i,j-1} \end{cases}
 \end{align*}
 
-The above recurrence can be easily identified in the central function of the three train, which is
-folded over the table of the costs (table comparing the characters). For this one has to
-notice that we compare insertions and substitutions, and then we can do a min scan over the result
-to get the deletions, which yields a vectorized implementation.
+The above recurrence can be easily identified in the 3-train's middle function, which is
+folded over the table of the costs (table comparing the characters).
+Note that we compare insertions and substitutions, and then we can do a min scan
+over the result to get the deletions, which gives a vectorised implementation.
 
-The only piece I cannot put together is the construction of the table of costs, which is done
-by reversing \(t\), but since the final result on \(p_{ij}\) is located in the bottom right corner,
-and we do a =foldr=, I would expect it to be \(s\) the one reversed. They both work, thought, as
-the following code shows:
+The only part I can't quite piece together is the construction of the cost table,
+which is done by reversing \(t\). Given that the final result for  \(p_{ij}\) ​ is located
+in the bottom-right corner and we use =foldr=, I would have expected \(s\) to be the
+one reversed instead. However, both approaches work, as demonstrated by the following code:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
   _l ← {¯1⊑(1⊸+⥊+)○≠(⌊`⊢⌊⊏⊸»∘⊢-0∾1+⊣)˝𝔽}
@@ -345,14 +345,13 @@ the following code shows:
 #+RESULTS:
 : 1
 
-My conjecture is that this can be understood using the following properties
-of the Levenshtein distance:
+I suspect the above can be explained by the following properties of the Levenshtein distance:
 
 - \(L(s,t) = L(t,s)\)
 - \(L(s,t) = L(\text{rev}(s),\text{rev}(t))\)
 - \(L(\text{rev}(s),t) = L(s,\text{rev}(t))\)
 
-If you know how to do it, please let me know!
+If you know why both formulations work, please let me know!
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
