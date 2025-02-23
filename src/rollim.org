@@ -308,7 +308,7 @@ by the following recurrence, which is the basis of dynamic programming algorithm
   d_{ij} &= \min \begin{cases} d_{i-1,j-1} + \mathbf{1}_{s_i \neq t_j} \\ d_{i-1,j} + 1 \\ d_{i,j-1} + 1 \end{cases}
 \end{align*}
 
-There is an elegant implementation of a variation of the Wagner–Fischer algorithm in the BQNcrate.
+There is an elegant [[https://mlochbaum.github.io/bqncrate/?q=leven#][implementation]] of a variation of the Wagner–Fischer algorithm in the BQNcrate.
 It has been particularly challenging for me to understand it—not due to the clarity
 of the primitives, but rather because of the clever transformation employed.
 I believe that this variant can be derived by shifting the distance matrix.
@@ -331,9 +331,9 @@ folded over the table of the costs (table comparing the characters). For this on
 notice that we compare insertions and substitutions, and then we can do a min scan over the result
 to get the deletions, which yields a vectorized implementation.
 
-Now the only piece I cannot put together is the contruction of the table of costs, which is done
-by reversing \(t\), but since the final result on \(pij\) is located in the bottom right corner,
-and we do a foldr, I would expect it to be \(s\) the one reversed. They both work, thought, as
+Now the only piece I cannot put together is the construction of the table of costs, which is done
+by reversing \(t\), but since the final result on \(p_{ij}\) is located in the bottom right corner,
+and we do a =foldr=, I would expect it to be \(s\) the one reversed. They both work, thought, as
 the following code shows:
 
 #+begin_src bqn :tangle ./bqn/rollim.bqn :exports both
