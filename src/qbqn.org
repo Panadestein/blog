@@ -1,6 +1,5 @@
 #+TITLE: BQN's Quantum Noise
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
-#+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+#+INCLUDE: "html-head.org"
 
 ** Preamble
 

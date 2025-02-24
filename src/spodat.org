@@ -1,6 +1,5 @@
 #+TITLE: Songs to pave the seasons
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
-#+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+#+INCLUDE: "html-head.org"
 
 I have analyzed my Spotify data[fn:1] for the period 2016-2024. The results accurately represent
 my actual music taste[fn:2].

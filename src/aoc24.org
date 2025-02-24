@@ -1,6 +1,5 @@
 #+TITLE: Coding in Advent
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
-#+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+#+INCLUDE: "html-head.org"
 #+HTML_HEAD: <style>
 #+HTML_HEAD:   #table-of-contents > h2 { display: none; }
 #+HTML_HEAD:   #text-table-of-contents > ul { 
