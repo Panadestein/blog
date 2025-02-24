@@ -193,6 +193,12 @@
 </style>
 <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+<style>
+mjx-container[jax="CHTML"] {
+overflow-x: auto !important;
+}
+</style>
+<!-- Post-specific setting bellow -->
 </head>
 <body>
 <div id="content" class="content">
@@ -201,9 +207,9 @@
 I have analyzed my Spotify data<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> for the period 2016-2024. The results accurately represent
 my actual music taste<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
-<div id="outline-container-orge00a1a1" class="outline-2">
-<h2 id="orge00a1a1">Technical details</h2>
-<div class="outline-text-2" id="text-orge00a1a1">
+<div id="outline-container-org3c7c9dc" class="outline-2">
+<h2 id="org3c7c9dc">Technical details</h2>
+<div class="outline-text-2" id="text-org3c7c9dc">
 <p>
 This is a suitable task for an array language, so I rely on <a href="https://mlochbaum.github.io/BQN/index.html">BQN</a> which is my
 favorite one:
@@ -235,15 +241,15 @@ We define a (50 chars) dyadic block function to execute the queries:
 </div>
 </div>
 </div>
-<div id="outline-container-org7bdff04" class="outline-2">
-<h2 id="org7bdff04">Top songs</h2>
-<div class="outline-text-2" id="text-org7bdff04">
+<div id="outline-container-orge1aa480" class="outline-2">
+<h2 id="orge1aa480">Top songs</h2>
+<div class="outline-text-2" id="text-orge1aa480">
 <div class="org-src-container">
 <pre class="src src-bqn">s Q spd	
 </pre>
 </div>
 
-<pre class="example" id="org94c6e86">
+<pre class="example" id="org75d8fa3">
 ┌─                                                     
 ╵ 1  "Countless Skies"                                 
   2  "Divertimento I, K.136: Allegro"                  
@@ -269,15 +275,15 @@ We define a (50 chars) dyadic block function to execute the queries:
 </pre>
 </div>
 </div>
-<div id="outline-container-orge204866" class="outline-2">
-<h2 id="orge204866">Top artists</h2>
-<div class="outline-text-2" id="text-orge204866">
+<div id="outline-container-orgbc03500" class="outline-2">
+<h2 id="orgbc03500">Top artists</h2>
+<div class="outline-text-2" id="text-orgbc03500">
 <div class="org-src-container">
 <pre class="src src-bqn">a Q spd
 </pre>
 </div>
 
-<pre class="example" id="orgb71b1d2">
+<pre class="example" id="org150a712">
 ┌─                              
 ╵ 1  "Opeth"                    
   2  "Wolfgang Amadeus Mozart"  
@@ -303,9 +309,9 @@ We define a (50 chars) dyadic block function to execute the queries:
 </pre>
 </div>
 </div>
-<div id="outline-container-orgcdf0424" class="outline-2">
-<h2 id="orgcdf0424">Bonus: Opeth anthology</h2>
-<div class="outline-text-2" id="text-orgcdf0424">
+<div id="outline-container-org06845ce" class="outline-2">
+<h2 id="org06845ce">Bonus: Opeth anthology</h2>
+<div class="outline-text-2" id="text-org06845ce">
 <p>
 This is the Opeth album I would recommend to anyone. The query function needs to be modified a bit for generating it.
 But before that, let's look at the <a href="https://www.opeth.com/releases/albums">official discography</a>:
@@ -334,7 +340,7 @@ Enjoy:
 </pre>
 </div>
 
-<pre class="example" id="orgdce93ad">
+<pre class="example" id="orgd35e2df">
 ┌─                             
 ╵ 1 "Ghost of Perdition"       
   2 "River"                    
