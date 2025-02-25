@@ -1,0 +1,37 @@
+#+TITLE: Navier-Stokes simulator (WIP)
+#+INCLUDE: "../html-head.org"
+
+** Foreword
+
+Under classical, non-relativistic continuum mechanics, effectively incompressible Newtonian fluids
+are governed with remarkable accuracy by the following [[https://en.wikipedia.org/wiki/Derivation_of_the_Navier%E2%80%93Stokes_equations][system]] of partial differential equations:
+
+\begin{equation*}
+  \begin{aligned}
+    \nabla \cdot \mathbf{q} &= 0,\\
+    \frac{\partial \mathbf{q}}{\partial t}
+    + \nabla \cdot (\mathbf{q} \otimes \mathbf{q}) &=
+    -\nabla p + \frac{1}{\text{Re}} \nabla^2 \mathbf{q},
+  \end{aligned}
+\end{equation*}
+
+where \(\mathbf{q}\) is the velocity vector, \(p\) is the pressure, and \(\text{Re}\) is the
+Reynolds number. We will craft a tiny solver for this system in BQN, considering a 2D domain
+with periodic boundary conditions.
+
+** Simulator
+
+The simulator is based on the material from [[https://doi.org/10.1007/978-3-031-35032-0][this book]], but aiming for a zero dependency implementation.
+
+#+begin_src bqn :tangle ../bqn/ns.bqn :exports code
+  z ← {
+    _p ⇐ {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
+    C‿E ⇐ ⟨⋈⟜-´˘, •math{𝕗.Cos≍˘𝕗.Sin}⟩
+  }
+  FFT ← {𝕊⁼: z.C{≠÷˜·𝔽𝔾∘𝔽}𝕊𝕩; (1=≠)◶⟨(+∾-)⟜(⊢×z._p˘·z.E∘-π×↕⊸÷∘≠)´(𝕊¨⊢⊔˜2|⊒˜), ⊢⟩𝕩}
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+#+INCLUDE: "../html-foot.org"

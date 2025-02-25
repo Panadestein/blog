@@ -1,0 +1,173 @@
+#+TITLE: Scheming a mise-en-abîme in BQN
+#+INCLUDE: "../html-head.org"
+
+** Prelude
+
+We will build an interpreter for a subset of the Scheme programming language,
+following an [[https://www.norvig.com/lispy.html][essay]] by Peter Norvig. An alternative reference would
+have been of course SICP's metacircular evaluator[fn:1], but I consider =lispy= to be
+a very elegant implementation targeting a non-Lisp host[fn:2]. Please beware this
+post is a learning exercise. Most of what I know about
+language implementation comes from self-study of a handful of books[fn:3].
+
+** A R5RS dialect
+
+Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme ([[https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html][R5RS]]).
+However, seasoned schemers will quickly notice that our implementation still has
+quite some distance to cover in reaching full compliance.
+
+Let's start by defining some utilities. One aspect I don't like about Scheme is that it uses
+special values for Booleans, so we  [[https://mlochbaum.github.io/BQN/tutorial/combinator.html#booleans][unfortunately]]  need the 1-modifier. The function, on the other hand,
+is a fine example of the minimalistic OOP features BQN provides. It is used to create a class
+for the environment used in the Scheme interpreter.
+
+#+begin_src bqn :tangle ../bqn/si.bqn
+  _bool ← {𝔽◶"#f"‿"#t"}
+  C ← {𝕨𝕊p‿v:
+    o‿h ⇐ 𝕨 ⋈ p •HashMap v
+    F ⇐ {h.Has 𝕩 ? h; @≢o ? o.F 𝕩; 0}
+  }
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+We then define a global environment (instance of the =C= class) with the Scheme primitives
+of the target subset, expressed as BQN functions:
+
+#+begin_src bqn :tangle ../bqn/si.bqn
+  env ← @ C ⟨
+    "sin", "cos", "tan", "asin", "acos", "atan"
+    "log", "+", "-", "*", "/", ">", "<", ">=", "<=", "="
+    "abs", "append", "apply", "begin", "car", "cdr", "cons"
+    "eq?", "expt", "equal?", "length", "list", "list?"
+    "map", "max", "min", "not", "null?", "number?"
+    "print", "round", "symbol?", "nil", "pi"
+  ⟩ ⋈ ⟨
+    ⋆⁼, +´, -˜´⌽, ×´, ÷˜´⌽, >´, <´, ≥´, ≤´, =´
+    |, ∾´, {𝕎𝕩}´, {∾𝕩}, ⊑∘∾, 1⊸↓∘∾, <⊸∾´
+    ≡´_bool, ⋆´, =´_bool, ≠∘∾, ⊢, (0=•Type∘⊑)_bool
+    {𝕎∘⋈¨𝕩}´, ⌈´, ⌊´, 0⊸≠_bool¬, @⊸=_bool, (1=•Type∘⊑)_bool 
+    {𝕩}, ⌊0.5+⊢, 2⊸=_bool{•Type⊑∾𝕩}, @, π
+  ⟩ ∾˜ •math •ns.Get¨ "sin"‿"cos"‿"tan"‿"asin"‿"acos"‿"atan"
+#+end_src
+
+#+RESULTS:
+: {o‿h‿f⇐}
+
+The interpreter is defined as a 1-modifier. This gives us the flexibility to create different
+subsets of the language by changing the input global environment:
+
+#+begin_src bqn :tangle ../bqn/si.bqn
+  _sch ← {
+    T ← " "⊸≢¨⊸/·(-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔(⊢+22×@=10-˜⊢)
+    R ← {
+      𝕊⟨⟩: "Empty program"!0;
+      𝕊𝕩: {
+        "("≡⊑𝕨 ? l←⟨⟩ ⋄ l⋈1↓{t‿ts: ts⊣l∾↩<t}∘R•_while_(")"≢⊑) 𝕩;
+        ")"≡⊑𝕨 ? "Unexpected )"!0 ;
+        𝕩 ⋈˜ •ParseFloat⎊⊢ ⊑𝕨
+      }´ 1(↑⋈↓)𝕩
+    }
+    E ← 𝕗⊸{
+      0≠𝕨.F 𝕩 ? (𝕨.F 𝕩).Get 𝕩;
+      1=•Type⊑⟨𝕩⟩ ? 𝕩;
+      𝕨𝕊"quote"‿arg: arg;
+      𝕨𝕊"quasiquote"‿arg: 𝕨{"unquote"≡⊑𝕩 ? 𝕗𝔾1↓𝕩; (2≤≠)◶⊢‿(𝕊¨)𝕩}𝕊arg;
+      𝕨𝕊"if"‿tst‿cnd‿alt: 𝕨(⊣𝕊𝕊◶alt‿cnd)tst;
+      𝕨𝕊"define"‿var‿val: ⟨⟩ ⊣ var 𝕨.h.Set 𝕨𝕊val;
+      𝕨𝕊"lambda"‿par‿bod: 𝕨{bod 𝕘˜ 𝕗 C par‿𝕩}𝕊;
+      f ← 𝕨𝕊⊑𝕩 ⋄ F 𝕨⊸𝕊¨1↓𝕩 
+    }∘⊑
+    P ← "-(@  )" {'@'⊸≠⊸/·(⊢+˝(𝕗-𝕘)×𝕘=⌜⊢)∘•Repr·1⊸=∘≠◶⊢‿⊑(0<≠¨)⊸/⎊⊢} "¯⟨"",‿⟩"
+    P∘E∘R∘T 𝕩
+  }
+#+end_src
+
+#+RESULTS:
+: (1-modifier block)
+
+And now for the climax. Our interpreter inherits all the limitations of the one in the reference essay,
+the most critical being the lack of proper error handling. Additionally,
+as the names of the functions inside the modifier suggest, an =L= is missing to complete the
+=Read → Eval → Print= loop. In terms of golfing statistics, =lispy= has 117
+non-comment non-blank lines, whereas =Scheme= has only 43. Ours, however, is a larger subset,
+because we include the basic [[https://www.oneofus.la/have-emacs-will-hack/files/bawden.pdf][metaprogramming]] building blocks.
+
+#+begin_src bqn :tangle ../bqn/si.bqn
+  Scheme ← env _sch
+#+end_src
+
+#+RESULTS:
+: {o‿h‿f⇐}(1-modifier block)
+
+** A Lisp quine
+
+Given the title of this post, it's only fitting that we test our interpreter with a quine. In fact, building this interpreter
+was, for me, an exercise in bootstrapping the necessary machinery to produce this recursive effect:
+
+#+begin_src bqn :tangle ../bqn/si.bqn :exports both
+  Scheme "((lambda (x) (list x (list (quote quote) x)))
+           (quote (lambda (x) (list x (list (quote quote) x)))))"
+#+end_src
+
+#+RESULTS:
+: "((lambda (x) (list x (list (quote quote) x))) (quote (lambda (x) (list x (list (quote quote) x)))))"
+
+Naturally, we can do more rigorous tests by comparing to my favorite Scheme
+implementation[fn:4]. To achieve this, we'll leverage BQN's
+foreign function interface:
+
+#+begin_src bqn :tangle ../bqn/si.bqn
+  ch ← "../supp/chicken/libchicken.so" •FFI "*u8"‿"eval_scheme"‿">*u8:c8"
+  R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch
+#+end_src
+
+#+RESULTS:
+: (function block)(foreign function)
+
+But fear not, there’s no room for monotony here. After all,
+people much prefer dealing with machinery to dealing with bureaucracies[fn:5]:
+
+#+begin_src bqn :tangle ../bqn/si.bqn :exports both
+  ("Not Compliant"⊸!Scheme≡R5RS)¨ ⟨
+    "(+ 10 122)"
+    "(max 5 6 7 1)"
+    "(* 4 2)"
+    "(begin (define r 10) (+ (/ 4 2) (* r r)))"
+    "(number? (quote b))"
+    "(symbol? (quote var))"
+    "(if (> (* 11 11) 120) (* 7 6) oops)"
+    "(car (quote (1 2 3)))"
+    "(list? (quote (1 2 3)))"
+    "(length (quote ((1 2) 3)))"
+    "(quasiquote (unquote (quote pointless)))"
+    "(quasiquote (apply + (list 1 1 2 (unquote (+ 1 2)))))"
+    "(begin
+       (define our-goal (quote macros))
+       (quasiquote (A little step towards (unquote our-goal) mate!)))"
+    "(begin
+       (define fib (lambda (n) (if (< n 2) 1 (+ (fib (- n 1)) (fib (- n 2))))))
+       (define range (lambda (a b) (if (= a b) (quote ()) (cons a (range (+ a 1) b)))))
+       (apply - (map fib (range 0 10))))"
+  ⟩
+#+end_src
+
+#+RESULTS:
+: ⟨ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 ⟩
+
+If you manage to find any sneaky corner cases that break the interpreter in the given subset, let me know!
+And please forgive the formatting problems, I'm tired of fiddling with the printer at this point.
+
+[fn:1] I recommend SICP as further reading. Much like Louis Reasoner, I attempted
+solving all the problems in the book, but I haven't gotten very far.
+I believe there are some interesting Racket bits in my [[https://panadestein.github.io/solved-sicp/][solutions]], though.
+[fn:2] I am not alone in this view; for instance, the [[https://www.fluentpython.com/][Lizard Book]] dedicates
+an entire section to it.
+[fn:3] In addition to the great SICP, I also studied from [[https://craftinginterpreters.com][Crafting Interpreters]] and
+[[https://www3.nd.edu/~dthain/compilerbook/][Introduction to Compilers and Language Design]].
+[fn:4] One of my favorite hacker guidelines is [[http://www.call-with-current-continuation.org/articles/brutalist-manifesto.txt][The Brutalist Programming Manifesto]],
+written by the creator of Chicken Scheme.
+[fn:5] John McCarthy, [[http://jmc.stanford.edu/general/sayings.html][1986]].
+
+#+INCLUDE: "../html-foot.org"
