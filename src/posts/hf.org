@@ -13,7 +13,7 @@ First, we import the required BQN system values and utility functions:
 
 #+begin_src bqn :results none :tangle ../bqn/hf.bqn
   Sin‿Cos‿ATan‿Erf ← •math
-  Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
+  Setplot‿Plot ← •Import "../../bqn-utils/plots.bqn"
 #+end_src
 
 Some auxiliary functions are needed for the computation of the Boys function, the matrix and vector product,

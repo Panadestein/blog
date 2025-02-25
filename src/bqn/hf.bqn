@@ -1,5 +1,5 @@
 Sin‿Cos‿ATan‿Erf ← •math
-Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
+Setplot‿Plot ← •Import "../../bqn-utils/plots.bqn"
 
 E ← 1e¯6⊸<◶(1-÷⟜3)‿((π÷4)⊸÷×⟜Erf○√⊢)
 P ← +˝∘×⎉1‿∞

@@ -35,7 +35,7 @@ no dependencies[fn:2]. As usual, we will set the stage by importing and defining
 namely plotting, random number generation, matrix product, and root mean square error: 
 
 #+begin_src bqn :tangle ../bqn/nn.bqn
-  Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
+  Setplot‿Plot ← •Import "../../bqn-utils/plots.bqn"
   U ← 0.5-˜•rand.Range⟜0
   M ← +˝∘×⎉1‿∞
   RMS ← √≠∘⊢÷˜·+´×˜∘-

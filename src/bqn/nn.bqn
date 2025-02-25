@@ -1,4 +1,4 @@
-Setplot‿Plot ← •Import "../bqn-utils/plots.bqn"
+Setplot‿Plot ← •Import "../../bqn-utils/plots.bqn"
 U ← 0.5-˜•rand.Range⟜0
 M ← +˝∘×⎉1‿∞
 RMS ← √≠∘⊢÷˜·+´×˜∘-
