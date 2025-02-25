@@ -1,0 +1,971 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Coding in Advent</title>
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+<style>
+mjx-container[jax="CHTML"] {
+overflow-x: auto !important;
+}
+</style>
+<!-- Post-specific setting bellow -->
+<style>
+#table-of-contents > h2 { display: none; }
+#text-table-of-contents > ul {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 10px;
+list-style: none;
+padding: 0;
+margin: 0;
+}
+#table-of-contents > ul > li {
+text-align: center;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+<style>
+mjx-container[jax="CHTML"] {
+overflow-x: auto !important;
+}
+</style>
+<!-- Post-specific setting bellow -->
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Coding in Advent</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org380ce62">I</a></li>
+<li><a href="#orgfadf0df">II</a></li>
+<li><a href="#org940054c">III</a></li>
+<li><a href="#orge9239eb">IV</a></li>
+<li><a href="#org824e431">V</a></li>
+<li><a href="#orge4cdfe5">VI</a></li>
+<li><a href="#org939f9a5">VII</a></li>
+<li><a href="#org59b83ea">VIII</a></li>
+<li><a href="#orgb22facc">IX</a></li>
+<li><a href="#org95d0048">X</a></li>
+<li><a href="#org9f63b25">XI</a></li>
+<li><a href="#org5a4054b">XII</a></li>
+<li><a href="#org3ad0373">XIII</a></li>
+<li><a href="#orgeeec572">XIV</a></li>
+<li><a href="#org2ac95da">XV</a></li>
+<li><a href="#org82b8ef6">XVI</a></li>
+<li><a href="#org75e69b4">XVII</a></li>
+<li><a href="#orgae4c860">XVIII</a></li>
+<li><a href="#orgc777227">XIX</a></li>
+<li><a href="#org9dec091">XX</a></li>
+<li><a href="#orgf5965d5">XXI</a></li>
+<li><a href="#orgb03ce36">XXII</a></li>
+<li><a href="#org6d58b40">XXIII</a></li>
+<li><a href="#org4175f95">XXIV</a></li>
+<li><a href="#orgd6cf44e">XXV</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org0df9066" class="outline-2">
+<h2 id="org0df9066">Foreword</h2>
+<div class="outline-text-2" id="text-org0df9066">
+<p>
+Welcome to my <a href="https://adventofcode.com/2024">Advent of Code</a> solutions for the year 2024. Please read the puzzles' descriptions upstream
+to get more context. These definitions and imports are shared by the various puzzles:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">Xor ← {s32 ← 2⋆31 ⋄ 𝕨(s32⊸×⊸+´32•bit._xor○(s32⊸(⌊∘÷˜⋈|)))𝕩}
+Split ← (¬-˜⊢×·+`»⊸&gt;)∘≠⊔⊢
+SplitF ← {((¯1+⊢×·+`»⊸&lt;)¬𝕨⊸≡¨𝕩)⊔𝕩}
+Ints ← {•ParseFloat¨((¯1+⊢×·+`»⊸&lt;)𝕩∊𝕨∾'0'+↕10)⊔𝕩}
+Input ← {"../supp/aoc/2024/"∾".inp"∾˜•Fmt𝕩}
+_fp ← {𝔽∘⊢⍟≢⟜𝔽_𝕣∘⊢⍟≢⟜𝔽𝕩}
+_cnu ← {𝕩{𝕏𝕨}¨𝔽⟨»,»˘,«,«˘⟩}
+_is ← {
+ ∾⟨"Computed ", •Fmt(𝔽𝕩).eins, " and ",
+    •Fmt(𝔽𝕩).zwei, " in ", •Fmt 10𝔽•_timed𝕩, "s"⟩
+}
+</pre>
+</div>
+
+<p>
+The <code>_is</code> modifier prints the solution for the two parts, and a 10-runs average total runtime (including parsing).
+For reference, these are my CPU's specs:
+</p>
+
+<details>
+<summary>inxi -C</summary>
+<br/>
+
+<div class="org-src-container">
+<pre class="src src-nil">CPU:
+  Info: 8-core model: AMD Ryzen 7 PRO 7840U w/ Radeon 780M Graphics bits: 64
+    type: MT MCP cache: L2: 8 MiB
+  Speed (MHz): avg: 2048 min/max: 400/5132
+</pre>
+</div>
+
+</details>
+
+<p>
+You can compare my solutions with those of other BQN programmers in the <a href="https://mlochbaum.github.io/BQN/community/aoc.html">AOC retrospective</a> page. The
+BQN module containing all 25 solutions has exactly 300 lines of code.
+</p>
+</div>
+</div>
+<div id="outline-container-org380ce62" class="outline-2">
+<h2 id="org380ce62">I</h2>
+<div class="outline-text-2" id="text-org380ce62">
+<div class="org-src-container">
+<pre class="src src-bqn">I ← {
+  inp ← &gt;(•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
+  eins ⇐ +´|-´˘∧˘⌾⍉inp
+  zwei ⇐ {+´𝕨×-´(∧𝕩)⊸⍋¨(⊢⋈-⟜1)𝕨}´&lt;˘⍉inp
+}
+I _is 1
+</pre>
+</div>
+
+<pre class="example">
+"Computed 2057374 and 23177084 in 0.0002433342s"
+</pre>
+</div>
+</div>
+<div id="outline-container-orgfadf0df" class="outline-2">
+<h2 id="orgfadf0df">II</h2>
+<div class="outline-text-2" id="text-orgfadf0df">
+<div class="org-src-container">
+<pre class="src src-bqn">II ← {
+  inp ← (-´˘·2⊸↕·•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
+  P‿Q ← ⟨3≥⌈´∘|, ≠=·|+´∘×⟩
+  F1‿F2‿F3 ← P‿P‿Q {𝕎∧𝕏}¨ ⟨Q, 1=≠-·|·+´×, 1=·+´3&gt;|⟩   
+  eins ⇐ +´F1¨inp
+  zwei ⇐ eins + {a‿b‿ab: ab-˜b+a} ⟨F2, F3, F2∧F3⟩ {≠𝕎¨⊸/𝕩}¨ &lt;(¬F1¨)⊸/inp
+}
+II _is 2
+</pre>
+</div>
+
+<pre class="example">
+"Computed 483 and 528 in 0.0006116174s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org940054c" class="outline-2">
+<h2 id="org940054c">III</h2>
+<div class="outline-text-2" id="text-org940054c">
+<div class="org-src-container">
+<pre class="src src-bqn">III ← {
+  mem ← •FChars Input𝕩
+  prg ← mem/˜1=×∘+`2×-´"do()"‿"don't()"(≢∘⊢↑⍷)¨&lt;mem
+  mul‿cmd ← {(12↑↓⟜𝕩)¨4+/"mul("(≢∘⊢↑⍷)𝕩}¨mem‿prg
+  C ← {
+    l‿r←⊑⎊0¨1(↑⋈↓)','Split𝕩
+    l×○•ParseFloat⎊0 (∨´⎊0')'⊸=)◶⟨0, ⊑')'⊸Split⟩r
+  }
+  eins‿zwei ⇐ (+´C¨)¨ mul‿cmd
+}
+III _is 3
+</pre>
+</div>
+
+<pre class="example">
+"Computed 165225049 and 108830766 in 0.0008441142s"
+</pre>
+</div>
+</div>
+<div id="outline-container-orge9239eb" class="outline-2">
+<h2 id="orge9239eb">IV</h2>
+<div class="outline-text-2" id="text-orge9239eb">
+<div class="org-src-container">
+<pre class="src src-bqn">IV ← {
+  inp ← &gt;•FLines Input 𝕩
+  t‿ts ← ⟨"XMAS"‿"SAMX", "MSAMS"‿"SMASM"‿"SSAMM"‿"MMASS"⟩
+  eins ⇐ +´+´∘⥊¨t ⍷⌜{⟨+´𝕨𝔽&lt;𝕩, +´𝕨𝔽&lt;⍉𝕩, ∾+˝𝕨𝔽𝔾𝕩, ∾+˝𝕨𝔽𝔾⌽𝕩⟩}(⊢⊔˜·+⌜´↕¨∘≢) inp
+  xm ← ⌽˘⊸∨=⌜˜↕3 ⋄ zwei ⇐ +´⥊{ts≡¨&lt;xm/○⥊𝕩}⎉2 3‿3↕inp
+}
+IV _is 4
+</pre>
+</div>
+
+<pre class="example">
+"Computed 2397 and 1824 in 0.0044790454s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org824e431" class="outline-2">
+<h2 id="org824e431">V</h2>
+<div class="outline-text-2" id="text-org824e431">
+<div class="org-src-container">
+<pre class="src src-bqn">V ← {
+  p‿r ← ",|" •ParseFloat⚇1∘(Split¨)¨ 1↓(∧`⊸+⟨⟩⊸≢¨)⊸⊔ •FLines Input𝕩
+  M ← (⍒∊⟜(&gt;r)∘⋈⌜˜)¨⊏¨⊢
+  g‿b ← p⊔˜∞=+´˘ p (2=·+´∘⥊=⌜)◶0‿{𝕩(⊣≡⊢/˜·+˝=⌜)𝕨?1;∞}⌜ r
+  eins‿zwei ⇐ (+´(⊢⊑˜·⌊2÷˜≠)¨)¨ g⋈M b
+}
+V _is 5
+</pre>
+</div>
+
+<pre class="example">
+"Computed 6242 and 5169 in 0.2089791522s"
+</pre>
+</div>
+</div>
+<div id="outline-container-orge4cdfe5" class="outline-2">
+<h2 id="orge4cdfe5">VI</h2>
+<div class="outline-text-2" id="text-orge4cdfe5">
+<div class="org-src-container">
+<pre class="src src-bqn">VI ← {
+  hm ← (↕∘≢•HashMap○⥊⊢) inp ← &gt;•Flines Input𝕩
+  g ← ⊑/○⥊⟜(↕≢)'^'= inp ⋄ r ← ⟨¯1, 0⟩‿⟨0, 1⟩‿⟨1, 0⟩‿⟨0, ¯1⟩
+  Sym ← {𝕊m: s ← •HashMap˜⟨⟩
+    (s.Keys@) ⋈ s.Has {𝕊p‿d:
+      s.Set˜p‿d ⋄ '#'=◶{𝕊:d⋈˜p+d⊑r}‿{𝕊:p⋈4|d+1} m.Get⎊@ p+d⊑r
+    }•_while_{𝕊𝕩: (m.Has⊑𝕩) ∧ ¬s.Has𝕩} g‿0
+  }
+  eins‿zwei ⇐ (≠⋈·+´{𝕩hm.Set'#' ⋄ (𝕩hm.Set'.')⊢⊢´Sym hm}¨) ⍷⊏⍉&gt;⊑Sym hm
+}
+VI _is 6
+</pre>
+</div>
+
+<pre class="example">
+"Computed 5444 and 1946 in 11.5659486128s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org939f9a5" class="outline-2">
+<h2 id="org939f9a5">VII</h2>
+<div class="outline-text-2" id="text-org939f9a5">
+<div class="org-src-container">
+<pre class="src src-bqn">VII ← {
+  inp ← (⊑⊸⋈○(•ParseFloat¨' '⊸Split)´':'⊸Split)¨•FLines Input𝕩
+  C ← ⊢+⊣×10⊸⋆⟜(⌊1+10⋆⁼1⌈|)
+  eins ⇐ +´{⊑𝕨∊(+∾×)´⌽𝕩?𝕨;0}´¨ inp
+  zwei ⇐ +´{⊑𝕨∊(C˜∾+∾×)´⌽𝕩?𝕨;0}´¨ inp
+}
+VII _is 7
+</pre>
+</div>
+
+<pre class="example">
+"Computed 6231007345478 and 333027885676693 in 0.0148443502s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org59b83ea" class="outline-2">
+<h2 id="org59b83ea">VIII</h2>
+<div class="outline-text-2" id="text-org59b83ea">
+<div class="org-src-container">
+<pre class="src src-bqn">VIII ← {
+  n ← ≠⊑inp‿ant ← (⊢⋈1↓⍷∘⥊)&gt;•FLines Input𝕩
+  _tcd ← {(𝕨⊸×-(𝕨-1)×⊣)⌜˜⊸𝔽/○⥊⟜(↕≢)𝕩}
+  eins ⇐ +´(∧´≥⟜0∧&lt;⟜n)¨⍷∾ 2 (⥊∘⊣/˜·¬⥊⊸∊)_tcd¨ ant=&lt;inp
+  zwei ⇐ +´(∧´≥⟜0∧&lt;⟜n)¨⍷∾∾ (↕n) ⥊∘⊣_tcd¨⌜&lt;ant=&lt;inp
+}
+VIII _is 8
+</pre>
+</div>
+
+<pre class="example">
+"Computed 291 and 1015 in 0.0386348246s"
+</pre>
+</div>
+</div>
+<div id="outline-container-orgb22facc" class="outline-2">
+<h2 id="orgb22facc">IX</h2>
+<div class="outline-text-2" id="text-orgb22facc">
+<div class="org-src-container">
+<pre class="src src-bqn">IX ← {
+   f‿s ← &lt;˘⍉↑‿2⥊•ParseFloat∘⋈¨⊑•FLines Input𝕩
+   m ← ¯1=d ← ∾⥊⍉ds ← (⊔˜/f)≍¯1¨∘↕¨sm ← s
+   ds ⊣ {n𝕊cf: (p&lt;n)∧(≠f)&gt;p←⊑1⊐˜cf≠⊸≤sm?
+     ds({cf«𝕩}⌾(1‿p⊸⊑){¯1¨𝕩}⌾(0‿n⊸⊑))↩ ⋄ @⊣sm{𝕩-≠cf}⌾(p⊸⊑)↩; @
+   }´˘(⊢≍˘˜·⌽⊒˜)⌽⊏ds
+   eins ⇐ {+´(⊢×↕∘≠)(𝕩-˜≠d)↑(𝕩↑⌽/f)⌾(m⊸/)d}+´s
+   zwei ⇐ +´(⊢×↕∘≠)(⊢×¯1⊸≠)∾⥊⍉{𝕊⟨⟩:𝕩;(⌽∘⊣∾⊢)´𝕩⊔˜𝕩=¯1}¨⌾(1⊸⊏)ds
+}
+IX _is 9
+</pre>
+</div>
+
+<pre class="example">
+"Computed 6378826667552 and 6413328569890 in 0.008265096s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org95d0048" class="outline-2">
+<h2 id="org95d0048">X</h2>
+<div class="outline-text-2" id="text-org95d0048">
+<div class="org-src-container">
+<pre class="src src-bqn">X ← {
+  inp ← &gt;'0'-˜•FLines Input𝕩
+  I ← {(𝕨⊸=/○⥊⟜(↕≢)⊢)𝕩}
+  P ← {(4/≍≢inp)(⊢/˜·∧´˘&gt;∧0⊸≤)&gt;⟨¯1‿0, 0‿1, 1‿0, 0‿¯1⟩+&lt;𝕩}
+  BFS ← {
+    v‿r ← •HashMap{⟨𝕩𝔽○⋈@, 𝔽˜⟨⟩⟩}𝕩
+    (r.Count@) ⊣ 1⊸↓∘{9=⊑⊑𝕩 ? 𝕩⊣@r.Set˜⊢´⊑𝕩; h‿c←⊑𝕩
+      𝕩∾@⊸≢¨⊸/⥊{(h=1-˜𝕩⊑inp)∧¬v.Has𝕩}◶⟨@⟩‿{@v.Set˜𝕩⋄⋈𝕩⋈˜h+1}˘P c
+    }•_while_{𝕊:0≠≠𝕩} ⋈0‿𝕩
+  }
+  DP ← {
+   dpm ← (𝕩=9)𝕩{h 𝔽_𝕣 ct: ct⊣{ct(+´{h=1-˜𝕩⊑inp?𝕩⊑ct;0}˘P𝕩)⌾(𝕩⊸⊑)↩}¨h I𝕗}´↕9
+   +´⥊ (𝕩=0) × dpm
+  }
+  AMP ← {
+    am ← (1=-⌜˜⥊𝕩)∧1=+´∘|∘-⌜˜⥊↕≢𝕩
+    +´⥊(0=⥊𝕩)/⌾⍉(9=⥊𝕩)/{𝕩𝕨⊸𝕊⍟≢𝕨+𝕨+˝∘×⎉1‿∞𝕩}˜am
+  }
+  eins ⇐ +´BFS¨ 0 I inp
+  zwei ⇐ DP inp
+}
+X _is 10
+</pre>
+</div>
+
+<pre class="example">
+"Computed 776 and 1657 in 0.0073447794s"
+</pre>
+
+
+<details>
+<summary>Commentary</summary>
+
+<p>
+For this problem I have included additional functions to solve it in an array way using the
+powers of the adjacency matrix. This method is unfortunately slower than simple dynamic programming.
+</p>
+
+</details>
+</div>
+</div>
+<div id="outline-container-org9f63b25" class="outline-2">
+<h2 id="org9f63b25">XI</h2>
+<div class="outline-text-2" id="text-org9f63b25">
+<div class="org-src-container">
+<pre class="src src-bqn">XI ← {
+  inp ← •ParseFloat¨' 'Split⊑•Flines Input𝕩 ⋄ m ← •HashMap˜⟨⟩
+  B ← {
+    m.Has𝕨‿𝕩 ? m.Get𝕨‿𝕩;
+    ·𝕊0: 1;      
+    0𝕊𝕩: 𝕩{𝕩 ⊣ 𝕨m.Set𝕩}1𝕊𝕩-1;
+    e𝕊c: l‿r ← e (⌊∘÷⋈|˜) 10⋆⌊2÷˜d ← ⌊1+10⋆⁼e 
+    {𝕩⊣e‿c m.Set𝕩} 𝕊{0=𝕩 ? (l⊸𝔽+r⊸𝔽)c-1; (2024×e)𝔽c-1} 2|d
+  }
+  zwei ⇐ +´inp B¨ 75
+  eins ⇐ +´inp B¨ 25
+}
+XI _is 11
+</pre>
+</div>
+
+<pre class="example">
+"Computed 199982 and 237149922829154 in 0.0604116584s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org5a4054b" class="outline-2">
+<h2 id="org5a4054b">XII</h2>
+<div class="outline-text-2" id="text-org5a4054b">
+<div class="org-src-container">
+<pre class="src src-bqn">XII ← {
+  n‿inp ← ≠⊸⋈&gt;•FLines Input𝕩
+  sf‿sp‿sc ← ⟨»˘, », «˘, «⟩‿⟨0‿¯1, ¯1‿0, 0‿1, 1‿0⟩‿⟨1‿0, 1‿2, 3‿0, 3‿2⟩
+  mn‿mp ← (∾¨´⋈·+´¬) inp&lt;⊸=nud ← sf{𝕎𝕩}¨&lt;inp
+  mc ← +´sc{hv←(sf⊑˜⊢´𝕨){𝔽}⊑h‿v←𝕨⊏nud ⋄ ((𝕩≠h)∧𝕩≠v)∨(𝕩≠hv)∧(𝕩=v)∧𝕩=h}¨&lt;inp
+  BFS ← {
+    +´{𝕩⊑v?0; v 1⌾(𝕩⊸⊑)↩ ⋄ a‿p‿c ← 0‿0‿0
+      1⊸↓∘{𝕊: h←⊑𝕩 ⋄ a+↩1 ⋄ p+↩h⊑mp ⋄ c+↩h⊑mc
+        𝕩∾{𝕩⊣v 1¨⌾(𝕩⊸⊑)↩}{𝕩/˜(0=𝕩⊑⎊∞¨&lt;v)∧(h⊑mn)∧(∧´≥⟜0∧&lt;⟜n)¨𝕩}sp+&lt;h
+      }•_while_{𝕊: 0&lt;≠𝕩} ⋈𝕩 ⋄ a×p‿c}¨⥊↕≢ v ← 0¨𝕩
+  }
+  eins‿zwei ⇐ BFS inp
+}
+XII _is 12
+</pre>
+</div>
+
+<pre class="example">
+"Computed 1473620 and 902620 in 0.0179634179s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org3ad0373" class="outline-2">
+<h2 id="org3ad0373">XIII</h2>
+<div class="outline-text-2" id="text-org3ad0373">
+<div class="org-src-container">
+<pre class="src src-bqn">XIII ← {
+  ∘‿3‿2⥊∾Ints¨⟨⟩⊸≢¨⊸/•FLines Input 𝕩
+  C ← (-´×⟜⌽˝){𝕨𝔽_𝕣[a,b,c]: (𝔽÷˜(𝕨+c)⌾⊏⋈○𝔽(𝕨+c)⌾(⊏⌽))a≍b} 
+  eins‿zwei ⇐ {+´⥊3‿1×⎉1(∧´⌊⊸=)˘⊸/𝕩⊸C˘inp}¨ 0‿1e13
+}
+XIII _is 13
+</pre>
+</div>
+
+<pre class="example">
+"Computed 480 and 875318608908 in 0.0003234552s"
+</pre>
+</div>
+</div>
+<div id="outline-container-orgeeec572" class="outline-2">
+<h2 id="orgeeec572">XIV</h2>
+<div class="outline-text-2" id="text-orgeeec572">
+<div class="org-src-container">
+<pre class="src src-bqn">XIV ← {
+  sm ← 0⥊˜s ← 101‿103 ⋄ inp ← 2‿2⊸⥊˘&gt;'-'⊸Ints¨•FLines Input𝕩
+  Q ← {𝕊r: ×´+´∘⥊¨0‿2‿6‿8⊏⥊(({/𝕩∾1∾𝕩}·⌊÷⟜2)¨s)⊔+˝{1⌾((s|𝕨+r×𝕩)⊸⊑)sm}˝˘inp}
+  eins ⇐ Q 100
+  zwei ⇐ ⊑⍋Q¨↕•math.LCM´s
+}
+XIV _is 14
+</pre>
+</div>
+
+<pre class="example">
+"Computed 229069152 and 7383 in 5.4615302822s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org2ac95da" class="outline-2">
+<h2 id="org2ac95da">XV</h2>
+<div class="outline-text-2" id="text-org2ac95da">
+<div class="org-src-container">
+<pre class="src src-bqn">XV ← {
+  ri ← ⊑/○⥊⟜(↕≢)'@'=⊑w‿m ← &gt;⊸⋈⟜∾´(⊢⊔˜·+`⟨⟩⊸≡¨)•FLines Input𝕩
+  m{&lt;˘⌽⍉&gt;"v^"‿"&gt;&lt;"(-˝=⌜)¨&lt;𝕩}↩
+  oid ← ∘‿2⥊/○⥊⟜(↕≢) 'O'=wd ← (⊢/˜2×1⥊˜≠)˘w ⋄ rid‿ridp ← /○⥊⟜(↕≢) '@'=wd
+  wd '.'⌾(ridp⊸⊑)↩ ⋄ {@ ⊣ wd(']'⌾(𝕩⊸⊑)'['⌾(𝕨⊸⊑))↩}´˘oid
+  DFS ← {dr𝕊r:
+    Step ← {
+      '#'=w⊑˜𝕩+dr ? 1;
+      '['=w⊑˜𝕩+dr ? 𝕊𝕩+dr+0‿1 ? 1;
+      ']'=w⊑˜𝕩+dr ? 𝕊𝕩+dr-0‿1 ? 1;
+      ⊑"[O]"∊˜w⊑˜𝕩+dr ? 𝕊𝕩+dr ? 1;
+      0 ⊣ w('.'⌾(𝕩⊸⊑)(𝕩⊑w)⌾((𝕩+dr)⊸⊑))↩
+    }
+    cw ← w ⋄ Step◶{𝕊: 𝕩+dr}‿{𝕊: w↩cw ⋄ 𝕩} r
+  }
+  ri DFS´m ⋄ eins ⇐ +´⥊100‿1×⎉1&gt;/○⥊⟜(↕≢)'O'=w
+  w↩wd ⋄ rid DFS´m ⋄ zwei ⇐ +´⥊100‿1×⎉1&gt;/○⥊⟜(↕≢)'['=w
+}
+XV _is 15
+</pre>
+</div>
+
+<pre class="example">
+"Computed 1446158 and 1446175 in 0.0177348094s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org82b8ef6" class="outline-2">
+<h2 id="org82b8ef6">XVI</h2>
+<div class="outline-text-2" id="text-org82b8ef6">
+<div class="org-src-container">
+<pre class="src src-bqn">XVI ← {
+  inf ← -2⋆31 ⋄ r‿s‿e ← ⟨'#'⊸≠, 'S'⊸=, 'E'⊸=⟩{𝕎𝕩}¨&lt;inp ← &gt;•FLines Input𝕩
+  dij ← ⌊´∘{⟨⊢_cnu, 1⊸⌽, 1⊸⌽⁼, ⊢⟩{r&lt;⊸×𝕎𝕩}¨⟨𝕩+1, 𝕩+1e3, 𝕩+1e3, 𝕩⟩}_fp 0‿inf‿0‿0×&lt;s
+  mn‿mr‿mrc ← r⊸∧¨¨ {⟨2⊸⌽_cnu𝕩-1, 1⌽𝕩-1e3, 1⌽⁼𝕩-1e3⟩=&lt;𝕩}dij
+  eins ⇐ inf -˜ opt ← (⌊´dij) ⊑˜⊑/○⥊⟜(↕≢)e
+  zwei ⇐ +´⥊∨´ ∨´∘{⟨mn∧2⊸⌽_cnu𝕩, mr∧1⌽𝕩, mrc∧1⌽⁼𝕩, 𝕩⟩}_fp e&lt;⊸∧dij=opt
+}
+XVI _is 16
+</pre>
+</div>
+
+<pre class="example">
+"Computed 99448 and 498 in 0.0625257885s"
+</pre>
+
+
+<details>
+<summary>Commentary</summary>
+
+<p>
+I dislike implementing graph algorithms with their messy, imperative solutions, side effects, and fancy data structures.
+Usually, a problem like this is solved using Dijkstra's algorithm, but after days of implementing “Fortranized” DFS and BFS,
+I decided to borrow ideas from an expert array programmer's <a href="https://github.com/dzaima/aoc">solutions</a> and rework mine into a more elegant, array-oriented style.
+As a note to myself and anyone interested in learning the craft, I will describe how the above code works.
+</p>
+
+<p>
+We start by parsing the map and getting boolean masks for the walls, start and end positions (<code>r‿s‿e</code>). We then defined
+a fixed point modifier <code>_fp</code>, and a motion modifier <code>_cnu</code>. The latter performs nudge operations on the array,
+simulating cardinal coordinate steps up, left, down and right. By operating in the appropriate function,
+we can take these steps in any order. In addition, we need the initial position to be <code>¯∞</code>,
+but for efficient (and correct) arithmetic we define it as the minimum <code>i32</code> negative integer.
+</p>
+
+<p>
+For part one, we start with four copies of the input array, all zeros except the second one which has the value <code>inf</code>
+in the start's index. Those arrays correspond to the four directions. Then we apply the following procedure until
+the input stabilizes:
+</p>
+
+<ol class="org-ol">
+<li>Apply the four nudges with a cost of 1</li>
+<li>Apply both clockwise and counterclockwise 90° rotations, each with a cost of 1e3,
+and select the minimal-cost configuration in each direction. A bit difficult to see, but this helped me understand it:</li>
+</ol>
+
+<div class="org-src-container">
+<pre class="src src-bqn">&gt;⟨⊢, 1⊸⌽, 1⊸⌽⁼, 2⊸⌽⟩ {𝕎𝕩}⌜ &lt;⟨»,»˘,«,«˘⟩
+</pre>
+</div>
+
+<pre class="example">
+┌─             
+╵ »  »˘ «  «˘  
+  »˘ «  «˘ »   
+  «˘ »  »˘ «   
+  «  «˘ »  »˘  
+              ┘
+</pre>
+
+
+<ol class="org-ol">
+<li value="3">Combine these new states with the original input state, and mask them by the walls so only valid paths remain.</li>
+<li>Take the minimal-cost state from each of the four directions.</li>
+<li>Find the fixed point, the stable configuration with minimal cost. The minimum value at the end position across
+the four-direction array is the solution, offset by <code>inf</code>. In effect, we have implemented a variant of
+Dijkstra’s algorithm purely with array operations and functional transformations,
+without explicit loops or priority queues.</li>
+</ol>
+
+<p>
+Some important remarks:
+</p>
+
+<ul class="org-ul">
+<li>At any given point, the shortest path to a particular tile may arrive from a different orientation than
+previously considered. Minimizing across the four directional arrays at each step ensures that one consistently
+chooses the lowest possible cost for each position, no matter how it is reached.</li>
+<li>Once reached the fixed point, the four orientation-based configurations represent stable minimal costs
+for approaching each tile from each direction. The final step is to minimize across all four directional
+costs for the end tile to get the absolute minimal cost path.</li>
+</ul>
+
+<p>
+For part two, we already know the minimal costs and directions for every tile, so we now want to find
+which tiles lie on at least one best path. To do this, we trace the solution backward from the end tile.
+First, we consider the inverse of our forward steps and rotations: we look at moving backwards and applying
+inverse rotations, which are identical for 90° turns since they are their own inverses.
+</p>
+
+<p>
+Using the final minimal cost configuration, we create masks indicating which tiles, if we moved from them in reverse,
+would correctly reproduce the forward cost offsets. We still apply the walls mask to avoid invalid positions.
+Starting with an array initialized such that only the end tile (in the appropriate direction) and
+with optimal value is marked, we propagate backwards, selecting tiles that could have led to the minimal
+cost at the end. This backward propagation continues until it stabilizes, reaching a new fixed point.
+At the end, we have identified all tiles that are part of at least one best path.
+</p>
+
+</details>
+</div>
+</div>
+<div id="outline-container-org75e69b4" class="outline-2">
+<h2 id="org75e69b4">XVII</h2>
+<div class="outline-text-2" id="text-org75e69b4">
+<div class="org-src-container">
+<pre class="src src-bqn">XVII ← {
+  inp ← 3(↑⋈∘‿2⥊↓)∾⟨⟩⊸Ints¨•FLines Input𝕩
+  M ← {r𝕊p:
+    Cmb ← {𝕩≤3? 𝕩; r⊑˜𝕩-4}
+    out←⟨⟩ ⋄ out ⊣ {
+      0‿op𝕊pc: arg←Cmb op ⋄ r(⌊(⊑r)÷2⋆arg)⌾⊑↩ ⋄ pc+1;
+      1‿op𝕊pc: r(op Xor ⊢)⌾(1⊸⊑)↩ ⋄ pc+1;
+      2‿op𝕊pc: arg←Cmb op ⋄ r(8|arg)⌾(1⊸⊑)↩ ⋄ pc+1;
+      3‿op𝕊pc: 0≠◶(pc+1)‿op ⊑r;
+      4‿·𝕊pc:  r((2⊑r)Xor⊢)⌾(1⊸⊑)↩ ⋄ pc+1;
+      5‿op𝕊pc: out∾↩8|Cmb op ⋄ pc+1;
+      6‿op𝕊pc: arg←Cmb op ⋄ r(⌊(⊑r)÷2⋆arg)⌾(1⊸⊑)↩ ⋄ pc+1;
+      7‿op𝕊pc: arg←Cmb op ⋄ r(⌊(⊑r)÷2⋆arg)⌾(2⊸⊑)↩ ⋄ pc+1
+    }´∘{𝕩⋈˜𝕩⊏p}•_while_{𝕊: 𝕩≠≠p}0
+  }
+  Q ← {
+    ·‿b‿c ← ⊑r‿p ← 𝕩
+    {(⥊p) ≡ 𝕩‿b‿c M p ? 𝕩;
+     (0=𝕨) ∨ ((-𝕨)↑⥊p) ≡ 𝕩‿b‿c M p ? ⌊´(&lt;𝕨)𝕊{(𝕨+1)𝔽𝕩+8×𝕘}𝕩¨⊒˜p;∞}´0‿0
+  }
+  eins ⇐ 1↓∾','⊸∾¨('0'-@)+@+M´inp
+  zwei ⇐ Q inp
+}
+XVII _is 17
+</pre>
+</div>
+
+<pre class="example">
+"Computed ""2,0,1,3,4,0,2,1,7"" and 236580836040301 in 0.0570494434s"
+</pre>
+</div>
+</div>
+<div id="outline-container-orgae4c860" class="outline-2">
+<h2 id="orgae4c860">XVIII</h2>
+<div class="outline-text-2" id="text-orgae4c860">
+<div class="org-src-container">
+<pre class="src src-bqn">XVIII ← {
+  n ← 70 ⋄ inp ← &gt;⟨⟩⊸Ints¨•FLines Input𝕩
+  g ← 1⌾⊑0¨ b ← (1⥊˜1+n‿n) {0⌾(𝕨⊸⊑)𝕩}´&lt;˘1024↑inp
+  _sym ← {Ms _𝕣𝕩: ⊑{(𝕨+1)⋈ms∧∨´⊢_cnu⊸∾&lt;𝕩}´•_while_{𝕊: ¬⊢´⊢˝⊢´𝕩} 0‿𝕩}
+  _symv ← {Ms _𝕣𝕩: ⊢´⊢˝{ms∧∨´⊢_cnu⊸∾&lt;𝕩}_fp𝕩}
+  eins ⇐ b _sym g
+  zwei ⇐ inp⊏˜⊑{𝕊l‿r:
+    ⟨l‿m,m‿r⟩⊑˜{si←&lt;˘𝕩↑inp ⋄ (0¨⌾(si⊸⊑)b)_symv g}m ← ⌊2÷˜+´𝕩
+  }_fp 1024⋈≠inp
+}
+XVIII _is 18
+</pre>
+</div>
+
+<pre class="example">
+"Computed 248 and ⟨ 32 55 ⟩ in 0.0038696174s"
+</pre>
+</div>
+</div>
+<div id="outline-container-orgc777227" class="outline-2">
+<h2 id="orgc777227">XIX</h2>
+<div class="outline-text-2" id="text-orgc777227">
+<div class="org-src-container">
+<pre class="src src-bqn">XIX ← {
+  p‿d ← (1⊸↑⋈2⊸↓) •FLines Input𝕩
+  dp ← •HashMap˜⟨⟩ ⋄ p(','⊸≢¨⊸/¨·' '⊸Split∾)↩
+  C ← {
+    dp.Has 𝕩 ? dp.Get 𝕩;
+    𝕩{𝕩⊣𝕨dp.Set𝕩}(𝕩≡⟨⟩)∨+´p𝕊{h‿hs←𝕨(↑⋈↓)˜≠𝕩 ⋄ h≡𝕩 ? 𝔽hs; 0}¨˜&lt;𝕩
+  }
+  zwei‿eins ⇐ (+´⋈·+´0⊸≠)C¨d
+}
+XIX _is 19
+</pre>
+</div>
+
+<pre class="example">
+"Computed 285 and 636483903099279 in 0.4877095598s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org9dec091" class="outline-2">
+<h2 id="org9dec091">XX</h2>
+<div class="outline-text-2" id="text-org9dec091">
+<div class="org-src-container">
+<pre class="src src-bqn">XX ← {
+  r‿s ← ⟨'#'⊸≠, 'S'⊸=⟩{𝕎𝕩}¨&lt;inp ← &gt;•FLines Input𝕩
+  Sym ← {ms𝕊𝕩: s←𝕩
+    s(⊢⋈⊑˜)/○⥊⟜(↕≢){{s+↩𝕩⋄𝕩}ms∧∨´⊢_cnu⊸∾&lt;𝕩}_fp𝕩
+  }
+  diff ← (-⌜˜ctn)-mh ← (+´|∘-)⌜˜⊑pth‿ctn ← r Sym s
+  eins‿zwei ⇐ +´¨⟨mh=2, mh≤20⟩{⥊100≤𝕨×𝕩}¨&lt;diff
+}
+XX _is 20
+</pre>
+</div>
+
+<pre class="example">
+"Computed 1463 and 985332 in 2.9748486369s"
+</pre>
+</div>
+</div>
+<div id="outline-container-orgf5965d5" class="outline-2">
+<h2 id="orgf5965d5">XXI</h2>
+<div class="outline-text-2" id="text-orgf5965d5">
+<div class="org-src-container">
+<pre class="src src-bqn">XXI ← {
+  inp ← •FLines Input𝕩
+  kbs ← ["789","456","123"," 0A"]‿[" ^A","&lt;v&gt;"] ⋄ dp ← •HashMap˜⟨⟩
+  F ← {
+    &gt;´1↓𝕩 ? ≠⊑𝕩; dp.Has 𝕩 ? dp.Get 𝕩;
+    𝕊s‿k‿r:
+    𝕩{𝕩⊣𝕨dp.Set𝕩}⊑+˝{
+      p‿q‿nl ← (𝕩∾' ')(⊑=/○⥊·↕∘≢⊢)¨&lt;⍉kbs⊑˜k&gt;0
+      F⟨'A'∾˜{0≠+´×⟜⌽˝q‿p&gt;∘=&lt;nl?⌽𝕩;𝕩}"&lt;v^&gt;"/˜0⌈∾¯1‿1⊸×¨⋈⟜⌽q-p, k+1, r⟩
+    }˘2↕'A'∾s
+  }
+  eins‿zwei ⇐ 2‿25 {+´𝕨{(•ParseFloat 3↑𝕩)×F𝕩‿0‿𝕨}¨𝕩}⌜ &lt;inp
+}
+XXI _is 21
+</pre>
+</div>
+
+<pre class="example">
+"Computed 246990 and 306335137543664 in 0.0011588057s"
+</pre>
+</div>
+</div>
+<div id="outline-container-orgb03ce36" class="outline-2">
+<h2 id="orgb03ce36">XXII</h2>
+<div class="outline-text-2" id="text-orgb03ce36">
+<div class="org-src-container">
+<pre class="src src-bqn">XXII ← {
+  dp ← •HashMap˜⟨⟩ ⋄ inp ← •ParseFloat¨ •FLines Input𝕩
+  Ev ← {{16777216|𝕩Xor𝕎𝕩}´⟨2048×⊢, ⌊32÷˜⊢, 64×⊢, 𝕩⟩}
+  Ctn ← {𝕩dp.Set𝕨+dp.Get⎊0𝕩}
+  {𝕩{@⊣(4↓𝕨) ⊑⊸Ctn˘○((∊w)⊸/)w←4↕𝕩}¨{-´˘2↕𝕩}¨𝕩} 10|sn ← Ev⍟(↕2001)¨ inp
+  eins ⇐ +´⊢´¨sn
+  zwei ⇐ ⌈´dp.Values@
+}
+XXII _is 22
+</pre>
+</div>
+
+<pre class="example">
+"Computed 18317943467 and 2018 in 2.4735878518s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org6d58b40" class="outline-2">
+<h2 id="org6d58b40">XXIII</h2>
+<div class="outline-text-2" id="text-org6d58b40">
+<div class="org-src-container">
+<pre class="src src-bqn">XXIII ← {
+  p‿c ← (⊢⋈·⍷∾)'-'⊸Split¨•FLines Input𝕩
+  am ← (⌽¨⊸∾p)∊˜⋈⌜˜c
+  eins ⇐ -○(6÷˜·+´0‿0⍉+˝∘×⎉1‿∞⍟2˜)´ am(⊣⋈/˜)⋈˜('t'≠⊑)¨c
+  zwei ⇐ 1↓∾','⊸∾¨∧c/˜⌈´⊸=⌈˝+˝∘×⎉1‿∞˜⊸×⍟2 am
+}
+XXIII _is 23
+</pre>
+</div>
+
+<pre class="example">
+"Computed 1337 and ""aw,fk,gv,hi,hp,ip,jy,kc,lk,og,pj,re,sr"" in 0.143743779s"
+</pre>
+</div>
+</div>
+<div id="outline-container-org4175f95" class="outline-2">
+<h2 id="org4175f95">XXIV</h2>
+<div class="outline-text-2" id="text-org4175f95">
+<div class="org-src-container">
+<pre class="src src-bqn">XXIV ← {
+  gs‿os ← (⊢⊔˜·+`⟨⟩⊸≡¨)•FLines Input𝕩
+  op ← "AND"‿"OR"‿"XOR"•HashMap "∧"‿"∨"‿"≠" ⋄ os 1⊸↓↩
+  TS ← {{𝕊⍟(𝕩&lt;○≠⊢)⟜(𝕩∾·/𝕨⊸&lt;)𝕨∨∧´∘⊏⟜𝕨¨p}⟜/0¨p←𝕩}
+  tsn ← (3⊸↑¨gs)∾⊑¨urd ← {a‿o‿b‿·‿r←' 'Split𝕩 ⋄ ⟨r, a‿b⟩}¨os
+  ord ← (≠gs)(↓-⊣)TS(⟨⟨⟩⟩⥊˜≠gs)∾(tsn⊸⊐⊢´)¨urd
+  defs ← {'←'¨⌾((𝕩=':')⊸/)𝕩}¨gs
+  dos ← ord⊏{a‿o‿b‿·‿r←' 'Split𝕩 ⋄ do ← op.Get o ⋄ ∾´r‿'←'‿a‿do‿b}¨os
+  eins ⇐ +´(⊢×2⋆↕∘≠)•BQN(∾'⋄'⊸∾¨defs∾dos)∾'⋄'∾1↓∾'‿'⊸∾¨(⊢∾˜·1⊸=◶"z"‿"z0"≠)¨•Fmt¨↕46
+  zwei ⇐ "cqm,mps,vcv,vjv,vwp,z13,z19,z25" # Graphviz
+ }
+ XXIV _is 24
+</pre>
+</div>
+
+<pre class="example">
+"Computed 42410633905894 and ""cqm,mps,vcv,vjv,vwp,z13,z19,z25"" in 0.0021468518s"
+</pre>
+</div>
+</div>
+<div id="outline-container-orgd6cf44e" class="outline-2">
+<h2 id="orgd6cf44e">XXV</h2>
+<div class="outline-text-2" id="text-orgd6cf44e">
+<div class="org-src-container">
+<pre class="src src-bqn">XXV ← {
+  inp ← &gt;¨⟨⟩SplitF•FLines Input𝕩
+  eins‿zwei ⇐ "All done!"⋈˜2÷˜+´⥊{¬∨´⥊1&lt;+´'#'=𝕨‿𝕩}⌜˜inp
+}
+XXV _is 25
+</pre>
+</div>
+
+<pre class="example">
+"Computed 3397 and ""All done!"" in 0.0214779937s"
+</pre>
+</div>
+</div>
+</div>
+</body>
+</html>
