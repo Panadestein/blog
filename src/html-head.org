@@ -1,5 +1,5 @@
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
-#+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+#+HTML_HEAD: <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
 #+HTML_HEAD: <style>
 #+HTML_HEAD: mjx-container[jax="CHTML"] {
 #+HTML_HEAD:   overflow-x: auto !important;

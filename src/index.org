@@ -28,13 +28,13 @@
 #+HTML_HEAD:   gtag('config', 'G-HHT1HPVCQJ');
 #+HTML_HEAD: </script>
 
-1. [[./rollim.org][A coding impromptu]]
-2. [[./qbqn.org][BQN's Quantum Noise]]
-3. [[./spodat.org][Songs to pave the seasons]]
-4. [[./hf.org][Helonium's Hartree-Fock program]]
-5. [[./si.org][Scheming a mise-en-abîme in BQN]]
-6. [[./aoc24.org][Coding in Advent]]
-7. [[./nn.org][The miniaturist's neural network]]
-8. [[./ns.org][Navier-Stokes simulator]]
+1. [[./posts/rollim.org][A coding impromptu]]
+2. [[./posts/qbqn.org][BQN's Quantum Noise]]
+3. [[./posts/spodat.org][Songs to pave the seasons]]
+4. [[./posts/hf.org][Helonium's Hartree-Fock program]]
+5. [[./posts/si.org][Scheming a mise-en-abîme in BQN]]
+6. [[./posts/aoc24.org][Coding in Advent]]
+7. [[./posts/nn.org][The miniaturist's neural network]]
+8. [[./posts/ns.org][Navier-Stokes simulator]]
 
 #+HTML: </div>
