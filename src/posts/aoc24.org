@@ -609,4 +609,4 @@ At the end, we have identified all tiles that are part of at least one best path
 #+RESULTS:
 : "Computed 3397 and ""All done!"" in 0.0214779937s"
 
-#+INCLUDE: "../html-head.org"
+#+INCLUDE: "../html-foot.org"
