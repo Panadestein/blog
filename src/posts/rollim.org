@@ -351,6 +351,82 @@ I suspect the above can be explained by the following properties of the Levensht
 
 If you know why both formulations work, please let me know!
 
+** Solving the cubic equation
+
+This function computes the real roots of an arbitrary [[https://en.wikipedia.org/wiki/Cubic_equation][cubic equation]]. Initially,
+the equation is transformed into its depressed form via an appropriate substitution.
+Depending on the sign of the discriminant, the roots are then determined using Cardano's
+method when the discriminant is positive, or Viète’s trigonometric method when it is negative.
+In the case where the discriminant is zero, the proportionality to the square
+of the Vandermonde polynomial implies that a repeated root is present, the roots
+are resolved through direct analytical methods. We have chosen those methods to avoid
+using complex numbers, which are not yet supported in BQN.
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  Cub ← {a‿b‿c‿d:
+    (b÷3×a)-˜•math{
+      𝕩>0 ? +´𝕩(𝕗.Cbrt+⋈-)⟜√˜-q÷2;
+      𝕩=0 ? 0⊸=◶⟨¯1‿2‿2÷˜·𝕗.Cbrt×⟜4,3⊸⥊⟩q;
+      (2×√-p÷3)×𝕗.Cos(2×π×↕⊸÷3)-˜3÷˜𝕗.Acos(√-3÷p)×1.5×q÷p
+    }(27÷˜p⋆3)+4÷˜×˜q←(d÷a)-(27÷˜3⋆˜b÷a)+3÷˜b×a÷˜p←(c÷a)-3÷˜×˜b÷a
+  }
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+The above implementation only works for the case where =a≢0=, it will yield =NaN= otherwise.
+Here are some tests for the four possible branches:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  Cub¨ ⟨1‿0‿¯7‿6, 1‿¯1‿¯8‿12, 1‿¯6‿12‿¯8, 1‿3‿0‿¯1⟩ 
+#+end_src
+
+#+RESULTS:
+: ⟨ ⟨ 2.0000000000000004 1 ¯3.0000000000000004 ⟩ ⟨ ¯2.9999999999999996 1.9999999999999998 1.9999999999999998 ⟩ ⟨ 2 2 2 ⟩ ⟨ 0.532088886237956 ¯0.6527036446661387 ¯2.879385241571817 ⟩ ⟩
+
+** QR decomposition
+
+I put some effort golfing this [[https://en.wikipedia.org/wiki/QR_decomposition][QR decomposition]] implementation, and I got a very satisfying
+100 chars one-liner. Ungolfed a bit, it looks like this:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  QR ← +˝∘×⎉1‿∞{
+    1=⊢´≢𝕩 ? 𝕩⊸÷⟜⊑⊸⋈+˝×˜𝕩; t←@
+    (q∾˘p)⋈(r∾˘t)∾0∾˘⍟k⊢´p‿s←𝕊𝔽{𝕘-𝕩𝔽t↩𝕩⍉⊸𝔽𝕘}(k↓˘𝕩)⊑q‿r←𝕊𝕩↑˘˜k←⌈2÷˜⊢´≢𝕩
+  }
+#+end_src
+
+#+RESULTS:
+: +˝∘×⎉⟨ 1 ∞ ⟩(1-modifier block)
+
+We can test it with random matrices:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  (⊢∾⟜<m-+˝∘×⎉1‿∞´) QR m ← 3‿3•rand.Range 0
+#+end_src
+
+#+RESULTS:
+: ┌─                                                                                                                                                                
+: · ┌─                                                               ┌─                                                             ┌─                              
+:   ╵ 0.6266184412308672  ¯1.2968088173251884 ¯0.30801312404463255   ╵ 0.6638406983370185  1.3819823162057778  1.1687805735356442   ╵ 0 0 1.1102230246251565e¯16    
+:      0.893110513518482  ¯0.5338705244393808  ¯0.2768095669543261                      0 0.49740866441213094 ¯1.5158978327243966     0 0 1.1102230246251565e¯16    
+:     0.5622174279675292 ¯0.20901793420505804 ¯0.07626092981576958                      0                   0    5.63979687698243     0 0                      0    
+:                                                                  ┘                                                              ┘                              ┘  
+:                                                                                                                                                                  ┘
+
+The function works like this: it recursively computes the QR decomposition of a matrix by first
+handling the base case (normalizing a single column) then splitting the matrix into two halves.
+The first half is decomposed into \(Q_0\) and \(R_0\), and the second half is orthogonalized
+against \(Q_0\) by subtracting its projection, yielding a residual matrix that is itself
+decomposed into \(Q_1\) and \(R_1\). Finally, the overall orthogonal matrix \(Q\) is formed
+by horizontally concatenating \(Q_0\) and \(Q_1\), and the upper triangular \(R\) is assembled
+as a block matrix combining \(R_0\), the projection coefficients, and \(R_1\):
+
+\begin{equation*}
+  Q \, R = \begin{pmatrix} Q_0 & Q_1 \end{pmatrix} \begin{pmatrix} R_0 & T \\ 0 & R_1 \end{pmatrix} = Q_0 R_0 + Q_0 T + Q_1 R_1,
+\end{equation*}
+
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
 [fn:2] Initially, I intended to rigorously attribute all contributions, but this
