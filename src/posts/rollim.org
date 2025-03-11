@@ -392,28 +392,13 @@ I put some effort golfing this [[https://en.wikipedia.org/wiki/QR_decomposition]
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn
   QR ← +˝∘×⎉1‿∞{
-    1=⊢´≢𝕩 ? 𝕩⊸÷⟜⊑⊸⋈+˝×˜𝕩; t←@
-    (q∾˘p)⋈(r∾˘t)∾0∾˘⍟k⊢´p‿s←𝕊𝔽{𝕘-𝕩𝔽t↩𝕩⍉⊸𝔽𝕘}(k↓˘𝕩)⊑q‿r←𝕊𝕩↑˘˜k←⌈2÷˜⊢´≢𝕩
+    1=⊢´≢𝕩 ? 𝕩⊸÷⟜⊑⊸⋈√+˝×˜𝕩; t←@
+    (q∾˘qs)⋈(r∾˘t)∾0∾˘⍟k⊢´qs‿rs←𝕊𝔽{𝕘-𝕩𝔽t↩𝕩⍉⊸𝔽𝕘}(k↓˘𝕩)⊑q‿r←𝕊𝕩↑˘˜k←⌈2÷˜⊢´≢𝕩
   }
 #+end_src
 
 #+RESULTS:
 : +˝∘×⎉⟨ 1 ∞ ⟩(1-modifier block)
-
-We can test it with random matrices:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  (⊢∾⟜<m-+˝∘×⎉1‿∞´) QR m ← 3‿3•rand.Range 0
-#+end_src
-
-#+RESULTS:
-: ┌─                                                                                                                                                                
-: · ┌─                                                               ┌─                                                             ┌─                              
-:   ╵ 0.6266184412308672  ¯1.2968088173251884 ¯0.30801312404463255   ╵ 0.6638406983370185  1.3819823162057778  1.1687805735356442   ╵ 0 0 1.1102230246251565e¯16    
-:      0.893110513518482  ¯0.5338705244393808  ¯0.2768095669543261                      0 0.49740866441213094 ¯1.5158978327243966     0 0 1.1102230246251565e¯16    
-:     0.5622174279675292 ¯0.20901793420505804 ¯0.07626092981576958                      0                   0    5.63979687698243     0 0                      0    
-:                                                                  ┘                                                              ┘                              ┘  
-:                                                                                                                                                                  ┘
 
 The function works like this: it recursively computes the QR decomposition of a matrix by first
 handling the base case (normalizing a single column) then splitting the matrix into two halves.
@@ -426,6 +411,21 @@ as a block matrix combining \(R_0\), the projection coefficients, and \(R_1\):
 \begin{equation*}
   Q \, R = \begin{pmatrix} Q_0 & Q_1 \end{pmatrix} \begin{pmatrix} R_0 & T \\ 0 & R_1 \end{pmatrix} = Q_0 R_0 + Q_0 T + Q_1 R_1,
 \end{equation*}
+
+We can test it with random matrices:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  (⊢∾⟜<m-+˝∘×⎉1‿∞´) QR m ← 3‿3•rand.Range 0
+#+end_src
+
+#+RESULTS:
+: ┌─                                                                                                                                                              
+: · ┌─                                                              ┌─                                                             ┌─                             
+:   ╵    0.65204666414665  0.3735905925577794 ¯0.6597463277105478   ╵ 0.7169012750995111  0.9333476577628379   1.163159355321143   ╵                     0 0 0    
+:      0.6903296918842164 ¯0.6523460726020032 0.31287300628815046                      0 0.23038468952934443 0.22799369620361443     5.551115123125783e¯17 0 0    
+:     0.31349651398104633  0.6594502791818874  0.6832607591605575                      0                   0 0.24449782494263964                         0 0 0    
+:                                                                 ┘                                                              ┘                             ┘  
+:                                                                                                                                                                ┘
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
