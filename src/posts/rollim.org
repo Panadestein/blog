@@ -388,7 +388,7 @@ Here are some tests for the four possible branches:
 ** QR decomposition
 
 I put some effort golfing this [[https://en.wikipedia.org/wiki/QR_decomposition][QR decomposition]] implementation, and I got a very satisfying
-100 chars one-liner. Ungolfed a bit, it looks like this:
+98 chars [[https://codegolf.stackexchange.com/a/278570/94421][one-liner]]. Ungolfed a bit, it looks like this:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn
   QR ← +˝∘×⎉1‿∞{
@@ -419,13 +419,13 @@ We can test it with random matrices:
 #+end_src
 
 #+RESULTS:
-: ┌─                                                                                                                                                              
-: · ┌─                                                              ┌─                                                             ┌─                             
-:   ╵    0.65204666414665  0.3735905925577794 ¯0.6597463277105478   ╵ 0.7169012750995111  0.9333476577628379   1.163159355321143   ╵                     0 0 0    
-:      0.6903296918842164 ¯0.6523460726020032 0.31287300628815046                      0 0.23038468952934443 0.22799369620361443     5.551115123125783e¯17 0 0    
-:     0.31349651398104633  0.6594502791818874  0.6832607591605575                      0                   0 0.24449782494263964                         0 0 0    
-:                                                                 ┘                                                              ┘                             ┘  
-:                                                                                                                                                                ┘
+: ┌─                                                                                                                                        
+: · ┌─                                                             ┌─                                                            ┌─         
+:   ╵ 0.5658223666083225 0.18759300320062508 ¯0.8029034279388315   ╵ 0.999354779030065 0.40314120035876133  0.6053704385875462   ╵ 0 0 0    
+:     0.6019992023745054  0.5714140211547362  0.5577481302238801                     0  0.0983431225337973 ¯0.4305865382645416     0 0 0    
+:     0.5634199231356806 ¯0.7989335902175756 0.21038799546513876                     0                   0 0.14752154674405557     0 0 0    
+:                                                                ┘                                                             ┘         ┘  
+:                                                                                                                                          ┘
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
