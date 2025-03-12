@@ -247,17 +247,17 @@ This post is a rolling collection of algorithms and computational ideas I like, 
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org029e0d0">Z algorithm</a></li>
-<li><a href="#org35a07e8">Longest increasing sub-sequence</a></li>
-<li><a href="#org9656739">N-queens problem</a></li>
-<li><a href="#orgfc97b5a">Majority element</a></li>
-<li><a href="#org388ead8">An identity on the naturals</a></li>
-<li><a href="#org135003f">Depth of nested lists</a></li>
-<li><a href="#org2e1469c">H-index</a></li>
-<li><a href="#orge93c8f0">Trapping rain water</a></li>
-<li><a href="#org0448661">Computing edit distances</a></li>
-<li><a href="#org992cc62">Solving the cubic equation</a></li>
-<li><a href="#orgfbfde5f">QR decomposition</a></li>
+<li><a href="#org0db0248">Z algorithm</a></li>
+<li><a href="#org183c285">Longest increasing sub-sequence</a></li>
+<li><a href="#orgdd3dfa1">N-queens problem</a></li>
+<li><a href="#orgd137fef">Majority element</a></li>
+<li><a href="#orgf288821">An identity on the naturals</a></li>
+<li><a href="#org0c22eeb">Depth of nested lists</a></li>
+<li><a href="#org7e90a4d">H-index</a></li>
+<li><a href="#org8088a9a">Trapping rain water</a></li>
+<li><a href="#orgcb25053">Computing edit distances</a></li>
+<li><a href="#org3171611">Solving the cubic equation</a></li>
+<li><a href="#org6f368f5">QR decomposition</a></li>
 </ul>
 </div>
 </div>
@@ -267,9 +267,9 @@ Extrapolating Perlis' remark<sup><a id="fnr.1" class="footref" href="#fn.1" role
 would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
 juxtapose my implementations with those of seasoned <i>BQNators</i><sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
-<div id="outline-container-org029e0d0" class="outline-2">
-<h2 id="org029e0d0">Z algorithm</h2>
-<div class="outline-text-2" id="text-org029e0d0">
+<div id="outline-container-org0db0248" class="outline-2">
+<h2 id="org0db0248">Z algorithm</h2>
+<div class="outline-text-2" id="text-org0db0248">
 <p>
 This is a very efficient procedure that finds prefix strings in <a href="https://cp-algorithms.com/string/z-function.html">linear time</a>. The imperative
 implementation reads:
@@ -336,9 +336,9 @@ With further refinements, the earlier solutions can be transformed into:
 </div>
 </div>
 </div>
-<div id="outline-container-org35a07e8" class="outline-2">
-<h2 id="org35a07e8">Longest increasing sub-sequence</h2>
-<div class="outline-text-2" id="text-org35a07e8">
+<div id="outline-container-org183c285" class="outline-2">
+<h2 id="org183c285">Longest increasing sub-sequence</h2>
+<div class="outline-text-2" id="text-org183c285">
 <p>
 This <a href="https://en.wikipedia.org/wiki/Longest_increasing_subsequence">problem</a> can be solved in \(O(n\log n)\) using dynamic programming. Here is an
 imperative implementation which is quadratic, but can be optimized:
@@ -378,7 +378,7 @@ LISA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿
 Let's <code>)explain</code> this optimized version, so we can truly appreciate its beauty:
 </p>
 
-<pre class="example" id="org6d7422f">
+<pre class="example" id="org2d9ac13">
  +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽ 
  │ │ │ ││    │ │ │  │ │  │ 
  │ │ │ {┼────┼─┼─┼──┼─┼─´│ 
@@ -408,9 +408,9 @@ we pick the enclosed atom from this operation's result. So it goes<sup><a id="fn
 </p>
 </div>
 </div>
-<div id="outline-container-org9656739" class="outline-2">
-<h2 id="org9656739">N-queens problem</h2>
-<div class="outline-text-2" id="text-org9656739">
+<div id="outline-container-orgdd3dfa1" class="outline-2">
+<h2 id="orgdd3dfa1">N-queens problem</h2>
+<div class="outline-text-2" id="text-orgdd3dfa1">
 <p>
 This problem is the archetypal example of backtracking. Initially, I tried to solve it
 using a function to place the queens in the full board, hoping that it would lead to a
@@ -422,7 +422,7 @@ more array oriented solution:
 </pre>
 </div>
 
-<pre class="example" id="orgdcfe34a">
+<pre class="example" id="org4d0bd8a">
 ┌─                 
 ╵ 0 1 0 1 0 1 0 0  
   0 0 1 1 1 0 0 0  
@@ -470,9 +470,9 @@ but I find the resulting validation and position functions very aesthetic the wa
 </p>
 </div>
 </div>
-<div id="outline-container-orgfc97b5a" class="outline-2">
-<h2 id="orgfc97b5a">Majority element</h2>
-<div class="outline-text-2" id="text-orgfc97b5a">
+<div id="outline-container-orgd137fef" class="outline-2">
+<h2 id="orgd137fef">Majority element</h2>
+<div class="outline-text-2" id="text-orgd137fef">
 <p>
 The <a href="https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm">Boyer–Moore</a> algorithm allows for finding the majority element (element that appears
 more than <code>⌊𝕩÷2</code> times in the array) in linear time. If such element exists, then it is
@@ -507,9 +507,9 @@ BM 6‿1‿3‿1‿3‿3‿4‿3‿3‿5
 </pre>
 </div>
 </div>
-<div id="outline-container-org388ead8" class="outline-2">
-<h2 id="org388ead8">An identity on the naturals</h2>
-<div class="outline-text-2" id="text-org388ead8">
+<div id="outline-container-orgf288821" class="outline-2">
+<h2 id="orgf288821">An identity on the naturals</h2>
+<div class="outline-text-2" id="text-orgf288821">
 <p>
 Some time ago, while working on performance optimization of linear algebra
 operations with Boolean arrays, I encountered an
@@ -544,9 +544,9 @@ and since <code>+´(/𝕩)=i ←→ i⊑𝕩</code>, the fold sums all the eleme
 </p>
 </div>
 </div>
-<div id="outline-container-org135003f" class="outline-2">
-<h2 id="org135003f">Depth of nested lists</h2>
-<div class="outline-text-2" id="text-org135003f">
+<div id="outline-container-org0c22eeb" class="outline-2">
+<h2 id="org0c22eeb">Depth of nested lists</h2>
+<div class="outline-text-2" id="text-org0c22eeb">
 <p>
 Studying tree algorithms in APL, I learned about the depth vector <a href="https://asherbhs.github.io/apl-site/trees/representing-trees.html">representation</a>. If
 the nested object in consideration is a string, the best approach is using boolean <a href="https://mlochbaum.github.io/bqncrate/?q=depth%20of%20parens#">masks</a>.
@@ -564,9 +564,9 @@ the depth of nested elements. Here’s how it can be implemented:
 </pre>
 </div>
 </div>
-<div id="outline-container-org2e1469c" class="outline-2">
-<h2 id="org2e1469c">H-index</h2>
-<div class="outline-text-2" id="text-org2e1469c">
+<div id="outline-container-org7e90a4d" class="outline-2">
+<h2 id="org7e90a4d">H-index</h2>
+<div class="outline-text-2" id="text-org7e90a4d">
 <p>
 This metric is one of the reasons for the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2407748">deplorable</a> state of modern academia,
 and the headaches for <i>outsiders</i> trying to get in. Consider that Peter Higgs
@@ -608,9 +608,9 @@ I initially clip my citations array with <code>{≠¨⊔≠∘𝕩¨⌾(≥⟜�
 </p>
 </div>
 </div>
-<div id="outline-container-orge93c8f0" class="outline-2">
-<h2 id="orge93c8f0">Trapping rain water</h2>
-<div class="outline-text-2" id="text-orge93c8f0">
+<div id="outline-container-org8088a9a" class="outline-2">
+<h2 id="org8088a9a">Trapping rain water</h2>
+<div class="outline-text-2" id="text-org8088a9a">
 <p>
 This is a classical interview <a href="https://leetcode.com/problems/trapping-rain-water/">problem</a> that can be solved in linear time. Interestingly,
 it admits a very elegant array solution:
@@ -647,9 +647,9 @@ will probably be slow). Here are two solutions, one \(O(n^2)\) and the other \(O
 </pre>
 </div>
 </div>
-<div id="outline-container-org0448661" class="outline-2">
-<h2 id="org0448661">Computing edit distances</h2>
-<div class="outline-text-2" id="text-org0448661">
+<div id="outline-container-orgcb25053" class="outline-2">
+<h2 id="orgcb25053">Computing edit distances</h2>
+<div class="outline-text-2" id="text-orgcb25053">
 <p>
 The Levenshtein (or edit) <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">distance</a> is a measure of the similarity between two strings. It is defined
 by the following recurrence, which is the basis of dynamic programming algorithms like Wagner-Fisher:
@@ -723,9 +723,9 @@ If you know why both formulations work, please let me know!
 </p>
 </div>
 </div>
-<div id="outline-container-org992cc62" class="outline-2">
-<h2 id="org992cc62">Solving the cubic equation</h2>
-<div class="outline-text-2" id="text-org992cc62">
+<div id="outline-container-org3171611" class="outline-2">
+<h2 id="org3171611">Solving the cubic equation</h2>
+<div class="outline-text-2" id="text-org3171611">
 <p>
 This function computes the real roots of an arbitrary <a href="https://en.wikipedia.org/wiki/Cubic_equation">cubic equation</a>. Initially,
 the equation is transformed into its depressed form via an appropriate substitution.
@@ -763,12 +763,12 @@ Here are some tests for the four possible branches:
 </pre>
 </div>
 </div>
-<div id="outline-container-orgfbfde5f" class="outline-2">
-<h2 id="orgfbfde5f">QR decomposition</h2>
-<div class="outline-text-2" id="text-orgfbfde5f">
+<div id="outline-container-org6f368f5" class="outline-2">
+<h2 id="org6f368f5">QR decomposition</h2>
+<div class="outline-text-2" id="text-org6f368f5">
 <p>
 I put some effort golfing this <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> implementation, and I got a very satisfying
-100 chars one-liner. Ungolfed a bit, it looks like this:
+98 chars <a href="https://codegolf.stackexchange.com/a/278570/94421">one-liner</a>. Ungolfed a bit, it looks like this:
 </p>
 
 <div class="org-src-container">
@@ -803,13 +803,13 @@ We can test it with random matrices:
 </div>
 
 <pre class="example">
-┌─                                                                                                                                                              
-· ┌─                                                              ┌─                                                             ┌─                             
-  ╵    0.65204666414665  0.3735905925577794 ¯0.6597463277105478   ╵ 0.7169012750995111  0.9333476577628379   1.163159355321143   ╵                     0 0 0    
-     0.6903296918842164 ¯0.6523460726020032 0.31287300628815046                      0 0.23038468952934443 0.22799369620361443     5.551115123125783e¯17 0 0    
-    0.31349651398104633  0.6594502791818874  0.6832607591605575                      0                   0 0.24449782494263964                         0 0 0    
-                                                                ┘                                                              ┘                             ┘  
-                                                                                                                                                               ┘
+┌─                                                                                                                                        
+· ┌─                                                             ┌─                                                            ┌─         
+  ╵ 0.5658223666083225 0.18759300320062508 ¯0.8029034279388315   ╵ 0.999354779030065 0.40314120035876133  0.6053704385875462   ╵ 0 0 0    
+    0.6019992023745054  0.5714140211547362  0.5577481302238801                     0  0.0983431225337973 ¯0.4305865382645416     0 0 0    
+    0.5634199231356806 ¯0.7989335902175756 0.21038799546513876                     0                   0 0.14752154674405557     0 0 0    
+                                                               ┘                                                             ┘         ┘  
+                                                                                                                                         ┘
 </pre>
 </div>
 </div>
