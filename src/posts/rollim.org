@@ -449,14 +449,14 @@ We also define a namespace for dealing with complex numbers, in particular the =
 #+RESULTS:
 : (function block)
 
-It works!
+Let's confirm that the inverse returns back the original list:
 
-#+begin_src bqn :tangle ../bqn/rollim.bqn
-  (⊢-·⊏∘⍉FFT⁼∘FFT) 0•rand.Range˜2⋆3
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  (+´⊢-·⊏∘⍉FFT⁼∘FFT) 0•rand.Range˜2⋆20
 #+end_src
 
 #+RESULTS:
-: ⟨ 0 0 0 0 5.551115123125783e¯17 0 5.551115123125783e¯17 1.1102230246251565e¯16 ⟩
+: 2.408678866170494e¯11
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
