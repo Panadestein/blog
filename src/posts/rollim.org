@@ -433,7 +433,7 @@ Below is an implementation of the radix-2 [[https://en.wikipedia.org/wiki/Cooley
 BQN's headers to define the inverse transform in a succinct way using the property:
 
 \begin{equation*}
-  \text{iFFT}\mathbf{x} = \frac{1}{N}\text{FFT}^{*}(\mathbf{x}^{*})
+  \text{iFFT}[\mathbf{x}] = \frac{1}{N}\text{FFT}^{*}[\mathbf{x}^{*}]
 \end{equation*}
 
 We also define a namespace for dealing with complex numbers, in particular the =Cis= function:
@@ -452,11 +452,29 @@ We also define a namespace for dealing with complex numbers, in particular the =
 Let's confirm that the inverse returns back the original list:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  (+´⊢-·⊏∘⍉FFT⁼∘FFT) 0•rand.Range˜2⋆20
+  (+´∘⥊⊢-FFT⁼∘FFT) 0•rand.Range˜2⋈˜2⋆15
 #+end_src
 
 #+RESULTS:
-: 2.408678866170494e¯11
+: 5.078090725696427e¯13
+
+We could also compare with the discrete Fourier transform, which despite being \(O(N^2)\)
+has a very nice array implementation:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  DFT ← (⊢+˝∘(+˝×z._p˘)⎉1‿∞˜√∘≠÷˜·z.E ¯2×π×≠÷˜·×⌜˜⊒˜)
+  (FFT⋈DFT) 0•rand.Range˜2⋈˜2⋆2
+#+end_src
+
+#+RESULTS:
+: ┌─                                                                              
+: · ┌─                            ┌─                                              
+:   ╵ 10                     10   ╵                  10                      0    
+:     ¯4 ¯2.220446049250313e¯16      ¯2.000000000000001     1.9999999999999996    
+:     ¯2                     ¯2                      ¯2 ¯9.797174393178826e¯16    
+:      0                     ¯4     ¯1.9999999999999982     ¯2.000000000000001    
+:                               ┘                                              ┘  
+:                                                                                ┘
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
