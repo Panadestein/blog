@@ -427,6 +427,37 @@ We can test it with random matrices:
 :                                                                ┘                                                             ┘         ┘  
 :                                                                                                                                          ┘
 
+** Fast Fourier Transform
+
+Below is an implementation of the radix-2 [[https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm][Cooley–Tukey FFT algorithm]]. The function leverages
+BQN's headers to define the inverse transform in a succinct way using the property:
+
+\begin{equation*}
+  \text{iFFT}\mathbf{x} = \frac{1}{N}\text{FFT}^{*}(\mathbf{x}^{*})
+\end{equation*}
+
+We also define a namespace for dealing with complex numbers, in particular the =Cis= function:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  z ← {
+    _p ⇐ {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
+    C‿E ⇐ ⟨⋈⟜-´˘, •math{𝕗.Cos≍˘𝕗.Sin}⟩
+  }
+  FFT ← {𝕊⁼: z.C{≠÷˜·𝔽𝔾∘𝔽}𝕊𝕩; (1=≠)◶⟨(+∾-)⟜(⊢×z._p˘·z.E∘-π×↕⊸÷∘≠)´(𝕊¨⊢⊔˜2|⊒˜), ⊢⟩𝕩}
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+It works!
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  (⊢-·⊏∘⍉FFT⁼∘FFT) 0•rand.Range˜2⋆3
+#+end_src
+
+#+RESULTS:
+: ⟨ 0 0 0 0 5.551115123125783e¯17 0 5.551115123125783e¯17 1.1102230246251565e¯16 ⟩
+
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
 [fn:2] Initially, I intended to rigorously attribute all contributions, but this

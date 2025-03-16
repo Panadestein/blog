@@ -36,6 +36,5 @@
 5. [[./posts/si.org][Scheming a mise-en-abîme in BQN]]
 6. [[./posts/aoc24.org][Coding in Advent]]
 7. [[./posts/nn.org][The miniaturist's neural network]]
-8. [[./posts/ns.org][Navier-Stokes simulator]]
 
 #+HTML: </div>
