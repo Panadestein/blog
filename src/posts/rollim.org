@@ -452,29 +452,31 @@ We also define a namespace for dealing with complex numbers, in particular the =
 Let's confirm that the inverse returns back the original list:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  (+´∘⥊⊢-FFT⁼∘FFT) 0•rand.Range˜2⋈˜2⋆15
+  (+´∘⥊⊢-FFT⁼∘FFT) 0•rand.Range˜2⋈˜2⋆10
 #+end_src
 
 #+RESULTS:
-: 5.078090725696427e¯13
+: 1.914614300435602e¯14
 
 We could also compare with the discrete Fourier transform, which despite being \(O(N^2)\)
-has a very nice array implementation:
++has+ should have a nice array formulation:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  DFT ← (⊢+˝∘(+˝×z._p˘)⎉1‿∞˜√∘≠÷˜·z.E ¯2×π×≠÷˜·×⌜˜⊒˜)
-  (FFT⋈DFT) 0•rand.Range˜2⋈˜2⋆2
+  DFT ← ≍˘´<˘{𝔽∘⍉+˝∘×⎉1‿∞ z._p˜·𝔽1‿0⍉⁼·z.E ¯2×π×≠÷˜·×⌜˜⊒˜}
+  (+´∘⥊FFT-DFT) 0•rand.Range˜2⋈˜2⋆10
 #+end_src
 
 #+RESULTS:
-: ┌─                                                                              
-: · ┌─                            ┌─                                              
-:   ╵ 10                     10   ╵                  10                      0    
-:     ¯4 ¯2.220446049250313e¯16      ¯2.000000000000001     1.9999999999999996    
-:     ¯2                     ¯2                      ¯2 ¯9.797174393178826e¯16    
-:      0                     ¯4     ¯1.9999999999999982     ¯2.000000000000001    
-:                               ┘                                              ┘  
-:                                                                                ┘
+: ¯2.8412011632283907e¯10
+
+In the DFT code above, I got into a big mess with the complex numbers, because the
+=z= namespace was too tightly coupled with the FFT implementation. I had to do a
+bunch of enclosing and coupling to get the same shape. With proper complex numbers
+support it would be something like:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  DFT ← ⊢+˝∘×⎉1‿∞˜·⋆¯2×π×≠÷˜·×⌜˜⊒˜
+#+end_src
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
