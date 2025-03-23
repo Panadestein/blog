@@ -1,0 +1,39 @@
+# -*- buffer-auto-save-file-name: nil; -*-
+#+TITLE: Project Euler solutions
+
+** Disclaimer
+
+This file contains my BQN solutions to some of the problems on Project Euler.
+It is discouraged to share them, so read this document at your own risk[fn:1]:
+you will just spoil the fun for yourself. The only reason I have this, is because I don't
+like writing throw-away code. I won't be adding much explanations and this org
+file will never become a blog post.
+
+** PE1 :crypt:
+
+-----BEGIN PGP MESSAGE-----
+
+hF4Djmgxy0OJ4GASAQdAuaSwHXE4kAY9BJQL6qiuNsPbUBQaCR31ZE2QSFmisgcw
+QZ4De9GtYfd2FhMExeI50NahHWQt/8KFvYdlZOguPNgpsrN3qp8RRpb8SVwJgmai
+0o0BVUGJURxSGdY7GTIe1RmT2yJmyFPGyxv+u6f8fzKERN5BVRtERv2JruNfqbIk
+9bY9vmf1x+ljlSLHksv34q+SeXRMONjqchc25w5wcs/TKuD6UY8T6RTPkpKtjCeI
+O4JozPA7oa0IrwnxIirLUQom8DbSh1GW2l+wD4mg+4VevewSHrFrkGdagJm4JVo=
+=7c/2
+-----END PGP MESSAGE-----
+
+** PE2 :crypt:
+
+-----BEGIN PGP MESSAGE-----
+
+hF4Djmgxy0OJ4GASAQdAl0LyDVuRi68NGukJhQZLIk3FQQ6oMf1FfCiF+CzkYV4w
+IsxduTNbL7lqvO3Sn8yJQ24R6LzLU/RajK1QTjUFnnoDItgbIoAzBvUDEjlXdtOF
+0sA6Adv7h8e6DI0dWiJaG4VvODTYVURENi4EigzjYnTJAtX6m6A6eziuBtMbVRU8
+uvS/kJ9kn6yLeKjKMdn6yoFW4ORWl0MyCYrrxZ2G25/vB8kGIdMnGbzg/zREyn6L
++DCFfbIFl4Vn7rmpjZlHqIU2u4E6544ueJ7uZbw5uVG3tLZMz8Eu5aXpt8wBGZtq
+Px+rL2EaVFGjqdX1ceyzyW2GWzDCuIC1V0pjYnFlZE6ZIaVFGDqOdjBptBnjgT4K
+henGe83UHOJs58ft/MiIkSRPJ5GW0J+d+X6qnyi/MShqnnKxbozsbHsDb7lBKX4K
+0OaAUePTvzxJe7lV5Q==
+=hXZI
+-----END PGP MESSAGE-----
+
+[fn:1] Plus, good luck with that anyway, it is all encrypted.
