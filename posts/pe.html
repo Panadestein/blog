@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Songs to pave the seasons</title>
+<title>Project Euler solutions</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -191,167 +191,59 @@
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { }
 </style>
-<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
-<link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
-<style>
-mjx-container[jax="CHTML"] {
-overflow-x: auto !important;
-}
-</style>
-<!-- Post-specific setting bellow -->
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Songs to pave the seasons</h1>
+<h1 class="title">Project Euler solutions</h1>
+<div id="outline-container-org412756e" class="outline-2">
+<h2 id="org412756e">Disclaimer</h2>
+<div class="outline-text-2" id="text-org412756e">
 <p>
-I have analyzed my Spotify data<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> for the period 2016-2024. The results accurately represent
-my actual music taste<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
+This file contains my BQN solutions to some of the problems on Project Euler.
+It is discouraged to share them, so read this document at your own risk<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>:
+you will just spoil the fun for yourself. The only reason I have this, is because I don't
+like writing throw-away code. I won't be adding much explanations and this org
+file will never become a blog post.
 </p>
-<div id="outline-container-org15590f7" class="outline-2">
-<h2 id="org15590f7">Technical details</h2>
-<div class="outline-text-2" id="text-org15590f7">
-<p>
-This is a suitable task for an array language, so I rely on <a href="https://mlochbaum.github.io/BQN/index.html">BQN</a> which is my
-favorite one:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-bqn">⟨P⇐Parse⟩ ← •Import "../bqn-libs/json.bqn"
-@ ⊣ spd ← P •file.Chars "../supp/spdat/data.json"
-</pre>
 </div>
-
+</div>
+<div id="outline-container-org5414c28" class="outline-2">
+<h2 id="org5414c28">PE1&#xa0;&#xa0;&#xa0;<span class="tag"><span class="crypt">crypt</span></span></h2>
+<div class="outline-text-2" id="text-org5414c28">
 <p>
-Additional structural information is needed, namely index of the songs,
-artists, elapsed time, and the length of the desired result.
+&#x2013;&#x2014;BEGIN PGP MESSAGE&#x2013;&#x2014;
 </p>
 
-<div class="org-src-container">
-<pre class="src src-bqn">s‿a‿m‿l ← ⟨7, 8, 3, 1+↕20⟩
-</pre>
-</div>
-
 <p>
-We define a (50 chars) dyadic block function to execute the queries:
+hF4Djmgxy0OJ4GASAQdAuaSwHXE4kAY9BJQL6qiuNsPbUBQaCR31ZE2QSFmisgcw
+QZ4De9GtYfd2FhMExeI50NahHWQt/8KFvYdlZOguPNgpsrN3qp8RRpb8SVwJgmai
+0o0BVUGJURxSGdY7GTIe1RmT2yJmyFPGyxv+u6f8fzKERN5BVRtERv2JruNfqbIk
+9bY9vmf1x+ljlSLHksv34q+SeXRMONjqchc25w5wcs/TKuD6UY8T6RTPkpKtjCeI
+O4JozPA7oa0IrwnxIirLUQom8DbSh1GW2l+wD4mg+4VevewSHrFrkGdagJm4JVo=
+=7c/2
+&#x2013;&#x2014;END PGP MESSAGE&#x2013;&#x2014;
+</p>
+</div>
+</div>
+<div id="outline-container-org5261362" class="outline-2">
+<h2 id="org5261362">PE2&#xa0;&#xa0;&#xa0;<span class="tag"><span class="crypt">crypt</span></span></h2>
+<div class="outline-text-2" id="text-org5261362">
+<p>
+&#x2013;&#x2014;BEGIN PGP MESSAGE&#x2013;&#x2014;
 </p>
 
-<div class="org-src-container">
-<pre class="src src-bqn">Q ← {l≍˘∾(⍷𝕨⊸⊏˘)¨ l⊏ ((⍒(+´m⊸⊏˘)¨)⊸⊏ 𝕨⊸⊏˘⊐⊸⊔⊢) &gt;1⊏¨ 𝕩}
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-orga2e0fb5" class="outline-2">
-<h2 id="orga2e0fb5">Top songs</h2>
-<div class="outline-text-2" id="text-orga2e0fb5">
-<div class="org-src-container">
-<pre class="src src-bqn">s Q spd	
-</pre>
-</div>
-
-<pre class="example" id="orgdfa91e7">
-┌─                                                     
-╵ 1  "Countless Skies"                                 
-  2  "Divertimento I, K.136: Allegro"                  
-  3  "The Numbers"                                     
-  4  "Autre temps"                                     
-  5  "Ghost of Perdition"                              
-  6  "Crossing the Road Material"                      
-  7  "Hoppípolla"                                      
-  8  "Ether"                                           
-  9  "Colossus"                                        
-  10 "River"                                           
-  11 "El Tete"                                         
-  12 "Will o the Wisp"                                 
-  13 "Pakumba"                                         
-  14 "Damned Rope"                                     
-  15 "Eternal Rains Will Come"                         
-  16 "La femme d'argent"                               
-  17 "Bajanda"                                         
-  18 "Nimrodel - Medley"                               
-  19 "Breathe (In The Air) - 2011 Remastered Version"  
-  20 "In The Shadow Of Our Pale Companion"             
-                                                      ┘
-</pre>
-</div>
-</div>
-<div id="outline-container-orgbb57022" class="outline-2">
-<h2 id="orgbb57022">Top artists</h2>
-<div class="outline-text-2" id="text-orgbb57022">
-<div class="org-src-container">
-<pre class="src src-bqn">a Q spd
-</pre>
-</div>
-
-<pre class="example" id="orga765ab5">
-┌─                              
-╵ 1  "Opeth"                    
-  2  "Wolfgang Amadeus Mozart"  
-  3  "Pink Floyd"               
-  4  "Be'lakor"                 
-  5  "Sigur Rós"                
-  6  "Coldplay"                 
-  7  "Mogwai"                   
-  8  "Chocolate Mc"             
-  9  "Radiohead"                
-  10 "Joaquín Sabina"           
-  11 "Iron &amp; Wine"              
-  12 "Rammstein"                
-  13 "Alcest"                   
-  14 "Buena Fe"                 
-  15 "Silvio Rodríguez"         
-  16 "Amon Amarth"              
-  17 "In Mourning"              
-  18 "Lamb of God"              
-  19 "Camel"                    
-  20 "Omnium Gatherum"          
-                               ┘
-</pre>
-</div>
-</div>
-<div id="outline-container-org302acc5" class="outline-2">
-<h2 id="org302acc5">Bonus: Opeth anthology</h2>
-<div class="outline-text-2" id="text-org302acc5">
 <p>
-This is the Opeth album I would recommend to anyone. The query function needs to be modified a bit for generating it.
-But before that, let's look at the <a href="https://www.opeth.com/releases/albums">official discography</a>:
+hF4Djmgxy0OJ4GASAQdAl0LyDVuRi68NGukJhQZLIk3FQQ6oMf1FfCiF+CzkYV4w
+IsxduTNbL7lqvO3Sn8yJQ24R6LzLU/RajK1QTjUFnnoDItgbIoAzBvUDEjlXdtOF
+0sA6Adv7h8e6DI0dWiJaG4VvODTYVURENi4EigzjYnTJAtX6m6A6eziuBtMbVRU8
+uvS/kJ9kn6yLeKjKMdn6yoFW4ORWl0MyCYrrxZ2G25/vB8kGIdMnGbzg/zREyn6L
++DCFfbIFl4Vn7rmpjZlHqIU2u4E6544ueJ7uZbw5uVG3tLZMz8Eu5aXpt8wBGZtq
+Px+rL2EaVFGjqdX1ceyzyW2GWzDCuIC1V0pjYnFlZE6ZIaVFGDqOdjBptBnjgT4K
+henGe83UHOJs58ft/MiIkSRPJ5GW0J+d+X6qnyi/MShqnnKxbozsbHsDb7lBKX4K
+0OaAUePTvzxJe7lV5Q==
+=hXZI
+&#x2013;&#x2014;END PGP MESSAGE&#x2013;&#x2014;
 </p>
-
-<div class="org-src-container">
-<pre class="src src-bqn">lo ← (↕∘⌈+´÷≠) 7‿5‿9‿7‿8‿6‿8‿8‿7‿10‿7‿11‿10
-</pre>
-</div>
-
-<p>
-Then:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-bqn">O ← {lo (1⊸+∘⊣≍˘⊏) (⊢˝˘⊸∊⟜𝕨/⊏˘) ∾(⍷s‿a⊸⊏˘)¨ ((⍒(+´m⊸⊏˘)¨)⊸⊏ s⊸⊏˘⊐⊸⊔⊢) &gt;1⊏¨ 𝕩}
-</pre>
-</div>
-
-<p>
-Enjoy:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-bqn">spd O˜⋈ "Opeth" 
-</pre>
-</div>
-
-<pre class="example" id="orga4a5ae9">
-┌─                             
-╵ 1 "Ghost of Perdition"       
-  2 "River"                    
-  3 "Will o the Wisp"          
-  4 "Eternal Rains Will Come"  
-  5 "The Drapery Falls"        
-  6 "Elysian Woes"             
-  7 "Burden"                   
-  8 "Harvest"                  
-                              ┘
-</pre>
 </div>
 </div>
 <div id="footnotes">
@@ -359,19 +251,8 @@ Enjoy:
 <div id="text-footnotes">
 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-It is possible to request a detailed report of all user activity since the account was created. There are
-some <a href="https://support.spotify.com/us/article/understanding-my-data/">interesting fields</a> in the data, but more advanced information, such as genre, requires querying the
-Spotify Web API, which is beyond the scope of this post.
+Plus, good luck with that anyway, it is all encrypted.
 </p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-Well, modulo all from <code>Tool</code> and <code>Silent state optimizer</code> from <code>Leech</code>, which are definitely in my top ten,
-and which I listen to on YouTube. It's possible to analyze the <a href="https://takeout.google.com/settings/takeout">data</a> from this site as well—perhaps in a follow-up post.
-</p>
-
-<div style="text-align: center; font-size: 2em; padding: 20px 0;">
-  <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
-</div></div></div>
 
 
 </div>
