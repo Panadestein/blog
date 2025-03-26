@@ -478,6 +478,27 @@ support it would be something like:
   DFT ← ⊢+˝∘×⎉1‿∞˜·⋆¯2×π×≠÷˜·×⌜˜⊒˜
 #+end_src
 
+** Tensor n-mode product
+
+This is one of the key ingredients for computing the Tucker decomposition of a tensor, for
+example using [[https://en.wikipedia.org/wiki/Higher-order_singular_value_decomposition][HOSVD.]] The last method has been rediscovered a couple of times. For instance,
+in the nuclear quantum dynamics community it is know as =POTFIT=, and was published before
+the often cited De Lathauwer paper, check out [[https://arxiv.org/abs/1309.5060][arXiv:1309.5060]] for some details. Formally we have:
+
+\begin{equation*}
+  (\mathcal{X} \times_n U)_{i_1,\dots,i_{n-1},\,j,\,i_{n+1},\dots,i_N} = \sum_{i_n=1}^{I_n} x_{i_1,\dots,i_n,\dots,i_N}\, u_{j,i_n}.
+\end{equation*}
+
+In BQN's parlance, we can express it as:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  {+˝∘×⎉1‿∞⟜𝕩⌾(⍉⍟𝕗)𝕨}
+#+end_src
+
+This beautiful deferred 1-modifier computes the 𝕗-mode product of tensor 𝕨 and matrix 𝕩, provided
+the user takes care of transposing the matrix (a matter of definition). It contains five 2-modifiers,
+which in my opinion are an excellent example of the power of using the right notation.
+
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
 [fn:2] Initially, I intended to rigorously attribute all contributions, but this

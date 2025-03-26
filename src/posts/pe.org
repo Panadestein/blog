@@ -36,4 +36,19 @@ henGe83UHOJs58ft/MiIkSRPJ5GW0J+d+X6qnyi/MShqnnKxbozsbHsDb7lBKX4K
 =hXZI
 -----END PGP MESSAGE-----
 
-[fn:1] Plus, good luck with that anyway, it is all encrypted.
+** PE3 :crypt:
+
+-----BEGIN PGP MESSAGE-----
+
+hF4Djmgxy0OJ4GASAQdAXxM+RWzy81Y/0gfXvGXf+u4oHFD+LEom1mj7dXjSglow
+oWkZjN0JIdO57LK8h18uk8pUNRGs8PSyvNEE4mM2ORkKQIEJGKDJWpQb5d8Bw7+G
+0sCXAT56hLqif+fPdo0BHtmjCZMyFxxjM5Df5M9tSXgBh6N1ftbze7EVREnXJYd2
+GVQBVqN5krEQwbkOK8yIiHBxht3dhtpz3s3CtuD8Zy0MXsa7vmA+c6Ya4FHPYsEm
+0gUT8C6n1ZGAcWqUwVekXDqaYwtwBnU1XbvebOIMBDHfoRacfVUAYlCBL8DvZuKo
+q4SjyiWAMO6rves5eKsUiJvAKmY2TVj0tuoNIeGHtVxGv9dJYm1LLENWAVuXpK8g
+1p9akz6f2eVHCPuXs5hMK2qkPux8eyqxaIWZi5DtRrWHIbaI3bK87iWMqtXYtuQ0
+8+gVS+1C3BZkf3TqqpoKGOokeEuqK5PLYHmw1azD4KD9XK24onej+Ab7y1zzW6gg
+f4euoTa9M/9+oY6vu86JZc9W6C4VDh11MRzNSueoF/NwEGZrp0zcG5bU8Mz2tpHO
+9N97OG/+VNhPoA==
+=VXsR
+-----END PGP MESSAGE-----
