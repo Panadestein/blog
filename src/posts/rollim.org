@@ -480,10 +480,11 @@ support it would be something like:
 
 ** Tensor n-mode product
 
-This is one of the key ingredients for computing the Tucker decomposition of a tensor, for
-example using [[https://en.wikipedia.org/wiki/Higher-order_singular_value_decomposition][HOSVD.]] The last method has been rediscovered a couple of times. For instance,
-in the nuclear quantum dynamics community it is know as =POTFIT=, and was published before
-the often cited De Lathauwer paper, check out [[https://arxiv.org/abs/1309.5060][arXiv:1309.5060]] for some details. Formally we have:
+The n-mode product is a key ingredient for computing the Tucker decomposition of a tensor.
+For this we can use the [[https://en.wikipedia.org/wiki/Higher-order_singular_value_decomposition][HOSVD]] algorithm: a method that has been rediscovered several times.
+For example, in the nuclear quantum dynamics community it is known as =POTFIT= and
+was published before the often cited De Lathauwer paper, see [[https://arxiv.org/abs/1309.5060][arXiv:1309.5060]] for a discussion.
+For a tensor \(\mathcal{X}\) and a matrix \(U\) we define:
 
 \begin{equation*}
   (\mathcal{X} \times_n U)_{i_1,\dots,i_{n-1},\,j,\,i_{n+1},\dots,i_N} = \sum_{i_n=1}^{I_n} x_{i_1,\dots,i_n,\dots,i_N}\, u_{j,i_n}.
@@ -495,9 +496,11 @@ In BQN's parlance, we can express it as:
   {+˝∘×⎉1‿∞⟜𝕩⌾(⍉⍟𝕗)𝕨}
 #+end_src
 
-This beautiful deferred 1-modifier computes the 𝕗-mode product of tensor 𝕨 and matrix 𝕩, provided
-the user takes care of transposing the matrix (a matter of definition). It contains five 2-modifiers,
-which in my opinion are an excellent example of the power of using the right notation.
+A beautiful example of notation as a tool of thought, in my opinion: this deferred 1-modifier
+(itself a compact melange of six modifiers) computes the 𝕗-mode product of a tensor 𝕨 and a matrix 𝕩.
+It works by moving the 𝕗-axis to the front, then multiplying 𝕨 and 𝕩 without the need for explicit
+unfolding, courtesy of the rank operator, and moving the last axis of the result back to 𝕗, all
+gracefully managed by under.
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.

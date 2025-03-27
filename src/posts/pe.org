@@ -4,10 +4,9 @@
 ** Disclaimer
 
 This file contains my BQN solutions to some of the problems on Project Euler.
-Since it is discouraged to share them, I have used encryption. The code here is
-not meant to be used in a blog post, but rather as a reference for myself. I don't
-like writing throw away code.
-
+Since I don't want to spoil the fun for anyone, I've encrypted them. I will not
+blog about it, but I am happy to discuss the solutions with anyone who is
+interested. Plus, I am not a fan of writing throw away code.
 
 ** PE1 :crypt:
 
@@ -40,14 +39,21 @@ henGe83UHOJs58ft/MiIkSRPJ5GW0J+d+X6qnyi/MShqnnKxbozsbHsDb7lBKX4K
 
 -----BEGIN PGP MESSAGE-----
 
-hF4Djmgxy0OJ4GASAQdA4m268y7d3/9TG2yqn5MIZlHXALcXRsHH4eKm6B7Tzw4w
-3dP0bdlmXxpxjcb9uR/l9xOA2EDZZDOcgwOysXvjUk1pcLJobuYqmKji7Oe2W9uA
-0sBiAb3GW9JwviK1WV6yMBf5iIHcT8MMMFi2fqtvQ4zQZeswVu/MCjliBuEOQyvJ
-JeTkKCIN1bzFV60lQeDbHTvWuxZPlW3ZdgtBztdeJDK/SrG9+UlVPS2SV/6R0xYG
-P9G0nHKWPrbiN9zrpQU+YmuDYfu8SMQex+kBJVYJ+z4XwCjhJ3887qKkvnmkkCV8
-N5ktCsGBpiA9IcP17z4P2vxhQxtj33ltv1/mB6Q8ro+TFRsycBlT4lQBAXD2BBu7
-1ciNELXW5VdXduj6LsJ7le/OLSY/IBTojNG50hVrZXvgMHNQiylvLCCDfqQkJG4h
-0I5BJ2RvyPQ0S4s2XL0/Ef3Dx3QGbu9oa2qtBg3jHsTdCd4O7CJ7ElHmPL8YxuFx
-7MuakoY=
-=nLNA
+hF4Djmgxy0OJ4GASAQdAnwFU79Kt8xBrWmUrP4Tj9veQ950HBkXf3lRSM62WiVUw
+455/Ep4qv/OTX/idW6+lCaiIp1Qy+aPrOTBY9Tt7aCyL+cfAgB255nrr2Q7mGmqZ
+0ukBP9kcmXKSx2mZuOyHnJ1K36SmyJ8MGI5C+eN2E83615rr/MSZlUsiaBfh/NbX
+lmrCjxXP234Ch1im4etB67Q5aB4+lyQ42+qedYULh6SNOO9atPsNm+uhZOv2RQOB
+4dPVTGGlcC+aw27toZb384RS/6lk08Cn6yiV5SE80ZaKoVP4Gh2cpxk1c8H2/V0j
+hzo1ici8J1Aqbt5kmxL95Hxyvg3Fas7YsBY5H0n9sohltxaKxKJbHcpX5WhRQlXh
++NSdVJq0xXo/n1sPl8rMwvmtB3pAuQkCTQgwRXCPMLoAOoubYbtxdrqXxAzZOBoA
+z3LMSMIrba0MpWlwV/raABS9NkvQig9FkPylzIvXIcpQykf/k1P6X5FpczjEFaF1
+ty08duRMp5RddLhLkemNsGyetpFIeYd+Bb0fZI0UopbPZFtiVYR+sh/zvrCNomT7
+iXHKFIeLcUT19ej0hO8uW8W43AKeZbzH4eKpiUE70xctiwxFdaNaVAspIAt6QuuQ
+JnmLA0HFQ2WHenu6bGWUT0XDB4NSn98MOEfLVNzzjqeji1R033UX3JP27cbswT0Y
+ihZ4bbrF+FzAlckGAiC5SJKpVE/dURBxVwK6sHvJvov9LjgByeAwGgniqsDq01y8
+zLiVNY/DlibT6XSccxlsscSqxHoTeID9GsV/kqyaWdS1dpHMgwRk/bqkzlJ0M4J5
+u2rIzuj/jmeNL1kXh3B1VRjTuBIMTP5eT43owHy0Vk7MNwLazl2DW7RhLynJLs3r
++74TfYci35tj4YpZOE5umT5FQtXWa7uACluJFs/Fb0Gn00OVwsV+MX6i4S6ub/JM
+ycHiIfdLAlGAreoZ/Ou2y8bv4BXeHPa2fmt5+hQk0EH6ZF45
+=9XUt
 -----END PGP MESSAGE-----
