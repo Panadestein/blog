@@ -191,153 +191,218 @@
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { }
 </style>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="content" class="content">
 <h1 class="title">Project Euler solutions</h1>
-<div id="outline-container-org5ee6841" class="outline-2">
-<h2 id="org5ee6841">Disclaimer</h2>
-<div class="outline-text-2" id="text-org5ee6841">
+<div id="outline-container-org815d97c" class="outline-2">
+<h2 id="org815d97c">Disclaimer</h2>
+<div class="outline-text-2" id="text-org815d97c">
 <p>
-This file contains my BQN solutions to some of the problems on Project Euler.
-Since I don't want to spoil the fun for anyone, I've encrypted them. I will not
-blog about it, but I am happy to discuss the solutions with anyone who is
-interested. Plus, I am not a fan of writing throw away code.
+This file contains my BQN solutions to some of the problems in <a href="https://projecteuler.net/">Project Euler</a>.
+It is discouraged to share them, but I very much dislike writing throw-away code,
+and that's why they are here. I will not blog about it, but I am happy to discuss
+them with anyone who is interested.
 </p>
 </div>
 </div>
-<div id="outline-container-org0d90a12" class="outline-2">
-<h2 id="org0d90a12">PE1&#xa0;&#xa0;&#xa0;<span class="tag"><span class="crypt">crypt</span></span></h2>
-<div class="outline-text-2" id="text-org0d90a12">
+<div id="outline-container-org12cce9b" class="outline-2">
+<h2 id="org12cce9b">Problem 1</h2>
+<div class="outline-text-2" id="text-org12cce9b">
+<div class="org-src-container">
+<pre class="src src-bqn">E1 ← +´(∨´0=5‿3|&lt;)⊸/
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E1 ↕1e3
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org08eca98" class="outline-2">
+<h2 id="org08eca98">Problem 2</h2>
+<div class="outline-text-2" id="text-org08eca98">
 <p>
-&#x2013;&#x2014;BEGIN PGP MESSAGE&#x2013;&#x2014;
+Estimate the upper bound with Binet's formula.
 </p>
 
-<p>
-hF4Djmgxy0OJ4GASAQdAuaSwHXE4kAY9BJQL6qiuNsPbUBQaCR31ZE2QSFmisgcw
-QZ4De9GtYfd2FhMExeI50NahHWQt/8KFvYdlZOguPNgpsrN3qp8RRpb8SVwJgmai
-0o0BVUGJURxSGdY7GTIe1RmT2yJmyFPGyxv+u6f8fzKERN5BVRtERv2JruNfqbIk
-9bY9vmf1x+ljlSLHksv34q+SeXRMONjqchc25w5wcs/TKuD6UY8T6RTPkpKtjCeI
-O4JozPA7oa0IrwnxIirLUQom8DbSh1GW2l+wD4mg+4VevewSHrFrkGdagJm4JVo=
-=7c/2
-&#x2013;&#x2014;END PGP MESSAGE&#x2013;&#x2014;
-</p>
+<div class="org-src-container">
+<pre class="src src-bqn">E2 ← {+´(¬2⊸|)⊸/{⊑¨+`∘⌽⍟(↕𝕩)↕2}(⌈0.5+𝕩⊸×÷○(⋆⁼)2÷˜1⊸+)√5}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E2 4e6
+</pre>
 </div>
 </div>
-<div id="outline-container-orgef22dfe" class="outline-2">
-<h2 id="orgef22dfe">PE2&#xa0;&#xa0;&#xa0;<span class="tag"><span class="crypt">crypt</span></span></h2>
-<div class="outline-text-2" id="text-orgef22dfe">
+</div>
+<div id="outline-container-orgfedc394" class="outline-2">
+<h2 id="orgfedc394">Problem 3</h2>
+<div class="outline-text-2" id="text-orgfedc394">
 <p>
-&#x2013;&#x2014;BEGIN PGP MESSAGE&#x2013;&#x2014;
+A brute force attempt, in which I got lucky. We create a primes table, and then check:
 </p>
 
-<p>
-hF4Djmgxy0OJ4GASAQdAl0LyDVuRi68NGukJhQZLIk3FQQ6oMf1FfCiF+CzkYV4w
-IsxduTNbL7lqvO3Sn8yJQ24R6LzLU/RajK1QTjUFnnoDItgbIoAzBvUDEjlXdtOF
-0sA6Adv7h8e6DI0dWiJaG4VvODTYVURENi4EigzjYnTJAtX6m6A6eziuBtMbVRU8
-uvS/kJ9kn6yLeKjKMdn6yoFW4ORWl0MyCYrrxZ2G25/vB8kGIdMnGbzg/zREyn6L
-+DCFfbIFl4Vn7rmpjZlHqIU2u4E6544ueJ7uZbw5uVG3tLZMz8Eu5aXpt8wBGZtq
-Px+rL2EaVFGjqdX1ceyzyW2GWzDCuIC1V0pjYnFlZE6ZIaVFGDqOdjBptBnjgT4K
-henGe83UHOJs58ft/MiIkSRPJ5GW0J+d+X6qnyi/MShqnnKxbozsbHsDb7lBKX4K
-0OaAUePTvzxJe7lV5Q==
-=hXZI
-&#x2013;&#x2014;END PGP MESSAGE&#x2013;&#x2014;
-</p>
+<div class="org-src-container">
+<pre class="src src-bqn">p ← ¬∘∊⟜(⥊×⌜˜)⊸/2↓↕1e4
+{𝕩=×´f←p/˜0=p|&lt;𝕩 ? ⌈´f; @}600851475143
+</pre>
 </div>
-</div>
-<div id="outline-container-org62a31d9" class="outline-2">
-<h2 id="org62a31d9">PE3&#xa0;&#xa0;&#xa0;<span class="tag"><span class="crypt">crypt</span></span></h2>
-<div class="outline-text-2" id="text-org62a31d9">
-<p>
-&#x2013;&#x2014;BEGIN PGP MESSAGE&#x2013;&#x2014;
-</p>
 
 <p>
-hF4Djmgxy0OJ4GASAQdAnwFU79Kt8xBrWmUrP4Tj9veQ950HBkXf3lRSM62WiVUw
-455/Ep4qv/OTX/idW6+lCaiIp1Qy+aPrOTBY9Tt7aCyL+cfAgB255nrr2Q7mGmqZ
-0ukBP9kcmXKSx2mZuOyHnJ1K36SmyJ8MGI5C+eN2E83615rr/MSZlUsiaBfh/NbX
-lmrCjxXP234Ch1im4etB67Q5aB4+lyQ42+qedYULh6SNOO9atPsNm+uhZOv2RQOB
-4dPVTGGlcC+aw27toZb384RS/6lk08Cn6yiV5SE80ZaKoVP4Gh2cpxk1c8H2/V0j
-hzo1ici8J1Aqbt5kmxL95Hxyvg3Fas7YsBY5H0n9sohltxaKxKJbHcpX5WhRQlXh
-+NSdVJq0xXo/n1sPl8rMwvmtB3pAuQkCTQgwRXCPMLoAOoubYbtxdrqXxAzZOBoA
-z3LMSMIrba0MpWlwV/raABS9NkvQig9FkPylzIvXIcpQykf/k1P6X5FpczjEFaF1
-ty08duRMp5RddLhLkemNsGyetpFIeYd+Bb0fZI0UopbPZFtiVYR+sh/zvrCNomT7
-iXHKFIeLcUT19ej0hO8uW8W43AKeZbzH4eKpiUE70xctiwxFdaNaVAspIAt6QuuQ
-JnmLA0HFQ2WHenu6bGWUT0XDB4NSn98MOEfLVNzzjqeji1R033UX3JP27cbswT0Y
-ihZ4bbrF+FzAlckGAiC5SJKpVE/dURBxVwK6sHvJvov9LjgByeAwGgniqsDq01y8
-zLiVNY/DlibT6XSccxlsscSqxHoTeID9GsV/kqyaWdS1dpHMgwRk/bqkzlJ0M4J5
-u2rIzuj/jmeNL1kXh3B1VRjTuBIMTP5eT43owHy0Vk7MNwLazl2DW7RhLynJLs3r
-+74TfYci35tj4YpZOE5umT5FQtXWa7uACluJFs/Fb0Gn00OVwsV+MX6i4S6ub/JM
-ycHiIfdLAlGAreoZ/Ou2y8bv4BXeHPa2fmt5+hQk0EH6ZF45
-=9XUt
-&#x2013;&#x2014;END PGP MESSAGE&#x2013;&#x2014;
-</p>
-</div>
-</div>
-<div id="outline-container-orgc7afc78" class="outline-2">
-<h2 id="orgc7afc78">PE4&#xa0;&#xa0;&#xa0;<span class="tag"><span class="crypt">crypt</span></span></h2>
-<div class="outline-text-2" id="text-orgc7afc78">
-<p>
-&#x2013;&#x2014;BEGIN PGP MESSAGE&#x2013;&#x2014;
+Provided the size of the input, a much reasonable approach is trial division. We can
+achieve this with the following tacit function:
 </p>
 
-<p>
-hF4Djmgxy0OJ4GASAQdAWQdGq+Fszl8k+x+AToHJiDoz4BB3VIMG6XXe7AS/QiIw
-Kg8o6VZDzOeV3vpxwhS1fTkgYpjR1rZnxzd0QUIvr90LoC3+BftBSVjZEOwC38pE
-0sBoAb3293kGq18d6fw0fLmWAVLSZkBKnS1hFWk1v5m83ch7Q/hr0qYCT6zcpi6i
-NqF6UzKWJO4sc9dZU1i4tIuD/mM7j8b46+e+6FTOT4Zx0o+NW/Q39T1cPOjqmK+e
-02TWRF5DRiLNc5tXAQ1cizt5ermye+zX0TjZh7LFI8Cqkz4jV/lO7PGGlk8w9aZ4
-qL8bSzjD35eWEJGhfv/0T5TgcfuxKt3A+GhHQkvnp5e/AtMubUFSKS2s3brGQSPi
-j0d9Mc8UEUFtqfx5+7kQaJPsukzWItgnqzg0sM6UKg5HxzCW0a6So4y7qerWygsP
-lyekIcFahwFadXLj56+Y51VuP2xe6HlAsYWwtoXWPjuBXGgkqw2vyAuHZyUIiH3s
-JGSsyyQ+gRbu+yE=
-=MKGx
-&#x2013;&#x2014;END PGP MESSAGE&#x2013;&#x2014;
-</p>
+<div class="org-src-container">
+<pre class="src src-bqn">E3 ← ⊢´(0=|)◶⟨+⟜2⊸⋈, ⊣⋈÷˜⟩´•_while_(×˜∘⊣⊸&lt;´)
+</pre>
 </div>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E3 3‿600851475143 
+</pre>
 </div>
-<div id="outline-container-orgb66a6c1" class="outline-2">
-<h2 id="orgb66a6c1">PE5&#xa0;&#xa0;&#xa0;<span class="tag"><span class="crypt">crypt</span></span></h2>
-<div class="outline-text-2" id="text-orgb66a6c1">
-<p>
-&#x2013;&#x2014;BEGIN PGP MESSAGE&#x2013;&#x2014;
-</p>
 
 <p>
-hF4Djmgxy0OJ4GASAQdADs1haOa7cBIVf4z3or3xo0sODeOThDwAFmm2BA5AQX4w
-4uhgetB4MtSpTQBSgZtpMa5RbJhuyERO789qW4ZCna8MWKBPLptyzDaGuU599Mm7
-0p8B1WCgndvxE8G2dQ+1Nhi8fJyAxze/W7ORFWxbelWvys4gv+JzojUhUBu4SyzX
-XUwPVJnaUDav6gLQG61Ig7KMER3nrm9HlRKqvISyvnH1wAp4/4aafWOAsVAMk8QT
-0bjAO6/bUzKLxDaMuzOag2JR5aPkTLbicAbMYVtd7mblGg1fPmOJGUrSDae9jFTs
-5+MPFaufOCDVFwpe5wi53io=
-=QZ8i
-&#x2013;&#x2014;END PGP MESSAGE&#x2013;&#x2014;
+Explanation: since the number is odd, we can start with 3. While the current
+divisor is less than the square root of the current number, we check if it
+divides the number. If it does, we divide the number by the divisor.
+If it doesn't, we increment the divisor by 2 (to consider only odd factors).
+This works because a composite number must have a prime factor less
+than or equal to its square root.
 </p>
 </div>
 </div>
-<div id="outline-container-org60b3122" class="outline-2">
-<h2 id="org60b3122">PE6&#xa0;&#xa0;&#xa0;<span class="tag"><span class="crypt">crypt</span></span></h2>
-<div class="outline-text-2" id="text-org60b3122">
+<div id="outline-container-orgc91d2e6" class="outline-2">
+<h2 id="orgc91d2e6">Problem 4</h2>
+<div class="outline-text-2" id="text-orgc91d2e6">
 <p>
-&#x2013;&#x2014;BEGIN PGP MESSAGE&#x2013;&#x2014;
+Anything other than brute force here? A little tacit function:
 </p>
 
+<div class="org-src-container">
+<pre class="src src-bqn">E4 ← ⌈´·(⌽⊸≡•Fmt)¨⊸/·⥊×⌜˜
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E4 900+↕101
+</pre>
+</div>
+
 <p>
-hF4Djmgxy0OJ4GASAQdAnwKFHboxRfAVv8GknTSNQCo/DnpSXZK6e4HEaFfrJC4w
-I4XkKmojRc9eeTxc1aeN/CoH8rvmffRurjHgqQidgBCkz3fPVp8Frw4KB2dEsXgd
-0sDzAZZ9ncWl7MPux/W+dfN+dzBB0dtDO5MizLg25UqdapHG7dwmEV8JNhcQ60MF
-16WJb+HojM17ujs26ZHF2e/5CjTQ/Ywj1s6T3AW2RzOGsS4BIZvw8pewXqKru3Kz
-HiB1PH1LlXGM/f90vqo/MkE5Oc2iEMa25r57H55wRvgmucUeKCrl+FQ3Hy6DIvrC
-AqfmTS2AetKXd85/lQw0jevJDj7aN02L6KHHVlyUX8fqHGZB8OYMq//MvJrQL2KQ
-cm7T5rKbiVMJIyBu21JtPtC7elK6R10u6UA8oOSJfYeHU0hhq9PlsQa3n9j4XXBB
-IJkGbdBZB9z9lX9IagLoMTnpPwneNC9AJQwoVJm+XItolJyXFYUPcujv2h0y2is7
-5tRdhcDlp3HyoF2A2gs/FgKxsisEa+iGuNy+86mzq2oRSnRefuGWpqhGmMmb3OHo
-72R8ReAXAeiYfHcGa470HOVKME9bVJDvncCHl31srHxDwX4yq3u91Dxl/WYvHMtX
-hZgLVSgYtUob76AfW6xAE6BaqZEfa+dXRZXb9bBqeGOj4OLnQVvh3AzVLKL3OHzO
-USLExflW
-=EiIu
-&#x2013;&#x2014;END PGP MESSAGE&#x2013;&#x2014;
+This runs in 5 ms with the optimization of searching only in the 900's.
 </p>
+</div>
+</div>
+<div id="outline-container-org85bdc43" class="outline-2">
+<h2 id="org85bdc43">Problem 5</h2>
+<div class="outline-text-2" id="text-org85bdc43">
+<p>
+That felt almost trivial.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E5 ← •math.LCM´
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E5 1+↕20
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org03809d3" class="outline-2">
+<h2 id="org03809d3">Problem 6</h2>
+<div class="outline-text-2" id="text-org03809d3">
+<p>
+Yeah well, what can I say, I love this identity:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E6 ← ×˜⊸(+´×-⊣)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E6 1+↕100
+</pre>
+</div>
+
+<p>
+In fact, I was terribly stupid. There are closed form solutions for the sum
+of the first \(n\) integers and its squares (remember induction?). So after
+squaring the former, subtracting the latter and simplifying we get this constant
+time solution:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">12÷˜×´⟨⊢, -⟜1, +⟜1, 2+3⊸×⟩{𝕎𝕩}¨100
+</pre>
+</div>
+
+<p>
+Quite a few characters more, though.
+</p>
+</div>
+</div>
+<div id="outline-container-org46d9936" class="outline-2">
+<h2 id="org46d9936">PE7</h2>
+<div class="outline-text-2" id="text-org46d9936">
+<p>
+The idea here is to use Eratosthenes' sieve with a correct upper bound, which we get
+thanks to Rosser's <a href="https://en.wikipedia.org/wiki/Prime-counting_function#Inequalities">theorem</a>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E7 ← 2⊸↓{𝔽/(𝕩⥊1)⊑◶⊢‿{↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}´⌽𝔽↕⌈√𝕩}·⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
+</pre>
+</div>
+
+<p>
+Which evaluates:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">-⟜1⊸E7 1e4+1
+</pre>
+</div>
 </div>
 </div>
 </div>
