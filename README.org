@@ -15,7 +15,7 @@
 </a>
 
 <a href="https://mlochbaum.github.io/BQN/community/index.html">
-<img alt="Emacs" src="https://img.shields.io/badge/using-BQN-red">
+<img alt="Emacs" src="https://img.shields.io/badge/using-BQN-yellow">
 </a>
 <br>
 <br>
