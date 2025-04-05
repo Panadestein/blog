@@ -227,9 +227,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Project Euler solutions</h1>
-<div id="outline-container-orgcc8e53d" class="outline-2">
-<h2 id="orgcc8e53d">Disclaimer</h2>
-<div class="outline-text-2" id="text-orgcc8e53d">
+<div id="outline-container-orgd0afe49" class="outline-2">
+<h2 id="orgd0afe49">Disclaimer</h2>
+<div class="outline-text-2" id="text-orgd0afe49">
 <p>
 This file contains my BQN solutions to some of the problems in <a href="https://projecteuler.net/">Project Euler</a>.
 It is discouraged to share them, but I very much dislike writing throw-away code,
@@ -238,9 +238,9 @@ them with anyone who is interested.
 </p>
 </div>
 </div>
-<div id="outline-container-org520cd5e" class="outline-2">
-<h2 id="org520cd5e">Problem 1</h2>
-<div class="outline-text-2" id="text-org520cd5e">
+<div id="outline-container-org9dcbdc3" class="outline-2">
+<h2 id="org9dcbdc3">Problem 1</h2>
+<div class="outline-text-2" id="text-org9dcbdc3">
 <div class="org-src-container">
 <pre class="src src-bqn">E1 ← +´(∨´0=5‿3|&lt;)⊸/
 </pre>
@@ -252,9 +252,9 @@ them with anyone who is interested.
 </div>
 </div>
 </div>
-<div id="outline-container-orge3d75f8" class="outline-2">
-<h2 id="orge3d75f8">Problem 2</h2>
-<div class="outline-text-2" id="text-orge3d75f8">
+<div id="outline-container-org3e6257f" class="outline-2">
+<h2 id="org3e6257f">Problem 2</h2>
+<div class="outline-text-2" id="text-org3e6257f">
 <p>
 Estimate the upper bound with Binet's formula.
 </p>
@@ -270,9 +270,9 @@ Estimate the upper bound with Binet's formula.
 </div>
 </div>
 </div>
-<div id="outline-container-org45f435d" class="outline-2">
-<h2 id="org45f435d">Problem 3</h2>
-<div class="outline-text-2" id="text-org45f435d">
+<div id="outline-container-orgbf234df" class="outline-2">
+<h2 id="orgbf234df">Problem 3</h2>
+<div class="outline-text-2" id="text-orgbf234df">
 <p>
 A brute force attempt, in which I got lucky. We create a primes table, and then check:
 </p>
@@ -308,9 +308,9 @@ than or equal to its square root.
 </p>
 </div>
 </div>
-<div id="outline-container-org7baf21d" class="outline-2">
-<h2 id="org7baf21d">Problem 4</h2>
-<div class="outline-text-2" id="text-org7baf21d">
+<div id="outline-container-orge31f7f9" class="outline-2">
+<h2 id="orge31f7f9">Problem 4</h2>
+<div class="outline-text-2" id="text-orge31f7f9">
 <p>
 Anything other than brute force here? A little tacit function:
 </p>
@@ -330,9 +330,9 @@ This runs in 5 ms with the optimization of searching only in the 900's.
 </p>
 </div>
 </div>
-<div id="outline-container-org84285c1" class="outline-2">
-<h2 id="org84285c1">Problem 5</h2>
-<div class="outline-text-2" id="text-org84285c1">
+<div id="outline-container-org7f038da" class="outline-2">
+<h2 id="org7f038da">Problem 5</h2>
+<div class="outline-text-2" id="text-org7f038da">
 <p>
 That felt almost trivial.
 </p>
@@ -348,9 +348,9 @@ That felt almost trivial.
 </div>
 </div>
 </div>
-<div id="outline-container-org41ced68" class="outline-2">
-<h2 id="org41ced68">Problem 6</h2>
-<div class="outline-text-2" id="text-org41ced68">
+<div id="outline-container-orge5cbfef" class="outline-2">
+<h2 id="orge5cbfef">Problem 6</h2>
+<div class="outline-text-2" id="text-orge5cbfef">
 <p>
 Yeah well, what can I say, I love this identity:
 </p>
@@ -382,17 +382,21 @@ Quite a few characters more, though.
 </p>
 </div>
 </div>
-<div id="outline-container-org90b4046" class="outline-2">
-<h2 id="org90b4046">PE7</h2>
-<div class="outline-text-2" id="text-org90b4046">
+<div id="outline-container-orgc32094a" class="outline-2">
+<h2 id="orgc32094a">PE7</h2>
+<div class="outline-text-2" id="text-orgc32094a">
 <p>
 The idea here is to use Eratosthenes' sieve with a correct upper bound, which we get
 thanks to Rosser's <a href="https://en.wikipedia.org/wiki/Prime-counting_function#Inequalities">theorem</a>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">E7 ← {
-  Sieve ← 2⊸↓{𝔽/(𝕩⥊1)⊑◶⊢‿{↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}´⌽𝔽↕⌈√𝕩}
+<pre class="src src-bqn">Sieve ← {
+  L ← {↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}
+  S ← ⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
+  2↓/(𝕩⥊1)≤⟜640◶L‿S⍟⊑´⌽2↓↕⌈√𝕩
+}
+E7 ← {
   Rosser ← ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
   (-⟜1⊑Sieve∘Rosser) 𝕩
 }
@@ -409,21 +413,30 @@ Which evaluates:
 </div>
 
 <p>
-As a bonus, here is a comparison of Eratosthenes' sieves implementations:
+The sieve uses heuristics to decide which operation to perform when marking the multiples,
+either zeroing the indices for large argument or creating a mask and multiplying by the
+current array in the fold. As a bonus, here is a comparison of Eratosthenes' sieves implementations:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">S1 ← 2⊸↓{𝔽/(𝕩⥊1)⊑◶⊢‿{↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}´⌽𝔽↕⌈√𝕩}
-S2 ← 2⊸↓{𝔽/(𝕩⥊1)⊑◶⊢‿{𝕩&gt;(≠𝕩)↑/⁼↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)≠𝕩}´⌽𝔽↕⌈√𝕩}
-S3 ← 2⊸↓{𝔽/(𝕩⥊1)⊑◶⟨⊢, ⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1⟩´⌽𝔽↕⌈√𝕩}
-S1‿S2‿S3 {𝕏•_timed𝕨}⌜˜10⋆3‿5‿7‿8‿9
+<pre class="src src-bqn">S0 ← 2⊸↓{𝔽/(𝕩⥊1)⊑◶⊢‿{↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}´⌽𝔽↕⌈√𝕩}
+S1 ← 2⊸↓{𝔽/(𝕩⥊1){↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
+S2 ← 2⊸↓{𝔽/(𝕩⥊1){𝕩&gt;(≠𝕩)↑/⁼↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)≠𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
+S3 ← 2⊸↓{𝔽/(𝕩⥊1)(⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1)⍟⊑´⌽𝔽↕⌈√𝕩}
+S4 ← {
+  L ← {↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}
+  S ← ⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
+  2↓/(𝕩⥊1)≤⟜640◶L‿S⍟⊑´⌽2↓↕⌈√𝕩
+}
+•Show 1=≠∘⍷ S0‿S1‿S2‿S3‿S4 {𝕎𝕩}¨&lt; 1e4
+S0‿S1‿S2‿S3‿S4 {𝕏•_timed𝕨}⌜˜ 10⋆3‿5‿7‿8‿9
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org59a97a9" class="outline-2">
-<h2 id="org59a97a9">PE8</h2>
-<div class="outline-text-2" id="text-org59a97a9">
+<div id="outline-container-org4d5a6a3" class="outline-2">
+<h2 id="org4d5a6a3">PE8</h2>
+<div class="outline-text-2" id="text-org4d5a6a3">
 <p>
 A simple windowed reduction:
 </p>
