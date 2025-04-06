@@ -227,20 +227,35 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Project Euler solutions</h1>
-<div id="outline-container-orgd0afe49" class="outline-2">
-<h2 id="orgd0afe49">Disclaimer</h2>
-<div class="outline-text-2" id="text-orgd0afe49">
+<div id="outline-container-orgdc9d9e7" class="outline-2">
+<h2 id="orgdc9d9e7">Disclaimer</h2>
+<div class="outline-text-2" id="text-orgdc9d9e7">
 <p>
 This file contains my BQN solutions to some of the problems in <a href="https://projecteuler.net/">Project Euler</a>.
 It is discouraged to share them, but I very much dislike writing throw-away code,
 and that's why they are here. I will not blog about it, but I am happy to discuss
 them with anyone who is interested.
 </p>
+
+<p>
+Here I define a namespace with some utilities that are often used in the problems:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">utils ← {
+  Sieve ⇐ 2⊸↓{
+    L ← {↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}
+    S ← ⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
+    𝔽/(𝕩⥊1)≤⟜640◶L‿S⍟⊑´⌽𝔽↕⌈√𝕩
+  }
+}
+</pre>
 </div>
 </div>
-<div id="outline-container-org9dcbdc3" class="outline-2">
-<h2 id="org9dcbdc3">Problem 1</h2>
-<div class="outline-text-2" id="text-org9dcbdc3">
+</div>
+<div id="outline-container-orgdac8041" class="outline-2">
+<h2 id="orgdac8041">Problem 1</h2>
+<div class="outline-text-2" id="text-orgdac8041">
 <div class="org-src-container">
 <pre class="src src-bqn">E1 ← +´(∨´0=5‿3|&lt;)⊸/
 </pre>
@@ -252,9 +267,9 @@ them with anyone who is interested.
 </div>
 </div>
 </div>
-<div id="outline-container-org3e6257f" class="outline-2">
-<h2 id="org3e6257f">Problem 2</h2>
-<div class="outline-text-2" id="text-org3e6257f">
+<div id="outline-container-orgce49bdd" class="outline-2">
+<h2 id="orgce49bdd">Problem 2</h2>
+<div class="outline-text-2" id="text-orgce49bdd">
 <p>
 Estimate the upper bound with Binet's formula.
 </p>
@@ -270,9 +285,9 @@ Estimate the upper bound with Binet's formula.
 </div>
 </div>
 </div>
-<div id="outline-container-orgbf234df" class="outline-2">
-<h2 id="orgbf234df">Problem 3</h2>
-<div class="outline-text-2" id="text-orgbf234df">
+<div id="outline-container-orgb59fd8b" class="outline-2">
+<h2 id="orgb59fd8b">Problem 3</h2>
+<div class="outline-text-2" id="text-orgb59fd8b">
 <p>
 A brute force attempt, in which I got lucky. We create a primes table, and then check:
 </p>
@@ -308,9 +323,9 @@ than or equal to its square root.
 </p>
 </div>
 </div>
-<div id="outline-container-orge31f7f9" class="outline-2">
-<h2 id="orge31f7f9">Problem 4</h2>
-<div class="outline-text-2" id="text-orge31f7f9">
+<div id="outline-container-org59694dd" class="outline-2">
+<h2 id="org59694dd">Problem 4</h2>
+<div class="outline-text-2" id="text-org59694dd">
 <p>
 Anything other than brute force here? A little tacit function:
 </p>
@@ -330,9 +345,9 @@ This runs in 5 ms with the optimization of searching only in the 900's.
 </p>
 </div>
 </div>
-<div id="outline-container-org7f038da" class="outline-2">
-<h2 id="org7f038da">Problem 5</h2>
-<div class="outline-text-2" id="text-org7f038da">
+<div id="outline-container-orgac76ac8" class="outline-2">
+<h2 id="orgac76ac8">Problem 5</h2>
+<div class="outline-text-2" id="text-orgac76ac8">
 <p>
 That felt almost trivial.
 </p>
@@ -348,9 +363,9 @@ That felt almost trivial.
 </div>
 </div>
 </div>
-<div id="outline-container-orge5cbfef" class="outline-2">
-<h2 id="orge5cbfef">Problem 6</h2>
-<div class="outline-text-2" id="text-orge5cbfef">
+<div id="outline-container-org3de739d" class="outline-2">
+<h2 id="org3de739d">Problem 6</h2>
+<div class="outline-text-2" id="text-org3de739d">
 <p>
 Yeah well, what can I say, I love this identity:
 </p>
@@ -382,23 +397,18 @@ Quite a few characters more, though.
 </p>
 </div>
 </div>
-<div id="outline-container-orgc32094a" class="outline-2">
-<h2 id="orgc32094a">PE7</h2>
-<div class="outline-text-2" id="text-orgc32094a">
+<div id="outline-container-org84641e8" class="outline-2">
+<h2 id="org84641e8">PE7</h2>
+<div class="outline-text-2" id="text-org84641e8">
 <p>
 The idea here is to use Eratosthenes' sieve with a correct upper bound, which we get
 thanks to Rosser's <a href="https://en.wikipedia.org/wiki/Prime-counting_function#Inequalities">theorem</a>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">Sieve ← {
-  L ← {↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}
-  S ← ⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
-  2↓/(𝕩⥊1)≤⟜640◶L‿S⍟⊑´⌽2↓↕⌈√𝕩
-}
-E7 ← {
+<pre class="src src-bqn">E7 ← {
   Rosser ← ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
-  (-⟜1⊑Sieve∘Rosser) 𝕩
+  (-⟜1⊑utils.Sieve∘Rosser) 𝕩
 }
 </pre>
 </div>
@@ -434,9 +444,9 @@ S0‿S1‿S2‿S3‿S4 {𝕏•_timed𝕨}⌜˜ 10⋆3‿5‿7‿8‿9
 </div>
 </div>
 </div>
-<div id="outline-container-org4d5a6a3" class="outline-2">
-<h2 id="org4d5a6a3">PE8</h2>
-<div class="outline-text-2" id="text-org4d5a6a3">
+<div id="outline-container-org469d493" class="outline-2">
+<h2 id="org469d493">PE8</h2>
+<div class="outline-text-2" id="text-org469d493">
 <p>
 A simple windowed reduction:
 </p>
@@ -455,6 +465,9 @@ Boom:
 </pre>
 </div>
 </div>
+</div>
+<div id="outline-container-org5078da2" class="outline-2">
+<h2 id="org5078da2">PE9</h2>
 </div>
 </div>
 </body>
