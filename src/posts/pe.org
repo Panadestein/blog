@@ -237,3 +237,21 @@ Boom:
 : 23514624000
 
 ** PE9
+
+A stupid brute force does the trick:
+
+#+begin_src bqn
+  E9 ← {(××+⌾(×˜))´¨1+/○⥊⟜(↕≢)(<⌜˜↕≠𝕩)×(1e3=+++⌾(×˜))⌜˜𝕩}
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+Then:
+
+#+begin_src bqn :tangle no
+  E9 1+↕1e3
+#+end_src
+
+#+RESULTS:
+: ⟨ 31875000 ⟩
