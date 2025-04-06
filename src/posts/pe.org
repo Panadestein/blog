@@ -8,6 +8,21 @@ It is discouraged to share them, but I very much dislike writing throw-away code
 and that's why they are here. I will not blog about it, but I am happy to discuss
 them with anyone who is interested.
 
+Here I define a namespace with some utilities that are often used in the problems:
+
+#+begin_src bqn
+  utils ← {
+    Sieve ⇐ 2⊸↓{
+      L ← {↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}
+      S ← ⊢>×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
+      𝔽/(𝕩⥊1)≤⟜640◶L‿S⍟⊑´⌽𝔽↕⌈√𝕩
+    }
+  }
+#+end_src
+
+#+RESULTS:
+: {sieve⇐}
+
 ** Problem 1
 
 #+begin_src bqn
@@ -155,14 +170,9 @@ The idea here is to use Eratosthenes' sieve with a correct upper bound, which we
 thanks to Rosser's [[https://en.wikipedia.org/wiki/Prime-counting_function#Inequalities][theorem]]:
 
 #+begin_src bqn
-  Sieve ← {
-    L ← {↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}
-    S ← ⊢>×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
-    2↓/(𝕩⥊1)≤⟜640◶L‿S⍟⊑´⌽2↓↕⌈√𝕩
-  }
   E7 ← {
     Rosser ← ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
-    (-⟜1⊑Sieve∘Rosser) 𝕩
+    (-⟜1⊑utils.Sieve∘Rosser) 𝕩
   }
 #+end_src
 
@@ -225,3 +235,5 @@ Boom:
 
 #+RESULTS:
 : 23514624000
+
+** PE9
