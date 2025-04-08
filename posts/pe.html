@@ -227,9 +227,9 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">Project Euler solutions</h1>
-<div id="outline-container-orgaaf761e" class="outline-2">
-<h2 id="orgaaf761e">Disclaimer</h2>
-<div class="outline-text-2" id="text-orgaaf761e">
+<div id="outline-container-org5fac3f0" class="outline-2">
+<h2 id="org5fac3f0">Disclaimer</h2>
+<div class="outline-text-2" id="text-org5fac3f0">
 <p>
 This file contains my BQN solutions to some of the problems in <a href="https://projecteuler.net/">Project Euler</a>.
 It is discouraged to share them, but I very much dislike writing throw-away code,
@@ -248,14 +248,18 @@ Here I define a namespace with some utilities that are often used in the problem
     S ← ⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
     𝔽/(𝕩⥊1)≤⟜640◶L‿S⍟⊑´⌽𝔽↕⌈√𝕩
   }
+  Rosser ⇐ ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
+}
+parsing ← {
+  Split ⇐ (¬-˜⊢×·+`»⊸&gt;)∘≠⊔⊢
 }
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orgab32e0c" class="outline-2">
-<h2 id="orgab32e0c">Problem 1</h2>
-<div class="outline-text-2" id="text-orgab32e0c">
+<div id="outline-container-orgb7e1525" class="outline-2">
+<h2 id="orgb7e1525">Problem 1</h2>
+<div class="outline-text-2" id="text-orgb7e1525">
 <div class="org-src-container">
 <pre class="src src-bqn">E1 ← +´(∨´0=5‿3|&lt;)⊸/
 </pre>
@@ -267,9 +271,9 @@ Here I define a namespace with some utilities that are often used in the problem
 </div>
 </div>
 </div>
-<div id="outline-container-org09346ab" class="outline-2">
-<h2 id="org09346ab">Problem 2</h2>
-<div class="outline-text-2" id="text-org09346ab">
+<div id="outline-container-org9a8e6d8" class="outline-2">
+<h2 id="org9a8e6d8">Problem 2</h2>
+<div class="outline-text-2" id="text-org9a8e6d8">
 <p>
 Estimate the upper bound with Binet's formula.
 </p>
@@ -285,9 +289,9 @@ Estimate the upper bound with Binet's formula.
 </div>
 </div>
 </div>
-<div id="outline-container-orgf94c3e6" class="outline-2">
-<h2 id="orgf94c3e6">Problem 3</h2>
-<div class="outline-text-2" id="text-orgf94c3e6">
+<div id="outline-container-orgbd1f082" class="outline-2">
+<h2 id="orgbd1f082">Problem 3</h2>
+<div class="outline-text-2" id="text-orgbd1f082">
 <p>
 A brute force attempt, in which I got lucky. We create a primes table, and then check:
 </p>
@@ -323,9 +327,9 @@ than or equal to its square root.
 </p>
 </div>
 </div>
-<div id="outline-container-org397ff10" class="outline-2">
-<h2 id="org397ff10">Problem 4</h2>
-<div class="outline-text-2" id="text-org397ff10">
+<div id="outline-container-org89ec37b" class="outline-2">
+<h2 id="org89ec37b">Problem 4</h2>
+<div class="outline-text-2" id="text-org89ec37b">
 <p>
 Anything other than brute force here? A little tacit function:
 </p>
@@ -345,9 +349,9 @@ This runs in 5 ms with the optimization of searching only in the 900's.
 </p>
 </div>
 </div>
-<div id="outline-container-orgca625f5" class="outline-2">
-<h2 id="orgca625f5">Problem 5</h2>
-<div class="outline-text-2" id="text-orgca625f5">
+<div id="outline-container-org1961afe" class="outline-2">
+<h2 id="org1961afe">Problem 5</h2>
+<div class="outline-text-2" id="text-org1961afe">
 <p>
 That felt almost trivial.
 </p>
@@ -363,9 +367,9 @@ That felt almost trivial.
 </div>
 </div>
 </div>
-<div id="outline-container-org57a62a9" class="outline-2">
-<h2 id="org57a62a9">Problem 6</h2>
-<div class="outline-text-2" id="text-org57a62a9">
+<div id="outline-container-orgbca81be" class="outline-2">
+<h2 id="orgbca81be">Problem 6</h2>
+<div class="outline-text-2" id="text-orgbca81be">
 <p>
 Yeah well, what can I say, I love this identity:
 </p>
@@ -397,19 +401,16 @@ Quite a few characters more, though.
 </p>
 </div>
 </div>
-<div id="outline-container-orge25a7e0" class="outline-2">
-<h2 id="orge25a7e0">PE7</h2>
-<div class="outline-text-2" id="text-orge25a7e0">
+<div id="outline-container-org87a9d9f" class="outline-2">
+<h2 id="org87a9d9f">Problem 7</h2>
+<div class="outline-text-2" id="text-org87a9d9f">
 <p>
 The idea here is to use Eratosthenes' sieve with a correct upper bound, which we get
 thanks to Rosser's <a href="https://en.wikipedia.org/wiki/Prime-counting_function#Inequalities">theorem</a>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">E7 ← {
-  Rosser ← ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
-  (-⟜1⊑utils.Sieve∘Rosser) 𝕩
-}
+<pre class="src src-bqn">E7 ← -⟜1⊑utils{𝕗.Sieve𝕗.Rosser}
 </pre>
 </div>
 
@@ -444,9 +445,9 @@ S0‿S1‿S2‿S3‿S4 {𝕏•_timed𝕨}⌜˜ 10⋆3‿5‿7‿8‿9
 </div>
 </div>
 </div>
-<div id="outline-container-org22d5df5" class="outline-2">
-<h2 id="org22d5df5">PE8</h2>
-<div class="outline-text-2" id="text-org22d5df5">
+<div id="outline-container-orgda5fb87" class="outline-2">
+<h2 id="orgda5fb87">Problem 8</h2>
+<div class="outline-text-2" id="text-orgda5fb87">
 <p>
 A simple windowed reduction:
 </p>
@@ -466,24 +467,84 @@ Boom:
 </div>
 </div>
 </div>
-<div id="outline-container-org4f91a7e" class="outline-2">
-<h2 id="org4f91a7e">PE9</h2>
-<div class="outline-text-2" id="text-org4f91a7e">
+<div id="outline-container-orgdaaa91d" class="outline-2">
+<h2 id="orgdaaa91d">Problem 9</h2>
+<div class="outline-text-2" id="text-orgdaaa91d">
 <p>
 A stupid brute force does the trick:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">E9 ← {(××+⌾(×˜))´¨1+/○⥊⟜(↕≢)(&lt;⌜˜↕≠𝕩)×(1e3=+++⌾(×˜))⌜˜𝕩}
+<pre class="src src-bqn">{⊑(××+⌾(×˜))´¨1+/○⥊⟜(↕≢)(&lt;⌜˜↕≠𝕩)×(1e3=+++⌾(×˜))⌜˜𝕩} 1+↕1e3
 </pre>
 </div>
 
 <p>
-Then:
+But I hate it and it is painfully slow. The correct way of doing it is using <a href="https://en.wikipedia.org/wiki/Pythagorean_triple#Proof_of_Euclid's_formula">Euclid's formula</a>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">E9 1+↕1e3
+<pre class="src src-bqn">E9 ← {⋆⟜4{2×××𝔽˜-𝔽}´¨1+/○⥊⟜(↕≢)⌊⊸=𝕩÷˜(⊢×+)⌜○(1+↕)˜⌈√𝕩}
+</pre>
+</div>
+
+<p>
+Here we have used the fact that the sum of the triplet expressed with Euclid's formula
+must be \(km(m+n)=500\), with \(m>n>1\) coprime and one of them odd. It suffices to loop
+until √500 because \(m\) cannot be larger than it, as \(n\) is positive. Then:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">⊑E9 500
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org08b455b" class="outline-2">
+<h2 id="org08b455b">Problem 10</h2>
+<div class="outline-text-2" id="text-org08b455b">
+<p>
+The sieve again:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E10 ← +´utils.Sieve
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E10 2e6
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org49ca2a9" class="outline-2">
+<h2 id="org49ca2a9">Problem 11</h2>
+<div class="outline-text-2" id="text-org49ca2a9">
+<p>
+This is gotta be brute force. First I will parse the grid:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">inp11 ← ∘‿20⥊•ParseFloat¨' 'parsing.Split"08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08 49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00 81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65 52 70 95 23 04 60 11 42 69 24 68 56 01 32 56 71 37 02 36 91 22 31 16 71 51 67 63 89 41 92 36 54 22 40 40 28 66 33 13 80 24 47 32 60 99 03 45 02 44 75 33 53 78 36 84 20 35 17 12 50 32 98 81 28 64 23 67 10 26 38 40 67 59 54 70 66 18 38 64 70 67 26 20 68 02 62 12 20 95 63 94 39 63 08 40 91 66 49 94 21 24 55 58 05 66 73 99 26 97 17 78 78 96 83 14 88 34 89 63 72 21 36 23 09 75 00 76 44 20 45 35 14 00 61 33 97 34 31 33 95 78 17 53 28 22 75 31 67 15 94 03 80 04 62 16 14 09 53 56 92 16 39 05 42 96 35 31 47 55 58 88 24 00 17 54 24 36 29 85 57 86 56 00 48 35 71 89 07 05 44 44 37 44 60 21 58 51 54 17 58 19 80 81 68 05 94 47 69 28 73 92 13 86 52 17 77 04 89 55 40 04 52 08 83 97 35 99 16 07 97 57 32 16 26 26 79 33 27 98 66 88 36 68 87 57 62 20 72 03 46 33 67 46 55 12 32 63 93 53 69 04 42 16 73 38 25 39 11 24 94 72 18 08 46 29 32 40 62 76 36 20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74 04 36 16 20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48"
+</pre>
+</div>
+
+<p>
+Then we have this hideous thing:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E11 ← {
+  rc ← (⌈´∘⥊·×˝˘4⊸↕){𝔽⌈𝔽∘⍉}𝕩
+  d ← ⌈´∾(×˝˘4⊸↕)¨(4≤≠)¨⊸/↕¨∘≢{(𝔾⌾⌽𝔽)⊸⊔∾(𝔾𝔽)⊸⊔}(+⌜´)𝕩
+  rc⌈d
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bqn">E11 inp11
 </pre>
 </div>
 </div>
