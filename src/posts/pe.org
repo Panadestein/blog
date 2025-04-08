@@ -17,11 +17,15 @@ Here I define a namespace with some utilities that are often used in the problem
       S ← ⊢>×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
       𝔽/(𝕩⥊1)≤⟜640◶L‿S⍟⊑´⌽𝔽↕⌈√𝕩
     }
+    Rosser ⇐ ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
+  }
+  parsing ← {
+    Split ⇐ (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
   }
 #+end_src
 
 #+RESULTS:
-: {sieve⇐}
+: {split⇐}
 
 ** Problem 1
 
@@ -164,20 +168,17 @@ time solution:
 Quite a few characters more, though.
 
 
-** PE7
+** Problem 7
 
 The idea here is to use Eratosthenes' sieve with a correct upper bound, which we get
 thanks to Rosser's [[https://en.wikipedia.org/wiki/Prime-counting_function#Inequalities][theorem]]:
 
 #+begin_src bqn
-  E7 ← {
-    Rosser ← ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
-    (-⟜1⊑utils.Sieve∘Rosser) 𝕩
-  }
+  E7 ← -⟜1⊑utils{𝕗.Sieve𝕗.Rosser}
 #+end_src
 
 #+RESULTS:
-: (function block)
+: -⟜1⊑(2⊸↓(1-modifier block)(⌈⋆⁼∘(⋆⁼)⊸+⟜(⋆⁼)⊸×))
 
 Which evaluates:
 
@@ -216,7 +217,7 @@ current array in the fold. As a bonus, here is a comparison of Eratosthenes' sie
 :   28.261043074000003 27.725597807000003     92.62981303100001  98.58912269400001    17.110364360000002  
 :                                                                                                        ┘
 
-** PE8
+** Problem 8
 
 A simple windowed reduction:
 
@@ -236,22 +237,105 @@ Boom:
 #+RESULTS:
 : 23514624000
 
-** PE9
+** Problem 9
 
 A stupid brute force does the trick:
 
+#+begin_src bqn :tangle no
+  {⊑(××+⌾(×˜))´¨1+/○⥊⟜(↕≢)(<⌜˜↕≠𝕩)×(1e3=+++⌾(×˜))⌜˜𝕩} 1+↕1e3
+#+end_src
+
+#+RESULTS:
+: 31875000
+
+But I hate it and it is painfully slow. The correct way of doing it is using [[https://en.wikipedia.org/wiki/Pythagorean_triple#Proof_of_Euclid's_formula][Euclid's formula]].
+
 #+begin_src bqn
-  E9 ← {(××+⌾(×˜))´¨1+/○⥊⟜(↕≢)(<⌜˜↕≠𝕩)×(1e3=+++⌾(×˜))⌜˜𝕩}
+  E9 ← {⋆⟜4{2×××𝔽˜-𝔽}´¨1+/○⥊⟜(↕≢)⌊⊸=𝕩÷˜(⊢×+)⌜○(1+↕)˜⌈√𝕩}
 #+end_src
 
 #+RESULTS:
 : (function block)
 
-Then:
+Here we have used the fact that the sum of the triplet expressed with Euclid's formula
+must be \(km(m+n)=500\), with \(m>n>1\) coprime and one of them odd. It suffices to loop
+until √500 because \(m\) cannot be larger than it, as \(n\) is positive. Then:
 
 #+begin_src bqn :tangle no
-  E9 1+↕1e3
+  ⊑E9 500
 #+end_src
 
 #+RESULTS:
-: ⟨ 31875000 ⟩
+: 31875000
+
+** Problem 10
+
+The sieve again:
+
+#+begin_src bqn
+  E10 ← +´utils.Sieve
+#+end_src
+
+#+RESULTS:
+: +´2⊸↓(1-modifier block)
+
+#+begin_src bqn :tangle no
+  E10 2e6
+#+end_src
+
+#+RESULTS:
+: 142913828922
+
+** Problem 11
+
+This is gotta be brute force. First I will parse the grid:
+
+#+begin_src bqn :tangle no
+  inp11 ← ∘‿20⥊•ParseFloat¨' 'parsing.Split"08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08 49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00 81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65 52 70 95 23 04 60 11 42 69 24 68 56 01 32 56 71 37 02 36 91 22 31 16 71 51 67 63 89 41 92 36 54 22 40 40 28 66 33 13 80 24 47 32 60 99 03 45 02 44 75 33 53 78 36 84 20 35 17 12 50 32 98 81 28 64 23 67 10 26 38 40 67 59 54 70 66 18 38 64 70 67 26 20 68 02 62 12 20 95 63 94 39 63 08 40 91 66 49 94 21 24 55 58 05 66 73 99 26 97 17 78 78 96 83 14 88 34 89 63 72 21 36 23 09 75 00 76 44 20 45 35 14 00 61 33 97 34 31 33 95 78 17 53 28 22 75 31 67 15 94 03 80 04 62 16 14 09 53 56 92 16 39 05 42 96 35 31 47 55 58 88 24 00 17 54 24 36 29 85 57 86 56 00 48 35 71 89 07 05 44 44 37 44 60 21 58 51 54 17 58 19 80 81 68 05 94 47 69 28 73 92 13 86 52 17 77 04 89 55 40 04 52 08 83 97 35 99 16 07 97 57 32 16 26 26 79 33 27 98 66 88 36 68 87 57 62 20 72 03 46 33 67 46 55 12 32 63 93 53 69 04 42 16 73 38 25 39 11 24 94 72 18 08 46 29 32 40 62 76 36 20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74 04 36 16 20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48"
+#+end_src
+
+#+RESULTS:
+#+begin_example
+┌─                                                             
+╵  8  2 22 97 38 15  0 40  0 75  4  5  7 78 52 12 50 77 91  8  
+  49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48  4 56 62  0  
+  81 49 31 73 55 79 14 29 93 71 40 67 53 88 30  3 49 13 36 65  
+  52 70 95 23  4 60 11 42 69 24 68 56  1 32 56 71 37  2 36 91  
+  22 31 16 71 51 67 63 89 41 92 36 54 22 40 40 28 66 33 13 80  
+  24 47 32 60 99  3 45  2 44 75 33 53 78 36 84 20 35 17 12 50  
+  32 98 81 28 64 23 67 10 26 38 40 67 59 54 70 66 18 38 64 70  
+  67 26 20 68  2 62 12 20 95 63 94 39 63  8 40 91 66 49 94 21  
+  24 55 58  5 66 73 99 26 97 17 78 78 96 83 14 88 34 89 63 72  
+  21 36 23  9 75  0 76 44 20 45 35 14  0 61 33 97 34 31 33 95  
+  78 17 53 28 22 75 31 67 15 94  3 80  4 62 16 14  9 53 56 92  
+  16 39  5 42 96 35 31 47 55 58 88 24  0 17 54 24 36 29 85 57  
+  86 56  0 48 35 71 89  7  5 44 44 37 44 60 21 58 51 54 17 58  
+  19 80 81 68  5 94 47 69 28 73 92 13 86 52 17 77  4 89 55 40  
+   4 52  8 83 97 35 99 16  7 97 57 32 16 26 26 79 33 27 98 66  
+  88 36 68 87 57 62 20 72  3 46 33 67 46 55 12 32 63 93 53 69  
+   4 42 16 73 38 25 39 11 24 94 72 18  8 46 29 32 40 62 76 36  
+  20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74  4 36 16  
+  20 73 35 29 78 31 90  1 74 31 49 71 48 86 81 16 23 57  5 54  
+   1 70 54 71 83 51 54 69 16 92 33 48 61 43 52  1 89 19 67 48  
+                                                              ┘
+#+end_example
+
+Then we have this hideous thing:
+
+#+begin_src bqn
+  E11 ← {
+    rc ← (⌈´∘⥊·×˝˘4⊸↕){𝔽⌈𝔽∘⍉}𝕩
+    d ← ⌈´∾(×˝˘4⊸↕)¨(4≤≠)¨⊸/↕¨∘≢{(𝔾⌾⌽𝔽)⊸⊔∾(𝔾𝔽)⊸⊔}(+⌜´)𝕩
+    rc⌈d
+  }
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+#+begin_src bqn :tangle no
+  E11 inp11
+#+end_src
+
+#+RESULTS:
+: 70600674
