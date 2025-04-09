@@ -323,15 +323,11 @@ This is gotta be brute force. First I will parse the grid:
 Then we have this hideous thing:
 
 #+begin_src bqn
-  E11 ← {
-    rc ← (⌈´∘⥊·×˝˘4⊸↕){𝔽⌈𝔽∘⍉}𝕩
-    d ← ⌈´∾(×˝˘4⊸↕)¨(4≤≠)¨⊸/↕¨∘≢{(𝔾⌾⌽𝔽)⊸⊔∾(𝔾𝔽)⊸⊔}(+⌜´)𝕩
-    rc⌈d
-  }
+  E11 ← {⌈´∾(×˝˘4⊸↕)¨(4≤≠)¨⊸/((⌽++´∘≢)⊸∾·+⌜´↕¨∘≢)⊸⊔⟜(∾˜)𝕩}⌈(⌈´∘⥊·×˝˘4⊸↕){𝔽⌈𝔽∘⍉}
 #+end_src
 
 #+RESULTS:
-: (function block)
+: (function block)⌈(⌈´∘⥊(×˝˘4⊸↕))⌈(⌈´∘⥊(×˝˘4⊸↕))∘⍉
 
 #+begin_src bqn :tangle no
   E11 inp11
@@ -339,3 +335,7 @@ Then we have this hideous thing:
 
 #+RESULTS:
 : 70600674
+
+This computes the answer in 300μs, albeit being brute force.
+
+** Problem 12
