@@ -85,7 +85,7 @@ Provided the size of the input, a much reasonable approach is trial division. We
 achieve this with the following tacit function:
 
 #+begin_src bqn
-  E3 ← ⊢´(0=|)◶⟨+⟜2⊸⋈, ⊣⋈÷˜⟩´•_while_(×˜∘⊣⊸<´)
+  E3 ← ⊢´(0=|)◶⟨+⟜2⊸⋈, ⊣⋈÷˜⟩´•_while_(×˜⊸<´)
 #+end_src
 
 #+RESULTS:
@@ -344,9 +344,27 @@ It computes the answer in 300μs.
 
 ** Problem 12
 
+Here I tried to use an awesome array solution for the number of divisors =1+´0=↕⊸|=,
+which unfortunately does not scale. So I use trial division for computing the divisor
+function, and also exploit the fact that since \(\text{GCD}(n, n+1)=1\), the divisor
+function is the product of the divisor functions of the two numbers, dividing by 2 the
+one that is even:
+
 #+begin_src bqn
-  {𝕊:(𝕩+1)⋈˜1+≠↕⊸(⊣/˜0=|)2÷˜𝕩×𝕩+1}´•_while_(500≥⊑) 0‿100
+  (2÷˜-⟜1⊸×)⊢´{𝕊:
+    D ← {
+      e‿c ← ↕2
+      c×1+e×1<⊢´(0=|)◶⟨
+        {𝕊: c×↩e+1 ⋄ e↩0 ⋄ 𝕩⋈˜𝕨+1}
+        {𝕊: e+↩1 ⋄ 𝕨⋈𝕩÷𝕨}
+      ⟩´•_while_(×˜⊸≤´)2⋈𝕩
+    }
+    (𝕩+1)⋈˜×´D¨(2⊸|)◶⟨÷⟜2⋈1⊸+, ⊢⋈2÷˜1⊸+⟩𝕩
+  }´•_while_(500≥⊑) ↕2
 #+end_src
+
+#+RESULTS:
+: 7589181600
 
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
