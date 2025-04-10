@@ -1,14 +1,13 @@
-#+TITLE: Project Euler solutions
+#+TITLE: Project Euler medley
+#+INCLUDE: "../html-head.org"
 #+PROPERTY: header-args :tangle ../bqn/pe.bqn
 
 ** Disclaimer
 
 This file contains my BQN solutions to some of the problems in [[https://projecteuler.net/][Project Euler]].
 It is discouraged to share them, but I very much dislike writing throw-away code,
-and that's why they are here. I will not blog about it, but I am happy to discuss
-them with anyone who is interested.
-
-Here I define a namespace with some utilities that are often used in the problems:
+and that's why they are here. Let's start by defining some namespaces with utilities
+that will be shared by several problems:
 
 #+begin_src bqn
   utils ← {
@@ -26,6 +25,14 @@ Here I define a namespace with some utilities that are often used in the problem
 
 #+RESULTS:
 : {split⇐}
+
+If you are interested, this is my profile:
+
+#+begin_html
+  <a href="https://projecteuler.net/profile/panadestein.png" target="_blank">
+    <img src="https://projecteuler.net/profile/panadestein.png" alt="My Project Euler Profile" style="border: 0;">
+  </a>
+#+end_html
 
 ** Problem 1
 
@@ -339,3 +346,9 @@ Then we have this hideous thing:
 This computes the answer in 300μs, albeit being brute force.
 
 ** Problem 12
+
+#+begin_src bqn
+  {𝕊:(𝕩+1)⋈˜1+≠↕⊸(⊣/˜0=|)2÷˜𝕩×𝕩+1}´•_while_(500≥⊑) 0‿100
+#+end_src
+
+#+INCLUDE: "../html-foot.org"
