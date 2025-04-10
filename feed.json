@@ -50,6 +50,12 @@
             "url": "https://panadestein.github.io/blog/nn.html",
 	    "title": "The miniaturist's neural network",
             "content_html": "Implement a neural network (multilayer perceptron) in BQN, and test it with the logistic map."
+        },
+        {
+            "id": "8",
+            "url": "https://panadestein.github.io/blog/pe.html",
+	    "title": "Climbing Mount Euler",
+            "content_html": "Solutions to selected Project Euler problems in BQN."
         }
     ]
 }
