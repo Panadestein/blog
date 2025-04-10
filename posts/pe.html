@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Project Euler medley</title>
+<title>Climbing Mount Euler</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -234,14 +234,16 @@ overflow-x: auto !important;
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Project Euler medley</h1>
-<div id="outline-container-org020a4b3" class="outline-2">
-<h2 id="org020a4b3">Disclaimer</h2>
-<div class="outline-text-2" id="text-org020a4b3">
+<h1 class="title">Climbing Mount Euler</h1>
+<div id="outline-container-org08a79fe" class="outline-2">
+<h2 id="org08a79fe">Foreword</h2>
+<div class="outline-text-2" id="text-org08a79fe">
 <p>
-This page contains my BQN solutions to some of the problems in <a href="https://projecteuler.net/">Project Euler</a>.
+This post presents my BQN solutions to some of the problems in <a href="https://projecteuler.net/">Project Euler</a>.
 It is discouraged to share them, but I very much dislike writing throw-away code,
-and that's why they are here. If you are interested, this is my profile:
+and that's why they are here<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. First I will solve problems in order, and then I will
+probably pick the ones that I find interesting. This is my profile, if you want to
+see my progress:
 </p>
 
 <a href="https://projecteuler.net/profile/panadestein.png" target="_blank">
@@ -249,7 +251,7 @@ and that's why they are here. If you are interested, this is my profile:
 </a>
 
 <p>
-Let's start by defining some namespaces with utilities that will be shared by several problems:
+Let's start by defining some utilities that will be shared by several problems:
 </p>
 
 <div class="org-src-container">
@@ -268,18 +270,18 @@ parsing ← {
 </div>
 </div>
 </div>
-<div id="outline-container-orgabfc52a" class="outline-2">
-<h2 id="orgabfc52a">Problem 1</h2>
-<div class="outline-text-2" id="text-orgabfc52a">
+<div id="outline-container-orge7ca893" class="outline-2">
+<h2 id="orge7ca893">Problem 1</h2>
+<div class="outline-text-2" id="text-orge7ca893">
 <div class="org-src-container">
 <pre class="src src-bqn">E1 ← +´(∨´0=5‿3|&lt;)⊸/
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org3b6c2bd" class="outline-2">
-<h2 id="org3b6c2bd">Problem 2</h2>
-<div class="outline-text-2" id="text-org3b6c2bd">
+<div id="outline-container-org948735a" class="outline-2">
+<h2 id="org948735a">Problem 2</h2>
+<div class="outline-text-2" id="text-org948735a">
 <p>
 Estimate the upper bound with Binet's formula.
 </p>
@@ -290,9 +292,9 @@ Estimate the upper bound with Binet's formula.
 </div>
 </div>
 </div>
-<div id="outline-container-orgd59e9c5" class="outline-2">
-<h2 id="orgd59e9c5">Problem 3</h2>
-<div class="outline-text-2" id="text-orgd59e9c5">
+<div id="outline-container-org5ebbfb2" class="outline-2">
+<h2 id="org5ebbfb2">Problem 3</h2>
+<div class="outline-text-2" id="text-org5ebbfb2">
 <p>
 A brute force attempt, in which I got lucky. We create a primes table, and then check:
 </p>
@@ -323,9 +325,9 @@ than or equal to its square root.
 </p>
 </div>
 </div>
-<div id="outline-container-orgc605a4a" class="outline-2">
-<h2 id="orgc605a4a">Problem 4</h2>
-<div class="outline-text-2" id="text-orgc605a4a">
+<div id="outline-container-org0e16f3d" class="outline-2">
+<h2 id="org0e16f3d">Problem 4</h2>
+<div class="outline-text-2" id="text-org0e16f3d">
 <p>
 Anything other than brute force here? A little tacit function:
 </p>
@@ -340,9 +342,9 @@ This runs in 5 ms with the optimization of searching only in the 900's.
 </p>
 </div>
 </div>
-<div id="outline-container-org9d93c00" class="outline-2">
-<h2 id="org9d93c00">Problem 5</h2>
-<div class="outline-text-2" id="text-org9d93c00">
+<div id="outline-container-org46dfef7" class="outline-2">
+<h2 id="org46dfef7">Problem 5</h2>
+<div class="outline-text-2" id="text-org46dfef7">
 <p>
 That felt almost trivial.
 </p>
@@ -353,9 +355,9 @@ That felt almost trivial.
 </div>
 </div>
 </div>
-<div id="outline-container-orgee727e1" class="outline-2">
-<h2 id="orgee727e1">Problem 6</h2>
-<div class="outline-text-2" id="text-orgee727e1">
+<div id="outline-container-org7eeb505" class="outline-2">
+<h2 id="org7eeb505">Problem 6</h2>
+<div class="outline-text-2" id="text-org7eeb505">
 <p>
 Yeah well, what can I say, I love this identity:
 </p>
@@ -382,9 +384,9 @@ Quite a few characters more, though.
 </p>
 </div>
 </div>
-<div id="outline-container-org6c58ec2" class="outline-2">
-<h2 id="org6c58ec2">Problem 7</h2>
-<div class="outline-text-2" id="text-org6c58ec2">
+<div id="outline-container-org0573686" class="outline-2">
+<h2 id="org0573686">Problem 7</h2>
+<div class="outline-text-2" id="text-org0573686">
 <p>
 The idea here is to use Eratosthenes' sieve with a correct upper bound, which we get
 thanks to Rosser's <a href="https://en.wikipedia.org/wiki/Prime-counting_function#Inequalities">theorem</a>:
@@ -428,9 +430,9 @@ S0‿S1‿S2‿S3‿S4 {𝕏•_timed𝕨}⌜˜ 10⋆3‿5‿7‿8‿9
 </pre>
 </div>
 </div>
-<div id="outline-container-orgc912988" class="outline-2">
-<h2 id="orgc912988">Problem 8</h2>
-<div class="outline-text-2" id="text-orgc912988">
+<div id="outline-container-org30d9c38" class="outline-2">
+<h2 id="org30d9c38">Problem 8</h2>
+<div class="outline-text-2" id="text-org30d9c38">
 <p>
 A simple windowed reduction:
 </p>
@@ -441,9 +443,9 @@ A simple windowed reduction:
 </div>
 </div>
 </div>
-<div id="outline-container-org71ceb02" class="outline-2">
-<h2 id="org71ceb02">Problem 9</h2>
-<div class="outline-text-2" id="text-org71ceb02">
+<div id="outline-container-org592737a" class="outline-2">
+<h2 id="org592737a">Problem 9</h2>
+<div class="outline-text-2" id="text-org592737a">
 <p>
 A stupid brute force does the trick:
 </p>
@@ -469,9 +471,9 @@ until √500 because \(m\) cannot be larger than it, as \(n\) is positive.
 </p>
 </div>
 </div>
-<div id="outline-container-org8faeb37" class="outline-2">
-<h2 id="org8faeb37">Problem 10</h2>
-<div class="outline-text-2" id="text-org8faeb37">
+<div id="outline-container-org9667654" class="outline-2">
+<h2 id="org9667654">Problem 10</h2>
+<div class="outline-text-2" id="text-org9667654">
 <p>
 The sieve again:
 </p>
@@ -482,11 +484,11 @@ The sieve again:
 </div>
 </div>
 </div>
-<div id="outline-container-orgfd3a4b7" class="outline-2">
-<h2 id="orgfd3a4b7">Problem 11</h2>
-<div class="outline-text-2" id="text-orgfd3a4b7">
+<div id="outline-container-orgc5a10ba" class="outline-2">
+<h2 id="orgc5a10ba">Problem 11</h2>
+<div class="outline-text-2" id="text-orgc5a10ba">
 <p>
-This is gotta be brute force. First I will parse the grid:
+This has to be brute force. First, I will parse the grid:
 </p>
 
 <div class="org-src-container">
@@ -504,23 +506,35 @@ Then we have this hideous thing:
 </div>
 
 <p>
-This computes the answer in 300μs, albeit being brute force.
+It computes the answer in 300μs.
 </p>
 </div>
 </div>
-<div id="outline-container-orgde43557" class="outline-2">
-<h2 id="orgde43557">Problem 12</h2>
-<div class="outline-text-2" id="text-orgde43557">
+<div id="outline-container-org5b87326" class="outline-2">
+<h2 id="org5b87326">Problem 12</h2>
+<div class="outline-text-2" id="text-org5b87326">
 <div class="org-src-container">
 <pre class="src src-bqn">{𝕊:(𝕩+1)⋈˜1+≠↕⊸(⊣/˜0=|)2÷˜𝕩×𝕩+1}´•_while_(500≥⊑) 0‿100
 </pre>
 </div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+If I make it that far, I will follow the rule of not sharing solutions
+to problems over 100. In that case, I will probably encrypt them with <code>org-crypt</code>,
+using the value of the solution as the key.
+</p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
+</div></div></div>
+
+
 </div>
-</div>
-</div>
-</div>
+</div></div>
 </body>
 </html>
