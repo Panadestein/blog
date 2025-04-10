@@ -4,10 +4,17 @@
 
 ** Disclaimer
 
-This file contains my BQN solutions to some of the problems in [[https://projecteuler.net/][Project Euler]].
+This page contains my BQN solutions to some of the problems in [[https://projecteuler.net/][Project Euler]].
 It is discouraged to share them, but I very much dislike writing throw-away code,
-and that's why they are here. Let's start by defining some namespaces with utilities
-that will be shared by several problems:
+and that's why they are here. If you are interested, this is my profile:
+
+#+begin_export html
+  <a href="https://projecteuler.net/profile/panadestein.png" target="_blank">
+    <img src="https://projecteuler.net/profile/panadestein.png" alt="My Project Euler Profile" style="border: 0;">
+  </a>
+#+end_export
+
+Let's start by defining some namespaces with utilities that will be shared by several problems:
 
 #+begin_src bqn
   utils ← {
@@ -26,14 +33,6 @@ that will be shared by several problems:
 #+RESULTS:
 : {split⇐}
 
-If you are interested, this is my profile:
-
-#+begin_html
-  <a href="https://projecteuler.net/profile/panadestein.png" target="_blank">
-    <img src="https://projecteuler.net/profile/panadestein.png" alt="My Project Euler Profile" style="border: 0;">
-  </a>
-#+end_html
-
 ** Problem 1
 
 #+begin_src bqn
@@ -43,7 +42,7 @@ If you are interested, this is my profile:
 #+RESULTS:
 : +´(∨´0=⟨ 5 3 ⟩|<)⊸/
 
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports none
   E1 ↕1e3
 #+end_src
 
@@ -61,7 +60,7 @@ Estimate the upper bound with Binet's formula.
 #+RESULTS:
 : (function block)
 
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports none
   E2 4e6
 #+end_src
 
@@ -90,7 +89,7 @@ achieve this with the following tacit function:
 #+RESULTS:
 : ⊢´(0=|)◶⟨ +⟜2⊸⋈ ⊣⋈÷˜ ⟩´•_while_(×˜∘⊣⊸<´)
 
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports none
   E3 3‿600851475143 
 #+end_src
 
@@ -115,7 +114,7 @@ Anything other than brute force here? A little tacit function:
 #+RESULTS:
 : ⌈´((⌽⊸≡•Fmt)¨⊸/(⥊×⌜˜))
 
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports none
   E4 900+↕101
 #+end_src
 
@@ -135,7 +134,7 @@ That felt almost trivial.
 #+RESULTS:
 : •math.LCM´
 
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports none
   E5 1+↕20
 #+end_src
 
@@ -153,7 +152,7 @@ Yeah well, what can I say, I love this identity:
 #+RESULTS:
 : ×˜⊸(+´×-⊣)
 
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports none
   E6 1+↕100
 #+end_src
 
@@ -187,9 +186,7 @@ thanks to Rosser's [[https://en.wikipedia.org/wiki/Prime-counting_function#Inequ
 #+RESULTS:
 : -⟜1⊑(2⊸↓(1-modifier block)(⌈⋆⁼∘(⋆⁼)⊸+⟜(⋆⁼)⊸×))
 
-Which evaluates:
-
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports none
   E7 1e4+1
 #+end_src
 
@@ -200,7 +197,7 @@ The sieve uses heuristics to decide which operation to perform when marking the 
 either zeroing the indices for large argument or creating a mask and multiplying by the
 current array in the fold. As a bonus, here is a comparison of Eratosthenes' sieves implementations:
 
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports both
   S0 ← 2⊸↓{𝔽/(𝕩⥊1)⊑◶⊢‿{↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}´⌽𝔽↕⌈√𝕩}
   S1 ← 2⊸↓{𝔽/(𝕩⥊1){↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
   S2 ← 2⊸↓{𝔽/(𝕩⥊1){𝕩>(≠𝕩)↑/⁼↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)≠𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
@@ -235,9 +232,7 @@ A simple windowed reduction:
 #+RESULTS:
 : ⌈´((×´⊢-@+48˙)˘13⊸↕)
 
-Boom:
-
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports none
   E8 "7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450"
 #+end_src
 
@@ -266,9 +261,9 @@ But I hate it and it is painfully slow. The correct way of doing it is using [[h
 
 Here we have used the fact that the sum of the triplet expressed with Euclid's formula
 must be \(km(m+n)=500\), with \(m>n>1\) coprime and one of them odd. It suffices to loop
-until √500 because \(m\) cannot be larger than it, as \(n\) is positive. Then:
+until √500 because \(m\) cannot be larger than it, as \(n\) is positive.
 
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports none
   ⊑E9 500
 #+end_src
 
@@ -286,7 +281,7 @@ The sieve again:
 #+RESULTS:
 : +´2⊸↓(1-modifier block)
 
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports none
   E10 2e6
 #+end_src
 
@@ -336,7 +331,7 @@ Then we have this hideous thing:
 #+RESULTS:
 : (function block)⌈(⌈´∘⥊(×˝˘4⊸↕))⌈(⌈´∘⥊(×˝˘4⊸↕))∘⍉
 
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :exports none
   E11 inp11
 #+end_src
 
