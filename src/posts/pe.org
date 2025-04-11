@@ -26,6 +26,7 @@ Let's start by defining some utilities that will be shared by several problems:
       𝔽/(𝕩⥊1)≤⟜640◶L‿S⍟⊑´⌽𝔽↕⌈√𝕩
     }
     Rosser ⇐ ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
+    Tau ⇐ {2+´(2⊸×-⊢×⊣=·⌊÷˜⟜𝕩)⟜(0=|⟜𝕩)2↓↕1+⌊√𝕩}
   }
   parsing ← {
     Split ⇐ (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
@@ -351,20 +352,20 @@ function is the product of the divisor functions of the two numbers, dividing by
 one that is even:
 
 #+begin_src bqn
-  (2÷˜-⟜1⊸×)⊢´{𝕊:
-    D ← {
-      e‿c ← ↕2
-      c×1+e×1<⊢´(0=|)◶⟨
-        {𝕊: c×↩e+1 ⋄ e↩0 ⋄ 𝕩⋈˜𝕨+1}
-        {𝕊: e+↩1 ⋄ 𝕨⋈𝕩÷𝕨}
-      ⟩´•_while_(×˜⊸≤´)2⋈𝕩
-    }
-    (𝕩+1)⋈˜×´D¨(2⊸|)◶⟨÷⟜2⋈1⊸+, ⊢⋈2÷˜1⊸+⟩𝕩
-  }´•_while_(500≥⊑) ↕2
+  E12 ← (2÷˜-⟜1⊸×)·⊢´{𝕊:
+    (𝕩+1)⋈˜×´utils.Tau¨(2⊸|)◶⟨÷⟜2⋈1⊸+, ⊢⋈2÷˜1⊸+⟩𝕩
+  }´•_while_(500≥⊑)
 #+end_src
 
 #+RESULTS:
-: 7589181600
+: (2÷˜-⟜1⊸×)(⊢´(function block)´•_while_(500≥⊑))
+
+#+begin_src bqn :tangle no :exports none
+  E12 ↕2
+#+end_src
+
+#+RESULTS:
+: 76576500
 
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
