@@ -367,6 +367,26 @@ one that is even:
 #+RESULTS:
 : 76576500
 
+** Problem 13
+
+Shall we play lottery with floating point addition? Put the input in a file and have fun:
+
+#+begin_src bqn
+  E13 ← 10↑·'.'⊸≠⊸/∘•Fmt·+´•ParseFloat¨∘•FLines 
+#+end_src
+
+#+RESULTS:
+: 10↑('.'⊸≠⊸/∘•Fmt(+´•ParseFloat¨∘(file).Lines))
+
+#+begin_src bqn :tangle no :exports none
+  E13 "../../supp/pe/13.inp"
+#+end_src
+
+#+RESULTS:
+: "5537376230"
+
+But hey, at least is a useless tacit function!
+
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
 using the value of the solution as the key.

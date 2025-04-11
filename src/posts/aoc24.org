@@ -30,7 +30,7 @@ to get more context. These definitions and imports are shared by the various puz
   Split ← (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
   SplitF ← {((¯1+⊢×·+`»⊸<)¬𝕨⊸≡¨𝕩)⊔𝕩}
   Ints ← {•ParseFloat¨((¯1+⊢×·+`»⊸<)𝕩∊𝕨∾'0'+↕10)⊔𝕩}
-  Input ← {"../supp/aoc/2024/"∾".inp"∾˜•Fmt𝕩}
+  Input ← {"../../supp/aoc/2024/"∾".inp"∾˜•Fmt𝕩}
   _fp ← {𝔽∘⊢⍟≢⟜𝔽_𝕣∘⊢⍟≢⟜𝔽𝕩}
   _cnu ← {𝕩{𝕏𝕨}¨𝔽⟨»,»˘,«,«˘⟩}
   _is ← {
@@ -77,7 +77,7 @@ BQN module containing all 25 solutions has exactly 300 lines of code.
 #+end_src
 
 #+RESULTS:
-: "Computed 2057374 and 23177084 in 0.0002433342s"
+: "Computed 2057374 and 23177084 in 0.0003749144s"
 
 ** II
 
