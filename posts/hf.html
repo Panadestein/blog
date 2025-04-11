@@ -235,9 +235,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Helonium's Hartree-Fock program</h1>
-<div id="outline-container-org10df03d" class="outline-2">
-<h2 id="org10df03d">Exordium</h2>
-<div class="outline-text-2" id="text-org10df03d">
+<div id="outline-container-org286e582" class="outline-2">
+<h2 id="org286e582">Exordium</h2>
+<div class="outline-text-2" id="text-org286e582">
 <p>
 We will implement the Hartree-Fock<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> program from the classic <a href="https://store.doverpublications.com/products/9780486691862">Szabo-Ostlund</a> text,
 a staple in quantum chemistry. If you have any experience in the field, chances are you know it well.
@@ -287,9 +287,9 @@ geometries:
 </div>
 </div>
 </div>
-<div id="outline-container-orgf1ea287" class="outline-2">
-<h2 id="orgf1ea287">Basis set</h2>
-<div class="outline-text-2" id="text-orgf1ea287">
+<div id="outline-container-org8341351" class="outline-2">
+<h2 id="org8341351">Basis set</h2>
+<div class="outline-text-2" id="text-org8341351">
 <p>
 Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
 Slater type orbitals<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup> are a good choice for our Hamiltonian. However, the computation of the integrals
@@ -307,9 +307,9 @@ the approximating function as follows:
 </div>
 </div>
 </div>
-<div id="outline-container-orgaba2dfd" class="outline-2">
-<h2 id="orgaba2dfd">Electronic integrals</h2>
-<div class="outline-text-2" id="text-orgaba2dfd">
+<div id="outline-container-orga0211ab" class="outline-2">
+<h2 id="orga0211ab">Electronic integrals</h2>
+<div class="outline-text-2" id="text-orga0211ab">
 <p>
 Constructing the integrals' tensor is complicated<sup><a id="fnr.6" class="footref" href="#fn.6" role="doc-backlink">6</a></sup> and is the main reason for the poor scaling
 of electronic structure methods. The \(1s\) orbitals are the simplest case, and here two types of integrals
@@ -388,7 +388,7 @@ slower than replicating the elements to match each axis' length, like I do for t
 </pre>
 </div>
 
-<pre class="example" id="orgbe6e1d3">
+<pre class="example" id="org3dd4a4a">
 Got 38006 samples
 (self-hosted runtime1): 1067 samples
 (REPL): 36939 samples:
@@ -417,9 +417,9 @@ Morals: Never underestimate the power of vectorization and reshaping operations 
 </details>
 </div>
 </div>
-<div id="outline-container-org4934820" class="outline-2">
-<h2 id="org4934820">Fock matrix</h2>
-<div class="outline-text-2" id="text-org4934820">
+<div id="outline-container-orge962bf7" class="outline-2">
+<h2 id="orge962bf7">Fock matrix</h2>
+<div class="outline-text-2" id="text-orge962bf7">
 <p>
 The following function constructs the Fock matrix, our approximation to the true Hamiltonian of the system:
 </p>
@@ -473,9 +473,9 @@ This process results in the  <a href="https://en.wikipedia.org/wiki/Roothaan_equ
 </details>
 </div>
 </div>
-<div id="outline-container-orgad17921" class="outline-2">
-<h2 id="orgad17921">Self-consistent field</h2>
-<div class="outline-text-2" id="text-orgad17921">
+<div id="outline-container-org701b201" class="outline-2">
+<h2 id="org701b201">Self-consistent field</h2>
+<div class="outline-text-2" id="text-org701b201">
 <p>
 The final stage of the computation involves solving the pseudo-eigenvalue problem using a fixed-point iteration.
 This process is commonly known as the self-consistent field method, a term coined by D. R. Hartree.

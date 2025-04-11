@@ -235,9 +235,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Climbing Mount Euler</h1>
-<div id="outline-container-orgfee38dc" class="outline-2">
-<h2 id="orgfee38dc">Foreword</h2>
-<div class="outline-text-2" id="text-orgfee38dc">
+<div id="outline-container-org67cca2d" class="outline-2">
+<h2 id="org67cca2d">Foreword</h2>
+<div class="outline-text-2" id="text-org67cca2d">
 <p>
 This post presents my BQN solutions to some of the problems in <a href="https://projecteuler.net/">Project Euler</a>.
 It is discouraged to share them, but I very much dislike writing throw-away code,
@@ -262,6 +262,7 @@ Let's start by defining some utilities that will be shared by several problems:
     𝔽/(𝕩⥊1)≤⟜640◶L‿S⍟⊑´⌽𝔽↕⌈√𝕩
   }
   Rosser ⇐ ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
+  Tau ⇐ {2+´(2⊸×-⊢×⊣=·⌊÷˜⟜𝕩)⟜(0=|⟜𝕩)2↓↕1+⌊√𝕩}
 }
 parsing ← {
   Split ⇐ (¬-˜⊢×·+`»⊸&gt;)∘≠⊔⊢
@@ -270,18 +271,18 @@ parsing ← {
 </div>
 </div>
 </div>
-<div id="outline-container-orge4ce080" class="outline-2">
-<h2 id="orge4ce080">Problem 1</h2>
-<div class="outline-text-2" id="text-orge4ce080">
+<div id="outline-container-org81e7108" class="outline-2">
+<h2 id="org81e7108">Problem 1</h2>
+<div class="outline-text-2" id="text-org81e7108">
 <div class="org-src-container">
 <pre class="src src-bqn">E1 ← +´(∨´0=5‿3|&lt;)⊸/
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org91a9a40" class="outline-2">
-<h2 id="org91a9a40">Problem 2</h2>
-<div class="outline-text-2" id="text-org91a9a40">
+<div id="outline-container-org6be211d" class="outline-2">
+<h2 id="org6be211d">Problem 2</h2>
+<div class="outline-text-2" id="text-org6be211d">
 <p>
 Estimate the upper bound with Binet's formula.
 </p>
@@ -292,9 +293,9 @@ Estimate the upper bound with Binet's formula.
 </div>
 </div>
 </div>
-<div id="outline-container-orgc58a4fa" class="outline-2">
-<h2 id="orgc58a4fa">Problem 3</h2>
-<div class="outline-text-2" id="text-orgc58a4fa">
+<div id="outline-container-org1d02b75" class="outline-2">
+<h2 id="org1d02b75">Problem 3</h2>
+<div class="outline-text-2" id="text-org1d02b75">
 <p>
 A brute force attempt, in which I got lucky. We create a primes table, and then check:
 </p>
@@ -325,9 +326,9 @@ than or equal to its square root.
 </p>
 </div>
 </div>
-<div id="outline-container-orgd2fcf99" class="outline-2">
-<h2 id="orgd2fcf99">Problem 4</h2>
-<div class="outline-text-2" id="text-orgd2fcf99">
+<div id="outline-container-org0c4f232" class="outline-2">
+<h2 id="org0c4f232">Problem 4</h2>
+<div class="outline-text-2" id="text-org0c4f232">
 <p>
 Anything other than brute force here? A little tacit function:
 </p>
@@ -342,9 +343,9 @@ This runs in 5 ms with the optimization of searching only in the 900's.
 </p>
 </div>
 </div>
-<div id="outline-container-orgbeaa26f" class="outline-2">
-<h2 id="orgbeaa26f">Problem 5</h2>
-<div class="outline-text-2" id="text-orgbeaa26f">
+<div id="outline-container-org9fcaf1d" class="outline-2">
+<h2 id="org9fcaf1d">Problem 5</h2>
+<div class="outline-text-2" id="text-org9fcaf1d">
 <p>
 That felt almost trivial.
 </p>
@@ -355,9 +356,9 @@ That felt almost trivial.
 </div>
 </div>
 </div>
-<div id="outline-container-org1865eb1" class="outline-2">
-<h2 id="org1865eb1">Problem 6</h2>
-<div class="outline-text-2" id="text-org1865eb1">
+<div id="outline-container-org56381ad" class="outline-2">
+<h2 id="org56381ad">Problem 6</h2>
+<div class="outline-text-2" id="text-org56381ad">
 <p>
 Yeah well, what can I say, I love this identity:
 </p>
@@ -384,9 +385,9 @@ Quite a few characters more, though.
 </p>
 </div>
 </div>
-<div id="outline-container-org3f2ef0f" class="outline-2">
-<h2 id="org3f2ef0f">Problem 7</h2>
-<div class="outline-text-2" id="text-org3f2ef0f">
+<div id="outline-container-org52e0c11" class="outline-2">
+<h2 id="org52e0c11">Problem 7</h2>
+<div class="outline-text-2" id="text-org52e0c11">
 <p>
 The idea here is to use Eratosthenes' sieve with a correct upper bound, which we get
 thanks to Rosser's <a href="https://en.wikipedia.org/wiki/Prime-counting_function#Inequalities">theorem</a>:
@@ -430,9 +431,9 @@ S0‿S1‿S2‿S3‿S4 {𝕏•_timed𝕨}⌜˜ 10⋆3‿5‿7‿8‿9
 </pre>
 </div>
 </div>
-<div id="outline-container-org4227935" class="outline-2">
-<h2 id="org4227935">Problem 8</h2>
-<div class="outline-text-2" id="text-org4227935">
+<div id="outline-container-org21a94a2" class="outline-2">
+<h2 id="org21a94a2">Problem 8</h2>
+<div class="outline-text-2" id="text-org21a94a2">
 <p>
 A simple windowed reduction:
 </p>
@@ -443,9 +444,9 @@ A simple windowed reduction:
 </div>
 </div>
 </div>
-<div id="outline-container-org3683c62" class="outline-2">
-<h2 id="org3683c62">Problem 9</h2>
-<div class="outline-text-2" id="text-org3683c62">
+<div id="outline-container-org4c8a1a8" class="outline-2">
+<h2 id="org4c8a1a8">Problem 9</h2>
+<div class="outline-text-2" id="text-org4c8a1a8">
 <p>
 A stupid brute force does the trick:
 </p>
@@ -471,9 +472,9 @@ until √500 because \(m\) cannot be larger than it, as \(n\) is positive.
 </p>
 </div>
 </div>
-<div id="outline-container-org9011b25" class="outline-2">
-<h2 id="org9011b25">Problem 10</h2>
-<div class="outline-text-2" id="text-org9011b25">
+<div id="outline-container-org7dce61c" class="outline-2">
+<h2 id="org7dce61c">Problem 10</h2>
+<div class="outline-text-2" id="text-org7dce61c">
 <p>
 The sieve again:
 </p>
@@ -484,9 +485,9 @@ The sieve again:
 </div>
 </div>
 </div>
-<div id="outline-container-org28f9020" class="outline-2">
-<h2 id="org28f9020">Problem 11</h2>
-<div class="outline-text-2" id="text-org28f9020">
+<div id="outline-container-org464e2c1" class="outline-2">
+<h2 id="org464e2c1">Problem 11</h2>
+<div class="outline-text-2" id="text-org464e2c1">
 <p>
 This has to be brute force. First, I will parse the grid:
 </p>
@@ -510,9 +511,9 @@ It computes the answer in 300μs.
 </p>
 </div>
 </div>
-<div id="outline-container-orgf835c57" class="outline-2">
-<h2 id="orgf835c57">Problem 12</h2>
-<div class="outline-text-2" id="text-orgf835c57">
+<div id="outline-container-orgd255b6a" class="outline-2">
+<h2 id="orgd255b6a">Problem 12</h2>
+<div class="outline-text-2" id="text-orgd255b6a">
 <p>
 Here I tried to use an awesome array solution for the number of divisors <code>1+´0=↕⊸|</code>,
 which unfortunately does not scale. So I use trial division for computing the divisor
@@ -522,16 +523,9 @@ one that is even:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">(2÷˜-⟜1⊸×)⊢´{𝕊:
-  D ← {
-    e‿c ← ↕2
-    c×1+e×1&lt;⊢´(0=|)◶⟨
-      {𝕊: c×↩e+1 ⋄ e↩0 ⋄ 𝕩⋈˜𝕨+1}
-      {𝕊: e+↩1 ⋄ 𝕨⋈𝕩÷𝕨}
-    ⟩´•_while_(×˜⊸≤´)2⋈𝕩
-  }
-  (𝕩+1)⋈˜×´D¨(2⊸|)◶⟨÷⟜2⋈1⊸+, ⊢⋈2÷˜1⊸+⟩𝕩
-}´•_while_(500≥⊑) ↕2
+<pre class="src src-bqn">E12 ← (2÷˜-⟜1⊸×)·⊢´{𝕊:
+  (𝕩+1)⋈˜×´utils.Tau¨(2⊸|)◶⟨÷⟜2⋈1⊸+, ⊢⋈2÷˜1⊸+⟩𝕩
+}´•_while_(500≥⊑)
 </pre>
 </div>
 </div>
