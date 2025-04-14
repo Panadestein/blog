@@ -382,7 +382,7 @@ There, a tacit function for the sake of it, that works only by accident. We can 
 implement the high school sum algorithm though (check it out with Python or whatever):
 
 #+begin_src bqn
-  E13 ← {∾•Fmt¨{c∾˜𝕩10{c↩⌊𝕗÷˜𝕩+↩c⋄𝕗|𝕩}¨˜c←0}⌾⌽+˝•ParseFloat∘⋈⚇0>•FLines𝕩}
+  E13 ← {∾•Fmt¨{c∾˜𝕩10{𝕩-𝕗×c↩⌊𝕗÷˜𝕩+↩c}¨˜c←0}⌾⌽+˝•ParseFloat∘⋈⚇0>•FLines𝕩}
 #+end_src
 
 #+RESULTS:
@@ -396,6 +396,28 @@ implement the high school sum algorithm though (check it out with Python or what
 : "5537376230390876637302048746832985971773659831892672"
 
 ** Problem 14
+
+Memoization, so we don't wait an eternity:
+
+#+begin_src bqn
+  E14 ← {
+    c ← •HashMap˜⋈1
+    ⊑⍒2⊸|◶⟨÷⟜2, 1+3⊸×⟩{
+      c.Has𝕩 ? c.Get𝕩;
+      𝕩(⊢⊣c.Set)1+𝕊𝔽𝕩
+    }¨1+↕𝕩
+  }
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+#+begin_src bqn :tangle no :exports none
+  1+E14 1e6
+#+end_src
+
+#+RESULTS:
+: 837799
 
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
