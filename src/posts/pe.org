@@ -371,21 +371,31 @@ one that is even:
 
 Shall we play lottery with floating point addition? Put the input in a file and have fun:
 
-#+begin_src bqn
-  E13 ← 10↑·'.'⊸≠⊸/∘•Fmt·+´•ParseFloat¨∘•FLines 
+#+begin_src bqn :tangle no
+  10↑·'.'⊸≠⊸/∘•Fmt·+´•ParseFloat¨∘•FLines 
 #+end_src
 
 #+RESULTS:
 : 10↑('.'⊸≠⊸/∘•Fmt(+´•ParseFloat¨∘(file).Lines))
+
+There, a tacit function for the sake of it, that works only by accident. We can always
+implement the high school sum algorithm though (check it out with Python or whatever):
+
+#+begin_src bqn
+  E13 ← {∾•Fmt¨{c∾˜𝕩10{c↩⌊𝕗÷˜𝕩+↩c⋄𝕗|𝕩}¨˜c←0}⌾⌽+˝•ParseFloat∘⋈⚇0>•FLines𝕩}
+#+end_src
+
+#+RESULTS:
+: (function block)
 
 #+begin_src bqn :tangle no :exports none
   E13 "../../supp/pe/13.inp"
 #+end_src
 
 #+RESULTS:
-: "5537376230"
+: "5537376230390876637302048746832985971773659831892672"
 
-But hey, at least is a useless tacit function!
+** Problem 14
 
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
