@@ -368,6 +368,9 @@ one that is even:
 : 76576500
 
 ** Problem 13
+:PROPERTIES:
+:CUSTOM_ID: pe13
+:END:
 
 Shall we play lottery with floating point addition? Put the input in a file and have fun:
 
@@ -453,7 +456,7 @@ unfortunately a slow \(O(mn)\) algorithm, for the optimal solution do this:
 ** Problem 16
 
 For this problem one is better off using a language with native support for
-big integers, which makes it trivial. BQN has integers up to =2⋆53=,
+big integers, which makes it trivial. No fancy math either. BQN has integers up to =2⋆53=,
 so we need to roll our own algorithm. Let's first generate an array that will
 contain the digits of the result, using an estimation for the length:
 
@@ -476,6 +479,10 @@ Then we have the following tacit function, which I will dare say is beautiful:
 
 #+RESULTS:
 : 1366
+
+This implementation of arbitrary precision arithmetic is way more elegant
+than the one I used in the related [[#pe13][Problem 13]], although it performs more
+(but vectorized) operations.
 
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
