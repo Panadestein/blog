@@ -450,6 +450,33 @@ unfortunately a slow \(O(mn)\) algorithm, for the optimal solution do this:
   2⊸×⊸•math.Comb
 #+end_src
 
+** Problem 16
+
+For this problem one is better off using a language with native support for
+big integers, which makes it trivial. BQN has integers up to =2⋆53=,
+so we need to roll our own algorithm. Let's first generate an array that will
+contain the digits of the result, using an estimation for the length:
+
+#+begin_src bqn :tangle no :results none
+  inp16 ← 1∾0⥊˜⌊10⋆⁼2⋆1000
+#+end_src
+
+Then we have the following tacit function, which I will dare say is beautiful:
+
+#+begin_src bqn
+  E16 ← +´10⊸(|+⟜»·⌊÷˜)•_while_(∨´≥⟜10)∘(2⊸×)⍟1000
+#+end_src
+
+#+RESULTS:
+: +´10⊸(|+⟜»(⌊÷˜))•_while_(∨´≥⟜10)∘(2⊸×)⍟1000
+
+#+begin_src bqn :tangle no :exports none
+  E16 inp16
+#+end_src
+
+#+RESULTS:
+: 1366
+
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
 using the value of the solution as the key.
