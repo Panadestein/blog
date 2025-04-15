@@ -419,6 +419,32 @@ Memoization, so we don't wait an eternity:
 #+RESULTS:
 : 837799
 
+** Problem 15
+
+First generate the input array:
+
+#+begin_src bqn :tangle no :results none
+  inp15 ← 1⌾⊑21‿21⥊0
+#+end_src
+
+Then we can propagate all routes and get the final count:
+
+#+begin_src bqn
+  E15 ← ⊢´∘⥊(»+»˘)⍟(2-˜+´∘≢)
+#+end_src
+
+#+RESULTS:
+: ⊢´∘⥊(»+»˘)⍟(2-˜+´∘≢)
+
+#+begin_src bqn :tangle no :exports none
+  E15 inp15
+#+end_src
+
+#+RESULTS:
+: 137846528820
+
+The repetition count is the number of diagonals minus one, your answer of course.
+
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
 using the value of the solution as the key.
