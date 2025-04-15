@@ -443,7 +443,12 @@ Then we can propagate all routes and get the final count:
 #+RESULTS:
 : 137846528820
 
-The repetition count is the number of diagonals minus one, your answer of course.
+The repetition count is the number of diagonals minus one, your answer. This is
+unfortunately a slow \(O(mn)\) algorithm, for the optimal solution do this:
+
+#+begin_src bqn :tangle no
+  2⊸×⊸•math.Comb
+#+end_src
 
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
