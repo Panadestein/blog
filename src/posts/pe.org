@@ -484,6 +484,31 @@ This implementation of arbitrary precision arithmetic is way more elegant
 than the one I used in the related [[#pe13][Problem 13]], although it performs more
 (but vectorized) operations.
 
+** Problem 17
+
+Nothing special here, store the lengths of the ones', teens' and tens' names,
+pass it in a modifier because a variable would be ugly, and pattern match:
+
+#+begin_src bqn
+  E17 ← (|⋈˜·⌊÷˜) {
+     𝔽 _𝕣_ 𝕘 1000: 11;
+     𝕩<100 ? (⊑10‿20⊸>⊐1˙)◶⟨𝕘⊑˜0⋈⊢, 𝕘⊑˜1⋈-⟜10, +´·⊑⟜𝕘¨2‿0⋈¨10⊸𝔽⟩𝕩;
+     (××3+𝕊)⊸+⟜(7+𝕘⊑˜0⋈⊑)´⌽100⊸𝔽𝕩
+  } [0‿3‿3‿5‿4‿4‿3‿5‿5‿4, 3‿6‿6‿8‿8‿7‿7‿9‿8‿8, 0‿0‿6‿6‿5‿5‿5‿7‿6‿6]
+#+end_src
+
+#+RESULTS:
+: (|⋈˜(⌊÷˜))(2-modifier block)*array*
+
+#+begin_src bqn :tangle no :exports none
+  +´E17¨1+↕1000
+#+end_src
+
+#+RESULTS:
+: 21124
+
+The magic numbers 11, 7, and 3 are for =one thousand=, =hundred= and =and= respectively.
+
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
 using the value of the solution as the key.
