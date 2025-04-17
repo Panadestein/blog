@@ -510,7 +510,7 @@ and pattern match:
 
 The magic numbers 11, 7, and 3 are for =one thousand=, =hundred= and =and= respectively.
 
-** Problem 18
+** Problems 18 and 67
 
 First we do some parsing, the lame padding to make it look like a proper low triangular
 matrix:
@@ -555,6 +555,15 @@ Then, what a beautiful array dynamic programming solution!
 
 #+RESULTS:
 : 1074
+
+This solution also works for Problem 67, which has only larger input. You get the answer in microseconds.
+
+#+begin_src bqn :tangle no :exports none
+  ⊑+⟜(⌈⟜«)˝>(⊢↑¨˜·≠⊢´)•ParseFloat⚇1' '⊸parsing.Split¨•FLines "../../supp/pe/67.inp"
+#+end_src
+
+#+RESULTS:
+: 7273
 
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
