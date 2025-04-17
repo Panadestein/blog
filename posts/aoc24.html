@@ -221,37 +221,37 @@ text-align: center;
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgb87cf31">I</a></li>
-<li><a href="#org4728ec0">II</a></li>
-<li><a href="#org65dea90">III</a></li>
-<li><a href="#orge8b6405">IV</a></li>
-<li><a href="#org0630a0b">V</a></li>
-<li><a href="#orgf211b68">VI</a></li>
-<li><a href="#orgf110824">VII</a></li>
-<li><a href="#org7d357a2">VIII</a></li>
-<li><a href="#org6a3f321">IX</a></li>
-<li><a href="#orge725d56">X</a></li>
-<li><a href="#org9be12a2">XI</a></li>
-<li><a href="#org84725d2">XII</a></li>
-<li><a href="#orgc09e28b">XIII</a></li>
-<li><a href="#org2b2fc09">XIV</a></li>
-<li><a href="#orgbe1da75">XV</a></li>
-<li><a href="#orgf0ce970">XVI</a></li>
-<li><a href="#org172ea50">XVII</a></li>
-<li><a href="#org8c688cf">XVIII</a></li>
-<li><a href="#org25f7414">XIX</a></li>
-<li><a href="#org9a792b9">XX</a></li>
-<li><a href="#orgdfcc910">XXI</a></li>
-<li><a href="#org1f69710">XXII</a></li>
-<li><a href="#org7ba28df">XXIII</a></li>
-<li><a href="#org6b138c1">XXIV</a></li>
-<li><a href="#orgfdf6a4a">XXV</a></li>
+<li><a href="#org4a95513">I</a></li>
+<li><a href="#org4c9c381">II</a></li>
+<li><a href="#org724da41">III</a></li>
+<li><a href="#org1c05034">IV</a></li>
+<li><a href="#org1522d17">V</a></li>
+<li><a href="#org82b3a21">VI</a></li>
+<li><a href="#orgd2a1a97">VII</a></li>
+<li><a href="#orgef739ba">VIII</a></li>
+<li><a href="#org2a2805c">IX</a></li>
+<li><a href="#org82d8c95">X</a></li>
+<li><a href="#orgd599f77">XI</a></li>
+<li><a href="#org1438f3a">XII</a></li>
+<li><a href="#org7349f9c">XIII</a></li>
+<li><a href="#orgc0ccaec">XIV</a></li>
+<li><a href="#org8321497">XV</a></li>
+<li><a href="#org8ed77ea">XVI</a></li>
+<li><a href="#org29e21a7">XVII</a></li>
+<li><a href="#org1f4c016">XVIII</a></li>
+<li><a href="#orgbb6e8d6">XIX</a></li>
+<li><a href="#org4f79f8e">XX</a></li>
+<li><a href="#org1c7fa7d">XXI</a></li>
+<li><a href="#orgf038332">XXII</a></li>
+<li><a href="#org563f767">XXIII</a></li>
+<li><a href="#orgcb56961">XXIV</a></li>
+<li><a href="#org32311a3">XXV</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org66786db" class="outline-2">
-<h2 id="org66786db">Foreword</h2>
-<div class="outline-text-2" id="text-org66786db">
+<div id="outline-container-orgd1d4123" class="outline-2">
+<h2 id="orgd1d4123">Foreword</h2>
+<div class="outline-text-2" id="text-orgd1d4123">
 <p>
 Welcome to my <a href="https://adventofcode.com/2024">Advent of Code</a> solutions for the year 2024. Please read the puzzles' descriptions upstream
 to get more context. These definitions and imports are shared by the various puzzles:
@@ -297,9 +297,9 @@ BQN module containing all 25 solutions has exactly 300 lines of code.
 </p>
 </div>
 </div>
-<div id="outline-container-orgb87cf31" class="outline-2">
-<h2 id="orgb87cf31">I</h2>
-<div class="outline-text-2" id="text-orgb87cf31">
+<div id="outline-container-org4a95513" class="outline-2">
+<h2 id="org4a95513">I</h2>
+<div class="outline-text-2" id="text-org4a95513">
 <div class="org-src-container">
 <pre class="src src-bqn">I ← {
   inp ← &gt;(•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -315,9 +315,9 @@ I _is 1
 </pre>
 </div>
 </div>
-<div id="outline-container-org4728ec0" class="outline-2">
-<h2 id="org4728ec0">II</h2>
-<div class="outline-text-2" id="text-org4728ec0">
+<div id="outline-container-org4c9c381" class="outline-2">
+<h2 id="org4c9c381">II</h2>
+<div class="outline-text-2" id="text-org4c9c381">
 <div class="org-src-container">
 <pre class="src src-bqn">II ← {
   inp ← (-´˘·2⊸↕·•ParseFloat¨' '⊸Split)¨•FLines Input𝕩
@@ -335,9 +335,9 @@ II _is 2
 </pre>
 </div>
 </div>
-<div id="outline-container-org65dea90" class="outline-2">
-<h2 id="org65dea90">III</h2>
-<div class="outline-text-2" id="text-org65dea90">
+<div id="outline-container-org724da41" class="outline-2">
+<h2 id="org724da41">III</h2>
+<div class="outline-text-2" id="text-org724da41">
 <div class="org-src-container">
 <pre class="src src-bqn">III ← {
   mem ← •FChars Input𝕩
@@ -358,9 +358,9 @@ III _is 3
 </pre>
 </div>
 </div>
-<div id="outline-container-orge8b6405" class="outline-2">
-<h2 id="orge8b6405">IV</h2>
-<div class="outline-text-2" id="text-orge8b6405">
+<div id="outline-container-org1c05034" class="outline-2">
+<h2 id="org1c05034">IV</h2>
+<div class="outline-text-2" id="text-org1c05034">
 <div class="org-src-container">
 <pre class="src src-bqn">IV ← {
   inp ← &gt;•FLines Input 𝕩
@@ -377,9 +377,9 @@ IV _is 4
 </pre>
 </div>
 </div>
-<div id="outline-container-org0630a0b" class="outline-2">
-<h2 id="org0630a0b">V</h2>
-<div class="outline-text-2" id="text-org0630a0b">
+<div id="outline-container-org1522d17" class="outline-2">
+<h2 id="org1522d17">V</h2>
+<div class="outline-text-2" id="text-org1522d17">
 <div class="org-src-container">
 <pre class="src src-bqn">V ← {
   p‿r ← ",|" •ParseFloat⚇1∘(Split¨)¨ 1↓(∧`⊸+⟨⟩⊸≢¨)⊸⊔ •FLines Input𝕩
@@ -396,9 +396,9 @@ V _is 5
 </pre>
 </div>
 </div>
-<div id="outline-container-orgf211b68" class="outline-2">
-<h2 id="orgf211b68">VI</h2>
-<div class="outline-text-2" id="text-orgf211b68">
+<div id="outline-container-org82b3a21" class="outline-2">
+<h2 id="org82b3a21">VI</h2>
+<div class="outline-text-2" id="text-org82b3a21">
 <div class="org-src-container">
 <pre class="src src-bqn">VI ← {
   hm ← (↕∘≢•HashMap○⥊⊢) inp ← &gt;•Flines Input𝕩
@@ -419,9 +419,9 @@ VI _is 6
 </pre>
 </div>
 </div>
-<div id="outline-container-orgf110824" class="outline-2">
-<h2 id="orgf110824">VII</h2>
-<div class="outline-text-2" id="text-orgf110824">
+<div id="outline-container-orgd2a1a97" class="outline-2">
+<h2 id="orgd2a1a97">VII</h2>
+<div class="outline-text-2" id="text-orgd2a1a97">
 <div class="org-src-container">
 <pre class="src src-bqn">VII ← {
   inp ← (⊑⊸⋈○(•ParseFloat¨' '⊸Split)´':'⊸Split)¨•FLines Input𝕩
@@ -438,9 +438,9 @@ VII _is 7
 </pre>
 </div>
 </div>
-<div id="outline-container-org7d357a2" class="outline-2">
-<h2 id="org7d357a2">VIII</h2>
-<div class="outline-text-2" id="text-org7d357a2">
+<div id="outline-container-orgef739ba" class="outline-2">
+<h2 id="orgef739ba">VIII</h2>
+<div class="outline-text-2" id="text-orgef739ba">
 <div class="org-src-container">
 <pre class="src src-bqn">VIII ← {
   n ← ≠⊑inp‿ant ← (⊢⋈1↓⍷∘⥊)&gt;•FLines Input𝕩
@@ -457,9 +457,9 @@ VIII _is 8
 </pre>
 </div>
 </div>
-<div id="outline-container-org6a3f321" class="outline-2">
-<h2 id="org6a3f321">IX</h2>
-<div class="outline-text-2" id="text-org6a3f321">
+<div id="outline-container-org2a2805c" class="outline-2">
+<h2 id="org2a2805c">IX</h2>
+<div class="outline-text-2" id="text-org2a2805c">
 <div class="org-src-container">
 <pre class="src src-bqn">IX ← {
    f‿s ← &lt;˘⍉↑‿2⥊•ParseFloat∘⋈¨⊑•FLines Input𝕩
@@ -479,9 +479,9 @@ IX _is 9
 </pre>
 </div>
 </div>
-<div id="outline-container-orge725d56" class="outline-2">
-<h2 id="orge725d56">X</h2>
-<div class="outline-text-2" id="text-orge725d56">
+<div id="outline-container-org82d8c95" class="outline-2">
+<h2 id="org82d8c95">X</h2>
+<div class="outline-text-2" id="text-org82d8c95">
 <div class="org-src-container">
 <pre class="src src-bqn">X ← {
   inp ← &gt;'0'-˜•FLines Input𝕩
@@ -524,9 +524,9 @@ powers of the adjacency matrix. This method is unfortunately slower than simple 
 </details>
 </div>
 </div>
-<div id="outline-container-org9be12a2" class="outline-2">
-<h2 id="org9be12a2">XI</h2>
-<div class="outline-text-2" id="text-org9be12a2">
+<div id="outline-container-orgd599f77" class="outline-2">
+<h2 id="orgd599f77">XI</h2>
+<div class="outline-text-2" id="text-orgd599f77">
 <div class="org-src-container">
 <pre class="src src-bqn">XI ← {
   inp ← •ParseFloat¨' 'Split⊑•Flines Input𝕩 ⋄ m ← •HashMap˜⟨⟩
@@ -549,9 +549,9 @@ XI _is 11
 </pre>
 </div>
 </div>
-<div id="outline-container-org84725d2" class="outline-2">
-<h2 id="org84725d2">XII</h2>
-<div class="outline-text-2" id="text-org84725d2">
+<div id="outline-container-org1438f3a" class="outline-2">
+<h2 id="org1438f3a">XII</h2>
+<div class="outline-text-2" id="text-org1438f3a">
 <div class="org-src-container">
 <pre class="src src-bqn">XII ← {
   n‿inp ← ≠⊸⋈&gt;•FLines Input𝕩
@@ -575,9 +575,9 @@ XII _is 12
 </pre>
 </div>
 </div>
-<div id="outline-container-orgc09e28b" class="outline-2">
-<h2 id="orgc09e28b">XIII</h2>
-<div class="outline-text-2" id="text-orgc09e28b">
+<div id="outline-container-org7349f9c" class="outline-2">
+<h2 id="org7349f9c">XIII</h2>
+<div class="outline-text-2" id="text-org7349f9c">
 <div class="org-src-container">
 <pre class="src src-bqn">XIII ← {
   ∘‿3‿2⥊∾Ints¨⟨⟩⊸≢¨⊸/•FLines Input 𝕩
@@ -593,9 +593,9 @@ XIII _is 13
 </pre>
 </div>
 </div>
-<div id="outline-container-org2b2fc09" class="outline-2">
-<h2 id="org2b2fc09">XIV</h2>
-<div class="outline-text-2" id="text-org2b2fc09">
+<div id="outline-container-orgc0ccaec" class="outline-2">
+<h2 id="orgc0ccaec">XIV</h2>
+<div class="outline-text-2" id="text-orgc0ccaec">
 <div class="org-src-container">
 <pre class="src src-bqn">XIV ← {
   sm ← 0⥊˜s ← 101‿103 ⋄ inp ← 2‿2⊸⥊˘&gt;'-'⊸Ints¨•FLines Input𝕩
@@ -612,9 +612,9 @@ XIV _is 14
 </pre>
 </div>
 </div>
-<div id="outline-container-orgbe1da75" class="outline-2">
-<h2 id="orgbe1da75">XV</h2>
-<div class="outline-text-2" id="text-orgbe1da75">
+<div id="outline-container-org8321497" class="outline-2">
+<h2 id="org8321497">XV</h2>
+<div class="outline-text-2" id="text-org8321497">
 <div class="org-src-container">
 <pre class="src src-bqn">XV ← {
   ri ← ⊑/○⥊⟜(↕≢)'@'=⊑w‿m ← &gt;⊸⋈⟜∾´(⊢⊔˜·+`⟨⟩⊸≡¨)•FLines Input𝕩
@@ -643,9 +643,9 @@ XV _is 15
 </pre>
 </div>
 </div>
-<div id="outline-container-orgf0ce970" class="outline-2">
-<h2 id="orgf0ce970">XVI</h2>
-<div class="outline-text-2" id="text-orgf0ce970">
+<div id="outline-container-org8ed77ea" class="outline-2">
+<h2 id="org8ed77ea">XVI</h2>
+<div class="outline-text-2" id="text-org8ed77ea">
 <div class="org-src-container">
 <pre class="src src-bqn">XVI ← {
   inf ← -2⋆31 ⋄ r‿s‿e ← ⟨'#'⊸≠, 'S'⊸=, 'E'⊸=⟩{𝕎𝕩}¨&lt;inp ← &gt;•FLines Input𝕩
@@ -749,9 +749,9 @@ At the end, we have identified all tiles that are part of at least one best path
 </details>
 </div>
 </div>
-<div id="outline-container-org172ea50" class="outline-2">
-<h2 id="org172ea50">XVII</h2>
-<div class="outline-text-2" id="text-org172ea50">
+<div id="outline-container-org29e21a7" class="outline-2">
+<h2 id="org29e21a7">XVII</h2>
+<div class="outline-text-2" id="text-org29e21a7">
 <div class="org-src-container">
 <pre class="src src-bqn">XVII ← {
   inp ← 3(↑⋈∘‿2⥊↓)∾⟨⟩⊸Ints¨•FLines Input𝕩
@@ -785,9 +785,9 @@ XVII _is 17
 </pre>
 </div>
 </div>
-<div id="outline-container-org8c688cf" class="outline-2">
-<h2 id="org8c688cf">XVIII</h2>
-<div class="outline-text-2" id="text-org8c688cf">
+<div id="outline-container-org1f4c016" class="outline-2">
+<h2 id="org1f4c016">XVIII</h2>
+<div class="outline-text-2" id="text-org1f4c016">
 <div class="org-src-container">
 <pre class="src src-bqn">XVIII ← {
   n ← 70 ⋄ inp ← &gt;⟨⟩⊸Ints¨•FLines Input𝕩
@@ -808,9 +808,9 @@ XVIII _is 18
 </pre>
 </div>
 </div>
-<div id="outline-container-org25f7414" class="outline-2">
-<h2 id="org25f7414">XIX</h2>
-<div class="outline-text-2" id="text-org25f7414">
+<div id="outline-container-orgbb6e8d6" class="outline-2">
+<h2 id="orgbb6e8d6">XIX</h2>
+<div class="outline-text-2" id="text-orgbb6e8d6">
 <div class="org-src-container">
 <pre class="src src-bqn">XIX ← {
   p‿d ← (1⊸↑⋈2⊸↓) •FLines Input𝕩
@@ -830,9 +830,9 @@ XIX _is 19
 </pre>
 </div>
 </div>
-<div id="outline-container-org9a792b9" class="outline-2">
-<h2 id="org9a792b9">XX</h2>
-<div class="outline-text-2" id="text-org9a792b9">
+<div id="outline-container-org4f79f8e" class="outline-2">
+<h2 id="org4f79f8e">XX</h2>
+<div class="outline-text-2" id="text-org4f79f8e">
 <div class="org-src-container">
 <pre class="src src-bqn">XX ← {
   r‿s ← ⟨'#'⊸≠, 'S'⊸=⟩{𝕎𝕩}¨&lt;inp ← &gt;•FLines Input𝕩
@@ -851,9 +851,9 @@ XX _is 20
 </pre>
 </div>
 </div>
-<div id="outline-container-orgdfcc910" class="outline-2">
-<h2 id="orgdfcc910">XXI</h2>
-<div class="outline-text-2" id="text-orgdfcc910">
+<div id="outline-container-org1c7fa7d" class="outline-2">
+<h2 id="org1c7fa7d">XXI</h2>
+<div class="outline-text-2" id="text-org1c7fa7d">
 <div class="org-src-container">
 <pre class="src src-bqn">XXI ← {
   inp ← •FLines Input𝕩
@@ -877,9 +877,9 @@ XXI _is 21
 </pre>
 </div>
 </div>
-<div id="outline-container-org1f69710" class="outline-2">
-<h2 id="org1f69710">XXII</h2>
-<div class="outline-text-2" id="text-org1f69710">
+<div id="outline-container-orgf038332" class="outline-2">
+<h2 id="orgf038332">XXII</h2>
+<div class="outline-text-2" id="text-orgf038332">
 <div class="org-src-container">
 <pre class="src src-bqn">XXII ← {
   dp ← •HashMap˜⟨⟩ ⋄ inp ← •ParseFloat¨ •FLines Input𝕩
@@ -898,9 +898,9 @@ XXII _is 22
 </pre>
 </div>
 </div>
-<div id="outline-container-org7ba28df" class="outline-2">
-<h2 id="org7ba28df">XXIII</h2>
-<div class="outline-text-2" id="text-org7ba28df">
+<div id="outline-container-org563f767" class="outline-2">
+<h2 id="org563f767">XXIII</h2>
+<div class="outline-text-2" id="text-org563f767">
 <div class="org-src-container">
 <pre class="src src-bqn">XXIII ← {
   p‿c ← (⊢⋈·⍷∾)'-'⊸Split¨•FLines Input𝕩
@@ -917,9 +917,9 @@ XXIII _is 23
 </pre>
 </div>
 </div>
-<div id="outline-container-org6b138c1" class="outline-2">
-<h2 id="org6b138c1">XXIV</h2>
-<div class="outline-text-2" id="text-org6b138c1">
+<div id="outline-container-orgcb56961" class="outline-2">
+<h2 id="orgcb56961">XXIV</h2>
+<div class="outline-text-2" id="text-orgcb56961">
 <div class="org-src-container">
 <pre class="src src-bqn">XXIV ← {
   gs‿os ← (⊢⊔˜·+`⟨⟩⊸≡¨)•FLines Input𝕩
@@ -941,9 +941,9 @@ XXIII _is 23
 </pre>
 </div>
 </div>
-<div id="outline-container-orgfdf6a4a" class="outline-2">
-<h2 id="orgfdf6a4a">XXV</h2>
-<div class="outline-text-2" id="text-orgfdf6a4a">
+<div id="outline-container-org32311a3" class="outline-2">
+<h2 id="org32311a3">XXV</h2>
+<div class="outline-text-2" id="text-org32311a3">
 <div class="org-src-container">
 <pre class="src src-bqn">XXV ← {
   inp ← &gt;¨⟨⟩SplitF•FLines Input𝕩
