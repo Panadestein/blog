@@ -454,6 +454,9 @@ unfortunately a slow \(O(mn)\) algorithm, for the optimal solution do this:
 #+end_src
 
 ** Problem 16
+:PROPERTIES:
+:CUSTOM_ID: pe16
+:END:
 
 For this problem one is better off using a language with native support for
 big integers, which makes it trivial. No fancy math either. BQN has integers up to =2⋆53=,
@@ -564,6 +567,36 @@ This solution also works for Problem 67, which has only larger input. You get th
 
 #+RESULTS:
 : 7273
+
+** Problem 20
+
+Here we can use the same method for bigint arithmetic of [[#pe16][Problem 16]]. We define the array
+that will contain the digits, using an upper bound. This array will be used as the initial for
+the fold of the product over the numbers in =1+↕100=. That's it.
+
+#+begin_src bqn :tangle no :results none
+  inp20 ← 1∾0⥊˜1+⌊+´10⋆⁼1+↕100
+#+end_src
+
+Then we reuse the tacit function for arbitrary precision multiplication:
+
+#+begin_src bqn
+  E20 ← 10⊸(|+⟜»·⌊÷˜)•_while_(∨´≥⟜10)∘×´
+#+end_src
+
+#+RESULTS:
+: 10⊸(|+⟜»(⌊÷˜))•_while_(∨´≥⟜10)∘×´
+
+#+begin_src bqn :tangle no :exports none
+  +´inp20 E20 1+↕100
+#+end_src
+
+#+RESULTS:
+: 648
+
+Note that here we implement the high school multiplication algorithm, for larger =n=
+we need to use Karatsuba's algorithm or the FFT-based convolution. The base would
+have to be adjusted as well.
 
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
