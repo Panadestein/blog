@@ -568,6 +568,30 @@ This solution also works for Problem 67, which has only larger input. You get th
 #+RESULTS:
 : 7273
 
+** Problem 19
+
+Here we simply simulate the Gregorian calendar, and since in the desired range we don't
+have to account for [[https://en.wikipedia.org/wiki/Century_leap_year][century leap years]], testing multiples of 4 suffices:
+
+#+begin_src bqn
+  E19 ← {
+    m ← 31‿28‿31‿30‿31‿30‿31‿31‿30‿31‿30‿31
+    {+´0=7|2+`⥊𝕩⊸+⌾(1⊏⍉)m˘𝕩}0=4|↓⟜↕○(1⊸+)´𝕩
+  }
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+Don't forget to add the proper initial to the scan, =7|1+365=.
+
+#+begin_src bqn :tangle no :exports none
+  E19 1900‿2000
+#+end_src
+
+#+RESULTS:
+: 171
+
 ** Problem 20
 
 Here we can use the same method for bigint arithmetic of [[#pe16][Problem 16]]. We define the array
