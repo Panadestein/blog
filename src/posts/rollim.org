@@ -38,11 +38,11 @@ and as a 1-modifier, and then compare these implementations with the two 2-modif
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn
   Whiles ← {F‿G𝕊𝕩:
-    Wfu ← {𝕎⍟G∘𝕎˙⊸𝕊∘𝕎⍟G𝕩}
+    Wfun ← {𝕎⍟G∘𝕎˙⊸𝕊∘𝕎⍟G𝕩}
     _wom ← {𝔽⍟G∘𝔽_𝕣∘𝔽⍟G𝕩}
     _wtmlog_ ← {𝔽⍟𝔾∘𝔽_𝕣_𝔾∘𝔽⍟𝔾𝕩}
     _wtmlin_ ← {𝕊∘𝔽⍟𝔾𝕩}
-    ⟨f Wfu 𝕩, f _wom 𝕩, f _wtmlog_ g 𝕩, f _wtmlin_ g ⎊"SO"𝕩⟩
+    ⟨f Wfun 𝕩, f _wom 𝕩, f _wtmlog_ g 𝕩, f _wtmlin_ g ⎊"SO"𝕩⟩
   }
 #+end_src
 
