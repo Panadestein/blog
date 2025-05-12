@@ -26,7 +26,8 @@ Let's start by defining some utilities that will be shared by several problems:
       𝔽/(𝕩⥊1)≤⟜640◶L‿S⍟⊑´⌽𝔽↕⌈√𝕩
     }
     Rosser ⇐ ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
-    Tau ⇐ {2+´(2⊸×-⊢×⊣=·⌊÷˜⟜𝕩)⟜(0=|⟜𝕩)2↓↕1+⌊√𝕩}
+    Tau ⇐ {2+´(2⊸×-⊢×⊣=÷˜⟜𝕩)⟜(0=|⟜𝕩)2↓↕1+⌊√𝕩}
+    Sigma ⇐ {+´1∾𝕩⊸÷⊸∾(0=|⟜𝕩)⊸/2↓↕1+⌊√𝕩}
   }
   parsing ← {
     Split ⇐ (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
@@ -621,6 +622,15 @@ Then we reuse the tacit function for arbitrary precision multiplication:
 Note that here we implement the high school multiplication algorithm, for larger =n=
 we need to use Karatsuba's algorithm or the FFT-based convolution. The base would
 have to be adjusted as well.
+
+** Problem 21
+
+#+begin_src bqn
+  ≠{⊏⟜n(𝕩⊸>∧n⊸≠)⊸/utils.Sigma¨n←2↓↕𝕩}1e4
+#+end_src
+
+#+RESULTS:
+: 9385
 
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,

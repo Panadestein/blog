@@ -13,6 +13,53 @@ Extrapolating Perlis' remark[fn:1], it's likely that a group of 50 individuals
 would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
 juxtapose my implementations with those of seasoned /BQNators/[fn:2].
 
+** The infamous =_while_= modifier
+
+I call it infamous because it made me feel stupid twice: first when I encountered it in code,
+and again when I read its [[https://mlochbaum.github.io/BQN/doc/control.html#low-stack-version][docs]]. To understand its behaviour, you need to be familiar with
+quite a bit of BQN, especially the functional programming and combinators aspects.
+As a newbie at the time, I found it quite daunting. It took me about five scattered attempts
+over several months to get it. Looking back, the difficulty wasn't so much BQN's syntax,
+but my struggle to express complex recursion, which modifier recursion definitely is.
+
+Here is an unrolling of the first two steps, showing how up to =2⋆n= 𝔽 evaluations
+occur at the recursion level =n=. To derive this, note that the left
+function of the rightmost top just tells what the 𝔽 of the next step will be,
+i.e. that is only =𝔽_𝕣_𝔾=:
+
+An unrolling of the first two steps reveals that up to =2⋆n= evaluations of =𝔽= can occur at recursion
+level =n=. This is derived by noting that, within the BQN combinator, the left function of the
+rightmost atop dictates that the =𝔽= for the subsequent step is, in accordance to =𝔽_𝕣_𝔾=:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  _w0_ ← {𝔽⍟𝔾∘𝔽_𝕣_𝔾∘𝔽⍟𝔾𝕩}
+  _w1_ ← {(𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽)_w0_𝔾∘(𝔽⍟𝔾∘𝔽)⍟𝔾𝕩}
+  _w2_ ← {((𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽))⍟𝔾∘((𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽))_w0_𝔾∘((𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽))⍟𝔾𝕩}
+#+end_src
+
+Another way to clarify the concept is to implement the same logic both as a
+function and as a 1-modifier:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  Whiles ← {F‿G𝕊𝕩:
+    Wfu ← {(𝕎⍟G∘𝕎˙)⊸𝕊∘𝕎⍟G𝕩}
+    _wom ← {𝔽⍟G∘𝔽_𝕣∘𝔽⍟G𝕩}
+    _wtm_ ← {𝔽⍟𝔾∘𝔽_𝕣_𝔾∘𝔽⍟𝔾𝕩}
+    ⟨f Wfu 𝕩, f _wom 𝕩, f _wtm_ g 𝕩, f{𝕊∘𝔽⍟𝔾𝕩}g⎊"SO"𝕩⟩
+  }
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+Let’s test it with a simple iteration that exceeds CBQN’s recursion limit, triggering a stack overflow:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  ⟨1⊸+, 5000⊸≥⟩ Whiles 0
+#+end_src
+
+#+RESULTS:
+: ⟨ 5001 5001 5001 "SO" ⟩
 
 ** Z algorithm
 
