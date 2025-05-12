@@ -22,11 +22,6 @@ As a newbie at the time, I found it quite daunting. It took me about five scatte
 over several months to get it. Looking back, the difficulty wasn't so much BQN's syntax,
 but my struggle to express complex recursion, which modifier recursion definitely is.
 
-Here is an unrolling of the first two steps, showing how up to =2⋆n= 𝔽 evaluations
-occur at the recursion level =n=. To derive this, note that the left
-function of the rightmost top just tells what the 𝔽 of the next step will be,
-i.e. that is only =𝔽_𝕣_𝔾=:
-
 An unrolling of the first two steps reveals that up to =2⋆n= evaluations of =𝔽= can occur at recursion
 level =n=. This is derived by noting that, within the BQN combinator, the left function of the
 rightmost atop dictates that the =𝔽= for the subsequent step is, in accordance to =𝔽_𝕣_𝔾=:
