@@ -75,7 +75,7 @@ Wir müssen wissen, wir werden wissen![fn:4]
 #+RESULTS: run
 : 1
 
-Compare the result with that from a real [[./supp/ibm_eagle/shor_factorize_fifteen.html][quantum computer]].
+Compare the result with that from a real [[../../supp/ibm_eagle/shor_factorize_fifteen.html][quantum computer]].
 
 ** Epilogue
 
@@ -132,7 +132,7 @@ BQN is also fast:
 While the interpreter's performance is not particularly optimized, here is a comparison with the equivalent Common Lisp code:
 
 #+begin_src bash :exports results :tangle no :results raw :wrap example
-  hyperfine --runs 5 'cbqn -f ./bqn/q.bqn' 'sbcl --script ../supp/perf_qi/q.lisp'
+  hyperfine --runs 5 'cbqn -f ./bqn/q.bqn' 'sbcl --script ../../supp/perf_qi/q.lisp'
 #+end_src
 
 #+RESULTS:
@@ -141,13 +141,13 @@ Benchmark 1: cbqn -f ./bqn/q.bqn
   Time (mean ± σ):      5.468 s ±  0.077 s    [User: 5.427 s, System: 0.005 s]
   Range (min … max):    5.358 s …  5.535 s    5 runs
  
-Benchmark 2: sbcl --script ../supp/perf_qi/q.lisp
+Benchmark 2: sbcl --script ../../supp/perf_qi/q.lisp
   Time (mean ± σ):     37.114 s ±  0.893 s    [User: 37.544 s, System: 0.207 s]
   Range (min … max):   36.457 s … 38.634 s    5 runs
  
 Summary
   cbqn -f ./bqn/q.bqn ran
-    6.79 ± 0.19 times faster than sbcl --script ../supp/perf_qi/q.lisp
+    6.79 ± 0.19 times faster than sbcl --script ../../supp/perf_qi/q.lisp
 #+end_example
 
 And here is a full program's profile. All time is spent in the Kronecker and matrix products:

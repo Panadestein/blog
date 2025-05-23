@@ -48,7 +48,7 @@ Scheme ← env _sch
 Scheme "((lambda (x) (list x (list (quote quote) x)))
          (quote (lambda (x) (list x (list (quote quote) x)))))"
 
-ch ← "../supp/chicken/libchicken.so" •FFI "*u8"‿"eval_scheme"‿">*u8:c8"
+ch ← "../../supp/chicken/libchicken.so" •FFI "*u8"‿"eval_scheme"‿">*u8:c8"
 R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch
 
 ("Not Compliant"⊸!Scheme≡R5RS)¨ ⟨

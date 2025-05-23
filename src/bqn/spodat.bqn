@@ -1,5 +1,5 @@
-⟨P⇐Parse⟩ ← •Import "../bqn-libs/json.bqn"
-@ ⊣ spd ← P •file.Chars "../supp/spdat/data.json"
+⟨P⇐Parse⟩ ← •Import "../../bqn-libs/json.bqn"
+@ ⊣ spd ← P •file.Chars "../../supp/spdat/data.json"
 
 s‿a‿m‿l ← ⟨7, 8, 3, 1+↕20⟩
 

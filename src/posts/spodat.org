@@ -10,8 +10,8 @@ This is a suitable task for an array language, so I rely on [[https://mlochbaum.
 favorite one:
 
 #+begin_src bqn :results none :tangle ../bqn/spodat.bqn
-  ⟨P⇐Parse⟩ ← •Import "../bqn-libs/json.bqn"
-  @ ⊣ spd ← P •file.Chars "../supp/spdat/data.json"
+  ⟨P⇐Parse⟩ ← •Import "../../bqn-libs/json.bqn"
+  @ ⊣ spd ← P •file.Chars "../../supp/spdat/data.json"
 #+end_src
 
 Additional structural information is needed, namely index of the songs,

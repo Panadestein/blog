@@ -119,7 +119,7 @@ implementation[fn:4]. To achieve this, we'll leverage BQN's
 foreign function interface:
 
 #+begin_src bqn :tangle ../bqn/si.bqn
-  ch ← "../supp/chicken/libchicken.so" •FFI "*u8"‿"eval_scheme"‿">*u8:c8"
+  ch ← "../../supp/chicken/libchicken.so" •FFI "*u8"‿"eval_scheme"‿">*u8:c8"
   R5RS ← {@+𝕩.Read¨ ↕1⊸+•_while_(0≠𝕩.Read)0}Ch
 #+end_src
 
