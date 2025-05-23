@@ -235,9 +235,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Helonium's Hartree-Fock program</h1>
-<div id="outline-container-orgdeeb11f" class="outline-2">
-<h2 id="orgdeeb11f">Exordium</h2>
-<div class="outline-text-2" id="text-orgdeeb11f">
+<div id="outline-container-org0c8c303" class="outline-2">
+<h2 id="org0c8c303">Exordium</h2>
+<div class="outline-text-2" id="text-org0c8c303">
 <p>
 We will implement the Hartree-Fock<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> program from the classic <a href="https://store.doverpublications.com/products/9780486691862">Szabo-Ostlund</a> text,
 a staple in quantum chemistry. If you have any experience in the field, chances are you know it well.
@@ -287,9 +287,9 @@ geometries:
 </div>
 </div>
 </div>
-<div id="outline-container-org5720cab" class="outline-2">
-<h2 id="org5720cab">Basis set</h2>
-<div class="outline-text-2" id="text-org5720cab">
+<div id="outline-container-orgb8d1429" class="outline-2">
+<h2 id="orgb8d1429">Basis set</h2>
+<div class="outline-text-2" id="text-orgb8d1429">
 <p>
 Basis sets are used to transform the PDEs into linear algebra problems. Physical intuition suggests that
 Slater type orbitals<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup> are a good choice for our Hamiltonian. However, the computation of the integrals
@@ -307,9 +307,9 @@ the approximating function as follows:
 </div>
 </div>
 </div>
-<div id="outline-container-org1ea6390" class="outline-2">
-<h2 id="org1ea6390">Electronic integrals</h2>
-<div class="outline-text-2" id="text-org1ea6390">
+<div id="outline-container-org01e3fff" class="outline-2">
+<h2 id="org01e3fff">Electronic integrals</h2>
+<div class="outline-text-2" id="text-org01e3fff">
 <p>
 Constructing the integrals' tensor is complicated<sup><a id="fnr.6" class="footref" href="#fn.6" role="doc-backlink">6</a></sup> and is the main reason for the poor scaling
 of electronic structure methods. The \(1s\) orbitals are the simplest case, and here two types of integrals
@@ -388,7 +388,7 @@ slower than replicating the elements to match each axis' length, like I do for t
 </pre>
 </div>
 
-<pre class="example" id="orga5a5d80">
+<pre class="example" id="org2bf71bf">
 Got 38006 samples
 (self-hosted runtime1): 1067 samples
 (REPL): 36939 samples:
@@ -417,9 +417,9 @@ Morals: Never underestimate the power of vectorization and reshaping operations 
 </details>
 </div>
 </div>
-<div id="outline-container-org1468956" class="outline-2">
-<h2 id="org1468956">Fock matrix</h2>
-<div class="outline-text-2" id="text-org1468956">
+<div id="outline-container-org0e2b1d5" class="outline-2">
+<h2 id="org0e2b1d5">Fock matrix</h2>
+<div class="outline-text-2" id="text-org0e2b1d5">
 <p>
 The following function constructs the Fock matrix, our approximation to the true Hamiltonian of the system:
 </p>
@@ -473,9 +473,9 @@ This process results in the  <a href="https://en.wikipedia.org/wiki/Roothaan_equ
 </details>
 </div>
 </div>
-<div id="outline-container-org0ebf73d" class="outline-2">
-<h2 id="org0ebf73d">Self-consistent field</h2>
-<div class="outline-text-2" id="text-org0ebf73d">
+<div id="outline-container-org4558910" class="outline-2">
+<h2 id="org4558910">Self-consistent field</h2>
+<div class="outline-text-2" id="text-org4558910">
 <p>
 The final stage of the computation involves solving the pseudo-eigenvalue problem using a fixed-point iteration.
 This process is commonly known as the self-consistent field method, a term coined by D. R. Hartree.
@@ -505,7 +505,7 @@ If you are receptive and humble, mathematics will lead you by the hand<sup><a id
 
 
 <p>
-Compare the electronic energy with the one computed using the original <a href="./supp/hf_so/hf_so.html">Fortran</a> program.
+Compare the electronic energy with the one computed using the original <a href="../../supp/hf_so/hf_so.html">Fortran</a> program.
 In terms of performance, the CBQN implementation runs in 5 ms, which is of the same order
 of magnitude as the original program. Notably, the BQN version consists of just 45 lines of code,
 compared to 541 lines in the Fortran version.
