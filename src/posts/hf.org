@@ -230,7 +230,7 @@ If you are receptive and humble, mathematics will lead you by the hand[fn:7]:
 #+RESULTS:
 : ¯4.22752930421725
 
-Compare the electronic energy with the one computed using the original [[../../supp/hf_so/hf_so.html][Fortran]] program.
+Compare the electronic energy with the one computed using the original [[https://panadestein.github.io/blog/supp/hf_so/hf_so.html][Fortran]] program.
 In terms of performance, the CBQN implementation runs in 5 ms, which is of the same order
 of magnitude as the original program. Notably, the BQN version consists of just 45 lines of code,
 compared to 541 lines in the Fortran version.
