@@ -75,7 +75,7 @@ Wir müssen wissen, wir werden wissen![fn:4]
 #+RESULTS: run
 : 1
 
-Compare the result with that from a real [[../../supp/ibm_eagle/shor_factorize_fifteen.html][quantum computer]].
+Compare the result with that from a real [[https://panadestein.github.io/blog/supp/ibm_eagle/shor_factorize_fifteen.html][quantum computer]].
 
 ** Epilogue
 
@@ -199,6 +199,6 @@ For an efficient implementation, see [[https://arxiv.org/abs/1710.05867v4][arXiv
 [fn:2] This post's title is a playful recursive acronym that employs quantum computing terminology, without any specific significance
 beyond that.
 [fn:3] I optimized it up to this number, but I wasn't targeting the Kolmogorov complexity.
-[fn:4] Hilbert's [[https://maa.org/press/periodicals/convergence/david-hilberts-radio-address-english-translation][radio address]] in 1930.
+[fn:4] Hilbert's [[https://mathweb.ucsd.edu/~williams/motiv/hilbert.html][radio address]] in 1930.
 
 #+INCLUDE: "../html-foot.org"
