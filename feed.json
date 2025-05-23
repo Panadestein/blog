@@ -11,49 +11,49 @@
     "items": [
         {
             "id": "1",
-            "url": "https://panadestein.github.io/blog/rollim.html",
+            "url": "https://panadestein.github.io/blog/posts/rollim.html",
 	    "title": "A coding impromptu",
             "content_text": "A rolling collection of algorithms and computational ideas I like, implemented in BQN."
         },
         {
             "id": "2",
-            "url": "https://panadestein.github.io/blog/qbqn.html",
+            "url": "https://panadestein.github.io/blog/posts/qbqn.html",
 	    "title": "BQN's Quantum Noise",
             "content_html": "Implement a Schrödinger-style quantum computing simulator in BQN, and test it with Shor's algorithm."
         },
         {
             "id": "3",
-            "url": "https://panadestein.github.io/blog/spodat.html",
+            "url": "https://panadestein.github.io/blog/posts/spodat.html",
 	    "title": "Songs to pave the seasons",
             "content_html": "Analysis of Spotify user data with BQN."
         },
         {
             "id": "4",
-            "url": "https://panadestein.github.io/blog/hf.html",
+            "url": "https://panadestein.github.io/blog/posts/hf.html",
 	    "title": "Helonium's Hartree-Fock program",
             "content_html": "Implement the Hartree-Fock program from the Szabo-Ostlund book. From Fortran to BQN."
         },
         {
             "id": "5",
-            "url": "https://panadestein.github.io/blog/si.html",
+            "url": "https://panadestein.github.io/blog/posts/si.html",
 	    "title": "Scheming a mise-en-abîme in BQN",
             "content_html": "Build an interpreter for the Scheme programming language in BQN. Write a lisp quine, using my version of Norvig's lispy."
         },
         {
             "id": "6",
-            "url": "https://panadestein.github.io/blog/aoc24.html",
+            "url": "https://panadestein.github.io/blog/posts/aoc24.html",
 	    "title": "Coding in Advent",
             "content_html": "My Advent of Code solutions for the year 2024, the 25 days in BQN."
         },
         {
             "id": "7",
-            "url": "https://panadestein.github.io/blog/nn.html",
+            "url": "https://panadestein.github.io/blog/posts/nn.html",
 	    "title": "The miniaturist's neural network",
             "content_html": "Implement a neural network (multilayer perceptron) in BQN, and test it with the logistic map."
         },
         {
             "id": "8",
-            "url": "https://panadestein.github.io/blog/pe.html",
+            "url": "https://panadestein.github.io/blog/posts/pe.html",
 	    "title": "Climbing Mount Euler",
             "content_html": "Solutions to selected Project Euler problems in BQN."
         }
