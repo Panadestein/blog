@@ -207,9 +207,9 @@ overflow-x: auto !important;
 I have analyzed my Spotify data<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> for the period 2016-2024. The results accurately represent
 my actual music taste<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
-<div id="outline-container-org32a01c2" class="outline-2">
-<h2 id="org32a01c2">Technical details</h2>
-<div class="outline-text-2" id="text-org32a01c2">
+<div id="outline-container-org04055dd" class="outline-2">
+<h2 id="org04055dd">Technical details</h2>
+<div class="outline-text-2" id="text-org04055dd">
 <p>
 This is a suitable task for an array language, so I rely on <a href="https://mlochbaum.github.io/BQN/index.html">BQN</a> which is my
 favorite one:
@@ -241,15 +241,15 @@ We define a (50 chars) dyadic block function to execute the queries:
 </div>
 </div>
 </div>
-<div id="outline-container-orge29f564" class="outline-2">
-<h2 id="orge29f564">Top songs</h2>
-<div class="outline-text-2" id="text-orge29f564">
+<div id="outline-container-org85a45c4" class="outline-2">
+<h2 id="org85a45c4">Top songs</h2>
+<div class="outline-text-2" id="text-org85a45c4">
 <div class="org-src-container">
 <pre class="src src-bqn">s Q spd	
 </pre>
 </div>
 
-<pre class="example" id="orgaa960ca">
+<pre class="example" id="org1f65743">
 ┌─                                                     
 ╵ 1  "Countless Skies"                                 
   2  "Divertimento I, K.136: Allegro"                  
@@ -275,15 +275,15 @@ We define a (50 chars) dyadic block function to execute the queries:
 </pre>
 </div>
 </div>
-<div id="outline-container-org8e09b50" class="outline-2">
-<h2 id="org8e09b50">Top artists</h2>
-<div class="outline-text-2" id="text-org8e09b50">
+<div id="outline-container-orgfc6b41e" class="outline-2">
+<h2 id="orgfc6b41e">Top artists</h2>
+<div class="outline-text-2" id="text-orgfc6b41e">
 <div class="org-src-container">
 <pre class="src src-bqn">a Q spd
 </pre>
 </div>
 
-<pre class="example" id="orgfbc5642">
+<pre class="example" id="org3781904">
 ┌─                              
 ╵ 1  "Opeth"                    
   2  "Wolfgang Amadeus Mozart"  
@@ -309,9 +309,9 @@ We define a (50 chars) dyadic block function to execute the queries:
 </pre>
 </div>
 </div>
-<div id="outline-container-org36c5911" class="outline-2">
-<h2 id="org36c5911">Bonus: Opeth anthology</h2>
-<div class="outline-text-2" id="text-org36c5911">
+<div id="outline-container-org6e283bd" class="outline-2">
+<h2 id="org6e283bd">Bonus: Opeth anthology</h2>
+<div class="outline-text-2" id="text-org6e283bd">
 <p>
 This is the Opeth album I would recommend to anyone. The query function needs to be modified a bit for generating it.
 But before that, let's look at the <a href="https://www.opeth.com/releases/albums">official discography</a>:
@@ -340,7 +340,7 @@ Enjoy:
 </pre>
 </div>
 
-<pre class="example" id="orgf1ec54a">
+<pre class="example" id="orgd44c2e6">
 ┌─                             
 ╵ 1 "Ghost of Perdition"       
   2 "River"                    
