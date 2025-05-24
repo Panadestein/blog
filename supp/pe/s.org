@@ -1,5 +1,5 @@
 #+TITLE: A faster-than-C primes sieve
-#+OPTIONS: toc:nil 
+#+OPTIONS: toc:nil num:nil
 #+OPTIONS: html-postamble:nil
 #+OPTIONS: html-style:nil
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../../assets/style.css"/>
