@@ -23,7 +23,7 @@ Let's start by defining some utilities that will be shared by several problems:
     Sieve ⇐ 2⊸↓{
       L ← 𝔽{0¨⌾((𝕨×𝔽/(⌈𝕨÷˜≠)⊸↑𝕩)⊸⊏)𝕩}
       M ← ⊢>×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
-      𝔽/(𝕩⥊1)≤⟜80◶L‿M⍟⊑´⌽𝔽↕⌈√𝕩
+      𝔽/(𝕩⥊1)≤⟜20◶L‿M⍟⊑´⌽𝔽↕⌈√𝕩
     }
     Rosser ⇐ ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
     Tau ⇐ {2+´(2⊸×-⊢×⊣=÷˜⟜𝕩)⟜(0=|⟜𝕩)2↓↕1+⌊√𝕩}
@@ -226,17 +226,27 @@ current array in the fold. As a bonus, here is a comparison of Eratosthenes' sie
 :                                                                                                        ┘
 
 I invested considerable effort in optimizing this sieve, primarily because comparable NumPy implementations were,
-at the time of writing, twice as fast as CBQN (though pure Python versions were marginally slower; see the [[https://dzaima.github.io/paste#0nVRtaxtHEP6uXzHg1rnVy/nuJCH5bBlaNYRAnLhWDAUhzFlaSQt3e8fuyUU2hkDBOMKlNW1wKQkpbgvpx0JpCyUtOB/7of/hfkF@Qmd39WInJoUe3N7cszOzM8/M7BKAV7adqu1Vc0sA2wEHxgHXDzY/gu3xAeVQg63tB1CrV5ydInzK0qGvNEvQ/PDj@xAGKZUpdOMoYin0RRxBj@7TME6KRmtrnA5jDmXb9WzXMdig2wXrTrNJwK3YCOcUvLICTdgLJA0ZpwpYYrwbjnoU1mXa24vj0B5uvIWz@CY0ZHs3wILxwRTej1kPpBXGfAB64QQO1QYA64PFYR08AoKmI8HXDK4igDyTu4lgEYUGWAYhURCGcddCowK4BPIg2QGN@3qbkKl1RCNJU2tmXoRUjHB9t9FMu@108Lz5n6v@@kEo6VSvHwu4kkuC294afvL4rjeAo1woEKNrEpz7SjrkTXOG5tp2DUVjzqCAGFmEwN4KQVA692riP1IL4ylEAeOWEgIx6BahOwwE5FHeb3fmrBuQ8l6SiqnLK8XBw7B8aRyGlrZzO0VYNspFcJ0ZX9LiM9GUDm5/cvfhbmun2bzdai2Cek93oLS7UIqReOxXKD0ow/IyDMcJFX1sQCiVxIhLbP5b9opRcZ3Zc0s5eai6wIoozsrlz/DPZ8Q39NbsmlcGqUBwbKdWRRmf9o6kwsddr1YBWYTWWKY08lGlvOqA7OgZWIL7o2hrrImLklikwEdRMoZAAk8U2qN9aGGW/jThBk/smFNMvOAWdYtOyyzbvtdpOIv@YGquRcAH1PKKWAyL5/N2lRTcmS/dGBIr6@OSZ77P5vZTMvGsPs47j/kBFbEl9VHvp8gDjn7LcneRmtlLTDo1u1wxXLhuHSIJSC/WNE4WzOG42urOsCHuI92KdaypUaJBd0imzGyNBJ3dJjdRoWvUgL1xSgMhgrGFXaIGazZieL94V1TNTN1MEFJpTSlykCNlSbSTa1RpL0jXDAMzeHgkU8oLWKYBVhIvDD1VVyNZRKN1fD/pXEshpNx6Y5@QazVpex08rD0/1aRSnE@qSopiE1GBF7XxRVT08/2A99ByA5zOf1fT8@zatJrl1f9dzRZkx1@Cl01@z46/OswB3NPA62dfvzx0Ll9kp39a1utnT168OlfQipWdnujf3/5@mj3@jmi7M0R@0uLkC6LkI/Szqf1kk4uNV@eoe/JNNvleqfw4yZ4/dS7/QGsNXijk@AxBF63MIcoHwi7JHv@AG3UnO//1Xvbor83s8@fZ5Ozyl@z0pdLMjp9gPNnJt8ogd5TL1aCVPbrYVbz14BppyFkZp72@6lbq1dWKV6/W3HLuXw#BQN][comparison]]).
-It is possible to further improve =S4= though, as it was suggested to me by Marshall Lochbaum, based on a publication
-by Roger Hui[fn:2]. The optimized code is located in the =utils= namespace (referenced previously). Ultimately,
-this optimized BQN code proved twice as fast as a C baseline! While the algorithms slightly differ,
-the C version's simple nested loops provide a relevant benchmark.
+at the time of writing, twice as fast as CBQN. It is possible to further improve =S4= though, as it was suggested
+to me by Marshall Lochbaum, based on a publication by Roger Hui[fn:2]. The optimized code is located in the
+=utils= namespace (referenced previously). Ultimately, this optimized BQN code proved twice as fast as a C baseline!
+While the algorithms slightly differ, the C version's simple nested loops provide a relevant benchmark.
 
 The key to this speed-up lies in the =L= function, which zeros elements in the sieve mask.
 This optimized version determines a count =k←⌈p÷n= and then acts on at most =k= mask elements,
 ensuring the condition =n≥k×p= holds. Fewer zeroing operations =0¨⌾(c⊸⊏)= are needed,
 as subsequent filtering passes with =/= process a reduced number of indices.
 
+*Update*: after some discussion in the BQN Matrix room, dzaima has speed up CBQN's =0¨⌾(c⊸⊏)=, and now =utils.Sieve=
+can compute the primes up to a billion in 1.2 seconds! See this other [[https://panadestein.github.io/blog/supp/pe/s.html][post]] for a comparison with Python and the straightforward
+C implementation, both of them around 5 times slower!
+
+#+begin_src bqn :tangle no :exports both
+  7 utils.Sieve•_timed 1e9
+#+end_src
+
+#+RESULTS:
+: 1.2253755055714286
+ 
 ** Problem 8
 
 A simple windowed reduction:
