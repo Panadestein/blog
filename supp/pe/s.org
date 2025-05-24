@@ -1,0 +1,143 @@
+#+TITLE: A faster-than-C primes sieve
+#+OPTIONS: toc:nil 
+#+OPTIONS: html-postamble:nil
+#+OPTIONS: html-style:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../../assets/style.css"/>
+
+While working on Project Euler problems in BQN, I needed to implement a prime sieve (typical).
+I gave the Sieve of Eratosthenes a shot and, out of curiosity, decided to compare it with an
+equivalent NumPy implementation. My initial BQN code was about 2.5 times slower than the NumPy version.
+This sparked a productive discussion in the BQN Matrix room, which eventually led dzaima to
+speed up the implementation of =0¨⌾(c⊸⊏)=. Combined with algorithmic improvements suggested by Marshall,
+this resulted in a sieve that computes primes up to one billion in just 1.2 seconds on my hardware:
+
+#+begin_src sh :results output :exports both
+  inxi -C -c
+#+end_src
+
+#+RESULTS:
+: CPU:
+:   Info: 8-core model: AMD Ryzen 7 PRO 7840U w/ Radeon 780M Graphics bits: 64 type: MT MCP cache:
+:     L2: 8 MiB
+:   Speed (MHz): avg: 1100 min/max: 400/5134 cores: 1: 1100 2: 1100 3: 1100 4: 1100 5: 1100 6: 1100
+:     7: 1100 8: 1100 9: 1100 10: 1100 11: 1100 12: 1100 13: 1100 14: 1100 15: 1100 16: 1100
+
+You can find the initial benchmarks of my sieve implementations in this other [[https://panadestein.github.io/blog/posts/pe.html][post]].
+At that time, my best attempt took 17 seconds to find primes up to one billion.
+
+** NumPy was faster
+
+First I will show the NumPy code that triggered all of this:
+
+#+begin_src jupyter-python :session sieve :exports both
+  import numpy as np
+  def S(n):
+     s=np.ones(n+1, bool)
+     s[:2]=0
+     for i in range(2,int(n**.5)+1):
+       if s[i]:s[i*i::i]=0
+     return np.flatnonzero(s)
+  %timeit S(1_000_000_000)
+#+end_src
+
+#+RESULTS:
+: 7.28 s ± 77.4 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+
+** Pure Python's performance
+
+After discussing this with other BQNators, I was motivated to implement a pure Python version
+of the same algorithm. I often find myself defending Python against claims of being /terribly slow/
+and I was curious how it would perform in this case:
+
+#+begin_src jupyter-python :session sieve :exports both
+  def S(n):
+    sieve = bytearray([1]) * ((n + 1) // 2)
+    sieve[0] = 0
+    for i in range(1, (int(n**0.5)// 2) + 1):
+      if sieve[i]:
+        p = 2 * i + 1
+        start = (p * p) // 2
+        sieve[start::p] = bytearray(len(sieve[start::p]))
+    return [2] + [2 * i + 1 for i, is_prime in enumerate(sieve) if is_prime and i > 0]
+  %timeit S(1_000_000_000)
+#+end_src
+
+#+RESULTS:
+: 23.5 s ± 440 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+
+So yeah, marginally slower than my initial BQN.
+
+** A C baseline
+
+Next, I decided to write a C implementation similar to the NumPy version. Interestingly,
+their speeds were quite comparable:
+
+#+begin_src C :tangle sieve.c
+  #include <stdbool.h>
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+
+  void s(long long n) {
+    if (n < 2) return;
+    bool *is_prime = malloc((n + 1) * sizeof *is_prime);
+    memset(is_prime, true, (n + 1) * sizeof *is_prime);
+    is_prime[0] = is_prime[1] = false;
+    for (long long p = 2; p * p <= n; p++)
+      if (is_prime[p])
+        for (long long i = p * p; i <= n; i += p)
+          is_prime[i] = false;
+    free(is_prime);
+  }
+
+  int main(int argc, char *argv[]) {
+    char *endptr;
+    long long n = strtoll(argv[1], &endptr, 10);
+    s(n);
+    return EXIT_SUCCESS;
+  }
+#+end_src
+
+Compiled with optimization:
+
+#+BEGIN_SRC sh :results output :exports both
+  gcc sieve.c -O3 -o sieve && hyperfine --runs 7 './sieve 1000000000'
+#+END_SRC
+
+#+RESULTS:
+: Benchmark 1: ./sieve 1000000000
+:   Time (mean ± σ):      7.358 s ±  0.160 s    [User: 6.975 s, System: 0.343 s]
+:   Range (min … max):    7.195 s …  7.629 s    7 runs
+:  
+
+** Yet BQN is faster than all that!
+
+It's worth emphasizing that this BQN code uses heuristics to switch the core sieving
+function based on the size of the required boolean mask. Furthermore, the implemented
+algorithm isn't an exact one-to-one match with the straightforward two-loop structure
+of the C code. Nevertheless, we achieve this wonderful result:
+
+#+begin_src bqn :exports both
+  S ← 2⊸↓{
+    L ← 𝔽{0¨⌾((𝕨×𝔽/(⌈𝕨÷˜≠)⊸↑𝕩)⊸⊏)𝕩}
+    M ← ⊢>×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
+    𝔽/(𝕩⥊1)≤⟜20◶L‿M⍟⊑´⌽𝔽↕⌈√𝕩
+  }
+  7 S•_timed 1_000_000_000
+#+end_src
+
+#+RESULTS:
+: 1.2466423944285714
+
+Oh, and rest assured, it doesn't yield [[https://mathworld.wolfram.com/BertelsensNumber.html][Bertelsen's Number]]:
+
+#+begin_src bqn :exports both
+  ≠S 1_000_000_000
+#+end_src
+
+#+RESULTS:
+: 50847534
+
+# Local Variables:
+# org-html-htmlize-output-type: nil
+# End:
