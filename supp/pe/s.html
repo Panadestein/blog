@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-05-24 Sat 21:42 -->
+<!-- 2025-05-24 Sat 22:03 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>A faster-than-C primes sieve</title>
@@ -40,9 +40,9 @@ CPU:
 You can find the initial benchmarks of my sieve implementations in this other <a href="https://panadestein.github.io/blog/posts/pe.html">post</a>.
 At that time, my best attempt took 17 seconds to find primes up to one billion.
 </p>
-<div id="outline-container-org6f359f0" class="outline-2">
-<h2 id="org6f359f0"><span class="section-number-2">1.</span> NumPy was faster</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-org9202dff" class="outline-2">
+<h2 id="org9202dff">NumPy was faster</h2>
+<div class="outline-text-2" id="text-org9202dff">
 <p>
 First I will show the NumPy code that triggered all of this:
 </p>
@@ -64,9 +64,9 @@ def S(n):
 </pre>
 </div>
 </div>
-<div id="outline-container-org54e6c92" class="outline-2">
-<h2 id="org54e6c92"><span class="section-number-2">2.</span> Pure Python's performance</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org8b54fe3" class="outline-2">
+<h2 id="org8b54fe3">Pure Python's performance</h2>
+<div class="outline-text-2" id="text-org8b54fe3">
 <p>
 After discussing this with other BQNators, I was motivated to implement a pure Python version
 of the same algorithm. I often find myself defending Python against claims of being <i>terribly slow</i>
@@ -96,9 +96,9 @@ So yeah, marginally slower than my initial BQN.
 </p>
 </div>
 </div>
-<div id="outline-container-orgd7cf493" class="outline-2">
-<h2 id="orgd7cf493"><span class="section-number-2">3.</span> A C baseline</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgdf14683" class="outline-2">
+<h2 id="orgdf14683">A C baseline</h2>
+<div class="outline-text-2" id="text-orgdf14683">
 <p>
 Next, I decided to write a C implementation similar to the NumPy version. Interestingly,
 their speeds were quite comparable:
@@ -148,9 +148,9 @@ Benchmark 1: ./sieve 1000000000
 </pre>
 </div>
 </div>
-<div id="outline-container-orga7cb069" class="outline-2">
-<h2 id="orga7cb069"><span class="section-number-2">4.</span> Yet BQN is faster than all that!</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-org33f7155" class="outline-2">
+<h2 id="org33f7155">Yet BQN is faster than all that!</h2>
+<div class="outline-text-2" id="text-org33f7155">
 <p>
 It's worth emphasizing that this BQN code uses heuristics to switch the core sieving
 function based on the size of the required boolean mask. Furthermore, the implemented
