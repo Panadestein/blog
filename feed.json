@@ -56,6 +56,12 @@
             "url": "https://panadestein.github.io/blog/posts/pe.html",
 	    "title": "Climbing Mount Euler",
             "content_html": "Solutions to selected Project Euler problems in BQN."
+        },
+        {
+            "id": "9",
+            "url": "https://panadestein.github.io/blog/posts/ps.html",
+	    "title": "Sieving primes at the speed of C",
+            "content_html": "An optimized primes sieve in BQN that is faster than simpler C implementations."
         }
     ]
 }

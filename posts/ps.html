@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sieving primes at the speed of C</title>
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+<style>
+mjx-container[jax="CHTML"] {
+overflow-x: auto !important;
+}
+</style>
+<!-- Post-specific setting bellow -->
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Sieving primes at the speed of C</h1>
+<div id="outline-container-org5d371fc" class="outline-2">
+<h2 id="org5d371fc">Motivation</h2>
+<div class="outline-text-2" id="text-org5d371fc">
+<p>
+When solving Project Euler problems, having an efficient prime sieve becomes
+indispensable sooner or later. Naturally, I wanted to code a
+vectorized sieve in BQN for my <a href="https://panadestein.github.io/blog/posts/pe.html">solutions</a>, but my early attempts were relatively slow.
+After getting some help, I arrived at the following approaches<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">S1 ← 2⊸↓{𝔽/(𝕩⥊1){↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
+S2 ← 2⊸↓{𝔽/(𝕩⥊1){𝕩&gt;(≠𝕩)↑/⁼↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)≠𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
+S3 ← 2⊸↓{𝔽/(𝕩⥊1)(⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1)⍟⊑´⌽𝔽↕⌈√𝕩}
+S4 ← {
+  L ← {↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}
+  M ← ⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
+  2↓/(𝕩⥊1)≤⟜80◶L‿M⍟⊑´⌽2↓↕⌈√𝕩
+}
+S0‿S1‿S2‿S3‿S4 (1=·≠∘⍷{𝕎𝕩}¨⟜⊏)◶⟨"Not comparable!", {𝕏•_timed𝕨}⌜˜⟩ 10⋆3‿5‿7‿8‿9
+</pre>
+</div>
+
+<pre class="example">
+┌─                                                                                                           
+╵  7.688000000000001e¯5            7.723e¯5             7.6189e¯5 3.7370000000000004e¯6            3.868e¯6  
+  0.0008230560000000001         0.000694756 0.0009353650000000001             7.4375e¯5         0.000355774  
+            0.060752074 0.06208334200000001           0.124390832           0.049489152         0.012799632  
+            0.822987633  0.8090816740000001    4.1966193910000005           3.454544154 0.16937880200000002  
+            7.045330444  7.0454376640000005         118.530455582    125.32992687800001         5.272534162  
+                                                                                                            ┘
+</pre>
+
+
+<p>
+The best-performing sieve employs a heuristic to determine how multiples are marked: either by directly zeroing
+the corresponding indices for large arguments (<code>L</code>) or by generating a mask and multiplying it element-wise
+with the current array during folding (<code>M</code>). The heuristic logic is straightforward: for small 𝕨,
+the arrays handled by <code>0¨⌾(m⊸⊏)</code> become longer, making multiplication with the mask more SIMD-friendly.
+</p>
+
+<p>
+Out of curiosity, I decided to compare <code>S4</code>'s performance with an equivalent NumPy implementation that used
+only the direct indexing approach (analogous to <code>L</code>), without the heuristic. At that time<sup><a id="fnr.1.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>,
+the BQN version was about 2.5 times slower. This sparked a productive discussion in the <a href="https://matrix.to/#/%23bqn:matrix.org">Matrix room</a>,
+which eventually led dzaima to <a href="https://github.com/dzaima/CBQN/commit/124d0945914cc04e59e9063dce0bf56be43581cc">speed up</a> the CBQN implementation of the under select <code>0¨⌾(m⊸⊏)</code>.
+Combined with algorithmic improvements suggested by Marshall, based on a publication by Roger Hui<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>,
+this resulted in a sieve that computes primes up to one billion in just 1.2 seconds on the hardware detailed below:
+</p>
+
+<details>
+<summary>CPU specs</summary>
+<br/>
+
+<div class="org-src-container">
+<pre class="src src-sh">inxi -C -c
+</pre>
+</div>
+
+<pre class="example">
+CPU:
+  Info: 8-core model: AMD Ryzen 7 PRO 7840U w/ Radeon 780M Graphics bits: 64 type: MT MCP cache:
+    L2: 8 MiB
+  Speed (MHz): avg: 1100 min/max: 400/5134 cores: 1: 1100 2: 1100 3: 1100 4: 1100 5: 1100 6: 1100
+    7: 1100 8: 1100 9: 1100 10: 1100 11: 1100 12: 1100 13: 1100 14: 1100 15: 1100 16: 1100
+</pre>
+
+
+</details>
+</div>
+</div>
+<div id="outline-container-orgcff3f3a" class="outline-2">
+<h2 id="orgcff3f3a">A microbenchmark</h2>
+<div class="outline-text-2" id="text-orgcff3f3a">
+<p>
+Ultimately, the optimized BQN code proved to be about six times as fast as a C reference implementation for large argument!
+While the algorithms differ (see the next section), I argue that the C version's simple nested loops provide
+a relevant baseline<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. Below, you will find the corresponding programs;
+the C and Python versions implement a standard Sieve of Eratosthenes
+without the more complex algorithmic optimizations found in the final BQN sieve<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>:
+</p>
+
+<details>
+<summary>NumPy</summary>
+
+<p>
+Straightforward, delivering quite good performance, comparable to C!
+</p>
+
+<div class="org-src-container">
+<pre class="src src-jupyter-python">import numpy as np
+def S(n):
+   s=np.ones(n+1, bool)
+   s[:2]=0
+   for i in range(2,int(n**.5)+1):
+     if s[i]:s[i*i::i]=0
+   return np.flatnonzero(s)
+%timeit S(1_000_000_000)
+</pre>
+</div>
+
+<pre class="example">
+7.28 s ± 77.4 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+</pre>
+
+
+</details>
+
+<details>
+<summary>Python</summary>
+
+<p>
+After discussing this with other BQNators, I was motivated to implement a pure Python version
+of the same algorithm. I introduced a minor optimization over a naive list-based approach by using <code>bytearray</code>.
+I often find myself defending Python against claims of being <i>terribly slow</i>
+and I was curious how it would perform in this case:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-jupyter-python">def S(n):
+  sieve = bytearray([1]) * ((n + 1) // 2)
+  sieve[0] = 0
+  for i in range(1, (int(n**0.5)// 2) + 1):
+    if sieve[i]:
+      p = 2 * i + 1
+      start = (p * p) // 2
+      sieve[start::p] = bytearray(len(sieve[start::p]))
+  return [2] + [2 * i + 1 for i, is_prime in enumerate(sieve) if is_prime and i &gt; 0]
+%timeit S(1_000_000_000)
+</pre>
+</div>
+
+<pre class="example">
+23.5 s ± 440 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+</pre>
+
+
+<p>
+So yes, it performed as one might expect for pure Python in such a task: considerably slower
+than the C/NumPy versions, and also slower than my initial BQN attempts<sup><a id="fnr.1.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>.
+</p>
+
+</details>
+
+<details>
+<summary>C</summary>
+
+<p>
+This program follows closely the NumPy one:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+void s(long long n) {
+  if (n &lt; 2) return;
+  bool *is_prime = malloc((n + 1) * sizeof *is_prime);
+  memset(is_prime, true, (n + 1) * sizeof *is_prime);
+  is_prime[0] = is_prime[1] = false;
+  for (long long p = 2; p * p &lt;= n; p++)
+    if (is_prime[p])
+      for (long long i = p * p; i &lt;= n; i += p)
+        is_prime[i] = false;
+  free(is_prime);
+}
+
+int main(int argc, char *argv[]) {
+  char *endptr;
+  long long n = strtoll(argv[1], &amp;endptr, 10);
+  s(n);
+  return EXIT_SUCCESS;
+}
+</pre>
+</div>
+
+<p>
+Compiled with optimization:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">gcc sieve.c -O3 -o sieve &amp;&amp; hyperfine --runs 7 './sieve 1000000000'
+</pre>
+</div>
+
+<pre class="example">
+Benchmark 1: ./sieve 1000000000
+  Time (mean ± σ):      7.358 s ±  0.160 s    [User: 6.975 s, System: 0.343 s]
+  Range (min … max):    7.195 s …  7.629 s    7 runs
+
+</pre>
+
+
+</details>
+</div>
+</div>
+<div id="outline-container-org9e7accf" class="outline-2">
+<h2 id="org9e7accf">BQN can be faster than C!</h2>
+<div class="outline-text-2" id="text-org9e7accf">
+<p>
+Yeah, right, as if that were possible! The function below again employs a heuristic, this time switching
+the core sieving strategy based on whether the prime 𝕨 is less than or equal to 20. Furthermore,
+the implemented algorithm, particularly the <code>L</code> function, isn't an exact one-to-one match
+with the straightforward two-loop structure of the C code. Nevertheless, we achieve this wonderful result:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">S ← 2⊸↓{
+  L ← 𝔽{0¨⌾((𝕨×𝔽/(⌈𝕨÷˜≠)⊸↑𝕩)⊸⊏)𝕩}
+  M ← ⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
+  𝔽/(𝕩⥊1)≤⟜20◶L‿M⍟⊑´⌽𝔽↕⌈√𝕩
+}
+7 S•_timed 1_000_000_000
+</pre>
+</div>
+
+<pre class="example">
+1.2084570474285714
+</pre>
+
+
+<p>
+The key to this speed-up lies in the <code>L</code> function, which zeros elements in the sieve mask.
+This optimized version determines a count <code>k←⌈p÷n</code> and then acts on at most <code>k</code> mask elements,
+ensuring the condition <code>n≥k×p</code> holds. Fewer zeroing operations <code>0¨⌾(m⊸⊏)</code> are needed,
+as subsequent filtering passes with <code>/</code> process a reduced number of indices. Oh, and rest assured,
+it doesn't yield <a href="https://mathworld.wolfram.com/BertelsensNumber.html">Bertelsen's Number</a>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">≠S 1_000_000_000
+</pre>
+</div>
+
+<pre class="example">
+50847534
+</pre>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+This benchmark has been updated to the latest CBQN. The original timing for a billion was 17.11
+seconds for the best case (the heuristic-based function <code>S4</code>).
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+A History of APL in 50 Functions, Roger K.W. Hui (2016). From <a href="https://www.jsoftware.com/papers/50/">jsoftware</a>'s papers collection.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Again, the C version shown provides a clear performance baseline. Achieving superior speed in C is
+<b>undoubtedly possible</b>, but usually involves a steep increase in code complexity compared to this
+straightforward implementation.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Sorry for the number of collapsibles; my focus for this blog is primarily on displaying BQN code.
+</p>
+
+<div style="text-align: center; font-size: 2em; padding: 20px 0;">
+  <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
+</div></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>
