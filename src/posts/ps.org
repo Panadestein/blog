@@ -38,7 +38,7 @@ Out of curiosity, I decided to compare =S4='s performance with an equivalent Num
 only the direct indexing approach (analogous to =L=), without the heuristic. At that time[fn:1],
 the BQN version was about 2.5 times slower. This sparked a productive discussion in the [[https://matrix.to/#/#bqn:matrix.org][Matrix room]],
 which eventually led dzaima to [[https://github.com/dzaima/CBQN/commit/124d0945914cc04e59e9063dce0bf56be43581cc][speed up]] the CBQN implementation of the under select =0¨⌾(m⊸⊏)=.
-Combined with algorithmic improvements suggested by Marshall, based on a publication by Roger Hui[fn:2],
+Combined with algorithmic improvements suggested by Marshall[fn:2], based on a publication by Roger Hui[fn:3],
 this resulted in a sieve that computes primes up to one billion in just 1.2 seconds on the hardware detailed below:
 
 #+begin_export html
@@ -65,10 +65,9 @@ this resulted in a sieve that computes primes up to one billion in just 1.2 seco
 ** A microbenchmark
 
 Ultimately, the optimized BQN code proved to be about six times as fast as a C reference implementation for large argument!
-While the algorithms differ (see the next section), I argue that the C version's simple nested loops provide
-a relevant baseline[fn:3]. Below, you will find the corresponding programs;
-the C and Python versions implement a standard Sieve of Eratosthenes
-without the more complex algorithmic optimizations found in the final BQN sieve[fn:4]:
+While the algorithms differ, I argue that the C version's simple nested loops provide
+a relevant baseline[fn:4]. Below you will find the corresponding programs; the C and Python versions
+are the standard Sieve of Eratosthenes without the more elaborated optimization of the final BQN sieve[fn:5]:
 
 #+begin_export html
 <details>
@@ -211,11 +210,14 @@ it doesn't yield [[https://mathworld.wolfram.com/BertelsensNumber.html][Bertelse
 
 [fn:1] This benchmark has been updated to the latest CBQN. The original timing for a billion was 17.11
 seconds for the best case (the heuristic-based function =S4=).
-[fn:2] A History of APL in 50 Functions, Roger K.W. Hui (2016). From [[https://www.jsoftware.com/papers/50/][jsoftware]]'s papers collection.
-[fn:3] Again, the C version shown provides a clear performance baseline. Achieving superior speed in C is
+[fn:2] For an exceptionally performant sieve implementation, see Marshall's [[https://github.com/mlochbaum/bqn-libs/blob/master/primes.bqn][bqn-libs]],
+which incorporates further elegant algorithmic optimizations. The implementation
+presented here aims instead for greater conciseness.
+[fn:3] A History of APL in 50 Functions, Roger K.W. Hui (2016). From [[https://www.jsoftware.com/papers/50/][jsoftware]]'s papers collection.
+[fn:4] Again, the C version shown provides a clear performance baseline. Achieving superior speed in C is
 *undoubtedly possible*, but usually involves a steep increase in code complexity compared to this
 straightforward implementation.
-[fn:4] Sorry for the number of collapsibles; my focus for this blog is primarily on displaying BQN code.
+[fn:5] Sorry for the number of collapsibles; my focus for this blog is primarily on displaying BQN code.
 
 #+INCLUDE: "../html-foot.org"
 
