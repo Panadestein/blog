@@ -3,5 +3,3 @@ supp/spdat/data.json
 supp/hf_so/hfso*
 supp/aoc/*
 supp/pe/*
-!supp/pe/*.org
-!supp/pe/*.html

@@ -37,5 +37,6 @@
 6. [[./posts/aoc24.org][Coding in Advent]]
 7. [[./posts/nn.org][The miniaturist's neural network]]
 8. [[./posts/pe.org][Climbing Mount Euler]]
+9. [[./posts/ps.org][Sieving primes at the speed of C]]
 
 #+HTML: </div>

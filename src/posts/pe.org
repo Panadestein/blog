@@ -1,8 +1,27 @@
 #+TITLE: Climbing Mount Euler
 #+INCLUDE: "../html-head.org"
 #+PROPERTY: header-args :tangle ../bqn/pe.bqn
+#+HTML_HEAD: <style>
+#+HTML_HEAD:   #table-of-contents > h2 { display: none; }
+#+HTML_HEAD:   #text-table-of-contents > ul { 
+#+HTML_HEAD:     display: grid;
+#+HTML_HEAD:     grid-template-columns: repeat(8, 1fr);
+#+HTML_HEAD:     gap: 10px;
+#+HTML_HEAD:     list-style: none;
+#+HTML_HEAD:     padding: 0;
+#+HTML_HEAD:     margin: 0;
+#+HTML_HEAD:   }
+#+HTML_HEAD:   #table-of-contents > ul > li {
+#+HTML_HEAD:     text-align: center;
+#+HTML_HEAD:   }
+#+HTML_HEAD: </style>
+
+#+TOC: headlines 1 :ignore-title t
 
 ** Foreword
+:PROPERTIES:
+:UNNUMBERED: notoc
+:END:
 
 This post presents my BQN solutions to some of the problems in [[https://projecteuler.net/][Project Euler]].
 It is discouraged to share them, but I very much dislike writing throw-away code,
@@ -38,6 +57,9 @@ Let's start by defining some utilities that will be shared by several problems:
 : {split⇐}
 
 ** Problem 1
+:PROPERTIES:
+:ALT_TITLE: 1
+:END:
 
 #+begin_src bqn
   E1 ← +´(∨´0=5‿3|<)⊸/
@@ -54,6 +76,9 @@ Let's start by defining some utilities that will be shared by several problems:
 : 233168
 
 ** Problem 2
+:PROPERTIES:
+:ALT_TITLE: 2
+:END:
 
 Estimate the upper bound with Binet's formula.
 
@@ -72,6 +97,9 @@ Estimate the upper bound with Binet's formula.
 : 4613732
 
 ** Problem 3
+:PROPERTIES:
+:ALT_TITLE: 3
+:END:
 
 A brute force attempt, in which I got lucky. We create a primes table, and then check:
 
@@ -108,6 +136,9 @@ This works because a composite number must have a prime factor less
 than or equal to its square root.
 
 ** Problem 4
+:PROPERTIES:
+:ALT_TITLE: 4
+:END:
 
 Anything other than brute force here? A little tacit function:
 
@@ -128,6 +159,9 @@ Anything other than brute force here? A little tacit function:
 This runs in 5 ms with the optimization of searching only in the 900's.
 
 ** Problem 5
+:PROPERTIES:
+:ALT_TITLE: 5
+:END:
 
 That felt almost trivial.
 
@@ -146,6 +180,9 @@ That felt almost trivial.
 : 232792560
 
 ** Problem 6
+:PROPERTIES:
+:ALT_TITLE: 6
+:END:
 
 Yeah well, what can I say, I love this identity:
 
@@ -179,6 +216,9 @@ Quite a few characters more, though.
 
 
 ** Problem 7
+:PROPERTIES:
+:ALT_TITLE: 7
+:END:
 
 The idea here is to use Eratosthenes' sieve with a correct upper bound, which we get
 thanks to Rosser's [[https://en.wikipedia.org/wiki/Prime-counting_function#Inequalities][theorem]]:
@@ -197,57 +237,10 @@ thanks to Rosser's [[https://en.wikipedia.org/wiki/Prime-counting_function#Inequ
 #+RESULTS:
 : 104743
 
-The sieve uses heuristics to decide which operation to perform when marking the multiples,
-either zeroing the indices for large argument or creating a mask and multiplying by the
-current array in the fold. As a bonus, here is a comparison of Eratosthenes' sieves implementations:
-
-#+begin_src bqn :tangle no :exports both
-  S0 ← 2⊸↓{𝔽/(𝕩⥊1)⊑◶⊢‿{↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}´⌽𝔽↕⌈√𝕩}
-  S1 ← 2⊸↓{𝔽/(𝕩⥊1){↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
-  S2 ← 2⊸↓{𝔽/(𝕩⥊1){𝕩>(≠𝕩)↑/⁼↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)≠𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
-  S3 ← 2⊸↓{𝔽/(𝕩⥊1)(⊢>×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1)⍟⊑´⌽𝔽↕⌈√𝕩}
-  S4 ← {
-    L ← {↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}
-    M ← ⊢>×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
-    2↓/(𝕩⥊1)≤⟜640◶L‿M⍟⊑´⌽2↓↕⌈√𝕩
-  }
-  •Show 1=≠∘⍷ S0‿S1‿S2‿S3‿S4 {𝕎𝕩}¨< 1e4
-  S0‿S1‿S2‿S3‿S4 {𝕏•_timed𝕨}⌜˜ 10⋆3‿5‿7‿8‿9
-#+end_src
-
-#+RESULTS:
-: 1
-: ┌─                                                                                                      
-: ╵          8.5813e¯5          8.4411e¯5             8.5593e¯5           3.958e¯6 3.6970000000000003e¯6  
-:          0.001241902        0.001077388 0.0009073750000000001          7.2879e¯5             7.0424e¯5  
-:          0.144439973        0.139676776           0.120608139        0.049470815           0.029924439  
-:   3.5437995570000003 2.0786221950000003    3.6722926040000003 3.5986206610000004           0.985192575  
-:   28.261043074000003 27.725597807000003     92.62981303100001  98.58912269400001    17.110364360000002  
-:                                                                                                        ┘
-
-I invested considerable effort in optimizing this sieve, primarily because comparable NumPy implementations were,
-at the time of writing, twice as fast as CBQN. It is possible to further improve =S4= though, as it was suggested
-to me by Marshall Lochbaum, based on a publication by Roger Hui[fn:2]. The optimized code is located in the
-=utils= namespace (referenced previously). Ultimately, this optimized BQN code proved twice as fast as a C baseline!
-While the algorithms slightly differ, the C version's simple nested loops provide a relevant benchmark.
-
-The key to this speed-up lies in the =L= function, which zeros elements in the sieve mask.
-This optimized version determines a count =k←⌈p÷n= and then acts on at most =k= mask elements,
-ensuring the condition =n≥k×p= holds. Fewer zeroing operations =0¨⌾(c⊸⊏)= are needed,
-as subsequent filtering passes with =/= process a reduced number of indices.
-
-*Update*: after some discussion in the BQN Matrix room, dzaima has speed up CBQN's =0¨⌾(c⊸⊏)=, and now =utils.Sieve=
-can compute the primes up to a billion in 1.2 seconds! See this other [[https://panadestein.github.io/blog/supp/pe/s.html][post]] for a comparison with Python and the straightforward
-C implementation, both of them around 5 times slower!
-
-#+begin_src bqn :tangle no :exports both
-  7 utils.Sieve•_timed 1e9
-#+end_src
-
-#+RESULTS:
-: 1.2253755055714286
- 
 ** Problem 8
+:PROPERTIES:
+:ALT_TITLE: 8
+:END:
 
 A simple windowed reduction:
 
@@ -266,6 +259,9 @@ A simple windowed reduction:
 : 23514624000
 
 ** Problem 9
+:PROPERTIES:
+:ALT_TITLE: 9
+:END:
 
 A stupid brute force does the trick:
 
@@ -297,6 +293,9 @@ until √500 because \(m\) cannot be larger than it, as \(n\) is positive.
 : 31875000
 
 ** Problem 10
+:PROPERTIES:
+:ALT_TITLE: 10
+:END:
 
 The sieve again:
 
@@ -315,6 +314,9 @@ The sieve again:
 : 142913828922
 
 ** Problem 11
+:PROPERTIES:
+:ALT_TITLE: 11
+:END:
 
 This has to be brute force. First, I will parse the grid:
 
@@ -367,6 +369,9 @@ Then we have this hideous thing:
 It computes the answer in 300μs.
 
 ** Problem 12
+:PROPERTIES:
+:ALT_TITLE: 12
+:END:
 
 Here I tried to use an awesome array solution for the number of divisors =1+´0=↕⊸|=,
 which unfortunately does not scale. So I use trial division for computing the divisor
@@ -393,6 +398,7 @@ one that is even:
 ** Problem 13
 :PROPERTIES:
 :CUSTOM_ID: pe13
+:ALT_TITLE: 13
 :END:
 
 Shall we play lottery with floating point addition? Put the input in a file and have fun:
@@ -422,6 +428,9 @@ implement the high school sum algorithm though (check it out with Python or what
 : "5537376230390876637302048746832985971773659831892672"
 
 ** Problem 14
+:PROPERTIES:
+:ALT_TITLE: 14
+:END:
 
 Memoization, so we don't wait an eternity:
 
@@ -446,6 +455,9 @@ Memoization, so we don't wait an eternity:
 : 837799
 
 ** Problem 15
+:PROPERTIES:
+:ALT_TITLE: 15
+:END:
 
 First generate the input array:
 
@@ -479,6 +491,7 @@ unfortunately a slow \(O(mn)\) algorithm, for the optimal solution do this:
 ** Problem 16
 :PROPERTIES:
 :CUSTOM_ID: pe16
+:ALT_TITLE: 16
 :END:
 
 For this problem one is better off using a language with native support for
@@ -493,11 +506,11 @@ contain the digits of the result, using an estimation for the length:
 Then we have the following tacit function, which I will dare say is beautiful:
 
 #+begin_src bqn
-  E16 ← +´10⊸(|+⟜»·⌊÷˜)•_while_(∨´≥⟜10)∘(2⊸×)⍟1000
+  E16 ← +´10⊸(|+⟜»·⌊÷˜)∘(2⊸×)⍟1000
 #+end_src
 
 #+RESULTS:
-: +´10⊸(|+⟜»(⌊÷˜))•_while_(∨´≥⟜10)∘(2⊸×)⍟1000
+: +´10⊸(|+⟜»(⌊÷˜))∘(2⊸×)⍟1000
 
 #+begin_src bqn :tangle no :exports none
   E16 inp16
@@ -511,6 +524,9 @@ than the one I used in the related [[#pe13][Problem 13]], although it performs m
 (but vectorized) operations.
 
 ** Problem 17
+:PROPERTIES:
+:ALT_TITLE: 17
+:END:
 
 Nothing special here, store the lengths of the ones', teens' and tens' names
 (with padding), pass it in a modifier because a variable would be ugly,
@@ -537,6 +553,9 @@ and pattern match:
 The magic numbers 11, 7, and 3 are for =one thousand=, =hundred= and =and= respectively.
 
 ** Problems 18 and 67
+:PROPERTIES:
+:ALT_TITLE: 18
+:END:
 
 First we do some parsing, the lame padding to make it look like a proper low triangular
 matrix:
@@ -592,6 +611,9 @@ This solution also works for Problem 67, which has only larger input. You get th
 : 7273
 
 ** Problem 19
+:PROPERTIES:
+:ALT_TITLE: 19
+:END:
 
 Here we simply simulate the Gregorian calendar, and since in the desired range we don't
 have to account for [[https://en.wikipedia.org/wiki/Century_leap_year][century leap years]], testing multiples of 4 suffices:
@@ -616,6 +638,9 @@ Don't forget to add the proper initial to the scan, =7|1+365=.
 : 171
 
 ** Problem 20
+:PROPERTIES:
+:ALT_TITLE: 20
+:END:
 
 Here we can use the same method for bigint arithmetic of [[#pe16][Problem 16]]. We define the array
 that will contain the digits, using an upper bound. This array will be used as the initial for
@@ -628,11 +653,11 @@ the fold of the product over the numbers in =1+↕100=. That's it.
 Then we reuse the tacit function for arbitrary precision multiplication:
 
 #+begin_src bqn
-  E20 ← 10⊸(|+⟜»·⌊÷˜)•_while_(∨´≥⟜10)∘×´
+  E20 ← 10⊸(|+⟜»·⌊÷˜)⍟9∘×´
 #+end_src
 
 #+RESULTS:
-: 10⊸(|+⟜»(⌊÷˜))•_while_(∨´≥⟜10)∘×´
+: 10⊸(|+⟜»(⌊÷˜))⍟8∘×´
 
 #+begin_src bqn :tangle no :exports none
   +´inp20 E20 1+↕100
@@ -646,6 +671,9 @@ we need to use Karatsuba's algorithm or the FFT-based convolution. The base woul
 have to be adjusted as well.
 
 ** Problem 21
+:PROPERTIES:
+:ALT_TITLE: 21
+:END:
 
 #+begin_src bqn
   ≠{(𝕩⊸>∧n⊸≠)⊸/utils.Sigma¨n←2↓↕𝕩}1e4
@@ -657,6 +685,5 @@ have to be adjusted as well.
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
 using the value of the solution as the key.
-[fn:2] A History of APL in 50 Functions, Roger K.W. Hui (2016). From [[https://www.jsoftware.com/papers/50/][jsoftware]]'s papers collection.
 
 #+INCLUDE: "../html-foot.org"
