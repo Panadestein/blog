@@ -203,9 +203,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Sieving primes at the speed of C</h1>
-<div id="outline-container-org5d371fc" class="outline-2">
-<h2 id="org5d371fc">Motivation</h2>
-<div class="outline-text-2" id="text-org5d371fc">
+<div id="outline-container-orgb73f5a7" class="outline-2">
+<h2 id="orgb73f5a7">Motivation</h2>
+<div class="outline-text-2" id="text-orgb73f5a7">
 <p>
 When solving Project Euler problems, having an efficient prime sieve becomes
 indispensable sooner or later. Naturally, I wanted to code a
@@ -249,7 +249,7 @@ Out of curiosity, I decided to compare <code>S4</code>'s performance with an equ
 only the direct indexing approach (analogous to <code>L</code>), without the heuristic. At that time<sup><a id="fnr.1.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>,
 the BQN version was about 2.5 times slower. This sparked a productive discussion in the <a href="https://matrix.to/#/%23bqn:matrix.org">Matrix room</a>,
 which eventually led dzaima to <a href="https://github.com/dzaima/CBQN/commit/124d0945914cc04e59e9063dce0bf56be43581cc">speed up</a> the CBQN implementation of the under select <code>0¨⌾(m⊸⊏)</code>.
-Combined with algorithmic improvements suggested by Marshall, based on a publication by Roger Hui<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>,
+Combined with algorithmic improvements suggested by Marshall<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>, based on a publication by Roger Hui<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>,
 this resulted in a sieve that computes primes up to one billion in just 1.2 seconds on the hardware detailed below:
 </p>
 
@@ -274,15 +274,14 @@ CPU:
 </details>
 </div>
 </div>
-<div id="outline-container-orgcff3f3a" class="outline-2">
-<h2 id="orgcff3f3a">A microbenchmark</h2>
-<div class="outline-text-2" id="text-orgcff3f3a">
+<div id="outline-container-org223903d" class="outline-2">
+<h2 id="org223903d">A microbenchmark</h2>
+<div class="outline-text-2" id="text-org223903d">
 <p>
 Ultimately, the optimized BQN code proved to be about six times as fast as a C reference implementation for large argument!
-While the algorithms differ (see the next section), I argue that the C version's simple nested loops provide
-a relevant baseline<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. Below, you will find the corresponding programs;
-the C and Python versions implement a standard Sieve of Eratosthenes
-without the more complex algorithmic optimizations found in the final BQN sieve<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>:
+While the algorithms differ, I argue that the C version's simple nested loops provide
+a relevant baseline<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>. Below you will find the corresponding programs; the C and Python versions
+are the standard Sieve of Eratosthenes without the more elaborated optimization of the final BQN sieve<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>:
 </p>
 
 <details>
@@ -401,9 +400,9 @@ Benchmark 1: ./sieve 1000000000
 </details>
 </div>
 </div>
-<div id="outline-container-org9e7accf" class="outline-2">
-<h2 id="org9e7accf">BQN can be faster than C!</h2>
-<div class="outline-text-2" id="text-org9e7accf">
+<div id="outline-container-orgd204783" class="outline-2">
+<h2 id="orgd204783">BQN can be faster than C!</h2>
+<div class="outline-text-2" id="text-orgd204783">
 <p>
 Yeah, right, as if that were possible! The function below again employs a heuristic, this time switching
 the core sieving strategy based on whether the prime 𝕨 is less than or equal to 20. Furthermore,
@@ -454,16 +453,22 @@ seconds for the best case (the heuristic-based function <code>S4</code>).
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-A History of APL in 50 Functions, Roger K.W. Hui (2016). From <a href="https://www.jsoftware.com/papers/50/">jsoftware</a>'s papers collection.
+For an exceptionally performant sieve implementation, see Marshall's <a href="https://github.com/mlochbaum/bqn-libs/blob/master/primes.bqn">bqn-libs</a>,
+which incorporates further elegant algorithmic optimizations. The implementation
+presented here aims instead for greater conciseness.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+A History of APL in 50 Functions, Roger K.W. Hui (2016). From <a href="https://www.jsoftware.com/papers/50/">jsoftware</a>'s papers collection.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 Again, the C version shown provides a clear performance baseline. Achieving superior speed in C is
 <b>undoubtedly possible</b>, but usually involves a steep increase in code complexity compared to this
 straightforward implementation.
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 Sorry for the number of collapsibles; my focus for this blog is primarily on displaying BQN code.
 </p>
 
