@@ -12,28 +12,28 @@ After getting some help, I arrived at the following approaches[fn:1]:
   S1 ← 2⊸↓{𝔽/(𝕩⥊1){↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
   S2 ← 2⊸↓{𝔽/(𝕩⥊1){𝕩>(≠𝕩)↑/⁼↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)≠𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
   S3 ← 2⊸↓{𝔽/(𝕩⥊1)(⊢>×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1)⍟⊑´⌽𝔽↕⌈√𝕩}
-  S4 ← {
+  S4 ← 2⊸↓{
     L ← {↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}
     M ← ⊢>×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
-    2↓/(𝕩⥊1)≤⟜80◶L‿M⍟⊑´⌽2↓↕⌈√𝕩
+    𝔽/(𝕩⥊1)≤⟜80◶L‿M⍟⊑´⌽𝔽↕⌈√𝕩
   }
   S1‿S2‿S3‿S4 (1=·≠∘⍷{𝕎𝕩}¨⟜⊏)◶⟨"Not comparable!", {𝕎•_timed𝕩}⌜⟩ 10⋆3‿5‿7‿8‿9
 #+end_src
 
 #+RESULTS:
-: ┌─                                                                                             
-: ╵   7.7698e¯5 0.0009223870000000001         0.038692483 0.42511051400000005       6.736025577  
-:   0.000176827            0.00074063 0.07879512000000001         3.321859566 96.97078475900001  
-:     1.9216e¯5             6.5374e¯5          0.03579827  3.2631592620000003     102.479847477  
-:     2.2113e¯5           0.000310731         0.008571766 0.17495785800000002 4.887775957000001  
-:                                                                                               ┘
+: ┌─                                                                                               
+: ╵             7.9856e¯5 0.001037675  0.06758383200000001         0.700785714         8.09195083  
+:               9.6947e¯5 0.000645739          0.065917548  2.9671749550000004  93.39382853900001  
+:               1.7913e¯5   6.1652e¯5          0.031183234         2.819513972 100.19372699300001  
+:   1.7245000000000002e¯5  0.00031342 0.008511399000000001 0.17044747400000002 4.7954312230000005  
+:                                                                                                 ┘
 
 The best-performing sieve employs a heuristic to determine how multiples are marked: either by directly zeroing
 the corresponding indices for large arguments (=L=) or by generating a mask and multiplying it element-wise
 with the current array during folding (=M=). The heuristic logic is straightforward: for small 𝕨,
 the arrays handled by =0¨⌾(m⊸⊏)= become longer, making multiplication with the mask more SIMD-friendly.
 
-Out of curiosity, I decided to compare =S4='s performance with an equivalent NumPy implementation that used
+Out of curiosity, I decided to compare =S4='s performance with an equivalent NumPy program that used
 only the direct indexing approach (analogous to =L=), without the heuristic. At that time[fn:1],
 the BQN version was about 2.5 times slower. This sparked a productive discussion in the [[https://matrix.to/#/#bqn:matrix.org][Matrix room]],
 which eventually led dzaima to [[https://github.com/dzaima/CBQN/commit/124d0945914cc04e59e9063dce0bf56be43581cc][speed up]] the CBQN implementation of the under select =0¨⌾(m⊸⊏)=.
@@ -210,12 +210,10 @@ it doesn't yield [[https://mathworld.wolfram.com/BertelsensNumber.html][Bertelse
 [fn:1] This benchmark has been updated to the latest CBQN. The original timing for a billion was 17.11
 seconds for the best case (the heuristic-based function =S4=).
 [fn:2] For an exceptionally performant sieve implementation, see Marshall's [[https://github.com/mlochbaum/bqn-libs/blob/master/primes.bqn][bqn-libs]],
-which incorporates further elegant algorithmic optimizations. The implementation
-presented here aims instead for greater conciseness.
+which incorporates further elegant algorithmic optimizations. The one presented here aims instead for greater conciseness.
 [fn:3] A History of APL in 50 Functions, Roger K.W. Hui (2016). From [[https://www.jsoftware.com/papers/50/][jsoftware]]'s papers collection.
 [fn:4] Again, the C version shown provides a clear performance baseline. Achieving superior speed in C is
-*undoubtedly possible*, but usually involves a steep increase in code complexity compared to this
-straightforward implementation.
+*undoubtedly possible*, but usually involves a steep increase in code complexity.
 [fn:5] Sorry for the number of collapsibles; my focus for this blog is primarily on displaying BQN code.
 
 #+INCLUDE: "../html-foot.org"
