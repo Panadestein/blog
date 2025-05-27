@@ -203,9 +203,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Sieving primes at the speed of C</h1>
-<div id="outline-container-org0297372" class="outline-2">
-<h2 id="org0297372">Motivation</h2>
-<div class="outline-text-2" id="text-org0297372">
+<div id="outline-container-orgac1eacc" class="outline-2">
+<h2 id="orgac1eacc">Motivation</h2>
+<div class="outline-text-2" id="text-orgac1eacc">
 <p>
 When solving Project Euler problems, having an efficient prime sieve becomes
 indispensable sooner or later. Naturally, I wanted to code a
@@ -217,22 +217,22 @@ After getting some help, I arrived at the following approaches<sup><a id="fnr.1"
 <pre class="src src-bqn">S1 ← 2⊸↓{𝔽/(𝕩⥊1){↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
 S2 ← 2⊸↓{𝔽/(𝕩⥊1){𝕩&gt;(≠𝕩)↑/⁼↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)≠𝕩}⍟⊑´⌽𝔽↕⌈√𝕩}
 S3 ← 2⊸↓{𝔽/(𝕩⥊1)(⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1)⍟⊑´⌽𝔽↕⌈√𝕩}
-S4 ← {
+S4 ← 2⊸↓{
   L ← {↕∘⌈⌾((𝕨×˜⊸+𝕨×⊢)⁼)∘≠⊸{0¨⌾(𝕨⊸⊏)𝕩}𝕩}
   M ← ⊢&gt;×˜∘⊣⊸⥊⟜0»≠∘⊢⥊↑⟜1
-  2↓/(𝕩⥊1)≤⟜80◶L‿M⍟⊑´⌽2↓↕⌈√𝕩
+  𝔽/(𝕩⥊1)≤⟜80◶L‿M⍟⊑´⌽𝔽↕⌈√𝕩
 }
 S1‿S2‿S3‿S4 (1=·≠∘⍷{𝕎𝕩}¨⟜⊏)◶⟨"Not comparable!", {𝕎•_timed𝕩}⌜⟩ 10⋆3‿5‿7‿8‿9
 </pre>
 </div>
 
 <pre class="example">
-┌─                                                                                             
-╵   7.7698e¯5 0.0009223870000000001         0.038692483 0.42511051400000005       6.736025577  
-  0.000176827            0.00074063 0.07879512000000001         3.321859566 96.97078475900001  
-    1.9216e¯5             6.5374e¯5          0.03579827  3.2631592620000003     102.479847477  
-    2.2113e¯5           0.000310731         0.008571766 0.17495785800000002 4.887775957000001  
-                                                                                              ┘
+┌─                                                                                               
+╵             7.9856e¯5 0.001037675  0.06758383200000001         0.700785714         8.09195083  
+              9.6947e¯5 0.000645739          0.065917548  2.9671749550000004  93.39382853900001  
+              1.7913e¯5   6.1652e¯5          0.031183234         2.819513972 100.19372699300001  
+  1.7245000000000002e¯5  0.00031342 0.008511399000000001 0.17044747400000002 4.7954312230000005  
+                                                                                                ┘
 </pre>
 
 
@@ -244,7 +244,7 @@ the arrays handled by <code>0¨⌾(m⊸⊏)</code> become longer, making multipl
 </p>
 
 <p>
-Out of curiosity, I decided to compare <code>S4</code>'s performance with an equivalent NumPy implementation that used
+Out of curiosity, I decided to compare <code>S4</code>'s performance with an equivalent NumPy program that used
 only the direct indexing approach (analogous to <code>L</code>), without the heuristic. At that time<sup><a id="fnr.1.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>,
 the BQN version was about 2.5 times slower. This sparked a productive discussion in the <a href="https://matrix.to/#/%23bqn:matrix.org">Matrix room</a>,
 which eventually led dzaima to <a href="https://github.com/dzaima/CBQN/commit/124d0945914cc04e59e9063dce0bf56be43581cc">speed up</a> the CBQN implementation of the under select <code>0¨⌾(m⊸⊏)</code>.
@@ -273,9 +273,9 @@ CPU:
 </details>
 </div>
 </div>
-<div id="outline-container-org83ac3b0" class="outline-2">
-<h2 id="org83ac3b0">A microbenchmark</h2>
-<div class="outline-text-2" id="text-org83ac3b0">
+<div id="outline-container-orgc8a1697" class="outline-2">
+<h2 id="orgc8a1697">A microbenchmark</h2>
+<div class="outline-text-2" id="text-orgc8a1697">
 <p>
 Ultimately, the optimized BQN code proved to be about six times as fast as a C reference implementation for large argument!
 While the algorithms differ, I argue that the C version's simple nested loops provide
@@ -399,9 +399,9 @@ Benchmark 1: ./sieve 1000000000
 </details>
 </div>
 </div>
-<div id="outline-container-org32da84e" class="outline-2">
-<h2 id="org32da84e">BQN can be faster than C!</h2>
-<div class="outline-text-2" id="text-org32da84e">
+<div id="outline-container-orge6b828f" class="outline-2">
+<h2 id="orge6b828f">BQN can be faster than C!</h2>
+<div class="outline-text-2" id="text-orge6b828f">
 <p>
 Yeah, right, as if that were possible! The function below again employs a heuristic, this time switching
 the core sieving strategy based on whether the prime 𝕨 is less than or equal to 20. Furthermore,
@@ -453,8 +453,7 @@ seconds for the best case (the heuristic-based function <code>S4</code>).
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 For an exceptionally performant sieve implementation, see Marshall's <a href="https://github.com/mlochbaum/bqn-libs/blob/master/primes.bqn">bqn-libs</a>,
-which incorporates further elegant algorithmic optimizations. The implementation
-presented here aims instead for greater conciseness.
+which incorporates further elegant algorithmic optimizations. The one presented here aims instead for greater conciseness.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
@@ -463,8 +462,7 @@ A History of APL in 50 Functions, Roger K.W. Hui (2016). From <a href="https://w
 
 <div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 Again, the C version shown provides a clear performance baseline. Achieving superior speed in C is
-<b>undoubtedly possible</b>, but usually involves a steep increase in code complexity compared to this
-straightforward implementation.
+<b>undoubtedly possible</b>, but usually involves a steep increase in code complexity.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
