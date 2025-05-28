@@ -499,7 +499,7 @@ big integers, which makes it trivial. No fancy math either. BQN has integers up 
 so we need to roll our own algorithm. Let's first generate an array that will
 contain the digits of the result, using an estimation for the length:
 
-#+begin_src bqn :tangle no :results none
+#+begin_src bqn :tangle no :results
   inp16 ← 1∾0⥊˜⌊10⋆⁼2⋆1000
 #+end_src
 
@@ -532,16 +532,21 @@ Then dzaima pointed out that the while loop could be replaced with a simpler rep
 Provided we know an upper bound =m= for the elements involved in the arithmetic operation,
 the iteration should not exceed =⌈base⋆⁼m×base-1=. In general:
 
-#+begin_src bqn :tangle no
+#+begin_src bqn :tangle no :results none
   MP ← {b𝕊n:
-    _o ← {𝕨b⊸(|+⟜»·⌊÷˜)⍟(⌈b⋆⁼𝕩×b-1)𝔽𝕩}
-    d ← 0⊸⥊∘⌊¨⟨1+b⋆⁼⌈´⊸×⟜≠n, 1+´b⋆⁼n⟩
-    +‿×{∾•Fmt¨𝕩𝕎_o´n}¨d
+    _o ← {b⊸(|+⟜»·⌊÷˜)⍟(⌈b⋆⁼𝕨×b-1)𝕨𝔽𝕩}
+    ⟨+⌾⊑_o, ×_o⟩{∾•Fmt¨⌽𝕩𝕎´n}¨⟨0⥊˜1+⌊b⋆⁼⌈´⊸×⟜≠n, 1∾0⥊˜⌊1+´b⋆⁼n⟩
   }
 #+end_src
 
+Yeah, something like that. Although the sum is less useful in that form.
+
+#+begin_src bqn :tangle no :exports both
+  10 MP 1500‿2000‿44556‿5566333
+#+end_src
+
 #+RESULTS:
-: (function block)
+: ⟨ "05614389" "0744040599444000000" ⟩
 
 ** Problem 17
 :PROPERTIES:
