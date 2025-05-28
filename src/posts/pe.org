@@ -530,7 +530,18 @@ I had used this construct with an unbounded while for an arithmetic operation �
 
 Then dzaima pointed out that the while loop could be replaced with a simpler repeat.
 Provided we know an upper bound =m= for the elements involved in the arithmetic operation,
-the iteration should not exceed =⌈base⋆⁼m×base-1=.
+the iteration should not exceed =⌈base⋆⁼m×base-1=. In general:
+
+#+begin_src bqn :tangle no
+  MP ← {b𝕊n:
+    _o ← {𝕨b⊸(|+⟜»·⌊÷˜)⍟(⌈b⋆⁼𝕩×b-1)𝔽𝕩}
+    d ← 0⊸⥊∘⌊¨⟨1+b⋆⁼⌈´⊸×⟜≠n, 1+´b⋆⁼n⟩
+    +‿×{∾•Fmt¨𝕩𝕎_o´n}¨d
+  }
+#+end_src
+
+#+RESULTS:
+: (function block)
 
 ** Problem 17
 :PROPERTIES:
