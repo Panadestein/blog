@@ -506,7 +506,7 @@ contain the digits of the result, using an estimation for the length:
 Then we have the following tacit function, which I will dare say is beautiful:
 
 #+begin_src bqn
-  E16 ← +´10{𝕗⊸(|+⟜»·⌊÷˜)⍟(⌈𝕗⋆⁼𝕗×2)}∘(2⊸×)⍟1000
+  E16 ← +´10{𝕗⊸(|+⟜»·⌊÷˜)⍟(⌈𝕗⋆⁼2×𝕗-1)}∘(2⊸×)⍟1000
 #+end_src
 
 #+RESULTS:
@@ -530,7 +530,7 @@ I had used this construct with an unbounded while for an arithmetic operation �
 
 Then dzaima pointed out that the while loop could be replaced with a simpler repeat.
 Provided we know an upper bound =m= for the elements involved in the arithmetic operation,
-the iteration should not exceed =⌈base⋆⁼base×m=.
+the iteration should not exceed =⌈base⋆⁼m×base-1=.
 
 ** Problem 17
 :PROPERTIES:
@@ -662,7 +662,7 @@ the fold of the product over the numbers in =1+↕100=. That's it.
 Then we reuse the tacit function for arbitrary precision multiplication:
 
 #+begin_src bqn
-  E20 ← 10{𝕗⊸(|+⟜»·⌊÷˜)⍟(⌈𝕗⋆⁼𝕗×100)}∘×´
+  E20 ← 10{𝕗⊸(|+⟜»·⌊÷˜)⍟(⌈𝕗⋆⁼100×𝕗-1)}∘×´
 #+end_src
 
 #+RESULTS:
