@@ -532,21 +532,21 @@ Then dzaima pointed out that the while loop could be replaced with a simpler rep
 Provided we know an upper bound =m= for the elements involved in the arithmetic operation,
 the iteration should not exceed =⌈base⋆⁼m×base-1=. In general:
 
-#+begin_src bqn :tangle no :results none
+#+begin_src bqn :results none
   MP ← {b𝕊n:
     _o ← {b⊸(|+⟜»·⌊÷˜)⍟(⌈b⋆⁼𝕨×b-1)𝕨𝔽𝕩}
-    ⟨+⌾⊑_o, ×_o⟩{∾•Fmt¨⌽𝕩𝕎´n}¨⟨0⥊˜1+⌊b⋆⁼⌈´⊸×⟜≠n, 1∾0⥊˜⌊1+´b⋆⁼n⟩
+    ⟨+⌾⊑, ×⟩{∾•Fmt¨⌽𝕩𝕎_o´n}¨b⊸⋆⁼{(𝔾∘𝔽⌈´⊸×⟜≠)⋈1∾·𝔾·+´𝔽}(0⥊˜1+⌊)n
   }
 #+end_src
 
 Yeah, something like that. Although the sum is less useful in that form.
 
 #+begin_src bqn :tangle no :exports both
-  10 MP 1500‿2000‿44556‿5566333
+  10 MP 1500‿2000‿44556‿55663330000
 #+end_src
 
 #+RESULTS:
-: ⟨ "05614389" "0744040599444000000" ⟩
+: ⟨ "055663378056" "07440405994440000000000" ⟩
 
 ** Problem 17
 :PROPERTIES:
