@@ -499,7 +499,7 @@ big integers, which makes it trivial. No fancy math either. BQN has integers up 
 so we need to roll our own algorithm. Let's first generate an array that will
 contain the digits of the result, using an estimation for the length:
 
-#+begin_src bqn :tangle no :results
+#+begin_src bqn :tangle no :results none
   inp16 ← 1∾0⥊˜⌊10⋆⁼2⋆1000
 #+end_src
 
