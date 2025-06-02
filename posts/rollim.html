@@ -247,20 +247,21 @@ This post is a rolling collection of algorithms and computational ideas I like, 
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org0c446f7">The infamous <code>_while_</code> modifier</a></li>
-<li><a href="#orge4d2f10">Z algorithm</a></li>
-<li><a href="#org121a6ba">Longest increasing sub-sequence</a></li>
-<li><a href="#org688b05e">N-queens problem</a></li>
-<li><a href="#org65d6567">Majority element</a></li>
-<li><a href="#org818f8db">An identity on the naturals</a></li>
-<li><a href="#orgbb06f2d">Depth of nested lists</a></li>
-<li><a href="#org86b1bad">H-index</a></li>
-<li><a href="#org26f8575">Trapping rain water</a></li>
-<li><a href="#orgc318a43">Computing edit distances</a></li>
-<li><a href="#orgd976d80">Solving the cubic equation</a></li>
-<li><a href="#orgfbac57d">QR decomposition</a></li>
-<li><a href="#org88a2964">Fast Fourier Transform</a></li>
-<li><a href="#org84f2531">Tensor n-mode product</a></li>
+<li><a href="#orgb1b386d">The infamous <code>_while_</code> modifier</a></li>
+<li><a href="#orga62102f">Blazing matrix products</a></li>
+<li><a href="#org5151231">Z algorithm</a></li>
+<li><a href="#orgd373ac9">Longest increasing sub-sequence</a></li>
+<li><a href="#org7d010ae">N-queens problem</a></li>
+<li><a href="#org42516c1">Majority element</a></li>
+<li><a href="#org57d9f93">An identity on the naturals</a></li>
+<li><a href="#org23b0800">Depth of nested lists</a></li>
+<li><a href="#orgaf5c49c">H-index</a></li>
+<li><a href="#orgeaa7db5">Trapping rain water</a></li>
+<li><a href="#orgc6fe5f4">Computing edit distances</a></li>
+<li><a href="#org17e5be4">Solving the cubic equation</a></li>
+<li><a href="#org7ed5fff">QR decomposition</a></li>
+<li><a href="#orged4ac54">Fast Fourier Transform</a></li>
+<li><a href="#org1808409">Tensor n-mode product</a></li>
 </ul>
 </div>
 </div>
@@ -270,9 +271,9 @@ Extrapolating Perlis' remark<sup><a id="fnr.1" class="footref" href="#fn.1" role
 would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
 juxtapose my implementations with those of seasoned <i>BQNators</i><sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
 </p>
-<div id="outline-container-org0c446f7" class="outline-2">
-<h2 id="org0c446f7">The infamous <code>_while_</code> modifier</h2>
-<div class="outline-text-2" id="text-org0c446f7">
+<div id="outline-container-orgb1b386d" class="outline-2">
+<h2 id="orgb1b386d">The infamous <code>_while_</code> modifier</h2>
+<div class="outline-text-2" id="text-orgb1b386d">
 <p>
 I call it infamous because it made me feel stupid twice: first when I encountered it in code,
 and again when I read its <a href="https://mlochbaum.github.io/BQN/doc/control.html#low-stack-version">docs</a>. To understand its behaviour, you need to be familiar with
@@ -326,9 +327,53 @@ Let’s test it with a simple iteration that exceeds CBQN’s recursion limit, t
 </pre>
 </div>
 </div>
-<div id="outline-container-orge4d2f10" class="outline-2">
-<h2 id="orge4d2f10">Z algorithm</h2>
-<div class="outline-text-2" id="text-orge4d2f10">
+<div id="outline-container-orga62102f" class="outline-2">
+<h2 id="orga62102f">Blazing matrix products</h2>
+<div class="outline-text-2" id="text-orga62102f">
+<p>
+One thing that has always bothered me in BQN is the lack of a fast matrix product. While the current
+idiom offers guarantees of numerical correctness, it is not very fast for large matrices. There is
+always the possibility of wrapping BLAS, of course:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">blasFFI ← (⊣•FFI·(1-˜+`×¬)∘=⟜⊏⊸⊔⊢)´ ⟨
+  "/lib/libcblas.so"∾˜•BQN 1⊑•Sh "nix-instantiate"‿"--eval-only"‿"--expr"‿"(import &lt;nixpkgs&gt; {}).blas.outPath"
+  " &amp; cblas_dgemm u32 u32 u32 i32 i32 i32 f64 *f64 i32 *f64 i32 f64 &amp;f64 i32"
+⟩
+Dgemm ← {BlasFFI 101‿111‿111‿m‿n‿k‿1‿𝕨‿k‿𝕩‿n‿0‿(m‿n⥊0)∾⊢´m‿k‿·‿n←𝕨∾○≢𝕩}
+</pre>
+</div>
+
+<p>
+This function has about the same overhead as NumPy's <code>dot</code>, so anyone praising how fast NumPy is,
+is actually praising BLAS. Now, it is possible to roll a simple blocked matrix product in BQN
+using a back of the envelope calculation of the block size (sorry, not fancy optimized kernels and block sizes here).
+For matrix sizes that overflow my machines cache, one can attain speed ups of 5x:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">mat‿mbt ← ⟨⋈˜2⥊500, ⋈˜5⥊600⟩ /¨⊸⊔¨ ma‿mb ← •rand.Range⟜0¨1e3×⟨1‿1, 3‿3⟩
+&gt;⟨ma‿ma‿mat, mb‿mb‿mbt⟩ {𝕎˜•_timed𝕩}¨¨˜ &lt;⟨Dgemm, +˝∘×⎉1‿∞, ∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞⟩
+</pre>
+</div>
+
+<pre class="example">
+┌─                                                            
+╵         0.008988871        0.646108393 0.37081367400000004  
+  0.16528436400000002 45.110128999000004   7.460860705000001  
+                                                             ┘
+</pre>
+
+
+<p>
+And there is only a 10 character leap between <code>+˝∘×⎉1‿∞</code> and <code>∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞</code>.
+</p>
+</div>
+</div>
+<div id="outline-container-org5151231" class="outline-2">
+<h2 id="org5151231">Z algorithm</h2>
+<div class="outline-text-2" id="text-org5151231">
 <p>
 This is a very efficient procedure that finds prefix strings in <a href="https://cp-algorithms.com/string/z-function.html">linear time</a>. The imperative
 implementation reads:
@@ -395,9 +440,9 @@ With further refinements, the earlier solutions can be transformed into:
 </div>
 </div>
 </div>
-<div id="outline-container-org121a6ba" class="outline-2">
-<h2 id="org121a6ba">Longest increasing sub-sequence</h2>
-<div class="outline-text-2" id="text-org121a6ba">
+<div id="outline-container-orgd373ac9" class="outline-2">
+<h2 id="orgd373ac9">Longest increasing sub-sequence</h2>
+<div class="outline-text-2" id="text-orgd373ac9">
 <p>
 This <a href="https://en.wikipedia.org/wiki/Longest_increasing_subsequence">problem</a> can be solved in \(O(n\log n)\) using dynamic programming. Here is an
 imperative implementation which is quadratic, but can be optimized:
@@ -437,7 +482,7 @@ LISA¨ ⟨0‿1‿0‿3‿2‿3, 10‿9‿2‿5‿3‿7‿101‿18, 7‿7‿7‿
 Let's <code>)explain</code> this optimized version, so we can truly appreciate its beauty:
 </p>
 
-<pre class="example" id="orgcea8af5">
+<pre class="example" id="org0b70e92">
  +´∞≠∞¨{𝕨⌾((⊑𝕩⍋𝕨-1)⊸⊑)𝕩}´⌽ 
  │ │ │ ││    │ │ │  │ │  │ 
  │ │ │ {┼────┼─┼─┼──┼─┼─´│ 
@@ -467,9 +512,9 @@ we pick the enclosed atom from this operation's result. So it goes<sup><a id="fn
 </p>
 </div>
 </div>
-<div id="outline-container-org688b05e" class="outline-2">
-<h2 id="org688b05e">N-queens problem</h2>
-<div class="outline-text-2" id="text-org688b05e">
+<div id="outline-container-org7d010ae" class="outline-2">
+<h2 id="org7d010ae">N-queens problem</h2>
+<div class="outline-text-2" id="text-org7d010ae">
 <p>
 This problem is the archetypal example of backtracking. Initially, I tried to solve it
 using a function to place the queens in the full board, hoping that it would lead to a
@@ -481,7 +526,7 @@ more array oriented solution:
 </pre>
 </div>
 
-<pre class="example" id="orged326f0">
+<pre class="example" id="orgf6b9174">
 ┌─                 
 ╵ 0 1 0 1 0 1 0 0  
   0 0 1 1 1 0 0 0  
@@ -529,9 +574,9 @@ but I find the resulting validation and position functions very aesthetic the wa
 </p>
 </div>
 </div>
-<div id="outline-container-org65d6567" class="outline-2">
-<h2 id="org65d6567">Majority element</h2>
-<div class="outline-text-2" id="text-org65d6567">
+<div id="outline-container-org42516c1" class="outline-2">
+<h2 id="org42516c1">Majority element</h2>
+<div class="outline-text-2" id="text-org42516c1">
 <p>
 The <a href="https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm">Boyer–Moore</a> algorithm allows for finding the majority element (element that appears
 more than <code>⌊𝕩÷2</code> times in the array) in linear time. If such element exists, then it is
@@ -566,9 +611,9 @@ BM 6‿1‿3‿1‿3‿3‿4‿3‿3‿5
 </pre>
 </div>
 </div>
-<div id="outline-container-org818f8db" class="outline-2">
-<h2 id="org818f8db">An identity on the naturals</h2>
-<div class="outline-text-2" id="text-org818f8db">
+<div id="outline-container-org57d9f93" class="outline-2">
+<h2 id="org57d9f93">An identity on the naturals</h2>
+<div class="outline-text-2" id="text-org57d9f93">
 <p>
 Some time ago, while working on performance optimization of linear algebra
 operations with Boolean arrays, I encountered an
@@ -603,9 +648,9 @@ and since <code>+´(/𝕩)=i ←→ i⊑𝕩</code>, the fold sums all the eleme
 </p>
 </div>
 </div>
-<div id="outline-container-orgbb06f2d" class="outline-2">
-<h2 id="orgbb06f2d">Depth of nested lists</h2>
-<div class="outline-text-2" id="text-orgbb06f2d">
+<div id="outline-container-org23b0800" class="outline-2">
+<h2 id="org23b0800">Depth of nested lists</h2>
+<div class="outline-text-2" id="text-org23b0800">
 <p>
 Studying tree algorithms in APL, I learned about the depth vector <a href="https://asherbhs.github.io/apl-site/trees/representing-trees.html">representation</a>. If
 the nested object in consideration is a string, the best approach is using boolean <a href="https://mlochbaum.github.io/bqncrate/?q=depth%20of%20parens#">masks</a>.
@@ -623,9 +668,9 @@ the depth of nested elements. Here’s how it can be implemented:
 </pre>
 </div>
 </div>
-<div id="outline-container-org86b1bad" class="outline-2">
-<h2 id="org86b1bad">H-index</h2>
-<div class="outline-text-2" id="text-org86b1bad">
+<div id="outline-container-orgaf5c49c" class="outline-2">
+<h2 id="orgaf5c49c">H-index</h2>
+<div class="outline-text-2" id="text-orgaf5c49c">
 <p>
 This metric is one of the reasons for the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2407748">deplorable</a> state of modern academia,
 and the headaches for <i>outsiders</i> trying to get in. Consider that Peter Higgs
@@ -667,9 +712,9 @@ I initially clip my citations array with <code>{≠¨⊔≠∘𝕩¨⌾(≥⟜�
 </p>
 </div>
 </div>
-<div id="outline-container-org26f8575" class="outline-2">
-<h2 id="org26f8575">Trapping rain water</h2>
-<div class="outline-text-2" id="text-org26f8575">
+<div id="outline-container-orgeaa7db5" class="outline-2">
+<h2 id="orgeaa7db5">Trapping rain water</h2>
+<div class="outline-text-2" id="text-orgeaa7db5">
 <p>
 This is a classical interview <a href="https://leetcode.com/problems/trapping-rain-water/">problem</a> that can be solved in linear time. Interestingly,
 it admits a very elegant array solution:
@@ -706,9 +751,9 @@ will probably be slow). Here are two solutions, one \(O(n^2)\) and the other \(O
 </pre>
 </div>
 </div>
-<div id="outline-container-orgc318a43" class="outline-2">
-<h2 id="orgc318a43">Computing edit distances</h2>
-<div class="outline-text-2" id="text-orgc318a43">
+<div id="outline-container-orgc6fe5f4" class="outline-2">
+<h2 id="orgc6fe5f4">Computing edit distances</h2>
+<div class="outline-text-2" id="text-orgc6fe5f4">
 <p>
 The Levenshtein (or edit) <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">distance</a> is a measure of the similarity between two strings. It is defined
 by the following recurrence, which is the basis of dynamic programming algorithms like Wagner-Fisher:
@@ -782,9 +827,9 @@ If you know why both formulations work, please let me know!
 </p>
 </div>
 </div>
-<div id="outline-container-orgd976d80" class="outline-2">
-<h2 id="orgd976d80">Solving the cubic equation</h2>
-<div class="outline-text-2" id="text-orgd976d80">
+<div id="outline-container-org17e5be4" class="outline-2">
+<h2 id="org17e5be4">Solving the cubic equation</h2>
+<div class="outline-text-2" id="text-org17e5be4">
 <p>
 This function computes the real roots of an arbitrary <a href="https://en.wikipedia.org/wiki/Cubic_equation">cubic equation</a>. Initially,
 the equation is transformed into its depressed form via an appropriate substitution.
@@ -822,9 +867,9 @@ Here are some tests for the four possible branches:
 </pre>
 </div>
 </div>
-<div id="outline-container-orgfbac57d" class="outline-2">
-<h2 id="orgfbac57d">QR decomposition</h2>
-<div class="outline-text-2" id="text-orgfbac57d">
+<div id="outline-container-org7ed5fff" class="outline-2">
+<h2 id="org7ed5fff">QR decomposition</h2>
+<div class="outline-text-2" id="text-org7ed5fff">
 <p>
 I put some effort golfing this <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> implementation, and I got a very satisfying
 98 chars <a href="https://codegolf.stackexchange.com/a/278570/94421">one-liner</a>. Ungolfed a bit, it looks like this:
@@ -872,9 +917,9 @@ We can test it with random matrices:
 </pre>
 </div>
 </div>
-<div id="outline-container-org88a2964" class="outline-2">
-<h2 id="org88a2964">Fast Fourier Transform</h2>
-<div class="outline-text-2" id="text-org88a2964">
+<div id="outline-container-orged4ac54" class="outline-2">
+<h2 id="orged4ac54">Fast Fourier Transform</h2>
+<div class="outline-text-2" id="text-orged4ac54">
 <p>
 Below is an implementation of the radix-2 <a href="https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm">Cooley–Tukey FFT algorithm</a>. The function leverages
 BQN's headers to define the inverse transform in a succinct way using the property:
@@ -940,9 +985,9 @@ support it would be something like:
 </div>
 </div>
 </div>
-<div id="outline-container-org84f2531" class="outline-2">
-<h2 id="org84f2531">Tensor n-mode product</h2>
-<div class="outline-text-2" id="text-org84f2531">
+<div id="outline-container-org1808409" class="outline-2">
+<h2 id="org1808409">Tensor n-mode product</h2>
+<div class="outline-text-2" id="text-org1808409">
 <p>
 The n-mode product is a key ingredient for computing the Tucker decomposition of a tensor.
 For this we can use the <a href="https://en.wikipedia.org/wiki/Higher-order_singular_value_decomposition">HOSVD</a> algorithm: a method that has been rediscovered several times.
