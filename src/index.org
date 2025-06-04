@@ -1,3 +1,7 @@
+#+TITLE: First atop infinity | Physics, Programming, BQN
+#+OPTIONS: title:nil
+#+DESCRIPTION: Explore rigorous physics, efficient array programming in BQN, competitive coding insights, and more. A blog for those who appreciate the beauty of science and code.
+#+AUTHOR: Panadestein
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 #+HTML_HEAD: <meta name="keywords" content="BQN, APL, array language, computational science, quantum computing, Hartree-Fock, Org-mode blog, literate programming">
@@ -11,7 +15,6 @@
 #+HTML_HEAD:     }
 #+HTML_HEAD:   }
 #+HTML_HEAD: </script>
-#+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 #+HTML: <div class="container">
 #+HTML: <header class="header">
 #+HTML:   <div class="header-left"><a id="title" href="#" onclick="toggleTitle(); return false;">First atop infinity</a></div>

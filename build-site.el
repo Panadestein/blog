@@ -59,6 +59,12 @@
 	     :publishing-directory "./public"
 	     :publishing-function 'org-publish-attachment
 	     :recursive nil)
+       (list "sitemap"
+	     :base-directory "."
+	     :base-extension "xml"
+	     :publishing-directory "./public"
+	     :publishing-function 'org-publish-attachment
+	     :recursive nil)
        (list "supp"
 	     :base-directory "./supp"
 	     :base-extension 'any

@@ -60,9 +60,9 @@ Let’s test it with a simple iteration that exceeds CBQN’s recursion limit, t
 
 ** Blazing matrix products
 
-One thing that has always bothered me in BQN is the lack of a fast matrix product. While the current
-idiom offers guarantees of numerical correctness, it is not very fast for large matrices. There is
-always the possibility of wrapping BLAS, of course:
+One thing that has always bothered me in BQN is the absence of a high-performance matrix product
+implementation. While the current inner product idiom guarantees numerical accuracy,
+it remains quite slow for larger matrices. Of course, wrapping BLAS directly is always an option:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
   blasFFI ← (⊣•FFI·(1-˜+`×¬)∘=⟜⊏⊸⊔⊢)´ ⟨
@@ -75,10 +75,11 @@ always the possibility of wrapping BLAS, of course:
 #+RESULTS:
 : (function block)
 
-This function has about the same overhead as NumPy's =dot=, so anyone praising how fast NumPy is,
-is actually praising BLAS. Now, it is possible to roll a simple blocked matrix product in BQN
-using a back of the envelope calculation of the block size (sorry, not fancy optimized kernels and block sizes here).
-For matrix sizes that overflow my machines cache, one can attain speed ups of 5x:
+This approach has roughly the same overhead as NumPy's =dot=, so anyone applauding NumPy's performance
+is essentially praising BLAS. However, it is possible to implement a simple blocked matrix product
+directly in BQN, using a basic back-of-the-envelope calculation for block sizes
+(sorry, no fancy optimized kernels here). For matrix sizes exceeding my machine's cache,
+speed-ups of about six times are achievable:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
   mat‿mbt ← ⟨⋈˜2⥊500, ⋈˜5⥊600⟩ /¨⊸⊔¨ ma‿mb ← •rand.Range⟜0¨1e3×⟨1‿1, 3‿3⟩
@@ -91,7 +92,25 @@ For matrix sizes that overflow my machines cache, one can attain speed ups of 5x
 :   0.16528436400000002 45.110128999000004   7.460860705000001  
 :                                                              ┘
 
-And there is only a 10 character leap between =+˝∘×⎉1‿∞= and =∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞=.
+Moreover, there is only a modest 10-character leap from =+˝∘×⎉1‿∞= to =∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞=.
+As a bonus, here's a convenient function to compute powers of a square matrix =𝕩=
+(particularly useful in graph theory) using blocks of size =𝕨=, assuming it evenly divides the matrix dimensions:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  MPow ← {(+˝+˝∘×⎉1‿∞¨)⎉1‿∞˜⌾((/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩)⊸⊔)𝕩}
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+A naïve search for the optimal block size yields:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  50‿100‿300‿600‿1000‿1500 {𝕨⊸MPow•_timed𝕩}¨ <3e3‿3e3 •rand.Range 0
+#+end_src
+
+#+RESULTS:
+: ⟨ 18.019331313000002 14.795254682000001 10.121937968000001 9.555259987000001 15.087960674000001 35.132816694 ⟩
 
 ** Z algorithm
 
