@@ -113,6 +113,20 @@ for the optimal block size yields:
 #+RESULTS:
 : ⟨ 15.883247281000001 12.451545102 8.224263037 7.7123262310000005 15.417112082000001 34.447925623 ⟩
 
+For more fine-grained control, here is the code for arbitrary block sizes (not necessarily divisors of the length),
+which pads the matrices with zeros. Let's take a look at the local minimum:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  MPow ← {𝕩≢⊸↑∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞˜𝕩(⥊⟜𝕨¨∘⊢/¨⊸⊔𝕨⊸×↑⊣)⌈𝕨÷˜≢𝕩}
+  (300+50×↕8) {𝕨⊸MPow•_timed𝕩}¨ <3e3‿3e3 •rand.Range 0
+#+end_src
+
+#+RESULTS:
+: ⟨ 8.30279774 10.112563361000001 9.781014477000001 9.670085717000001 7.556631647000001 10.970897867000001 7.570657628 10.231164773000001 ⟩
+
+The blocked algorithm is only about 2 seconds slower than the analogous inner product in Dyalog APL 19 =+.×⌿?2 3000 3000⍴1e10=,
+whereas the standard one is 10 times slower.
+
 ** Z algorithm
 
 This is a very efficient procedure that finds prefix strings in [[https://cp-algorithms.com/string/z-function.html][linear time]]. The imperative
