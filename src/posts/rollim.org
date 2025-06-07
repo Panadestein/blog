@@ -125,7 +125,16 @@ which pads the matrices with zeros. Let's take a look at the local minimum:
 : ⟨ 8.30279774 10.112563361000001 9.781014477000001 9.670085717000001 7.556631647000001 10.970897867000001 7.570657628 10.231164773000001 ⟩
 
 The blocked algorithm is only about 2 seconds slower than the analogous inner product in Dyalog APL 19 =+.×⌿?2 3000 3000⍴1e10=,
-whereas the standard one is 10 times slower.
+whereas the standard one is 10 times slower. Finally, for a deeper level of tiling, we can use
+something like this, though I found the performance does not improve much:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  MPow2 ← {∾∾×_p¨_p¨(_p←{+˝∘𝔽⎉1‿∞})˜𝕩{𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}´𝕨}
+  2‿500⊸MPow2•_timed 3e3‿3e3•rand.Range 0
+#+end_src
+
+#+RESULTS:
+: 8.495383934000001
 
 ** Z algorithm
 
