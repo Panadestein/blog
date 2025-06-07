@@ -130,11 +130,11 @@ something like this, though I found the performance does not improve much:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
   MPow2 ← {∾∾×_p¨_p¨(_p←{+˝∘𝔽⎉1‿∞})˜𝕩{𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}´𝕨}
-  2‿500⊸MPow2•_timed 3e3‿3e3•rand.Range 0
+  5 2‿500⊸MPow2•_timed 3e3‿3e3•rand.Range 0
 #+end_src
 
 #+RESULTS:
-: 8.495383934000001
+: 7.602923728
 
 ** Z algorithm
 
