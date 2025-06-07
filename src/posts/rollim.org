@@ -128,13 +128,13 @@ The blocked algorithm is only about 2 seconds slower than the analogous inner pr
 whereas the standard one is 10 times slower. Finally, for a deeper level of tiling, we can use
 something like this, though I found the performance does not improve much:
 
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
   MPow2 ← {∾∾×_p¨_p¨(_p←{+˝∘𝔽⎉1‿∞})˜𝕩{𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}´𝕨}
-  5 2‿500⊸MPow2•_timed 3e3‿3e3•rand.Range 0
+  ⟨10‿60, 4‿250, 3‿500⟩ {𝕨⊸MPow2•_timed𝕩}¨ <3e3‿3e3•rand.Range 0
 #+end_src
 
 #+RESULTS:
-: 7.602923728
+: ⟨ 14.348832648 9.077623381 7.711024861 ⟩
 
 ** Z algorithm
 
