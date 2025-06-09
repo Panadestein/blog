@@ -103,8 +103,9 @@ As a bonus, here's a convenient function to compute powers of a square matrix =�
 #+RESULTS:
 : (function block)
 
-Here I could have used a fancier but slower under =𝔽˜⌾((/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩)⊸⊔)=. A naïve search
-for the optimal block size yields:
+Here I could have used a fancier but slower under =𝔽˜⌾((/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩)⊸⊔)=. Or even then
+memory hungry outer product formulation at the block level =+˝⍉∘⊢(+˝∘×⎉1‿∞¨)⌜˘⊢=, which
+turns out to be only marginally slower. A naïve search for the optimal block size yields:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
   50‿100‿300‿600‿1000‿1500 {𝕨⊸MPow•_timed𝕩}¨ <3e3‿3e3 •rand.Range 0
@@ -124,23 +125,13 @@ which pads the matrices with zeros. Let's take a look at the local minimum:
 #+RESULTS:
 : ⟨ 8.30279774 10.112563361000001 9.781014477000001 9.670085717000001 7.556631647000001 10.970897867000001 7.570657628 10.231164773000001 ⟩
 
-Or if you prefer an outer product formulation of the upper layer, and two chars less:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  MPow ← {𝕩≢⊸↑∾+˝(+˝∘×⎉1‿∞)⌜˘⟜⍉𝕩(⥊⟜𝕨¨∘⊢/¨⊸⊔𝕨⊸×↑⊣)⌈𝕨÷˜≢𝕩}
-  (300+50×↕8) {𝕨⊸MPow•_timed𝕩}¨ <3e3‿3e3 •rand.Range 0
-#+end_src
-
-#+RESULTS:
-: ⟨ 8.721242529000001 10.460210561 9.941383868 10.083968367 8.304803364 11.517073651 7.590935321000001 10.333602533 ⟩
-
 The blocked algorithm is only about 2 seconds slower than the analogous inner product in Dyalog APL 19 =+.×⌿?2 3000 3000⍴1e10=,
 whereas the standard one is 10 times slower. Finally, for a deeper level of tiling, we can use
-something like this, though I found the performance does not improve much:
+something like this, though I found the performance does not improve at all:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  MPow2 ← {∾∾×_p¨_p¨(_p←{+˝∘𝔽⎉1‿∞})˜𝕩{𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}´𝕨}
-  ⟨10‿60, 4‿250, 3‿500⟩ {𝕨⊸MPow2•_timed𝕩}¨ <3e3‿3e3•rand.Range 0
+  MPow ← {∾∾×_p¨_p¨(_p←{+˝∘𝔽⎉1‿∞})˜𝕩{𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}´𝕨}
+  ⟨10‿60, 4‿250, 3‿500⟩ {𝕨⊸MPow•_timed𝕩}¨ <3e3‿3e3•rand.Range 0
 #+end_src
 
 #+RESULTS:
