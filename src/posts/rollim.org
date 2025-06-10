@@ -94,32 +94,21 @@ speed-ups of about six times are achievable:
 
 Moreover, there is only a modest 10-character leap from =+˝∘×⎉1‿∞= to =∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞=.
 As a bonus, here's a convenient function to compute powers of a square matrix =𝕩=
-(particularly useful in graph theory) using blocks of size =𝕨=, assuming it evenly divides the matrix dimensions:
+(particularly useful in graph theory) using blocks of size =𝕨=, which pads the matrices with zeros:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
-  MP1 ← {∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞˜𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}
+  MPB ← {𝕩≢⊸↑∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞˜𝕩(⥊⟜𝕨¨∘⊢/¨⊸⊔𝕨⊸×↑⊣)⌈𝕨÷˜≢𝕩}
 #+end_src
 
 #+RESULTS:
 : (function block)
 
 Here I could have used a fancier but slower under =𝔽˜⌾((/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩)⊸⊔)=. Or even the
-memory hungry outer product formulation at the block level =+˝⍉∘⊢(+˝∘×⎉1‿∞¨)⌜˘⊢=, which
-turns out to be only marginally slower. A naïve search for the optimal block size yields:
+memory-hungry outer product formulation =+˝⍉∘⊢(+˝∘×⎉1‿∞¨)⌜˘⊢=, which
+is only marginally slower. A naïve search for the optimal block size yields:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  50‿100‿300‿600‿1000‿1500 {𝕨⊸MP1•_timed𝕩}¨ <3e3‿3e3 •rand.Range 0
-#+end_src
-
-#+RESULTS:
-: ⟨ 15.883247281000001 12.451545102 8.224263037 7.7123262310000005 15.417112082000001 34.447925623 ⟩
-
-For more fine-grained control, here is the code for arbitrary block sizes (not necessarily divisors of the length),
-which pads the matrices with zeros. Let's take a look at the local minimum:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  MP2 ← {𝕩≢⊸↑∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞˜𝕩(⥊⟜𝕨¨∘⊢/¨⊸⊔𝕨⊸×↑⊣)⌈𝕨÷˜≢𝕩}
-  (300+50×↕8) {𝕨⊸MPow2•_timed𝕩}¨ <3e3‿3e3 •rand.Range 0
+  (300+50×↕8) {𝕨⊸MPB•_timed𝕩}¨ <3e3‿3e3 •rand.Range 0
 #+end_src
 
 #+RESULTS:
@@ -130,8 +119,8 @@ whereas the standard one is 10 times slower. For a deeper level of tiling, we ca
 something like this, though I found the performance does not improve at all:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  MP3 ← {∾∾×_p¨_p¨(_p←{+˝∘𝔽⎉1‿∞})˜𝕩{𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}´𝕨}
-  ⟨10‿60, 4‿250, 3‿500⟩ {𝕨⊸MP3•_timed𝕩}¨ <3e3‿3e3•rand.Range 0
+  MPB2 ← {∾∾×_p¨_p¨(_p←{+˝∘𝔽⎉1‿∞})˜𝕩{𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}´𝕨}
+  ⟨10‿60, 4‿250, 3‿500⟩ {𝕨⊸MPB2•_timed𝕩}¨ <3e3‿3e3•rand.Range 0
 #+end_src
 
 #+RESULTS:
@@ -143,10 +132,8 @@ But we are not done yet. There is this little divide and conquer algorithm, whic
   _strassen ← {
     𝕗≥≠𝕩 ? 𝕨+˝∘×⎉1‿∞𝕩;
     [a‿b,c‿d]‿[e‿f,g‿h] ← (⊢/¨⊸⊔˜2⥊¨2÷˜≢)¨𝕨‿𝕩
-    p1‿p2‿p3‿p4‿p5‿p6‿p7 ← 𝕊´¨⟨⟨a+d,e+h⟩
-     ⟨c+d,e⟩ ⋄ ⟨a,f-h⟩ ⋄ ⟨d,g-e⟩
-     ⟨a+b,h⟩ ⋄ ⟨c-a,e+f⟩ ⋄ ⟨b-d,g+h⟩⟩
-    ∾[⟨p1+p4+p7-p5, p3+p5⟩, ⟨p2+p4, p1+p3+p6-p2⟩]
+    p1‿p2‿p3‿p4‿p5‿p6‿p7 ← 𝕊´¨⟨a+d,e+h⟩‿⟨c+d,e⟩‿⟨a,f-h⟩‿⟨d,g-e⟩‿⟨a+b,h⟩‿⟨c-a,e+f⟩‿⟨b-d,g+h⟩
+    ∾⟨p1+p4+p7-p5, p3+p5⟩≍⟨p2+p4, p1+p3+p6-p2⟩
   }
 #+end_src
 
@@ -156,7 +143,7 @@ But we are not done yet. There is this little divide and conquer algorithm, whic
 Let's go somewhat big for a solid 9x speed-up:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  ⟨+˝∘×⎉1‿∞, 600⊸MP2, 256 _strassen, Dgemm⟩ {𝕎˜•_timed𝕩}¨ <4096‿4096•rand.Range 0
+  ⟨+˝∘×⎉1‿∞, 600⊸MPB, 256 _strassen, Dgemm⟩ {𝕎˜•_timed𝕩}¨ <4096‿4096•rand.Range 0
 #+end_src
 
 #+RESULTS:
