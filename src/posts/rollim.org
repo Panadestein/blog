@@ -139,7 +139,7 @@ something like this, though I found the performance does not improve at all:
 
 But we are not done yet. There is this little divide and conquer algorithm, which I formulate radix-2 here:
 
-#+begin_src bqn
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
   _strassen ← {
     𝕗≥≠𝕩 ? 𝕨+˝∘×⎉1‿∞𝕩;
     [a‿b,c‿d]‿[e‿f,g‿h] ← (⊢/¨⊸⊔˜2⥊¨2÷˜≢)¨𝕨‿𝕩
@@ -155,7 +155,7 @@ But we are not done yet. There is this little divide and conquer algorithm, whic
 
 Let's go somewhat big for a solid 9x speed-up:
 
-#+begin_src bqn
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
   ⟨+˝∘×⎉1‿∞, 600⊸MP2, 256 _strassen, Dgemm⟩ {𝕎˜•_timed𝕩}¨ <4096‿4096•rand.Range 0
 #+end_src
 
