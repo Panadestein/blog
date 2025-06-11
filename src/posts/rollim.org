@@ -58,7 +58,7 @@ Let’s test it with a simple iteration that exceeds CBQN’s recursion limit, t
 #+RESULTS:
 : ⟨ 5001 5001 5001 "SO" ⟩
 
-** Blazing matrix products
+** Blazing matrix products à la BLAS
 
 One thing that has always bothered me in BQN is the absence of a high-performance matrix product
 implementation. While the current inner product idiom guarantees numerical accuracy,
@@ -94,7 +94,7 @@ speed-ups of about six times are achievable:
 
 Moreover, there is only a modest 10-character leap from =+˝∘×⎉1‿∞= to =∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞=.
 As a bonus, here's a convenient function to compute powers of a square matrix =𝕩=
-(particularly useful in graph theory) using blocks of size =𝕨=, which pads the matrices with zeros:
+(particularly useful in graph theory) using blocks of size =𝕨=, which pads the matrices with zeros as needed:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
   MPB ← {𝕩≢⊸↑∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞˜𝕩(⥊⟜𝕨¨∘⊢/¨⊸⊔𝕨⊸×↑⊣)⌈𝕨÷˜≢𝕩}
@@ -115,8 +115,8 @@ is only marginally slower. A naïve search for the optimal block size yields:
 : ⟨ 8.30279774 10.112563361000001 9.781014477000001 9.670085717000001 7.556631647000001 10.970897867000001 7.570657628 10.231164773000001 ⟩
 
 The blocked algorithm is only about 2 seconds slower than the analogous inner product in Dyalog APL 19 =+.×⌿?2 3000 3000⍴1e10=,
-whereas the standard one is 10 times slower. For a deeper level of tiling, we can use
-something like this, though I found the performance does not improve at all:
+whereas the standard idiom is more than 10 times slower. For a deeper level of tiling, we can use
+something like this, though I found performance does not improve at all:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
   MPB2 ← {∾∾×_p¨_p¨(_p←{+˝∘𝔽⎉1‿∞})˜𝕩{𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}´𝕨}
@@ -126,7 +126,8 @@ something like this, though I found the performance does not improve at all:
 #+RESULTS:
 : ⟨ 14.096323785000001 9.16644102 7.668334754000001 ⟩
 
-But we are not done yet. There is this little divide and conquer algorithm, which I formulate radix-2 here:
+But we are not done yet. There is this little divide and conquer (and potentially cache-oblivious)
+algorithm, which I formulate in its classic radix-2 form here:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
   _strassen ← {
@@ -140,7 +141,7 @@ But we are not done yet. There is this little divide and conquer algorithm, whic
 #+RESULTS:
 : (1-modifier block)
 
-Let's go somewhat big for a solid 9x speed-up:
+Let's go somewhat big for a solid 9x speed-up over the naive implementation:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
   ⟨+˝∘×⎉1‿∞, 600⊸MPB, 256 _strassen, Dgemm⟩ {𝕎˜•_timed𝕩}¨ <4096‿4096•rand.Range 0
@@ -148,6 +149,13 @@ Let's go somewhat big for a solid 9x speed-up:
 
 #+RESULTS:
 : ⟨ 121.84402379400001 21.551750837 13.44136753525 0.41289318700000005 ⟩
+
+To the best of my ability, this marks the limit of what can be achieved with a pure,
+single-threaded BQN implementation. To achieve true bare-metal performance,
+it is essential to wrap BLAS/BLIS, as they are multicore and SIMD-optimised.
+For deeper insight into blocked matrix multiplication algorithms, I recommend
+this [[https://docs.jax.dev/en/latest/pallas/tpu/matmul.html][JAX post]], the SaC [[https://dl.acm.org/doi/10.1145/3609024.3609410][paper]] on rank polymorphic blocking, and [[https://arxiv.org/abs/1605.01078][arXiv:1605.01078]]
+for the high-performance Strassen implementation.
 
 ** Z algorithm
 
