@@ -130,8 +130,7 @@ But we are not done yet. There is this little divide and conquer (and potentiall
 algorithm, which I formulate in its classic radix-2 form here:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
-  _strassen ← {
-    𝕗≥≠𝕩 ? 𝕨+˝∘×⎉1‿∞𝕩;
+  _strassen_ ← {𝕘≥≠𝕩 ? 𝕨𝔽𝕩;
     [a‿b,c‿d]‿[e‿f,g‿h] ← (⊢/¨⊸⊔˜2⥊¨2÷˜≢)¨𝕨‿𝕩
     p1‿p2‿p3‿p4‿p5‿p6‿p7 ← 𝕊´¨⟨a+d,e+h⟩‿⟨c+d,e⟩‿⟨a,f-h⟩‿⟨d,g-e⟩‿⟨a+b,h⟩‿⟨c-a,e+f⟩‿⟨b-d,g+h⟩
     ∾⟨p1+p4+p7-p5, p3+p5⟩≍⟨p2+p4, p1+p3+p6-p2⟩
@@ -139,20 +138,20 @@ algorithm, which I formulate in its classic radix-2 form here:
 #+end_src
 
 #+RESULTS:
-: (1-modifier block)
+: (2-modifier block)
 
 Let's go somewhat big for a solid 9x speed-up over the naive implementation:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  ⟨+˝∘×⎉1‿∞, 600⊸MPB, 256 _strassen, Dgemm⟩ {𝕎˜•_timed𝕩}¨ <4096‿4096•rand.Range 0
+  ⟨+˝∘×⎉1‿∞, 600⊸MPB, +˝∘×⎉1‿∞ _strassen_ 256, Dgemm _strassen_ 256, Dgemm⟩ {𝕎˜•_timed𝕩}¨ <4096‿4096•rand.Range 0
 #+end_src
 
 #+RESULTS:
-: ⟨ 121.84402379400001 21.551750837 13.44136753525 0.41289318700000005 ⟩
+: ⟨ 121.21441014300001 23.299975492 13.688074838 2.1399266160000003 0.400549596 ⟩
 
 To the best of my ability, this marks the limit of what can be achieved with a pure,
 single-threaded BQN implementation. To achieve true bare-metal performance,
-it is essential to wrap BLAS/BLIS, as they are multicore and SIMD-optimised.
+it is essential to wrap BLAS/BLIS, as they are multicore and SIMD-optimized.
 For deeper insight into blocked matrix multiplication algorithms, I recommend
 this [[https://docs.jax.dev/en/latest/pallas/tpu/matmul.html][JAX post]], the SaC [[https://dl.acm.org/doi/10.1145/3609024.3609410][paper]] on rank polymorphic blocking, and [[https://arxiv.org/abs/1605.01078][arXiv:1605.01078]]
 for the high-performance Strassen implementation.
