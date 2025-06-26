@@ -1,0 +1,197 @@
+#+TITLE: Blazing matrix products
+#+INCLUDE: "../html-head.org"
+
+** Why not use BLAS?
+
+Because I am interested in Brutalist array programming,
+and the absence of a high-performance native matrix product in BQN was
+a compelling opportunity for exploration[fn:1].
+Of course wrapping =dgemm= is always an option:
+
+#+begin_src bqn :tangle ../bqn/mp.bqn :exports code
+  blasFFI ← (⊣•FFI·(1-˜+`×¬)∘=⟜⊏⊸⊔⊢)´ ⟨
+    "/lib/libcblas.so"∾˜•BQN 1⊑•Sh "nix-instantiate"‿"--eval-only"‿"--expr"‿"(import <nixpkgs> {}).blas.outPath"
+    " & cblas_dgemm u32 u32 u32 i32 i32 i32 f64 *f64 i32 *f64 i32 f64 &f64 i32"
+  ⟩
+  Dgemm ← {BlasFFI 101‿111‿111‿m‿n‿k‿1‿𝕨‿k‿𝕩‿n‿0‿(m‿n⥊0)∾⊢´m‿k‿·‿n←𝕨∾○≢𝕩}
+#+end_src
+
+In case you're wondering, this function has roughly the same overhead as NumPy's =dot=.
+For fun, let's challenge the idea that you should never write your own[fn:2] GEMM,
+but rather wrap BLAS.
+
+** Taming the cache
+
+The first step towards higher performance is employing blocking to optimize cache access patterns.
+By using a straightforward square partitioning of the input matrices (without resorting to
+specialized assembly kernels and instead relying on the native BQN idiom) speed-ups
+of approximately sixfold are achievable for matrices that exceed the machine's cache size:
+
+#+begin_src bqn :tangle ../bqn/mp.bqn :exports both
+  mat‿mbt ← ⟨⋈˜2⥊500, ⋈˜5⥊600⟩ /¨⊸⊔¨ ma‿mb ← •rand.Range⟜0¨1e3×⟨1‿1, 3‿3⟩
+  >⟨ma‿ma‿mat, mb‿mb‿mbt⟩ {𝕎˜•_timed𝕩}¨¨˜ <⟨Dgemm, +˝∘×⎉1‿∞, ∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞⟩
+#+end_src
+
+#+RESULTS:
+: ┌─                                                            
+: ╵         0.008988871        0.646108393 0.37081367400000004  
+:   0.16528436400000002 45.110128999000004   7.460860705000001  
+:                                                              ┘
+
+Moreover, there is only a modest 10-character leap from =+˝∘×⎉1‿∞= to =∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞=.
+As a bonus, here's a convenient function to compute powers of a square matrix =𝕩=
+(particularly useful in graph theory) using blocks of size =𝕨=, which pads the matrices with zeros as needed:
+
+#+begin_src bqn :tangle ../bqn/mp.bqn :exports code
+  MPB ← {𝕩≢⊸↑∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞˜𝕩(⥊⟜𝕨¨∘⊢/¨⊸⊔𝕨⊸×↑⊣)⌈𝕨÷˜≢𝕩}
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+Here I could have used a fancier but slower under =𝔽˜⌾((/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩)⊸⊔)=. Or even the
+memory-hungry outer product formulation =+˝⍉∘⊢(+˝∘×⎉1‿∞¨)⌜˘⊢=, which
+is only marginally slower. A naïve search for the optimal block size yields:
+
+#+begin_src bqn :tangle ../bqn/mp.bqn :exports both
+  (300+50×↕8) {𝕨⊸MPB•_timed𝕩}¨ <3e3‿3e3 •rand.Range 0
+#+end_src
+
+#+RESULTS:
+: ⟨ 8.30279774 10.112563361000001 9.781014477000001 9.670085717000001 7.556631647000001 10.970897867000001 7.570657628 10.231164773000001 ⟩
+
+Although nested tiling can be easily implemented, I found that it does not improve performance at all:
+
+#+begin_src bqn :tangle ../bqn/mp.bqn :exports both
+  MPB2 ← {∾∾×_p¨_p¨(_p←{+˝∘𝔽⎉1‿∞})˜𝕩{𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}´𝕨}
+  ⟨10‿60, 4‿250, 3‿500⟩ {𝕨⊸MPB2•_timed𝕩}¨ <3e3‿3e3•rand.Range 0
+#+end_src
+
+#+RESULTS:
+: ⟨ 14.096323785000001 9.16644102 7.668334754000001 ⟩
+
+But we're not finished yet. Here is a little divide-and-conquer (and cache-oblivious) [[https://en.wikipedia.org/wiki/Strassen_algorithm][algorithm]] in its classic
+radix-2 form. It works for any square matrix, regardless of dimension: if it is odd, we pad with an extra row and column,
+and then take back the original.
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  _strassen_ ← {𝕘≥≠𝕩 ? 𝕨𝔽𝕩;
+    [a‿b,c‿d]‿[e‿f,g‿h] ← (2⊸⥊¨∘⊢/¨⊸⊔2⊸×↑⊣)¨⟜(⌈2÷˜≢¨)𝕨‿𝕩
+    p1‿p2‿p3‿p4‿p5‿p6‿p7 ← 𝕊´¨⟨a+d,e+h⟩‿⟨c+d,e⟩‿⟨a,f-h⟩‿⟨d,g-e⟩‿⟨a+b,h⟩‿⟨c-a,e+f⟩‿⟨b-d,g+h⟩
+    𝕩≢⊸↑∾⟨p1+p4+p7-p5, p3+p5⟩≍⟨p2+p4, p1+p3+p6-p2⟩
+  }
+#+end_src
+
+#+RESULTS:
+: (2-modifier block)
+
+Let's go somewhat big for a solid 9x speed-up over the naive implementation:
+
+#+begin_src bqn :tangle ../bqn/mp.bqn :exports both
+  ⟨+˝∘×⎉1‿∞, 600⊸MPB, +˝∘×⎉1‿∞ _strassen_ 256, Dgemm _strassen_ 256, Dgemm⟩ {𝕎˜•_timed𝕩}¨ <4096‿4096•rand.Range 0
+#+end_src
+
+#+RESULTS:
+: ⟨ 121.21441014300001 23.299975492 13.688074838 2.1399266160000003 0.400549596 ⟩
+
+To the best of my ability, this marks the limit of what can be achieved with a pure,
+single-threaded BQN implementation[fn:3]. 
+
+** Parallelism via MPI
+
+To approach true bare-metal performance on par with BLAS/BLIS, we must leverage multiple cores.
+As BQN lacked native support for SPMD programming, I developed and implemented bindings for a
+useful subset of the Message Passing Interface (MPI), which are available on [[https://codeberg.org/panadestein/bqn-mpi][Codeberg]].
+
+With these bindings, I implemented a variant of Cannon's [[https://en.wikipedia.org/wiki/Cannon%27s_algorithm][algorithm]]. In this version, each process
+generates its initial local matrices, though scattering and gathering could be added as needed.
+The implementation assumes a perfect square number of tasks, forming a processor grid of =⋈˜√p=,
+and pads matrices whose dimensions are not divisible by =√p=.
+
+#+begin_src bqn :tangle ../bqn/mp.bqn :exports code
+  ⟨mpi⟩ ⇐ •Import "mpi.bqn"
+
+  mpi.Init@ ⋄ r‿s ← ⟨mpi.Rank@, mpi.Size@⟩
+
+  # Processor element coordinates in 2D grid (r≡y+q×x)
+  !⌊⊸=q←√s ⋄ b ← q÷˜n ← 2⋆12 ⋄ x‿y ← q(|⋈˜·⌊÷˜)r
+
+  # Local matrices
+  aml ← (+´b‿b×x‿y)++⌜˜↕b
+  bml ← (-´b‿b×x‿y)+-⌜˜↕b
+
+  # Toroidal topology with periodic boundary conditions, (aml←) (bml↑)
+  L‿U ← {𝕩⊸mpi.Sendrecv⌾⥊}¨⟨(q×x)+q|y(-⋈+)1 ⋄ y+q×q|x(-⋈+)1⟩
+
+  # Strassen algorithm with blocking for cache efficiency
+  _strassen_ ← {𝕘≥≠𝕩 ? 𝕨𝔽𝕩;
+    [a‿b,c‿d]‿[e‿f,g‿h] ← (2⊸⥊¨∘⊢/¨⊸⊔2⊸×↑⊣)¨⟜(⌈2÷˜≢¨)𝕨‿𝕩
+    p1‿p2‿p3‿p4‿p5‿p6‿p7 ← 𝕊´¨⟨a+d,e+h⟩‿⟨c+d,e⟩‿⟨a,f-h⟩‿⟨d,g-e⟩‿⟨a+b,h⟩‿⟨c-a,e+f⟩‿⟨b-d,g+h⟩
+    𝕩≢⊸↑∾⟨p1+p4+p7-p5, p3+p5⟩≍⟨p2+p4, p1+p3+p6-p2⟩
+  }
+  MP ← +˝∘×⎉1‿∞ _strassen_ 256
+
+  # Skewing
+  aml L⍟x↩ ⋄ bml U⍟y↩
+
+  # Multiply and shift
+  cml ← +´{𝕊: aml⊸MP⟜bml⟨aml L↩ ⋄ bml U↩⟩}¨↕q
+
+  # Test (not included in benchmark)
+  cmf ← (+⌜˜+˝∘×⎉1‿∞-⌜˜)↕n
+  !cml≡r⊑⥊cmf/¨⊸⊔˜⋈˜q⥊b
+
+  mpi.Finalize@
+#+end_src
+
+Which yields a speed-up of
+
+#+begin_export html
+<details>
+<summary>31x</summary>
+#+end_export
+
+#+begin_src bash :results raw :wrap example :exports both
+  hyperfine --runs 4 'bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"' 'time mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn'
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Benchmark 1: bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"
+  Time (mean ± σ):     108.965 s ±  1.897 s    [User: 107.824 s, System: 0.169 s]
+  Range (min … max):   106.771 s … 110.747 s    4 runs
+ 
+Benchmark 2: time mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn
+  Time (mean ± σ):      3.510 s ±  0.012 s    [User: 11.990 s, System: 0.701 s]
+  Range (min … max):    3.493 s …  3.521 s    4 runs
+ 
+Summary
+  time mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn ran
+   31.04 ± 0.55 times faster than bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"
+#+end_example
+
+#+begin_export html
+</details>
+#+end_export
+
+This result is only possible thanks to a combination of SPMD parallelism and a
+cache-efficient matrix multiplication algorithm. We have improved significantly,
+going from =+˝∘×⎉1‿∞= being 300 times slower than OpenBLAS's =dgemm= to only eight times slower.
+The obvious limitation of Cannon's algorithm is the need for a perfect square number of tasks.
+But if your computer supports SMT, you can push the problem size further with the
+option =--use-hwthread-cpus=. Careful with the memory usage, though, as it might bring your system to a crawl
+if you push it too far.
+
+[fn:1] While the current idiom guarantees numerical accuracy, it is hundreds of times slower
+than BLAS for large matrices.
+[fn:2] See this [[https://en.algorithmica.org/hpc/algorithms/matmul/][post]] for a surprisingly accessible way to replicate what OpenBLAS
+does without spending your life in assembly. 
+[fn:3] For deeper insight into blocked matrix multiplication algorithms, I recommend
+this [[https://docs.jax.dev/en/latest/pallas/tpu/matmul.html][JAX post]], the SaC [[https://dl.acm.org/doi/10.1145/3609024.3609410][paper]] on rank polymorphic blocking, and [[https://arxiv.org/abs/1605.01078][arXiv:1605.01078]]
+for the high-performance Strassen implementation.
+
+#+INCLUDE: "../html-foot.org"
+
+# Local Variables:
+# org-html-htmlize-output-type: nil
+# End:

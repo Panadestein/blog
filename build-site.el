@@ -1,4 +1,4 @@
-;;; package --- Build Org website
+;;; package --- Build Org website  -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;; Build website from Org-mode source files
