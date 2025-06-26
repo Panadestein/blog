@@ -62,6 +62,12 @@
             "url": "https://panadestein.github.io/blog/posts/ps.html",
 	    "title": "Sieving primes at the speed of C",
             "content_html": "An optimized primes sieve in BQN that is faster than simpler C implementations."
+        },
+        {
+            "id": "10",
+            "url": "https://panadestein.github.io/blog/posts/mp.html",
+	    "title": "Blazing matrix products.",
+            "content_html": "Implementing an efficient GEMM in BQN."
         }
     ]
 }

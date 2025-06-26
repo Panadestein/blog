@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Blazing matrix products</title>
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+<style>
+mjx-container[jax="CHTML"] {
+overflow-x: auto !important;
+}
+</style>
+<!-- Post-specific setting bellow -->
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Blazing matrix products</h1>
+<div id="outline-container-org8056e4a" class="outline-2">
+<h2 id="org8056e4a">Why not use BLAS?</h2>
+<div class="outline-text-2" id="text-org8056e4a">
+<p>
+Because I am interested in Brutalist array programming,
+and the absence of a high-performance native matrix product in BQN was
+a compelling opportunity for exploration<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>.
+Of course wrapping <code>dgemm</code> is always an option:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">blasFFI ← (⊣•FFI·(1-˜+`×¬)∘=⟜⊏⊸⊔⊢)´ ⟨
+  "/lib/libcblas.so"∾˜•BQN 1⊑•Sh "nix-instantiate"‿"--eval-only"‿"--expr"‿"(import &lt;nixpkgs&gt; {}).blas.outPath"
+  " &amp; cblas_dgemm u32 u32 u32 i32 i32 i32 f64 *f64 i32 *f64 i32 f64 &amp;f64 i32"
+⟩
+Dgemm ← {BlasFFI 101‿111‿111‿m‿n‿k‿1‿𝕨‿k‿𝕩‿n‿0‿(m‿n⥊0)∾⊢´m‿k‿·‿n←𝕨∾○≢𝕩}
+</pre>
+</div>
+
+<p>
+In case you're wondering, this function has roughly the same overhead as NumPy's <code>dot</code>.
+For fun, let's challenge the idea that you should never write your own<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> GEMM,
+but rather wrap BLAS.
+</p>
+</div>
+</div>
+<div id="outline-container-org59c4f6e" class="outline-2">
+<h2 id="org59c4f6e">Taming the cache</h2>
+<div class="outline-text-2" id="text-org59c4f6e">
+<p>
+The first step towards higher performance is employing blocking to optimize cache access patterns.
+By using a straightforward square partitioning of the input matrices (without resorting to
+specialized assembly kernels and instead relying on the native BQN idiom) speed-ups
+of approximately sixfold are achievable for matrices that exceed the machine's cache size:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">mat‿mbt ← ⟨⋈˜2⥊500, ⋈˜5⥊600⟩ /¨⊸⊔¨ ma‿mb ← •rand.Range⟜0¨1e3×⟨1‿1, 3‿3⟩
+&gt;⟨ma‿ma‿mat, mb‿mb‿mbt⟩ {𝕎˜•_timed𝕩}¨¨˜ &lt;⟨Dgemm, +˝∘×⎉1‿∞, ∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞⟩
+</pre>
+</div>
+
+<pre class="example">
+┌─                                                            
+╵         0.008988871        0.646108393 0.37081367400000004  
+  0.16528436400000002 45.110128999000004   7.460860705000001  
+                                                             ┘
+</pre>
+
+
+<p>
+Moreover, there is only a modest 10-character leap from <code>+˝∘×⎉1‿∞</code> to <code>∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞</code>.
+As a bonus, here's a convenient function to compute powers of a square matrix <code>𝕩</code>
+(particularly useful in graph theory) using blocks of size <code>𝕨</code>, which pads the matrices with zeros as needed:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">MPB ← {𝕩≢⊸↑∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞˜𝕩(⥊⟜𝕨¨∘⊢/¨⊸⊔𝕨⊸×↑⊣)⌈𝕨÷˜≢𝕩}
+</pre>
+</div>
+
+<p>
+Here I could have used a fancier but slower under <code>𝔽˜⌾((/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩)⊸⊔)</code>. Or even the
+memory-hungry outer product formulation <code>+˝⍉∘⊢(+˝∘×⎉1‿∞¨)⌜˘⊢</code>, which
+is only marginally slower. A naïve search for the optimal block size yields:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">(300+50×↕8) {𝕨⊸MPB•_timed𝕩}¨ &lt;3e3‿3e3 •rand.Range 0
+</pre>
+</div>
+
+<pre class="example">
+⟨ 8.30279774 10.112563361000001 9.781014477000001 9.670085717000001 7.556631647000001 10.970897867000001 7.570657628 10.231164773000001 ⟩
+</pre>
+
+
+<p>
+Although nested tiling can be easily implemented, I found that it does not improve performance at all:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">MPB2 ← {∾∾×_p¨_p¨(_p←{+˝∘𝔽⎉1‿∞})˜𝕩{𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}´𝕨}
+⟨10‿60, 4‿250, 3‿500⟩ {𝕨⊸MPB2•_timed𝕩}¨ &lt;3e3‿3e3•rand.Range 0
+</pre>
+</div>
+
+<pre class="example">
+⟨ 14.096323785000001 9.16644102 7.668334754000001 ⟩
+</pre>
+
+
+<p>
+But we're not finished yet. Here is a little divide-and-conquer (and cache-oblivious) <a href="https://en.wikipedia.org/wiki/Strassen_algorithm">algorithm</a> in its classic
+radix-2 form. It works for any square matrix, regardless of dimension: if it is odd, we pad with an extra row and column,
+and then take back the original.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">_strassen_ ← {𝕘≥≠𝕩 ? 𝕨𝔽𝕩;
+  [a‿b,c‿d]‿[e‿f,g‿h] ← (2⊸⥊¨∘⊢/¨⊸⊔2⊸×↑⊣)¨⟜(⌈2÷˜≢¨)𝕨‿𝕩
+  p1‿p2‿p3‿p4‿p5‿p6‿p7 ← 𝕊´¨⟨a+d,e+h⟩‿⟨c+d,e⟩‿⟨a,f-h⟩‿⟨d,g-e⟩‿⟨a+b,h⟩‿⟨c-a,e+f⟩‿⟨b-d,g+h⟩
+  𝕩≢⊸↑∾⟨p1+p4+p7-p5, p3+p5⟩≍⟨p2+p4, p1+p3+p6-p2⟩
+}
+</pre>
+</div>
+
+<p>
+Let's go somewhat big for a solid 9x speed-up over the naive implementation:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">⟨+˝∘×⎉1‿∞, 600⊸MPB, +˝∘×⎉1‿∞ _strassen_ 256, Dgemm _strassen_ 256, Dgemm⟩ {𝕎˜•_timed𝕩}¨ &lt;4096‿4096•rand.Range 0
+</pre>
+</div>
+
+<pre class="example">
+⟨ 121.21441014300001 23.299975492 13.688074838 2.1399266160000003 0.400549596 ⟩
+</pre>
+
+
+<p>
+To the best of my ability, this marks the limit of what can be achieved with a pure,
+single-threaded BQN implementation<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. 
+</p>
+</div>
+</div>
+<div id="outline-container-org8c788da" class="outline-2">
+<h2 id="org8c788da">Parallelism via MPI</h2>
+<div class="outline-text-2" id="text-org8c788da">
+<p>
+To approach true bare-metal performance on par with BLAS/BLIS, we must leverage multiple cores.
+As BQN lacked native support for SPMD programming, I developed and implemented bindings for a
+useful subset of the Message Passing Interface (MPI), which are available on <a href="https://codeberg.org/panadestein/bqn-mpi">Codeberg</a>.
+</p>
+
+<p>
+With these bindings, I implemented a variant of Cannon's <a href="https://en.wikipedia.org/wiki/Cannon%27s_algorithm">algorithm</a>. In this version, each process
+generates its initial local matrices, though scattering and gathering could be added as needed.
+The implementation assumes a perfect square number of tasks, forming a processor grid of <code>⋈˜√p</code>,
+and pads matrices whose dimensions are not divisible by <code>√p</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">⟨mpi⟩ ⇐ •Import "mpi.bqn"
+
+mpi.Init@ ⋄ r‿s ← ⟨mpi.Rank@, mpi.Size@⟩
+
+# Processor element coordinates in 2D grid (r≡y+q×x)
+!⌊⊸=q←√s ⋄ b ← q÷˜n ← 2⋆12 ⋄ x‿y ← q(|⋈˜·⌊÷˜)r
+
+# Local matrices
+aml ← (+´b‿b×x‿y)++⌜˜↕b
+bml ← (-´b‿b×x‿y)+-⌜˜↕b
+
+# Toroidal topology with periodic boundary conditions, (aml←) (bml↑)
+L‿U ← {𝕩⊸mpi.Sendrecv⌾⥊}¨⟨(q×x)+q|y(-⋈+)1 ⋄ y+q×q|x(-⋈+)1⟩
+
+# Strassen algorithm with blocking for cache efficiency
+_strassen_ ← {𝕘≥≠𝕩 ? 𝕨𝔽𝕩;
+  [a‿b,c‿d]‿[e‿f,g‿h] ← (2⊸⥊¨∘⊢/¨⊸⊔2⊸×↑⊣)¨⟜(⌈2÷˜≢¨)𝕨‿𝕩
+  p1‿p2‿p3‿p4‿p5‿p6‿p7 ← 𝕊´¨⟨a+d,e+h⟩‿⟨c+d,e⟩‿⟨a,f-h⟩‿⟨d,g-e⟩‿⟨a+b,h⟩‿⟨c-a,e+f⟩‿⟨b-d,g+h⟩
+  𝕩≢⊸↑∾⟨p1+p4+p7-p5, p3+p5⟩≍⟨p2+p4, p1+p3+p6-p2⟩
+}
+MP ← +˝∘×⎉1‿∞ _strassen_ 256
+
+# Skewing
+aml L⍟x↩ ⋄ bml U⍟y↩
+
+# Multiply and shift
+cml ← +´{𝕊: aml⊸MP⟜bml⟨aml L↩ ⋄ bml U↩⟩}¨↕q
+
+# Test (not included in benchmark)
+cmf ← (+⌜˜+˝∘×⎉1‿∞-⌜˜)↕n
+!cml≡r⊑⥊cmf/¨⊸⊔˜⋈˜q⥊b
+
+mpi.Finalize@
+</pre>
+</div>
+
+<p>
+Which yields a speed-up of
+</p>
+
+<details>
+<summary>31x</summary>
+
+<div class="org-src-container">
+<pre class="src src-bash">hyperfine --runs 4 'bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"' 'time mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn'
+</pre>
+</div>
+
+<pre class="example" id="org96a7784">
+Benchmark 1: bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"
+  Time (mean ± σ):     108.965 s ±  1.897 s    [User: 107.824 s, System: 0.169 s]
+  Range (min … max):   106.771 s … 110.747 s    4 runs
+ 
+Benchmark 2: time mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn
+  Time (mean ± σ):      3.510 s ±  0.012 s    [User: 11.990 s, System: 0.701 s]
+  Range (min … max):    3.493 s …  3.521 s    4 runs
+ 
+Summary
+  time mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn ran
+   31.04 ± 0.55 times faster than bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"
+</pre>
+
+</details>
+
+<p>
+This result is only possible thanks to a combination of SPMD parallelism and a
+cache-efficient matrix multiplication algorithm. We have improved significantly,
+going from <code>+˝∘×⎉1‿∞</code> being 300 times slower than OpenBLAS's <code>dgemm</code> to only eight times slower.
+The obvious limitation of Cannon's algorithm is the need for a perfect square number of tasks.
+But if your computer supports SMT, you can push the problem size further with the
+option <code>--use-hwthread-cpus</code>. Careful with the memory usage, though, as it might bring your system to a crawl
+if you push it too far.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+While the current idiom guarantees numerical accuracy, it is hundreds of times slower
+than BLAS for large matrices.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+See this <a href="https://en.algorithmica.org/hpc/algorithms/matmul/">post</a> for a surprisingly accessible way to replicate what OpenBLAS
+does without spending your life in assembly. 
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+For deeper insight into blocked matrix multiplication algorithms, I recommend
+this <a href="https://docs.jax.dev/en/latest/pallas/tpu/matmul.html">JAX post</a>, the SaC <a href="https://dl.acm.org/doi/10.1145/3609024.3609410">paper</a> on rank polymorphic blocking, and <a href="https://arxiv.org/abs/1605.01078">arXiv:1605.01078</a>
+for the high-performance Strassen implementation.
+</p>
+
+<div style="text-align: center; font-size: 2em; padding: 20px 0;">
+  <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
+</div></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>
