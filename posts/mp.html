@@ -203,9 +203,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Blazing matrix products</h1>
-<div id="outline-container-orgd41f795" class="outline-2">
-<h2 id="orgd41f795">Why not use BLAS?</h2>
-<div class="outline-text-2" id="text-orgd41f795">
+<div id="outline-container-org319cc24" class="outline-2">
+<h2 id="org319cc24">Why not use BLAS?</h2>
+<div class="outline-text-2" id="text-org319cc24">
 <p>
 Because I am interested in Brutalist array programming,
 and the absence of a high-performance native matrix product in BQN was
@@ -229,9 +229,9 @@ but rather wrap BLAS.
 </p>
 </div>
 </div>
-<div id="outline-container-org459a12e" class="outline-2">
-<h2 id="org459a12e">Taming the cache</h2>
-<div class="outline-text-2" id="text-org459a12e">
+<div id="outline-container-org238fd67" class="outline-2">
+<h2 id="org238fd67">Taming the cache</h2>
+<div class="outline-text-2" id="text-org238fd67">
 <p>
 The first step towards higher performance is employing blocking to optimize cache access patterns.
 By using a straightforward square partitioning of the input matrices (without resorting to
@@ -254,9 +254,11 @@ of approximately sixfold are achievable for matrices that exceed the machine's c
 
 
 <p>
-Moreover, there is only a modest 10-character leap from <code>+˝∘×⎉1‿∞</code> to <code>∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞</code>.
-As a bonus, here's a convenient function to compute powers of a square matrix <code>𝕩</code>
-(particularly useful in graph theory) using blocks of size <code>𝕨</code>, which pads the matrices with zeros as needed:
+This performance gain requires only a modest 10-character leap in the code,
+from <code>+˝∘×⎉1‿∞</code> to <code>∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞</code>. Let's abstract this logic into reusable code.
+For instance, the function below<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup> computes powers of a square matrix <code>𝕩</code> using blocks of size <code>𝕨</code>,
+padding with zeros as needed. This operation is particularly useful in domains like graph theory or
+analyzing Markov chains:
 </p>
 
 <div class="org-src-container">
@@ -265,9 +267,7 @@ As a bonus, here's a convenient function to compute powers of a square matrix <c
 </div>
 
 <p>
-Here I could have used a fancier but slower under <code>𝔽˜⌾((/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩)⊸⊔)</code>. Or even the
-memory-hungry outer product formulation <code>+˝⍉∘⊢(+˝∘×⎉1‿∞¨)⌜˘⊢</code>, which
-is only marginally slower. A naïve search for the optimal block size yields:
+An empirical (naïve, really) search for the optimal block size yields:
 </p>
 
 <div class="org-src-container">
@@ -281,7 +281,9 @@ is only marginally slower. A naïve search for the optimal block size yields:
 
 
 <p>
-Although nested tiling can be easily implemented, I found that it does not improve performance at all:
+One might hypothesize that further performance could be gained by applying this blocking principle
+recursively to accommodate multiple levels of cache. This technique, known as nested tiling,
+can also be implemented easily, though experimentation shows it yields no improvement:
 </p>
 
 <div class="org-src-container">
@@ -296,9 +298,11 @@ Although nested tiling can be easily implemented, I found that it does not impro
 
 
 <p>
-But we're not finished yet. Here is a little divide-and-conquer (and cache-oblivious) <a href="https://en.wikipedia.org/wiki/Strassen_algorithm">algorithm</a> in its classic
-radix-2 form. It works for any square matrix, regardless of dimension: if it is odd, we pad with an extra row and column,
-and then take back the original.
+Having seemingly reached the limits of performance gains by optimizing memory access patterns,
+the next logical step is to attack the problem from a different axis: reducing the algorithm's
+asymptotic complexity. Here is a little divide-and-conquer (and cache-oblivious) <a href="https://en.wikipedia.org/wiki/Strassen_algorithm">algorithm</a> in its classic
+radix-2 form. It works for any square matrix, regardless of dimension: if it is odd,
+we pad with an extra row and column, and then take back the original.
 </p>
 
 <div class="org-src-container">
@@ -326,17 +330,17 @@ Let's go somewhat big for a solid 9x speed-up over the naive implementation:
 
 <p>
 To the best of my ability, this marks the limit of what can be achieved with a pure,
-single-threaded BQN implementation<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. 
+single-threaded BQN implementation<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>. 
 </p>
 </div>
 </div>
-<div id="outline-container-org61e2ffd" class="outline-2">
-<h2 id="org61e2ffd">Parallelism via MPI</h2>
-<div class="outline-text-2" id="text-org61e2ffd">
+<div id="outline-container-orgc088165" class="outline-2">
+<h2 id="orgc088165">Parallelism via MPI</h2>
+<div class="outline-text-2" id="text-orgc088165">
 <p>
 To approach true bare-metal performance on par with BLAS/BLIS, we must leverage multiple cores.
-As BQN lacked native support for SPMD programming, I developed and implemented bindings for a
-useful subset of the Message Passing Interface (MPI), which are available on <a href="https://codeberg.org/panadestein/bqn-mpi">Codeberg</a>.
+As BQN lacked native support for SPMD programming, I developed bindings for a small
+(but useful IMHO) subset of the Message Passing Interface (MPI), which are available on <a href="https://codeberg.org/panadestein/bqn-mpi">Codeberg</a>.
 </p>
 
 <p>
@@ -395,7 +399,7 @@ Which yields a speed-up of
 </pre>
 </div>
 
-<pre class="example" id="orgb9d4e0f">
+<pre class="example" id="org8f4593e">
 Benchmark 1: bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"
   Time (mean ± σ):     108.965 s ±  1.897 s    [User: 107.824 s, System: 0.169 s]
   Range (min … max):   106.771 s … 110.747 s    4 runs
@@ -433,10 +437,15 @@ than BLAS for large matrices.
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 See this <a href="https://en.algorithmica.org/hpc/algorithms/matmul/">post</a> for a surprisingly accessible way to replicate what OpenBLAS
-does without spending your life in assembly. 
+does without spending your life in assembly.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Here I could have used a fancier but slower under <code>𝔽˜⌾((/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩)⊸⊔)</code>. Or even the
+memory-hungry outer product formulation <code>+˝⍉∘⊢(+˝∘×⎉1‿∞¨)⌜˘⊢</code>, which is only marginally slower.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 For deeper insight into blocked matrix multiplication algorithms, I recommend
 this <a href="https://docs.jax.dev/en/latest/pallas/tpu/matmul.html">JAX post</a>, the SaC <a href="https://dl.acm.org/doi/10.1145/3609024.3609410">paper</a> on rank polymorphic blocking, and <a href="https://arxiv.org/abs/1605.01078">arXiv:1605.01078</a>
 for the high-performance Strassen implementation.
