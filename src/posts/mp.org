@@ -38,9 +38,11 @@ of approximately sixfold are achievable for matrices that exceed the machine's c
 :   0.16528436400000002 45.110128999000004   7.460860705000001  
 :                                                              ┘
 
-Moreover, there is only a modest 10-character leap from =+˝∘×⎉1‿∞= to =∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞=.
-As a bonus, here's a convenient function to compute powers of a square matrix =𝕩=
-(particularly useful in graph theory) using blocks of size =𝕨=, which pads the matrices with zeros as needed:
+This performance gain requires only a modest 10-character leap in the code,
+from =+˝∘×⎉1‿∞= to =∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞=. Let's abstract this logic into reusable code.
+For instance, the function below[fn:3] computes powers of a square matrix =𝕩= using blocks of size =𝕨=,
+padding with zeros as needed. This operation is particularly useful in domains like graph theory or
+analyzing Markov chains:
 
 #+begin_src bqn :tangle ../bqn/mp.bqn :exports code
   MPB ← {𝕩≢⊸↑∾(+˝+˝∘×⎉1‿∞¨)⎉1‿∞˜𝕩(⥊⟜𝕨¨∘⊢/¨⊸⊔𝕨⊸×↑⊣)⌈𝕨÷˜≢𝕩}
@@ -49,9 +51,7 @@ As a bonus, here's a convenient function to compute powers of a square matrix =�
 #+RESULTS:
 : (function block)
 
-Here I could have used a fancier but slower under =𝔽˜⌾((/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩)⊸⊔)=. Or even the
-memory-hungry outer product formulation =+˝⍉∘⊢(+˝∘×⎉1‿∞¨)⌜˘⊢=, which
-is only marginally slower. A naïve search for the optimal block size yields:
+An empirical (naïve, really) search for the optimal block size yields:
 
 #+begin_src bqn :tangle ../bqn/mp.bqn :exports both
   (300+50×↕8) {𝕨⊸MPB•_timed𝕩}¨ <3e3‿3e3 •rand.Range 0
@@ -60,7 +60,9 @@ is only marginally slower. A naïve search for the optimal block size yields:
 #+RESULTS:
 : ⟨ 8.30279774 10.112563361000001 9.781014477000001 9.670085717000001 7.556631647000001 10.970897867000001 7.570657628 10.231164773000001 ⟩
 
-Although nested tiling can be easily implemented, I found that it does not improve performance at all:
+One might hypothesize that further performance could be gained by applying this blocking principle
+recursively to accommodate multiple levels of cache. This technique, known as nested tiling,
+can also be implemented easily, though experimentation shows it yields no improvement:
 
 #+begin_src bqn :tangle ../bqn/mp.bqn :exports both
   MPB2 ← {∾∾×_p¨_p¨(_p←{+˝∘𝔽⎉1‿∞})˜𝕩{𝕩⊔˜/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩}´𝕨}
@@ -70,9 +72,11 @@ Although nested tiling can be easily implemented, I found that it does not impro
 #+RESULTS:
 : ⟨ 14.096323785000001 9.16644102 7.668334754000001 ⟩
 
-But we're not finished yet. Here is a little divide-and-conquer (and cache-oblivious) [[https://en.wikipedia.org/wiki/Strassen_algorithm][algorithm]] in its classic
-radix-2 form. It works for any square matrix, regardless of dimension: if it is odd, we pad with an extra row and column,
-and then take back the original.
+Having seemingly reached the limits of performance gains by optimizing memory access patterns,
+the next logical step is to attack the problem from a different axis: reducing the algorithm's
+asymptotic complexity. Here is a little divide-and-conquer (and cache-oblivious) [[https://en.wikipedia.org/wiki/Strassen_algorithm][algorithm]] in its classic
+radix-2 form. It works for any square matrix, regardless of dimension: if it is odd,
+we pad with an extra row and column, and then take back the original.
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
   _strassen_ ← {𝕘≥≠𝕩 ? 𝕨𝔽𝕩;
@@ -95,13 +99,13 @@ Let's go somewhat big for a solid 9x speed-up over the naive implementation:
 : ⟨ 121.21441014300001 23.299975492 13.688074838 2.1399266160000003 0.400549596 ⟩
 
 To the best of my ability, this marks the limit of what can be achieved with a pure,
-single-threaded BQN implementation[fn:3]. 
+single-threaded BQN implementation[fn:4]. 
 
 ** Parallelism via MPI
 
 To approach true bare-metal performance on par with BLAS/BLIS, we must leverage multiple cores.
-As BQN lacked native support for SPMD programming, I developed and implemented bindings for a
-useful subset of the Message Passing Interface (MPI), which are available on [[https://codeberg.org/panadestein/bqn-mpi][Codeberg]].
+As BQN lacked native support for SPMD programming, I developed bindings for a small
+(but useful IMHO) subset of the Message Passing Interface (MPI), which are available on [[https://codeberg.org/panadestein/bqn-mpi][Codeberg]].
 
 With these bindings, I implemented a variant of Cannon's [[https://en.wikipedia.org/wiki/Cannon%27s_algorithm][algorithm]]. In this version, each process
 generates its initial local matrices, though scattering and gathering could be added as needed.
@@ -185,8 +189,10 @@ if you push it too far.
 [fn:1] While the current idiom guarantees numerical accuracy, it is hundreds of times slower
 than BLAS for large matrices.
 [fn:2] See this [[https://en.algorithmica.org/hpc/algorithms/matmul/][post]] for a surprisingly accessible way to replicate what OpenBLAS
-does without spending your life in assembly. 
-[fn:3] For deeper insight into blocked matrix multiplication algorithms, I recommend
+does without spending your life in assembly.
+[fn:3] Here I could have used a fancier but slower under =𝔽˜⌾((/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩)⊸⊔)=. Or even the
+memory-hungry outer product formulation =+˝⍉∘⊢(+˝∘×⎉1‿∞¨)⌜˘⊢=, which is only marginally slower.
+[fn:4] For deeper insight into blocked matrix multiplication algorithms, I recommend
 this [[https://docs.jax.dev/en/latest/pallas/tpu/matmul.html][JAX post]], the SaC [[https://dl.acm.org/doi/10.1145/3609024.3609410][paper]] on rank polymorphic blocking, and [[https://arxiv.org/abs/1605.01078][arXiv:1605.01078]]
 for the high-performance Strassen implementation.
 
