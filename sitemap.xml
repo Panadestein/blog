@@ -3,61 +3,45 @@
   <url>
     <loc>https://panadestein.github.io/blog/</loc>
     <lastmod>2025-06-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
   </url>
   <url>
     <loc>https://panadestein.github.io/blog/posts/rollim.html</loc>
     <lastmod>2025-06-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://panadestein.github.io/blog/posts/qbqn.html</loc>
-    <lastmod>2025-06-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2025-06-24</lastmod>
   </url>
   <url>
     <loc>https://panadestein.github.io/blog/posts/spodat.html</loc>
-    <lastmod>2025-06-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2025-06-24</lastmod>
   </url>
   <url>
     <loc>https://panadestein.github.io/blog/posts/hf.html</loc>
     <lastmod>2025-06-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://panadestein.github.io/blog/posts/si.html</loc>
     <lastmod>2025-06-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://panadestein.github.io/blog/posts/aoc24.html</loc>
     <lastmod>2025-06-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://panadestein.github.io/blog/posts/nn.html</loc>
     <lastmod>2025-06-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://panadestein.github.io/blog/posts/pe.html</loc>
     <lastmod>2025-06-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://panadestein.github.io/blog/posts/ps.html</loc>
     <lastmod>2025-06-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://panadestein.github.io/blog/posts/mp.html</loc>
+    <lastmod>2025-06-27</lastmod>
   </url>
 </urlset>
