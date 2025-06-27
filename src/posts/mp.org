@@ -78,7 +78,7 @@ asymptotic complexity. Here is a little divide-and-conquer (and cache-oblivious)
 radix-2 form. It works for any square matrix, regardless of dimension: if it is odd,
 we pad with an extra row and column, and then take back the original.
 
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+#+begin_src bqn :tangle ../bqn/mp.bqn :exports code
   _strassen_ ← {𝕘≥≠𝕩 ? 𝕨𝔽𝕩;
     [a‿b,c‿d]‿[e‿f,g‿h] ← (2⊸⥊¨∘⊢/¨⊸⊔2⊸×↑⊣)¨⟜(⌈2÷˜≢¨)𝕨‿𝕩
     p1‿p2‿p3‿p4‿p5‿p6‿p7 ← 𝕊´¨⟨a+d,e+h⟩‿⟨c+d,e⟩‿⟨a,f-h⟩‿⟨d,g-e⟩‿⟨a+b,h⟩‿⟨c-a,e+f⟩‿⟨b-d,g+h⟩
