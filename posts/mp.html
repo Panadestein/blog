@@ -203,9 +203,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Blazing matrix products</h1>
-<div id="outline-container-org8056e4a" class="outline-2">
-<h2 id="org8056e4a">Why not use BLAS?</h2>
-<div class="outline-text-2" id="text-org8056e4a">
+<div id="outline-container-orgd41f795" class="outline-2">
+<h2 id="orgd41f795">Why not use BLAS?</h2>
+<div class="outline-text-2" id="text-orgd41f795">
 <p>
 Because I am interested in Brutalist array programming,
 and the absence of a high-performance native matrix product in BQN was
@@ -229,9 +229,9 @@ but rather wrap BLAS.
 </p>
 </div>
 </div>
-<div id="outline-container-org59c4f6e" class="outline-2">
-<h2 id="org59c4f6e">Taming the cache</h2>
-<div class="outline-text-2" id="text-org59c4f6e">
+<div id="outline-container-org459a12e" class="outline-2">
+<h2 id="org459a12e">Taming the cache</h2>
+<div class="outline-text-2" id="text-org459a12e">
 <p>
 The first step towards higher performance is employing blocking to optimize cache access patterns.
 By using a straightforward square partitioning of the input matrices (without resorting to
@@ -330,9 +330,9 @@ single-threaded BQN implementation<sup><a id="fnr.3" class="footref" href="#fn.3
 </p>
 </div>
 </div>
-<div id="outline-container-org8c788da" class="outline-2">
-<h2 id="org8c788da">Parallelism via MPI</h2>
-<div class="outline-text-2" id="text-org8c788da">
+<div id="outline-container-org61e2ffd" class="outline-2">
+<h2 id="org61e2ffd">Parallelism via MPI</h2>
+<div class="outline-text-2" id="text-org61e2ffd">
 <p>
 To approach true bare-metal performance on par with BLAS/BLIS, we must leverage multiple cores.
 As BQN lacked native support for SPMD programming, I developed and implemented bindings for a
@@ -342,8 +342,8 @@ useful subset of the Message Passing Interface (MPI), which are available on <a 
 <p>
 With these bindings, I implemented a variant of Cannon's <a href="https://en.wikipedia.org/wiki/Cannon%27s_algorithm">algorithm</a>. In this version, each process
 generates its initial local matrices, though scattering and gathering could be added as needed.
-The implementation assumes a perfect square number of tasks, forming a processor grid of <code>⋈˜√p</code>,
-and pads matrices whose dimensions are not divisible by <code>√p</code>.
+The implementation assumes a perfect square number of tasks (otherwise errors out),
+forming a processor grid of <code>⋈˜√p</code>, and pads matrices whose dimensions are not divisible by <code>√p</code>.
 </p>
 
 <div class="org-src-container">
@@ -391,21 +391,21 @@ Which yields a speed-up of
 <summary>31x</summary>
 
 <div class="org-src-container">
-<pre class="src src-bash">hyperfine --runs 4 'bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"' 'time mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn'
+<pre class="src src-bash">hyperfine --runs 4 'bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"' 'mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn'
 </pre>
 </div>
 
-<pre class="example" id="org96a7784">
+<pre class="example" id="orgb9d4e0f">
 Benchmark 1: bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"
   Time (mean ± σ):     108.965 s ±  1.897 s    [User: 107.824 s, System: 0.169 s]
   Range (min … max):   106.771 s … 110.747 s    4 runs
  
-Benchmark 2: time mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn
+Benchmark 2: mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn
   Time (mean ± σ):      3.510 s ±  0.012 s    [User: 11.990 s, System: 0.701 s]
   Range (min … max):    3.493 s …  3.521 s    4 runs
  
 Summary
-  time mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn ran
+  mpirun --mca btl self,sm -n 4 bqn -f cannon.bqn ran
    31.04 ± 0.55 times faster than bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"
 </pre>
 
