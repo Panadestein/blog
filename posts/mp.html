@@ -203,9 +203,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Blazing matrix products</h1>
-<div id="outline-container-orgca6d205" class="outline-2">
-<h2 id="orgca6d205">Why not use BLAS?</h2>
-<div class="outline-text-2" id="text-orgca6d205">
+<div id="outline-container-orgc5f47e2" class="outline-2">
+<h2 id="orgc5f47e2">Why not use BLAS?</h2>
+<div class="outline-text-2" id="text-orgc5f47e2">
 <p>
 Because I am interested in Brutalist array programming,
 and the absence of a high-performance native matrix product in BQN was
@@ -229,9 +229,9 @@ but rather wrap BLAS.
 </p>
 </div>
 </div>
-<div id="outline-container-org93b5162" class="outline-2">
-<h2 id="org93b5162">Taming the cache</h2>
-<div class="outline-text-2" id="text-org93b5162">
+<div id="outline-container-orgbd3429a" class="outline-2">
+<h2 id="orgbd3429a">Taming the cache</h2>
+<div class="outline-text-2" id="text-orgbd3429a">
 <p>
 The first step towards higher performance is employing blocking to optimize cache access patterns.
 By using a straightforward square partitioning of the input matrices (without resorting to
@@ -334,9 +334,9 @@ single-threaded BQN implementation<sup><a id="fnr.4" class="footref" href="#fn.4
 </p>
 </div>
 </div>
-<div id="outline-container-orgb305058" class="outline-2">
-<h2 id="orgb305058">Parallelism via MPI</h2>
-<div class="outline-text-2" id="text-orgb305058">
+<div id="outline-container-org44e0c64" class="outline-2">
+<h2 id="org44e0c64">Parallelism via MPI</h2>
+<div class="outline-text-2" id="text-org44e0c64">
 <p>
 To approach true bare-metal performance on par with BLAS/BLIS, we must leverage multiple cores.
 As BQN lacked native support for SPMD programming, I developed bindings for a small
@@ -353,7 +353,7 @@ forming a processor grid of <code>⋈˜√p</code>, and pads matrices whose dime
 <div class="org-src-container">
 <pre class="src src-bqn">⟨mpi⟩ ⇐ •Import "mpi.bqn"
 
-mpi.Init@ ⋄ r‿s ← ⟨mpi.Rank@, mpi.Size@⟩
+mpi.Init@ ⋄ r‿s ← mpi{𝕗.Rank⋈𝕗.Size}⋈cw ← mpi.comm_world
 
 # Processor element coordinates in 2D grid (r≡y+q×x)
 !⌊⊸=q←√s ⋄ b ← q÷˜n ← 2⋆12 ⋄ x‿y ← q(|⋈˜·⌊÷˜)r
@@ -362,8 +362,8 @@ mpi.Init@ ⋄ r‿s ← ⟨mpi.Rank@, mpi.Size@⟩
 aml ← (+´b‿b×x‿y)++⌜˜↕b
 bml ← (-´b‿b×x‿y)+-⌜˜↕b
 
-# Toroidal topology with periodic boundary conditions, (aml←) (bml↑)
-L‿U ← {𝕩⊸mpi.Sendrecv⌾⥊}¨⟨(q×x)+q|y(-⋈+)1 ⋄ y+q×q|x(-⋈+)1⟩
+# Toroidal topology with periodic boundary conditions (aml←) (bml↑)
+L‿U ← {(cw⊸mpi.Sendrecv⊢&lt;⊸∾𝕩˙)⌾⥊}¨⟨(q×x)+q|y(-⋈+)1 ⋄ y+q×q|x(-⋈+)1⟩
 
 # Strassen algorithm with blocking for cache efficiency
 _strassen_ ← {𝕘≥≠𝕩 ? 𝕨𝔽𝕩;
@@ -399,7 +399,7 @@ Which yields a speed-up of
 </pre>
 </div>
 
-<pre class="example" id="orgf94f485">
+<pre class="example" id="org5330f3b">
 Benchmark 1: bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"
   Time (mean ± σ):     108.965 s ±  1.897 s    [User: 107.824 s, System: 0.169 s]
   Range (min … max):   106.771 s … 110.747 s    4 runs
