@@ -24,7 +24,7 @@ _strassen_ ← {𝕘≥≠𝕩 ? 𝕨𝔽𝕩;
 
 ⟨mpi⟩ ⇐ •Import "mpi.bqn"
 
-mpi.Init@ ⋄ r‿s ← ⟨mpi.Rank@, mpi.Size@⟩
+mpi.Init@ ⋄ r‿s ← mpi{𝕗.Rank⋈𝕗.Size}⋈cw ← mpi.comm_world
 
 # Processor element coordinates in 2D grid (r≡y+q×x)
 !⌊⊸=q←√s ⋄ b ← q÷˜n ← 2⋆12 ⋄ x‿y ← q(|⋈˜·⌊÷˜)r
@@ -33,8 +33,8 @@ mpi.Init@ ⋄ r‿s ← ⟨mpi.Rank@, mpi.Size@⟩
 aml ← (+´b‿b×x‿y)++⌜˜↕b
 bml ← (-´b‿b×x‿y)+-⌜˜↕b
 
-# Toroidal topology with periodic boundary conditions, (aml←) (bml↑)
-L‿U ← {𝕩⊸mpi.Sendrecv⌾⥊}¨⟨(q×x)+q|y(-⋈+)1 ⋄ y+q×q|x(-⋈+)1⟩
+# Toroidal topology with periodic boundary conditions (aml←) (bml↑)
+L‿U ← {(cw⊸mpi.Sendrecv⊢<⊸∾𝕩˙)⌾⥊}¨⟨(q×x)+q|y(-⋈+)1 ⋄ y+q×q|x(-⋈+)1⟩
 
 # Strassen algorithm with blocking for cache efficiency
 _strassen_ ← {𝕘≥≠𝕩 ? 𝕨𝔽𝕩;
