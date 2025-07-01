@@ -203,9 +203,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Blazing matrix products</h1>
-<div id="outline-container-orgc5f47e2" class="outline-2">
-<h2 id="orgc5f47e2">Why not use BLAS?</h2>
-<div class="outline-text-2" id="text-orgc5f47e2">
+<div id="outline-container-orga883e4b" class="outline-2">
+<h2 id="orga883e4b">Why not use BLAS?</h2>
+<div class="outline-text-2" id="text-orga883e4b">
 <p>
 Because I am interested in Brutalist array programming,
 and the absence of a high-performance native matrix product in BQN was
@@ -229,9 +229,9 @@ but rather wrap BLAS.
 </p>
 </div>
 </div>
-<div id="outline-container-orgbd3429a" class="outline-2">
-<h2 id="orgbd3429a">Taming the cache</h2>
-<div class="outline-text-2" id="text-orgbd3429a">
+<div id="outline-container-org597ea18" class="outline-2">
+<h2 id="org597ea18">Taming the cache</h2>
+<div class="outline-text-2" id="text-org597ea18">
 <p>
 The first step towards higher performance is employing blocking to optimize cache access patterns.
 By using a straightforward square partitioning of the input matrices (without resorting to
@@ -334,9 +334,9 @@ single-threaded BQN implementation<sup><a id="fnr.4" class="footref" href="#fn.4
 </p>
 </div>
 </div>
-<div id="outline-container-org44e0c64" class="outline-2">
-<h2 id="org44e0c64">Parallelism via MPI</h2>
-<div class="outline-text-2" id="text-org44e0c64">
+<div id="outline-container-org9ac6e3d" class="outline-2">
+<h2 id="org9ac6e3d">Parallelism via MPI</h2>
+<div class="outline-text-2" id="text-org9ac6e3d">
 <p>
 To approach true bare-metal performance on par with BLAS/BLIS, we must leverage multiple cores.
 As BQN lacked native support for SPMD programming, I developed bindings for a small
@@ -359,8 +359,7 @@ mpi.Init@ ⋄ r‿s ← mpi{𝕗.Rank⋈𝕗.Size}⋈cw ← mpi.comm_world
 !⌊⊸=q←√s ⋄ b ← q÷˜n ← 2⋆12 ⋄ x‿y ← q(|⋈˜·⌊÷˜)r
 
 # Local matrices
-aml ← (+´b‿b×x‿y)++⌜˜↕b
-bml ← (-´b‿b×x‿y)+-⌜˜↕b
+aml‿bml ← {(b×x𝕏y)+𝕏⌜˜↕b}¨+‿-
 
 # Toroidal topology with periodic boundary conditions (aml←) (bml↑)
 L‿U ← {(cw⊸mpi.Sendrecv⊢&lt;⊸∾𝕩˙)⌾⥊}¨⟨(q×x)+q|y(-⋈+)1 ⋄ y+q×q|x(-⋈+)1⟩
@@ -399,7 +398,7 @@ Which yields a speed-up of
 </pre>
 </div>
 
-<pre class="example" id="org5330f3b">
+<pre class="example" id="org59ba70f">
 Benchmark 1: bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"
   Time (mean ± σ):     108.965 s ±  1.897 s    [User: 107.824 s, System: 0.169 s]
   Range (min … max):   106.771 s … 110.747 s    4 runs
@@ -416,7 +415,7 @@ Summary
 </details>
 
 <p>
-This result is only possible thanks to a combination of SPMD parallelism and a
+This result is only possible<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup> thanks to a combination of SPMD parallelism and a
 cache-efficient matrix multiplication algorithm. We have improved significantly,
 going from <code>+˝∘×⎉1‿∞</code> being 300 times slower than OpenBLAS's <code>dgemm</code> to only eight times slower.
 The obvious limitation of Cannon's algorithm is the need for a perfect square number of tasks.
@@ -449,6 +448,12 @@ memory-hungry outer product formulation <code>+˝⍉∘⊢(+˝∘×⎉1‿∞¨)
 For deeper insight into blocked matrix multiplication algorithms, I recommend
 this <a href="https://docs.jax.dev/en/latest/pallas/tpu/matmul.html">JAX post</a>, the SaC <a href="https://dl.acm.org/doi/10.1145/3609024.3609410">paper</a> on rank polymorphic blocking, and <a href="https://arxiv.org/abs/1605.01078">arXiv:1605.01078</a>
 for the high-performance Strassen implementation.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+The approach to data locality and parallelism used here is rooted in the principles from Golub and Van Loan's
+<a href="https://epubs.siam.org/doi/book/10.1137/1.9781421407944">Matrix Computations</a>, an essential reference in the field of numerical linear algebra. Particularly relevant
+for this post is section 1.6.
 </p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
