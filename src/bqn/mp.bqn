@@ -30,8 +30,7 @@ mpi.Init@ ⋄ r‿s ← mpi{𝕗.Rank⋈𝕗.Size}⋈cw ← mpi.comm_world
 !⌊⊸=q←√s ⋄ b ← q÷˜n ← 2⋆12 ⋄ x‿y ← q(|⋈˜·⌊÷˜)r
 
 # Local matrices
-aml ← (+´b‿b×x‿y)++⌜˜↕b
-bml ← (-´b‿b×x‿y)+-⌜˜↕b
+aml‿bml ← {(b×x𝕏y)+𝕏⌜˜↕b}¨+‿-
 
 # Toroidal topology with periodic boundary conditions (aml←) (bml↑)
 L‿U ← {(cw⊸mpi.Sendrecv⊢<⊸∾𝕩˙)⌾⥊}¨⟨(q×x)+q|y(-⋈+)1 ⋄ y+q×q|x(-⋈+)1⟩

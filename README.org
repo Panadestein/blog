@@ -23,6 +23,7 @@
 
 Welcome to the source code of my blog. Here, I delve into solving computational
 and algorithmic problems across various disciplines using my preferred tool of thought.
+Some of my post have been discussed in [[https://lobste.rs/domains/panadestein.github.io][Lobsters]] and [[https://news.ycombinator.com/from?site=panadestein.github.io][Hacker News]].
 
 *Disclaimer*:
 

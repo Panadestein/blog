@@ -121,8 +121,7 @@ forming a processor grid of =⋈˜√p=, and pads matrices whose dimensions are 
   !⌊⊸=q←√s ⋄ b ← q÷˜n ← 2⋆12 ⋄ x‿y ← q(|⋈˜·⌊÷˜)r
 
   # Local matrices
-  aml ← (+´b‿b×x‿y)++⌜˜↕b
-  bml ← (-´b‿b×x‿y)+-⌜˜↕b
+  aml‿bml ← {(b×x𝕏y)+𝕏⌜˜↕b}¨+‿-
 
   # Toroidal topology with periodic boundary conditions (aml←) (bml↑)
   L‿U ← {(cw⊸mpi.Sendrecv⊢<⊸∾𝕩˙)⌾⥊}¨⟨(q×x)+q|y(-⋈+)1 ⋄ y+q×q|x(-⋈+)1⟩
@@ -178,7 +177,7 @@ Summary
 </details>
 #+end_export
 
-This result is only possible thanks to a combination of SPMD parallelism and a
+This result is only possible[fn:5] thanks to a combination of SPMD parallelism and a
 cache-efficient matrix multiplication algorithm. We have improved significantly,
 going from =+˝∘×⎉1‿∞= being 300 times slower than OpenBLAS's =dgemm= to only eight times slower.
 The obvious limitation of Cannon's algorithm is the need for a perfect square number of tasks.
@@ -195,6 +194,9 @@ memory-hungry outer product formulation =+˝⍉∘⊢(+˝∘×⎉1‿∞¨)⌜˘
 [fn:4] For deeper insight into blocked matrix multiplication algorithms, I recommend
 this [[https://docs.jax.dev/en/latest/pallas/tpu/matmul.html][JAX post]], the SaC [[https://dl.acm.org/doi/10.1145/3609024.3609410][paper]] on rank polymorphic blocking, and [[https://arxiv.org/abs/1605.01078][arXiv:1605.01078]]
 for the high-performance Strassen implementation.
+[fn:5] The approach to data locality and parallelism used here is rooted in the principles from Golub and Van Loan's
+[[https://epubs.siam.org/doi/book/10.1137/1.9781421407944][Matrix Computations]], an essential reference in the field of numerical linear algebra. Particularly relevant
+for this post is section 1.6.
 
 #+INCLUDE: "../html-foot.org"
 
