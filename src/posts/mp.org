@@ -187,7 +187,7 @@ if you push it too far.
 
 [fn:1] While the current idiom guarantees numerical accuracy, it is hundreds of times slower
 than BLAS for large matrices.
-[fn:2] See this [[https://en.algorithmica.org/hpc/algorithms/matmul/][post]] for a surprisingly accessible way to replicate what OpenBLAS
+[fn:2] See this [[https://en.algorithmica.org/hpc/algorithms/matmul/][post]] or this [[https://salykova.github.io/matmul-cpu][other post]] for surprisingly accessible ways to replicate what OpenBLAS
 does without spending your life in assembly.
 [fn:3] Here I could have used a fancier but slower under =𝔽˜⌾((/¨⥊⟜𝕨¨⌈𝕨÷˜≢𝕩)⊸⊔)=. Or even the
 memory-hungry outer product formulation =+˝⍉∘⊢(+˝∘×⎉1‿∞¨)⌜˘⊢=, which is only marginally slower.
