@@ -203,9 +203,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Blazing matrix products</h1>
-<div id="outline-container-org38a8601" class="outline-2">
-<h2 id="org38a8601">Why not use BLAS?</h2>
-<div class="outline-text-2" id="text-org38a8601">
+<div id="outline-container-orgd985fea" class="outline-2">
+<h2 id="orgd985fea">Why not use BLAS?</h2>
+<div class="outline-text-2" id="text-orgd985fea">
 <p>
 Because I am interested in Brutalist array programming,
 and the absence of a high-performance native matrix product in BQN was
@@ -229,9 +229,9 @@ but rather wrap BLAS.
 </p>
 </div>
 </div>
-<div id="outline-container-orgb4818fa" class="outline-2">
-<h2 id="orgb4818fa">Taming the cache</h2>
-<div class="outline-text-2" id="text-orgb4818fa">
+<div id="outline-container-org08e0052" class="outline-2">
+<h2 id="org08e0052">Taming the cache</h2>
+<div class="outline-text-2" id="text-org08e0052">
 <p>
 The first step towards higher performance is employing blocking to optimize cache access patterns.
 By using a straightforward square partitioning of the input matrices (without resorting to
@@ -334,9 +334,9 @@ single-threaded BQN implementation<sup><a id="fnr.4" class="footref" href="#fn.4
 </p>
 </div>
 </div>
-<div id="outline-container-org33f4645" class="outline-2">
-<h2 id="org33f4645">Parallelism via MPI</h2>
-<div class="outline-text-2" id="text-org33f4645">
+<div id="outline-container-org801ca69" class="outline-2">
+<h2 id="org801ca69">Parallelism via MPI</h2>
+<div class="outline-text-2" id="text-org801ca69">
 <p>
 To approach true bare-metal performance on par with BLAS/BLIS, we must leverage multiple cores.
 As BQN lacked native support for SPMD programming, I developed bindings for a small
@@ -398,7 +398,7 @@ Which yields a speed-up of
 </pre>
 </div>
 
-<pre class="example" id="org2789788">
+<pre class="example" id="org93d380d">
 Benchmark 1: bqn -e "+˝∘×⎉1‿∞˜ ⟨2⋆12,2⋆12⟩•rand.Range 1e5"
   Time (mean ± σ):     108.965 s ±  1.897 s    [User: 107.824 s, System: 0.169 s]
   Range (min … max):   106.771 s … 110.747 s    4 runs
