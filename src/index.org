@@ -1,6 +1,6 @@
-#+TITLE: First atop infinity | Physics, Programming, BQN
+#+TITLE: First atop infinity | Array programming in BQN
 #+OPTIONS: title:nil
-#+DESCRIPTION: Explore rigorous physics, efficient array programming in BQN, competitive coding insights, and more. A blog for those who appreciate the beauty of science and code.
+#+DESCRIPTION: Array programming like bonsai art: trimming primitives, distilling notation into a tool of thought.
 #+AUTHOR: Panadestein
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="assets/style.css"/>
 #+HTML_HEAD: <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
