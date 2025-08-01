@@ -1,38 +1,36 @@
-/* BQN386 Font Face */
+/* --- Font Definitions --- */
+
+@font-face {
+  font-family: 'APL';
+  src: url('APL333.ttf') format('truetype');
+}
+
 @font-face {
   font-family: 'BQN';
   src: url('BQN386.ttf') format('truetype');
 }
 
-/* Blog header settings */
-.container {
-    max-width: 500px; /* Set your desired maximum width */
-    margin: 0 auto; /* Center the container */
-    padding: 10px;
-}
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-}
+/* --- Global and Text Styles --- */
 
-.header-left {
-    font-size: 1.5em; 
-}
-
-/* Applying the BQN386 Font */
-body, input, select, textarea, pre, code, kbd {
-  font-family: 'BQN', monospace;
+body, input, select, textarea {
+  font-family: 'BQN', sans-serif; 
 }
 
 body {
   text-align: justify;
 }
 
-/* Basic styling for code elements */
-code, pre {
+a:link, a:visited {
+  color: #267CB9;
+  text-decoration: none;
+}
+
+
+/* --- Code Element Styles --- */
+
+pre, code, kbd {
+  font-family: 'BQN', monospace;
   background-color: #e3e7e7;
   color: #292929;
   font-size: 0.94em;
@@ -43,17 +41,30 @@ pre, pre.src {
   border: 1px solid #ccc;
   border-radius: 3px;
   box-shadow: 3px 3px 3px #eee;
-  background-color: #e3e7e7;
 }
 
 pre.src {
   position: relative;
-  margin: 0 2em 0 2em;
+  margin: 0 2em;
   padding-top: 0.7em;
 }
 
-/* Hyperlinks */
-a:link, a:visited {
-  color: #267CB9;
-  text-decoration: none;
+
+/* --- Layout --- */
+
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.header-left {
+  font-size: 1.5em;  
 }
