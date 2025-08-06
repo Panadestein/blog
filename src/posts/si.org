@@ -60,7 +60,7 @@ subsets of the language by changing the input global environment:
 
 #+begin_src bqn :tangle ../bqn/si.bqn
   _sch ← {
-    T ← " "⊸≢¨⊸/·(-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔(⊢+22×@=10-˜⊢)
+    T ← " "⊸≢¨⊸/·(-⟜1·+`·»⊸∨·+˝"( )"=⌜⊢)⊸⊔(⊢+22×@=10-˜⊢)
     R ← {
       𝕊⟨⟩: "Empty program"!0;
       𝕊𝕩: {
@@ -85,7 +85,7 @@ subsets of the language by changing the input global environment:
 #+end_src
 
 #+RESULTS:
-: (1-modifier block)
+: {o‿h‿f⇐}(1-modifier block)
 
 And now for the climax. Our interpreter inherits all the limitations of the one in the reference essay,
 the most critical being the lack of proper error handling. Additionally,

@@ -68,6 +68,12 @@
             "url": "https://panadestein.github.io/blog/posts/mp.html",
 	    "title": "Blazing matrix products.",
             "content_html": "Implementing an efficient GEMM in BQN."
+        },
+        {
+            "id": "11",
+            "url": "https://panadestein.github.io/blog/posts/bc.html",
+	    "title": "Strips from the BQNcrate.",
+            "content_html": "Explaining some examples from the BQNcrate."
         }
     ]
 }

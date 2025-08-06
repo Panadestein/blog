@@ -13,50 +13,31 @@ Extrapolating Perlis' remark[fn:1], it's likely that a group of 50 individuals
 would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
 juxtapose my implementations with those of seasoned /BQNators/[fn:2].
 
-** The infamous =_while_= modifier
+** Trapping rain water
 
-I call it infamous because it made me feel stupid twice: first when I encountered it in code,
-and again when I read its [[https://mlochbaum.github.io/BQN/doc/control.html#low-stack-version][docs]]. To understand its behaviour, you need to be familiar with
-quite a bit of BQN, especially the functional programming and combinators aspects.
-As a newbie at the time, I found it quite daunting. It took me about five scattered attempts
-over several months to get it. Looking back, the difficulty wasn't so much BQN's syntax,
-but my struggle to express complex recursion, which modifier recursion definitely is.
-
-An unrolling of the first two steps reveals that up to =2⋆n= evaluations of =𝔽= can occur at recursion
-level =n=. This is derived by noting that, within the BQN combinator, the left function of the
-rightmost atop dictates that the =𝔽= for the subsequent step is, in accordance to =𝔽_𝕣_𝔾=:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn
-  _w0_ ← {𝔽⍟𝔾∘𝔽_𝕣_𝔾∘𝔽⍟𝔾𝕩}
-  _w1_ ← {(𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽)_w0_𝔾∘(𝔽⍟𝔾∘𝔽)⍟𝔾𝕩}
-  _w2_ ← {((𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽))⍟𝔾∘((𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽))_w0_𝔾∘((𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽))⍟𝔾𝕩}
-#+end_src
-
-Another way to clarify the concept is to implement the same logic both as a function
-and as a 1-modifier, and then compare these implementations with the two 2-modifiers
-(one exhibiting linear and the other a logarithmic number of stack frames):
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn
-  Whiles ← {F‿G𝕊𝕩:
-    Wfun ← {𝕎⍟G∘𝕎˙⊸𝕊∘𝕎⍟G𝕩}
-    _wom ← {𝔽⍟G∘𝔽_𝕣∘𝔽⍟G𝕩}
-    _wtmlog_ ← {𝔽⍟𝔾∘𝔽_𝕣_𝔾∘𝔽⍟𝔾𝕩}
-    _wtmlin_ ← {𝕊∘𝔽⍟𝔾𝕩}
-    ⟨f Wfun 𝕩, f _wom 𝕩, f _wtmlog_ g 𝕩, f _wtmlin_ g ⎊"SO"𝕩⟩
-  }
-#+end_src
-
-#+RESULTS:
-: (function block)
-
-Let’s test it with a simple iteration that exceeds CBQN’s recursion limit, triggering a stack overflow:
+This is a classical interview [[https://leetcode.com/problems/trapping-rain-water/][problem]] that can be solved in linear time. Interestingly,
+it admits a very elegant array solution:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  ⟨1⊸+, 5000⊸≥⟩ Whiles 0
+  (+´⊢-˜⌈`⌾⌽⌊⌈`) [0,1,0,2,1,0,1,3,2,1,2,1]
 #+end_src
 
 #+RESULTS:
-: ⟨ 5001 5001 5001 "SO" ⟩
+: 6
+
+That is, we take the minimum of max-scans from the left and from the right, and subtract the corresponding height.
+Reducing the resulting array gives the amount of trapped water.
+
+A closely related problem is [[https://leetcode.com/problems/container-with-most-water/][container with most water]], which unfortunately is not so easy to solve in linear
+time using an array approach (one can easily implement the imperative two pointers solution in BQN, but it
+will probably be slow). Here are two solutions, one \(O(n^2)\) and the other \(O(n\log n)\), both tacit:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  ⟨⌈´∘⥊⌊⌜˜×·-⌜˜⊒˜, ⌈´∨×(⌈`⊸-⌈⊢-⌊`)∘⍒⟩ {10 𝕎•_timed𝕩}¨< •rand.Range˜1e4
+#+end_src
+
+#+RESULTS:
+: ⟨ 0.080050875 4.14558e¯5 ⟩
 
 ** Z algorithm
 
@@ -313,87 +294,6 @@ If someone ever published that much, sorting will eventually be slower:
 
 A testament to the idea that the simplest solution in BQN is often the most efficient:
 I initially clip my citations array with ={≠¨⊔≠∘𝕩¨⌾(≥⟜≠∘𝕩⊸/)𝕩}=, which is just =/⁼≠⊸⌊=.
-
-** Trapping rain water
-
-This is a classical interview [[https://leetcode.com/problems/trapping-rain-water/][problem]] that can be solved in linear time. Interestingly,
-it admits a very elegant array solution:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  (+´⊢-˜⌈`⌾⌽⌊⌈`) [0,1,0,2,1,0,1,3,2,1,2,1]
-#+end_src
-
-#+RESULTS:
-: 6
-
-That is, we take the minimum of max-scans from the left and from the right, and subtract the corresponding height.
-Reducing the resulting array gives the amount of trapped water.
-
-A closely related problem is [[https://leetcode.com/problems/container-with-most-water/][container with most water]], which unfortunately is not so easy to solve in linear
-time using an array approach (one can easily implement the imperative two pointers solution in BQN, but it
-will probably be slow). Here are two solutions, one \(O(n^2)\) and the other \(O(n\log n)\), both tacit:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  ⟨⌈´∘⥊⌊⌜˜×·-⌜˜⊒˜, ⌈´∨×(⌈`⊸-⌈⊢-⌊`)∘⍒⟩ {10 𝕎•_timed𝕩}¨< •rand.Range˜1e4
-#+end_src
-
-#+RESULTS:
-: ⟨ 0.080050875 4.14558e¯5 ⟩
-
-** Computing edit distances
-
-The Levenshtein (or edit) [[https://en.wikipedia.org/wiki/Levenshtein_distance][distance]] is a measure of the similarity between two strings. It is defined
-by the following recurrence, which is the basis of dynamic programming algorithms like Wagner-Fisher:
-
-\begin{align*}
-  d_{i0} &= i, \quad d_{0j} = j, \\
-  d_{ij} &= \min \begin{cases} d_{i-1,j-1} + \mathbf{1}_{s_i \neq t_j} \\ d_{i-1,j} + 1 \\ d_{i,j-1} + 1 \end{cases}
-\end{align*}
-
-There is an elegant [[https://mlochbaum.github.io/bqncrate/?q=leven#][implementation]] of a variation of the Wagner–Fischer algorithm in the BQNcrate.
-It has been particularly challenging for me to understand it—not due to the clarity
-of the primitives, but rather because of the clever transformation employed.
-I believe that this variant can be derived by shifting the distance matrix.
-Given two strings \(s\) and \(t\) of lengths \(n\) and \(m\), respectively,
-we define a new distance matrix as follows:
-
-\begin{equation*}
-  p_{ij} = d_{ij} + n - i + m - j
-\end{equation*}
-
-Under this transformation, the recurrence relation becomes:
-
-\begin{align*}
-  p_{i0} &= p_{0j} = m + n, \\
-  p_{ij} &= \min \begin{cases} p_{i-1,j-1} + \mathbf{1}_{s_i \neq t_j} - 2 \\ p_{i-1,j} \\ p_{i,j-1} \end{cases}
-\end{align*}
-
-The above recurrence can be easily identified in the 3-train's middle function, which is
-folded over the table of the costs (table comparing the characters).
-Note that we compare insertions and substitutions, and then we can do a min scan
-over the result to get the deletions, which gives a vectorised implementation.
-
-The only part I can't quite piece together is the construction of the cost table,
-which is done by reversing \(t\). Given that the final result for  \(p_{ij}\) ​ is located
-in the bottom-right corner and we use =foldr=, I would have expected \(s\) to be the
-one reversed instead. However, both approaches work, as demonstrated by the following code:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  _l ← {¯1⊑(1⊸+⥊+)○≠(⌊`⊢⌊⊏⊸»∘⊢-0∾1+⊣)˝𝔽}
-  T ← ⌽⊸(=⌜)_l≡=⌜⟜⌽_l
-  T○{@+97+𝕩•rand.Range 25}´ 1e4‿1e5
-#+end_src
-
-#+RESULTS:
-: 1
-
-I suspect the above can be explained by the following properties of the Levenshtein distance:
-
-- \(L(s,t) = L(t,s)\)
-- \(L(s,t) = L(\text{rev}(s),\text{rev}(t))\)
-- \(L(\text{rev}(s),t) = L(s,\text{rev}(t))\)
-
-If you know why both formulations work, please let me know!
 
 ** Solving the cubic equation
 

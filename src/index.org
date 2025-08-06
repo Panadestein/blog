@@ -42,5 +42,6 @@
 8. [[./posts/pe.org][Climbing Mount Euler]]
 9. [[./posts/ps.org][Sieving primes at the speed of C]]
 10. [[./posts/mp.org][Blazing matrix products]]
+11. [[./posts/bc.org][Strips from the BQNcrate]]
 
 #+HTML: </div>
