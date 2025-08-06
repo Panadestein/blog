@@ -250,15 +250,15 @@ know exactly what each one does, but still miss the emergent behavior of the com
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orge9ba1c2">Topological sort</a></li>
-<li><a href="#org9337196">The _​while_ modifier</a></li>
-<li><a href="#org76dee64">Levenshtein distance</a></li>
+<li><a href="#org8313ba5">Topological sort</a></li>
+<li><a href="#org3643d0c">The _​while_ modifier</a></li>
+<li><a href="#org18adf0b">Levenshtein distance</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orge9ba1c2" class="outline-2">
-<h2 id="orge9ba1c2">Topological sort</h2>
-<div class="outline-text-2" id="text-orge9ba1c2">
+<div id="outline-container-org8313ba5" class="outline-2">
+<h2 id="org8313ba5">Topological sort</h2>
+<div class="outline-text-2" id="text-org8313ba5">
 <p>
 Seeing this implementation of <a href="https://en.wikipedia.org/wiki/Topological_sorting#Kahn's_algorithm">Kahn's algorithm</a> for the first time is not for the faint of heart:
 </p>
@@ -278,7 +278,7 @@ and named variables. Let's deconstruct the magic:
   result‿mask ← ⟨⟩ ⋈ 0¨graph
   Sort ← {m𝕊r:
     n ← m∨ready ← {∧´𝕩⊏m}¨graph
-    n 𝕊⍟(𝕩&lt;○≠⊢) r∾/m&lt;n
+    n 𝕊⍟(𝕩⊸≢) r∾/m&lt;ready
   }
   mask Sort result
 }
@@ -325,14 +325,15 @@ of the old mask and the newly ready nodes, ensuring it grows monotonically.
 
 <p>
 Crucially, the result list is extended only with the nodes that just became available. This new layer is
-isolated with the differential comparison <code>m&lt;n</code>, and their indices <code>/</code> are appended to the result before
-recurring with the updated state. The process repeats until a pass yields no new nodes, completing the sort.
+isolated with the differential comparison <code>m&lt;n</code> (<code>m&lt;ready</code> also works, since <code>n≡m∨ready</code>), and their
+indices <code>/</code> are appended to the result before recurring with the updated state. The process repeats until a pass yields
+no new nodes, completing the sort.
 </p>
 </div>
 </div>
-<div id="outline-container-org9337196" class="outline-2">
-<h2 id="org9337196">The _​while_ modifier</h2>
-<div class="outline-text-2" id="text-org9337196">
+<div id="outline-container-org3643d0c" class="outline-2">
+<h2 id="org3643d0c">The _​while_ modifier</h2>
+<div class="outline-text-2" id="text-org3643d0c">
 <p>
 This one was infamously hard for me to grasp, and reading its <a href="https://mlochbaum.github.io/BQN/doc/control.html#low-stack-version">docs</a> didn't clarify much at first. To understand it,
 you need to be familiar with a fair bit of BQN, especially the functional programming and combinators aspects.
@@ -383,9 +384,9 @@ Let’s test it with a simple iteration that exceeds CBQN’s recursion limit, t
 </pre>
 </div>
 </div>
-<div id="outline-container-org76dee64" class="outline-2">
-<h2 id="org76dee64">Levenshtein distance</h2>
-<div class="outline-text-2" id="text-org76dee64">
+<div id="outline-container-org18adf0b" class="outline-2">
+<h2 id="org18adf0b">Levenshtein distance</h2>
+<div class="outline-text-2" id="text-org18adf0b">
 <p>
 The Levenshtein (or edit) <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">distance</a> is a measure of the similarity between two strings. It is defined
 by the following recurrence, which is the basis of dynamic programming algorithms like Wagner-Fisher:
