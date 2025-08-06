@@ -235,9 +235,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">Scheming a mise-en-abîme in BQN</h1>
-<div id="outline-container-org4fc2f31" class="outline-2">
-<h2 id="org4fc2f31">Prelude</h2>
-<div class="outline-text-2" id="text-org4fc2f31">
+<div id="outline-container-org62102d7" class="outline-2">
+<h2 id="org62102d7">Prelude</h2>
+<div class="outline-text-2" id="text-org62102d7">
 <p>
 We will build an interpreter for a subset of the Scheme programming language,
 following an <a href="https://www.norvig.com/lispy.html">essay</a> by Peter Norvig. An alternative reference would
@@ -248,9 +248,9 @@ language implementation comes from self-study of a handful of books<sup><a id="f
 </p>
 </div>
 </div>
-<div id="outline-container-org5124407" class="outline-2">
-<h2 id="org5124407">A R5RS dialect</h2>
-<div class="outline-text-2" id="text-org5124407">
+<div id="outline-container-org0a53d2e" class="outline-2">
+<h2 id="org0a53d2e">A R5RS dialect</h2>
+<div class="outline-text-2" id="text-org0a53d2e">
 <p>
 Our goal is to adhere to the Revised\(^5\) Report on the Algorithmic Language Scheme (<a href="https://conservatory.scheme.org/schemers/Documents/Standards/R5RS/HTML/r5rs.html">R5RS</a>).
 However, seasoned schemers will quickly notice that our implementation still has
@@ -303,7 +303,7 @@ subsets of the language by changing the input global environment:
 
 <div class="org-src-container">
 <pre class="src src-bqn">_sch ← {
-  T ← " "⊸≢¨⊸/·(-⟜1·+`·¬⊸∧⟜»⊸∨·+˝"( )"=⌜⊢)⊸⊔(⊢+22×@=10-˜⊢)
+  T ← " "⊸≢¨⊸/·(-⟜1·+`·»⊸∨·+˝"( )"=⌜⊢)⊸⊔(⊢+22×@=10-˜⊢)
   R ← {
     𝕊⟨⟩: "Empty program"!0;
     𝕊𝕩: {
@@ -343,9 +343,9 @@ because we include the basic <a href="https://www.oneofus.la/have-emacs-will-hac
 </div>
 </div>
 </div>
-<div id="outline-container-org6e98e3e" class="outline-2">
-<h2 id="org6e98e3e">A Lisp quine</h2>
-<div class="outline-text-2" id="text-org6e98e3e">
+<div id="outline-container-org1acecb7" class="outline-2">
+<h2 id="org1acecb7">A Lisp quine</h2>
+<div class="outline-text-2" id="text-org1acecb7">
 <p>
 Given the title of this post, it's only fitting that we test our interpreter with a quine. In fact, building this interpreter
 was, for me, an exercise in bootstrapping the necessary machinery to produce this recursive effect:

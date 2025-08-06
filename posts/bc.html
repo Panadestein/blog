@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Songs to pave the seasons</title>
+<title>Strips from the BQNcrate</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -199,182 +199,264 @@ overflow-x: auto !important;
 }
 </style>
 <!-- Post-specific setting bellow -->
+<style>
+#table-of-contents > h2 { display: none; } /* Hide the default TOC heading */
+#table-of-contents > ul { display: block; } /* Ensure TOC content is shown */
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Songs to pave the seasons</h1>
+<h1 class="title">Strips from the BQNcrate</h1>
 <p>
-I have analyzed my Spotify data<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> for the period 2016-2024. The results accurately represent
-my actual music taste<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
-</p>
-<div id="outline-container-orgf22b39c" class="outline-2">
-<h2 id="orgf22b39c">Technical details</h2>
-<div class="outline-text-2" id="text-orgf22b39c">
-<p>
-This is a suitable task for an array language, so I rely on <a href="https://mlochbaum.github.io/BQN/index.html">BQN</a> which is my
-favorite one:
+The <a href="https://mlochbaum.github.io/bqncrate/">BQNcrate</a> is an useful tool for learning and honing BQN skills, though not all of its entries are easy to understand.
+Personally, I always prefer a shorter implementation if it's possible to maintain the same time complexity.
+For this post, I have chosen three examples that fall into that specific category of code where you can read every primitive,
+know exactly what each one does, but still miss the emergent behavior of the composition.
 </p>
 
-<div class="org-src-container">
-<pre class="src src-bqn">⟨P⇐Parse⟩ ← •Import "../../bqn-libs/json.bqn"
-@ ⊣ spd ← P •file.Chars "../../supp/spdat/data.json"
-</pre>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orge9ba1c2">Topological sort</a></li>
+<li><a href="#org9337196">The _​while_ modifier</a></li>
+<li><a href="#org76dee64">Levenshtein distance</a></li>
+</ul>
 </div>
-
-<p>
-Additional structural information is needed, namely index of the songs,
-artists, elapsed time, and the length of the desired result.
-</p>
-
-<div class="org-src-container">
-<pre class="src src-bqn">s‿a‿m‿l ← ⟨7, 8, 3, 1+↕20⟩
-</pre>
 </div>
-
+<div id="outline-container-orge9ba1c2" class="outline-2">
+<h2 id="orge9ba1c2">Topological sort</h2>
+<div class="outline-text-2" id="text-orge9ba1c2">
 <p>
-We define a (50 chars) dyadic block function to execute the queries:
+Seeing this implementation of <a href="https://en.wikipedia.org/wiki/Topological_sorting#Kahn's_algorithm">Kahn's algorithm</a> for the first time is not for the faint of heart:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">Q ← {l≍˘∾(⍷𝕨⊸⊏˘)¨ l⊏ ((⍒(+´m⊸⊏˘)¨)⊸⊏ 𝕨⊸⊏˘⊐⊸⊔⊢) &gt;1⊏¨ 𝕩}
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-orgb4a192f" class="outline-2">
-<h2 id="orgb4a192f">Top songs</h2>
-<div class="outline-text-2" id="text-orgb4a192f">
-<div class="org-src-container">
-<pre class="src src-bqn">s Q spd	
-</pre>
-</div>
-
-<pre class="example" id="org245099a">
-┌─                                                     
-╵ 1  "Countless Skies"                                 
-  2  "Divertimento I, K.136: Allegro"                  
-  3  "The Numbers"                                     
-  4  "Autre temps"                                     
-  5  "Ghost of Perdition"                              
-  6  "Crossing the Road Material"                      
-  7  "Hoppípolla"                                      
-  8  "Ether"                                           
-  9  "Colossus"                                        
-  10 "River"                                           
-  11 "El Tete"                                         
-  12 "Will o the Wisp"                                 
-  13 "Pakumba"                                         
-  14 "Damned Rope"                                     
-  15 "Eternal Rains Will Come"                         
-  16 "La femme d'argent"                               
-  17 "Bajanda"                                         
-  18 "Nimrodel - Medley"                               
-  19 "Breathe (In The Air) - 2011 Remastered Version"  
-  20 "In The Shadow Of Our Pale Companion"             
-                                                      ┘
-</pre>
-</div>
-</div>
-<div id="outline-container-orgc7eb980" class="outline-2">
-<h2 id="orgc7eb980">Top artists</h2>
-<div class="outline-text-2" id="text-orgc7eb980">
-<div class="org-src-container">
-<pre class="src src-bqn">a Q spd
-</pre>
-</div>
-
-<pre class="example" id="org21fbdec">
-┌─                              
-╵ 1  "Opeth"                    
-  2  "Wolfgang Amadeus Mozart"  
-  3  "Pink Floyd"               
-  4  "Be'lakor"                 
-  5  "Sigur Rós"                
-  6  "Coldplay"                 
-  7  "Mogwai"                   
-  8  "Chocolate Mc"             
-  9  "Radiohead"                
-  10 "Joaquín Sabina"           
-  11 "Iron &amp; Wine"              
-  12 "Rammstein"                
-  13 "Alcest"                   
-  14 "Buena Fe"                 
-  15 "Silvio Rodríguez"         
-  16 "Amon Amarth"              
-  17 "In Mourning"              
-  18 "Lamb of God"              
-  19 "Camel"                    
-  20 "Omnium Gatherum"          
-                               ┘
-</pre>
-</div>
-</div>
-<div id="outline-container-orgb18fae3" class="outline-2">
-<h2 id="orgb18fae3">Bonus: Opeth anthology</h2>
-<div class="outline-text-2" id="text-orgb18fae3">
-<p>
-This is the Opeth album I would recommend to anyone. The query function needs to be modified a bit for generating it.
-But before that, let's look at the <a href="https://www.opeth.com/releases/albums">official discography</a>:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-bqn">lo ← (↕∘⌈+´÷≠) 7‿5‿9‿7‿8‿6‿8‿8‿7‿10‿7‿11‿10
+<pre class="src src-bqn">TC ← {{𝕊⍟(𝕩&lt;○≠⊢)⟜(𝕩∾·/𝕨⊸&lt;)𝕨∨∧´∘⊏⟜𝕨¨p}⟜/0¨p←𝕩}
 </pre>
 </div>
 
 <p>
-Then:
+To understand dense, beautiful code like this, a good first step is to refactor it into smaller block functions
+and named variables. Let's deconstruct the magic:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">O ← {lo (1⊸+∘⊣≍˘⊏) (⊢˝˘⊸∊⟜𝕨/⊏˘) ∾(⍷s‿a⊸⊏˘)¨ ((⍒(+´m⊸⊏˘)¨)⊸⊏ s⊸⊏˘⊐⊸⊔⊢) &gt;1⊏¨ 𝕩}
+<pre class="src src-bqn">TCS ← {𝕊graph:
+  result‿mask ← ⟨⟩ ⋈ 0¨graph
+  Sort ← {m𝕊r:
+    n ← m∨ready ← {∧´𝕩⊏m}¨graph
+    n 𝕊⍟(𝕩&lt;○≠⊢) r∾/m&lt;n
+  }
+  mask Sort result
+}
 </pre>
 </div>
 
 <p>
-Enjoy:
+Let's verify our refactoring is equivalent to the original. The input for both functions is a list of lists
+representing the dependency graph: each index is a task, and its corresponding element is a list of
+its prerequisites. For example:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">spd O˜⋈ "Opeth" 
+<pre class="src src-bqn">graph ← ⟨⟩‿⟨⟩‿⟨0⟩‿⟨0,1⟩‿⟨2,3⟩‿⟨4⟩‿⟨4⟩‿⟨1,5,6⟩
 </pre>
 </div>
 
-<pre class="example" id="org3e76e55">
-┌─                             
-╵ 1 "Ghost of Perdition"       
-  2 "River"                    
-  3 "Will o the Wisp"          
-  4 "Eternal Rains Will Come"  
-  5 "The Drapery Falls"        
-  6 "Elysian Woes"             
-  7 "Burden"                   
-  8 "Harvest"                  
-                              ┘
-</pre>
-</div>
-</div>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-It is possible to request a detailed report of all user activity since the account was created. There are
-some <a href="https://support.spotify.com/us/article/understanding-my-data/">interesting fields</a> in the data, but more advanced information, such as genre, requires querying the
-Spotify Web API, which is beyond the scope of this post.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-Well, modulo all from <code>Tool</code> and <code>Silent state optimizer</code> from <code>Leech</code>, which are definitely in my top ten,
-and which I listen to on YouTube. It's possible to analyze the <a href="https://takeout.google.com/settings/takeout">data</a> from this site as well—perhaps in a follow-up post.
+<p>
+And then:
 </p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">(TC≡TCS) graph
+</pre>
+</div>
+
+<pre class="example">
+1
+</pre>
+
+
+<p>
+Looks good. So, how does this more "readable" version work? The algorithm's state is propagated through two variables:
+a "can-be-built" boolean mask <code>m</code>, initially all false, and the final sorted list <code>s</code>,
+initially empty (indices <code>/</code> of a zeros' list is an empty list).
+</p>
+
+<p>
+The <code>Sort</code> function then begins its iterative process. Inside, it first identifies the ready nodes: those whose
+prerequisites are all satisfied by the current mask <code>m</code>. In the first step, this naturally selects nodes with
+no prerequisites <code>⟨⟩</code>, which unlocks the next layer of dependencies. The new "can-be-built" mask <code>n</code> is the union
+of the old mask and the newly ready nodes, ensuring it grows monotonically.
+</p>
+
+<p>
+Crucially, the result list is extended only with the nodes that just became available. This new layer is
+isolated with the differential comparison <code>m&lt;n</code>, and their indices <code>/</code> are appended to the result before
+recurring with the updated state. The process repeats until a pass yields no new nodes, completing the sort.
+</p>
+</div>
+</div>
+<div id="outline-container-org9337196" class="outline-2">
+<h2 id="org9337196">The _​while_ modifier</h2>
+<div class="outline-text-2" id="text-org9337196">
+<p>
+This one was infamously hard for me to grasp, and reading its <a href="https://mlochbaum.github.io/BQN/doc/control.html#low-stack-version">docs</a> didn't clarify much at first. To understand it,
+you need to be familiar with a fair bit of BQN, especially the functional programming and combinators aspects.
+What makes it so complicated is the use of modifier recursion, which I will try to break down here.
+</p>
+
+<p>
+An unrolling of the first two steps reveals that up to <code>2⋆n</code> evaluations of <code>𝔽</code> can occur at recursion
+level <code>n</code>. This is derived by noting that, within the BQN combinator, the left function of the
+rightmost atop dictates that the <code>𝔽</code> for the subsequent step is, in accordance to <code>𝔽_𝕣_𝔾</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">_w0_ ← {𝔽⍟𝔾∘𝔽_𝕣_𝔾∘𝔽⍟𝔾𝕩}
+_w1_ ← {(𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽)_w0_𝔾∘(𝔽⍟𝔾∘𝔽)⍟𝔾𝕩}
+_w2_ ← {((𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽))⍟𝔾∘((𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽))_w0_𝔾∘((𝔽⍟𝔾∘𝔽)⍟𝔾∘(𝔽⍟𝔾∘𝔽))⍟𝔾𝕩}
+</pre>
+</div>
+
+<p>
+Another way to clarify the concept is to implement the same logic both as a function
+and as a 1-modifier, and then compare these implementations with the two 2-modifiers
+(one exhibiting linear and the other a logarithmic number of stack frames):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">Whiles ← {F‿G𝕊𝕩:
+  Wfun ← {𝕎⍟G∘𝕎˙⊸𝕊∘𝕎⍟G𝕩}
+  _wom ← {𝔽⍟G∘𝔽_𝕣∘𝔽⍟G𝕩}
+  _wtmlog_ ← {𝔽⍟𝔾∘𝔽_𝕣_𝔾∘𝔽⍟𝔾𝕩}
+  _wtmlin_ ← {𝕊∘𝔽⍟𝔾𝕩}
+  ⟨f Wfun 𝕩, f _wom 𝕩, f _wtmlog_ g 𝕩, f _wtmlin_ g ⎊"SO"𝕩⟩
+}
+</pre>
+</div>
+
+<p>
+Let’s test it with a simple iteration that exceeds CBQN’s recursion limit, triggering a stack overflow:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">⟨1⊸+, 5000⊸≥⟩ Whiles 0
+</pre>
+</div>
+
+<pre class="example">
+⟨ 5001 5001 5001 "SO" ⟩
+</pre>
+</div>
+</div>
+<div id="outline-container-org76dee64" class="outline-2">
+<h2 id="org76dee64">Levenshtein distance</h2>
+<div class="outline-text-2" id="text-org76dee64">
+<p>
+The Levenshtein (or edit) <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">distance</a> is a measure of the similarity between two strings. It is defined
+by the following recurrence, which is the basis of dynamic programming algorithms like Wagner-Fisher:
+</p>
+
+\begin{align*}
+  d_{i0} &= i, \quad d_{0j} = j, \\
+  d_{ij} &= \min \begin{cases} d_{i-1,j-1} + \mathbf{1}_{s_i \neq t_j} \\ d_{i-1,j} + 1 \\ d_{i,j-1} + 1 \end{cases}
+\end{align*}
+
+<p>
+The Wagner-Fisher variant in the BQNcrate can be derived by shifting the distance matrix.
+Given two strings \(s\) and \(t\) of lengths \(n\) and \(m\), respectively,
+we define a new distance matrix as follows:
+</p>
+
+\begin{equation*}
+  p_{ij} = d_{ij} + n - i + m - j
+\end{equation*}
+
+<p>
+Under this transformation, the recurrence relation becomes:
+</p>
+
+\begin{align*}
+  p_{i0} &= p_{0j} = m + n, \\
+  p_{ij} &= \min \begin{cases} p_{i-1,j-1} + \mathbf{1}_{s_i \neq t_j} - 2 \\ p_{i-1,j} \\ p_{i,j-1} \end{cases}
+\end{align*}
+
+<p>
+The above recurrence can be easily identified in the 3-train's middle function, which is
+folded over the table of the costs (table comparing the characters).
+Note that we compare insertions and substitutions, and then we can do a min scan
+over the result to get the deletions, which gives a vectorised implementation.
+</p>
+
+<p>
+An interesting part of this solution is the construction of the cost table,
+which is done by reversing \(t\). Given that the final result for  \(p_{ij}\) ​ is located
+in the bottom-right corner and we use <code>foldr</code>, I would have expected \(s\) to be the
+one reversed instead. However, both methods are functionally equivalent, as the following
+stochastic test suggests:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">_l ← {¯1⊑(1⊸+⥊+)○≠(⌊`⊢⌊⊏⊸»∘⊢-0∾1+⊣)˝𝔽}
+T ← ⌽⊸(=⌜)_l≡=⌜⟜⌽_l
+T○{@+97+𝕩•rand.Range 25}´ 1e4‿1e5
+</pre>
+</div>
+
+<pre class="example">
+1
+</pre>
+
+
+<p>
+The reason both approaches work lies in the inherent symmetries of the Levenshtein distance:
+</p>
+
+<ul class="org-ul">
+<li>\(L(s,t) = L(t,s)\)</li>
+<li>\(L(s,t) = L(\text{rev}(s),\text{rev}(t))\)</li>
+<li>\(L(\text{rev}(s),t) = L(s,\text{rev}(t))\)</li>
+</ul>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
-</div></div></div>
-
-
 </div>
-</div></div>
+</div>
+</div>
+</div>
 </body>
 </html>
