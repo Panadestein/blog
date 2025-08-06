@@ -4,7 +4,7 @@ TCS ← {𝕊graph:
   result‿mask ← ⟨⟩ ⋈ 0¨graph
   Sort ← {m𝕊r:
     n ← m∨ready ← {∧´𝕩⊏m}¨graph
-    n 𝕊⍟(𝕩<○≠⊢) r∾/m<n
+    n 𝕊⍟(𝕩⊸≢) r∾/m<ready
   }
   mask Sort result
 }

@@ -31,7 +31,7 @@ and named variables. Let's deconstruct the magic:
     result‿mask ← ⟨⟩ ⋈ 0¨graph
     Sort ← {m𝕊r:
       n ← m∨ready ← {∧´𝕩⊏m}¨graph
-      n 𝕊⍟(𝕩<○≠⊢) r∾/m<n
+      n 𝕊⍟(𝕩⊸≢) r∾/m<ready
     }
     mask Sort result
   }
@@ -47,6 +47,9 @@ its prerequisites. For example:
 #+begin_src bqn :tangle ../bqn/bc.bqn :exports code
   graph ← ⟨⟩‿⟨⟩‿⟨0⟩‿⟨0,1⟩‿⟨2,3⟩‿⟨4⟩‿⟨4⟩‿⟨1,5,6⟩
 #+end_src
+
+#+RESULTS:
+: ⟨ ⟨⟩ ⟨⟩ ⟨ 0 ⟩ ⟨ 0 1 ⟩ ⟨ 2 3 ⟩ ⟨ 4 ⟩ ⟨ 4 ⟩ ⟨ 1 5 6 ⟩ ⟩
 
 And then:
 
@@ -67,8 +70,9 @@ no prerequisites =⟨⟩=, which unlocks the next layer of dependencies. The new
 of the old mask and the newly ready nodes, ensuring it grows monotonically.
 
 Crucially, the result list is extended only with the nodes that just became available. This new layer is
-isolated with the differential comparison =m<n=, and their indices =/= are appended to the result before
-recurring with the updated state. The process repeats until a pass yields no new nodes, completing the sort.
+isolated with the differential comparison =m<n= (=m<ready= also works, since =n≡m∨ready=), and their
+indices =/= are appended to the result before recurring with the updated state. The process repeats until a pass yields
+no new nodes, completing the sort.
 
 ** The _​while_ modifier
 
