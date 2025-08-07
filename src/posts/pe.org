@@ -700,12 +700,21 @@ have to be adjusted as well.
 :ALT_TITLE: 21
 :END:
 
+Beautiful array solution, not much more to say.
+
 #+begin_src bqn
-  ≠{(𝕩⊸>∧n⊸≠)⊸/utils.Sigma¨n←2↓↕𝕩}1e4
+  E21 ← {+´/𝕩↑utils.Sigma¨⊸(≠∧⊢=·⊏˜⌊⟜𝕩)↕𝕩+1}
 #+end_src
 
 #+RESULTS:
-: 9385
+: (function block)
+
+#+begin_src bqn :tangle no :exports none
+  E21 1e4
+#+end_src
+
+#+RESULTS:
+: 31626
 
 [fn:1]  If I make it that far, I will follow the rule of not sharing solutions
 to problems over 100. In that case, I will probably encrypt them with =org-crypt=,
