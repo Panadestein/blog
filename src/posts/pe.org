@@ -700,7 +700,7 @@ have to be adjusted as well.
 :ALT_TITLE: 21
 :END:
 
-Beautiful array solution, not much more to say.
+Beautiful array solution, not much more to say. 
 
 #+begin_src bqn
   E21 ← {+´/𝕩↑utils.Sigma¨⊸(≠∧⊢=·⊏˜⌊⟜𝕩)↕𝕩+1}
@@ -708,6 +708,8 @@ Beautiful array solution, not much more to say.
 
 #+RESULTS:
 : (function block)
+
+Amicalement, P.
 
 #+begin_src bqn :tangle no :exports none
   E21 1e4
