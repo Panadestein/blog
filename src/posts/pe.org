@@ -46,7 +46,7 @@ Let's start by defining some utilities that will be shared by several problems:
     }
     Rosser ⇐ ⌈⋆⁼{𝔽∘𝔽⊸+⟜𝔽⊸×}
     Tau ⇐ {2+´(2⊸×-⊢×⊣=÷˜⟜𝕩)⟜(0=|⟜𝕩)2↓↕1+⌊√𝕩}
-    Sigma ⇐ {+´1∾𝕩⊸÷⊸∾(0=|⟜𝕩)⊸/2↓↕1+⌊√𝕩}
+    Sigma ⇐ {+´⍷1∾𝕩⊸÷⊸∾(0=|⟜𝕩)⊸/2↓↕1+⌊√𝕩}
   }
   parsing ← {
     Split ⇐ (¬-˜⊢×·+`»⊸>)∘≠⊔⊢
