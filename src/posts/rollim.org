@@ -5,15 +5,21 @@
 #+HTML_HEAD:   #table-of-contents > ul { display: block; } /* Ensure TOC content is shown */
 #+HTML_HEAD: </style>
 
-This post is a rolling collection of algorithms and computational ideas I like, implemented in BQN:
+This post is a rolling collection of algorithms and computational ideas I like, implemented in BQN.
+The current selection includes:
 
-#+TOC: headlines 1 :ignore-title t
+#+TOC: headlines 2 :ignore-title t
 
-Extrapolating Perlis' remark[fn:1], it's likely that a group of 50 individuals
-would devise 35 to 40 distinct solutions to even the simplest problem in BQN. Therefore, I will frequently
-juxtapose my implementations with those of seasoned /BQNators/[fn:2].
+The categories above are more hints than strict taxonomies. Occasionally, an entry here grows enough to deserve
+its own dedicated post, leaving behind only a link or a memory. Extrapolating Perlis' remark[fn:1], it's likely
+that a group of 50 individuals would devise 35 to 40 distinct solutions to even the simplest problem in BQN.
+Therefore, I will sometimes juxtapose my implementations with those of seasoned /BQNators/[fn:2].
 
-** Trapping rain water
+** Competitive programming
+
+Problems I find in coding challenges' platforms, such as [[https://leetcode.com/u/panadestein/][LeetCode]], [[https://cses.fi/problemset/][CSES]], and [[https://cp-algorithms.com/][cp-algorithms]].
+
+*** Trapping rain water
 
 This is a classical interview [[https://leetcode.com/problems/trapping-rain-water/][problem]] that can be solved in linear time. Interestingly,
 it admits a very elegant array solution:
@@ -39,7 +45,7 @@ will probably be slow). Here are two solutions, one \(O(n^2)\) and the other \(O
 #+RESULTS:
 : ⟨ 0.080050875 4.14558e¯5 ⟩
 
-** Z algorithm
+*** Z algorithm
 
 This is a very efficient procedure that finds prefix strings in [[https://cp-algorithms.com/string/z-function.html][linear time]]. The imperative
 implementation reads:
@@ -90,7 +96,7 @@ With further refinements, the earlier solutions can be transformed into:
   ZAQ‿ZAC ← {(+´∧`)¨𝕏}¨ ⟨≠↑↓=⌽∘↑, <=«⍟(↕∘≠)⟩
 #+end_src
 
-** Longest increasing sub-sequence
+*** Longest increasing sub-sequence
 
 This [[https://en.wikipedia.org/wiki/Longest_increasing_subsequence][problem]] can be solved in \(O(n\log n)\) using dynamic programming. Here is an
 imperative implementation which is quadratic, but can be optimized:
@@ -151,7 +157,7 @@ The element is either placed at the end of the unfilled region, or it replaces
 the first element that is greater than =𝕨=. Since BQN uses a based array model,
 we pick the enclosed atom from this operation's result. So it goes[fn:3].
 
-** N-queens problem
+*** N-queens problem
 
 This problem is the archetypal example of backtracking. Initially, I tried to solve it
 using a function to place the queens in the full board, hoping that it would lead to a
@@ -199,7 +205,7 @@ Which nicely compares with the OEIS [[https://oeis.org/A000170][sequence]]:
 And of course, in the implementation above I could have used a single array instead of three,
 but I find the resulting validation and position functions very aesthetic the way they are.
 
-** Majority element
+*** Majority element
 
 The [[https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm][Boyer–Moore]] algorithm allows for finding the majority element (element that appears
 more than =⌊𝕩÷2= times in the array) in linear time. If such element exists, then it is
@@ -225,47 +231,8 @@ the number of votes:
 #+RESULTS:
 : 3
 
-** An identity on the naturals
 
-Some time ago, while working on performance optimization of linear algebra
-operations with Boolean arrays, I encountered an
-interesting summation property for an array \(a\) of length \(n\):
-
-\begin{equation*}
-    \sum_{i | a_i \neq 0} \sum_{j=i+1} f_j
-  = \sum_{j=0} f_j \sum_{i < j | a_i \neq 0} 1
-\end{equation*}
-
-It turns out that the RHS can be elegantly transformed
-into a scan, giving rise to a beautiful identity that applies to all
-natural numbers, not just Booleans as I initially thought:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  (+`≡·+´/≤⟜<⊒˜) •rand.Range˜ 1e3
-#+end_src
-
-#+RESULTS:
-: 1
-
-This identity holds because =⊒˜= represents the indices =i= of the list,
-and since =+´(/𝕩)=i ←→ i⊑𝕩=, the fold sums all the elements in =𝕩= up to =i=, for
-=i= in the range of the length of the list. Ergo, a scan.
-
-** Depth of nested lists
-
-Studying tree algorithms in APL, I learned about the depth vector [[https://asherbhs.github.io/apl-site/trees/representing-trees.html][representation]]. If
-the nested object in consideration is a string, the best approach is using boolean [[https://mlochbaum.github.io/bqncrate/?q=depth%20of%20parens#][masks]].
-However, when dealing with a BQN list, recursion becomes necessary to determine
-the depth of nested elements. Here’s how it can be implemented:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  {=◶⟨⋈0, 1+·∾𝕊¨⟩𝕩} ⟨1, ⟨2, ⟨3⟩, ⟨4, ⟨5, ⟨6, 7⟩⟩⟩⟩, 1⟩
-#+end_src
-
-#+RESULTS:
-: ⟨ 1 2 3 3 4 5 5 1 ⟩
-
-** H-index
+*** H-index
 
 This metric is one of the reasons for the [[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2407748][deplorable]] state of modern academia,
 and the headaches for /outsiders/ trying to get in. Consider that Peter Higgs
@@ -295,7 +262,11 @@ If someone ever published that much, sorting will eventually be slower:
 A testament to the idea that the simplest solution in BQN is often the most efficient:
 I initially clip my citations array with ={≠¨⊔≠∘𝕩¨⌾(≥⟜≠∘𝕩⊸/)𝕩}=, which is just =/⁼≠⊸⌊=.
 
-** Solving the cubic equation
+** Numerical methods
+
+I love numerical analysis. Compact implementations are often helpful to get the big picture.
+
+*** Solving the cubic equation
 
 This function computes the real roots of an arbitrary [[https://en.wikipedia.org/wiki/Cubic_equation][cubic equation]]. Initially,
 the equation is transformed into its depressed form via an appropriate substitution.
@@ -329,7 +300,7 @@ Here are some tests for the four possible branches:
 #+RESULTS:
 : ⟨ ⟨ 2.0000000000000004 1 ¯3.0000000000000004 ⟩ ⟨ ¯2.9999999999999996 1.9999999999999998 1.9999999999999998 ⟩ ⟨ 2 2 2 ⟩ ⟨ 0.532088886237956 ¯0.6527036446661387 ¯2.879385241571817 ⟩ ⟩
 
-** QR decomposition
+*** QR decomposition
 
 I put some effort golfing this [[https://en.wikipedia.org/wiki/QR_decomposition][QR decomposition]] implementation, and I got a very satisfying
 98 chars [[https://codegolf.stackexchange.com/a/278570/94421][one-liner]]. Ungolfed a bit, it looks like this:
@@ -371,7 +342,7 @@ We can test it with random matrices:
 :                                                                ┘                                                             ┘         ┘  
 :                                                                                                                                          ┘
 
-** Fast Fourier Transform
+*** Fast Fourier Transform
 
 Below is an implementation of the radix-2 [[https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm][Cooley–Tukey FFT algorithm]]. The function leverages
 BQN's headers to define the inverse transform in a succinct way using the property:
@@ -422,7 +393,7 @@ support it would be something like:
   DFT ← ⊢+˝∘×⎉1‿∞˜·⋆¯2×π×≠÷˜·×⌜˜⊒˜
 #+end_src
 
-** Tensor n-mode product
+*** Tensor n-mode product
 
 The n-mode product is a key ingredient for computing the Tucker decomposition of a tensor.
 For this we can use the [[https://en.wikipedia.org/wiki/Higher-order_singular_value_decomposition][HOSVD]] algorithm: a method that has been rediscovered several times.
@@ -445,6 +416,50 @@ A beautiful example of notation as a tool of thought, in my opinion: this deferr
 It works by moving the 𝕗-axis to the front, then multiplying 𝕨 and 𝕩 without the need for explicit
 unfolding, courtesy of the rank operator, and moving the last axis of the result back to 𝕗, all
 gracefully managed by under.
+
+** Array programming
+
+Here are some tricks and I ideas I find useful in array programming, many of them born from some REPL exploration.
+
+*** An identity on the naturals
+
+Some time ago, while working on performance optimization of linear algebra
+operations with Boolean arrays, I encountered an
+interesting summation property for an array \(a\) of length \(n\):
+
+\begin{equation*}
+    \sum_{i | a_i \neq 0} \sum_{j=i+1} f_j
+  = \sum_{j=0} f_j \sum_{i < j | a_i \neq 0} 1
+\end{equation*}
+
+It turns out that the RHS can be elegantly transformed
+into a scan, giving rise to a beautiful identity that applies to all
+natural numbers, not just Booleans as I initially thought:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  (+`≡·+´/≤⟜<⊒˜) •rand.Range˜ 1e3
+#+end_src
+
+#+RESULTS:
+: 1
+
+This identity holds because =⊒˜= represents the indices =i= of the list,
+and since =+´(/𝕩)=i ←→ i⊑𝕩=, the fold sums all the elements in =𝕩= up to =i=, for
+=i= in the range of the length of the list. Ergo, a scan.
+
+*** Depth of nested lists
+
+Studying tree algorithms in APL, I learned about the depth vector [[https://asherbhs.github.io/apl-site/trees/representing-trees.html][representation]]. If
+the nested object in consideration is a string, the best approach is using boolean [[https://mlochbaum.github.io/bqncrate/?q=depth%20of%20parens#][masks]].
+However, when dealing with a BQN list, recursion becomes necessary to determine
+the depth of nested elements. Here’s how it can be implemented:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  {=◶⟨⋈0, 1+·∾𝕊¨⟩𝕩} ⟨1, ⟨2, ⟨3⟩, ⟨4, ⟨5, ⟨6, 7⟩⟩⟩⟩, 1⟩
+#+end_src
+
+#+RESULTS:
+: ⟨ 1 2 3 3 4 5 5 1 ⟩
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
