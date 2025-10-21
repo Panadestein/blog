@@ -440,7 +440,7 @@ Pity, its implementation is deceptively simple:
   KMC ← {
     _fp ← {𝕊∘⊢⍟≢⟜𝔽𝕩}
     c ← 𝕨(•rand.Deal⟜≠⊏⊢)𝕩
-    𝕩⊸(>·(+˝÷≠)¨⊣⊔˜·⊏∘⍋˘+´○(×˜)∘-⎉1⎉1‿∞)_fp c
+    𝕩⊸(>·(+˝÷≠)¨⊣⊔˜·⊏∘⍋˘(+´×˜)∘-⎉1⎉1‿∞)_fp c
   }
 #+end_src
 
@@ -452,7 +452,7 @@ You can fix that by adding a =•_while_= instead, with an appropriate stopping 
 To obtain the labels, simply record the result of =⊏∘⍋˘= (or =⊐⟜(⌊´)=, which is faster).
 Bellow is a test with some sample data:
 
-#+begin_src bqn :tangle ../bqn/rollim.bqn
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
   test ← [
     0‿0, 0‿1, 1‿0
     5‿0, 5‿1, 6‿0
@@ -464,13 +464,15 @@ Bellow is a test with some sample data:
 
 #+RESULTS:
 : ┌─                                       
-: ╵ 0.3333333333333333 0.3333333333333333  
-:   5.333333333333333  0.3333333333333333  
-:   2.8333333333333335 5.333333333333333   
+: ╵ 5.333333333333333  2.8333333333333335  
+:   0.3333333333333333 0.3333333333333333  
+:   0.3333333333333333 5.333333333333333   
 :                                         ┘
 
 Keep in mind that Lloyd’s algorithm can converge to local minima, and that apparently distinct
 solutions may in fact be equivalent up to permutation or geometric symmetry (rotations, reflections, etc.).
+
+*Update*: check out the [[https://mlochbaum.github.io/bqncrate/?q=k-me][BQNcrate version]] that was added after some discussion in the Matrix room.
 
 ** Array programming
 
