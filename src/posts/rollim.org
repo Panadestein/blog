@@ -262,6 +262,19 @@ If someone ever published that much, sorting will eventually be slower:
 A testament to the idea that the simplest solution in BQN is often the most efficient:
 I initially clip my citations array with ={≠¨⊔≠∘𝕩¨⌾(≥⟜≠∘𝕩⊸/)𝕩}=, which is just =/⁼≠⊸⌊=.
 
+** Array style breath-first search
+
+If your problem is small enough to fit comfortably within a dense adjacency matrix,
+you won't find a more elegant BFS algorithm than the one presented in this excellent GraphBLAS [[https://archive.fosdem.org/2020/schedule/event/graphblas/][talk]].
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  BFS ← {1+´¬∨`𝕩∨˝∘∧⍟n𝕨=n←↕≠𝕩}
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+
 ** Numerical methods
 
 I love numerical analysis. Compact implementations are often helpful to get the big picture.
@@ -416,6 +429,47 @@ A beautiful example of notation as a tool of thought, in my opinion: this deferr
 It works by moving the 𝕗-axis to the front, then multiplying 𝕨 and 𝕩 without the need for explicit
 unfolding, courtesy of the rank operator, and moving the last axis of the result back to 𝕗, all
 gracefully managed by under.
+
+*** k-means clustering
+
+A classic algorithm in machine learning for unsupervised clustering.
+I was once asked to recognize it in an interview, but I didn’t know it at the time.
+Pity, its implementation is deceptively simple:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  KMC ← {
+    _fp ← {𝕊∘⊢⍟≢⟜𝔽𝕩}
+    c ← 𝕨(•rand.Deal⟜≠⊏⊢)𝕩
+    𝕩⊸(>·(+˝÷≠)¨⊣⊔˜·⊏∘⍋˘+´○(×˜)∘-⎉1⎉1‿∞)_fp c
+  }
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+Here I have chosen to implement the algorithm as a fixed point, but I am not filtering empty groups.
+You can fix that by adding a =•_while_= instead, with an appropriate stopping condition.
+To obtain the labels, simply record the result of =⊏∘⍋˘=. Bellow is a test with some sample data:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  test ← [
+    0‿0, 0‿1, 1‿0
+    5‿0, 5‿1, 6‿0
+    0‿5, 1‿5, 0‿6
+    5‿5, 5‿6, 6‿5
+  ]
+  3 KMC test
+#+end_src
+
+#+RESULTS:
+: ┌─                                       
+: ╵ 0.3333333333333333 0.3333333333333333  
+:   5.333333333333333  0.3333333333333333  
+:   2.8333333333333335 5.333333333333333   
+:                                         ┘
+
+Keep in mind that Lloyd’s algorithm can converge to local minima, and that apparently distinct
+solutions may in fact be equivalent up to permutation or geometric symmetry (rotations, reflections, etc.).
 
 ** Array programming
 
