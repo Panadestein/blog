@@ -262,10 +262,11 @@ If someone ever published that much, sorting will eventually be slower:
 A testament to the idea that the simplest solution in BQN is often the most efficient:
 I initially clip my citations array with ={≠¨⊔≠∘𝕩¨⌾(≥⟜≠∘𝕩⊸/)𝕩}=, which is just =/⁼≠⊸⌊=.
 
-** Array style breath-first search
+*** Array style breath-first search
 
 If your problem is small enough to fit comfortably within a dense adjacency matrix,
-you won't find a more elegant BFS algorithm than the one presented in this excellent GraphBLAS [[https://archive.fosdem.org/2020/schedule/event/graphblas/][talk]].
+you won't find a more elegant BFS algorithm than the one presented
+in this excellent GraphBLAS [[https://archive.fosdem.org/2020/schedule/event/graphblas/][talk]].
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn
   BFS ← {1+´¬∨`𝕩∨˝∘∧⍟n𝕨=n←↕≠𝕩}
