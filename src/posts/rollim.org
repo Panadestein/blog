@@ -449,7 +449,8 @@ Pity, its implementation is deceptively simple:
 
 Here I have chosen to implement the algorithm as a fixed point, but I am not filtering empty groups.
 You can fix that by adding a =•_while_= instead, with an appropriate stopping condition.
-To obtain the labels, simply record the result of =⊏∘⍋˘=. Bellow is a test with some sample data:
+To obtain the labels, simply record the result of =⊏∘⍋˘= (or =⊐⟜(⌊´)=, which is faster).
+Bellow is a test with some sample data:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn
   test ← [
