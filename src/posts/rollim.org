@@ -17,7 +17,7 @@ Therefore, I will sometimes juxtapose my implementations with those of seasoned 
 
 ** Competitive programming
 
-Problems I find in coding challenges' platforms, such as [[https://leetcode.com/u/panadestein/][LeetCode]], [[https://cses.fi/problemset/][CSES]], and [[https://cp-algorithms.com/][cp-algorithms]].
+Problems I find in coding challenges' platforms, such as [[https://leetcode.com/u/panadestein/][LeetCode]], [[https://cses.fi/problemset/][CSES]], [[https://cp-algorithms.com/][cp-algorithms]], and [[https://adventofcode.com/][Advent of Code]].
 
 *** Trapping rain water
 
@@ -321,7 +321,7 @@ I put some effort golfing this [[https://en.wikipedia.org/wiki/QR_decomposition]
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn
   QR ← +˝∘×⎉1‿∞{
-    1=⊢´≢𝕩 ? 𝕩⊸÷⟜⊑⊸⋈√+˝×˜𝕩;
+    1=⊢´≢𝕩 ? 𝕩⊸÷⟜⊑⊸⋈+˝⌾(×˜)𝕩;
     ∾˘{(q𝔽𝕨)⋈(r𝔽t)∾0𝔽⍟k𝕩}´𝕊𝔽{𝕘-𝕩𝔽t↩𝕩⍉⊸𝔽𝕘}(k↓˘𝕩)⊑q‿r←𝕊𝕩↑˘˜k←⌈2÷˜⊢´≢𝕩⊣t←@
   }
 #+end_src
@@ -348,13 +348,13 @@ We can test it with random matrices:
 #+end_src
 
 #+RESULTS:
-: ┌─                                                                                                                                        
-: · ┌─                                                             ┌─                                                            ┌─         
-:   ╵  0.8157427013276365 ¯0.577946856084976 0.02326535562123689   ╵ 0.9106163258394209 0.7411115590785274  0.7652096291273813   ╵ 0 0 0    
-:     0.32843727859545113 0.4297133155667652 ¯0.8411155809122974                      0  0.709988720748101 0.15322713799622295     0 0 0    
-:       0.476122672490509 0.6937751061879561  0.5403547934222346                      0                  0 0.36577814222564664     0 0 0    
-:                                                                ┘                                                             ┘         ┘  
-:                                                                                                                                          ┘
+: ┌─                                                                                                                                             
+: · ┌─                                                               ┌─                                                               ┌─         
+:   ╵ 0.7144260899509619  ¯0.11998405924866697 ¯0.6893469282760241   ╵ 1.3272602613914946 0.45821006669986125  0.6778483350121149     ╵ 0 0 0    
+:     0.24775066978035085  0.9647413811697029   0.0888463453506213     0                  0.697172106504235   ¯0.13992817528755036      0 0 0    
+:     0.6543813625255287  ¯0.23426031030668987  0.7189625438047855     0                  0                    0.029863470562463006     0 0 0    
+:                                                                  ┘                                                                ┘         ┘  
+:                                                                                                                                               ┘
 
 *** Fast Fourier Transform
 
@@ -518,6 +518,54 @@ the depth of nested elements. Here’s how it can be implemented:
 
 #+RESULTS:
 : ⟨ 1 2 3 3 4 5 5 1 ⟩
+
+*** Another fun spiral
+
+There are many variants of the spiral matrix problem. One fun version appears in the 
+[[https://cses.fi/problemset/task/1071][CSES]] problem set, which I attempted to generate using array programming techniques. 
+In particular, I implemented a variation of Joey Tuttle’s remarkable method 
+for constructing integer volutes. For background, see this [[https://tony-zorman.com/posts/volutes-in-bqn.html][post]], which also links to
+the original APL and J sources.
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  Z1 ← {∘‿𝕩⥊⍋+`0∾(⥊1∾˘≍˘˜1↓↕𝕩)(⊣/·-⌾(2⊏˘∘‿3⊸⥊)≠⊸⥊)1‿𝕩}
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+The key to Tuttle’s method lies in understanding the role of the =⍋=. Rather than constructing
+the spiral step by step, this approach derives it by sorting a list whose relative order
+encodes the path of the spiral. The scan integrates a sequence of alternating increments
+and decrements that capture the turning rhythm of the spiral, and =⍋= then ranks
+those cumulative values, producing exactly the traversal order of the spiral cells.  
+
+Interestingly, this particular problem also has a concise *closed-form* solution, 
+described beautifully in this other [[https://susam.net/zigzag-number-spiral.html][post]]:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  Z2 ← (×˜⊸-∘⌈+-×¯1⋆⌈)⌜˜1+↕
+#+end_src
+
+#+RESULTS:
+: (×˜⊸-∘⌈+-×¯1⋆⌈)⌜˜1+↕
+
+Let’s confirm that both methods produce identical results:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  (Z1≡Z2)◶@‿Z1 ⊑1 •rand.Deal 10
+#+end_src
+
+#+RESULTS:
+: ┌─                      
+: ╵  0  1  8  9 24 25 48  
+:    3  2  7 10 23 26 47  
+:    4  5  6 11 22 27 46  
+:   15 14 13 12 21 28 45  
+:   16 17 18 19 20 29 44  
+:   35 34 33 32 31 30 43  
+:   36 37 38 39 40 41 42  
+:                        ┘
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
