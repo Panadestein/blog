@@ -528,23 +528,24 @@ for constructing integer volutes. For background, see this [[https://tony-zorman
 the original APL and J sources.
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn
-  Z1 ← {∘‿𝕩⥊⍋+`0∾(⥊1∾˘≍˘˜1↓↕𝕩)(⊣/·-⌾(2⊏˘∘‿3⊸⥊)≠⊸⥊)1‿𝕩}
+  Z1 ← {∘‿𝕩⥊⍋+`(⥊1∾˘≍˘˜↕𝕩)(⊣/·-⌾(2⊏˘∘‿3⊸⥊)≠⊸⥊)𝕩‿1}
 #+end_src
 
 #+RESULTS:
 : (function block)
 
-The key to Tuttle’s method lies in understanding the role of the =⍋=. Rather than constructing
+The key to Tuttle’s method lies in understanding the role of the grade up. Rather than constructing
 the spiral step by step, this approach derives it by sorting a list whose relative order
 encodes the path of the spiral. The scan integrates a sequence of alternating increments
 and decrements that capture the turning rhythm of the spiral, and =⍋= then ranks
 those cumulative values, producing exactly the traversal order of the spiral cells.  
 
-Interestingly, this particular problem also has a concise *closed-form* solution, 
-described beautifully in this other [[https://susam.net/zigzag-number-spiral.html][post]]:
+Interestingly, this particular problem also has a concise closed-form solution, 
+described beautifully in this other [[https://susam.net/zigzag-number-spiral.html][post]], made zero based with the observation that
+=𝕨⌈○(1⊸+)𝕩= is =1+𝕨⌈𝕩=:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn
-  Z2 ← (×˜⊸-∘⌈+-×¯1⋆⌈)⌜˜1+↕
+  Z2 ← (×˜⊸+∘⌈--×¯1⋆⌈)⌜˜↕
 #+end_src
 
 #+RESULTS:
@@ -557,15 +558,13 @@ Let’s confirm that both methods produce identical results:
 #+end_src
 
 #+RESULTS:
-: ┌─                      
-: ╵  0  1  8  9 24 25 48  
-:    3  2  7 10 23 26 47  
-:    4  5  6 11 22 27 46  
-:   15 14 13 12 21 28 45  
-:   16 17 18 19 20 29 44  
-:   35 34 33 32 31 30 43  
-:   36 37 38 39 40 41 42  
-:                        ┘
+: ┌─                
+: ╵  0  1  8  9 24  
+:    3  2  7 10 23  
+:    4  5  6 11 22  
+:   15 14 13 12 21  
+:   16 17 18 19 20  
+:                  ┘
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
