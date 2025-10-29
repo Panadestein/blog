@@ -253,33 +253,33 @@ text-align: center;
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org3f4c117">1</a></li>
-<li><a href="#org284c6a7">2</a></li>
-<li><a href="#orgb23bdf5">3</a></li>
-<li><a href="#orgc683a5b">4</a></li>
-<li><a href="#org53afe8a">5</a></li>
-<li><a href="#orgf16dde0">6</a></li>
-<li><a href="#org40f9fae">7</a></li>
-<li><a href="#org3da72e5">8</a></li>
-<li><a href="#orgaa97489">9</a></li>
-<li><a href="#orgc842e53">10</a></li>
-<li><a href="#org960c9e7">11</a></li>
-<li><a href="#org9fd6c8b">12</a></li>
+<li><a href="#orgf98241e">1</a></li>
+<li><a href="#orga5982db">2</a></li>
+<li><a href="#orga38210f">3</a></li>
+<li><a href="#org27a8f01">4</a></li>
+<li><a href="#orgfa98379">5</a></li>
+<li><a href="#orgb1388ac">6</a></li>
+<li><a href="#org4fa7a1d">7</a></li>
+<li><a href="#org107f573">8</a></li>
+<li><a href="#orgbfdbbe2">9</a></li>
+<li><a href="#org74709a2">10</a></li>
+<li><a href="#org90a78da">11</a></li>
+<li><a href="#org32c7d59">12</a></li>
 <li><a href="#pe13">13</a></li>
-<li><a href="#orge3c6287">14</a></li>
-<li><a href="#org07d4c3e">15</a></li>
+<li><a href="#org9e06d44">14</a></li>
+<li><a href="#org3999a6f">15</a></li>
 <li><a href="#pe16">16</a></li>
-<li><a href="#orgaef3d21">17</a></li>
-<li><a href="#org7e95978">18</a></li>
-<li><a href="#org0d3b84f">19</a></li>
-<li><a href="#orga0a3b26">20</a></li>
-<li><a href="#orga3d9c79">21</a></li>
+<li><a href="#org74e25a5">17</a></li>
+<li><a href="#org9274f1d">18</a></li>
+<li><a href="#org8a7c09b">19</a></li>
+<li><a href="#org8a6978e">20</a></li>
+<li><a href="#org8fa6b21">21</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org328960f" class="outline-2">
-<h2 id="org328960f">Foreword</h2>
-<div class="outline-text-2" id="text-org328960f">
+<div id="outline-container-org812ece2" class="outline-2">
+<h2 id="org812ece2">Foreword</h2>
+<div class="outline-text-2" id="text-org812ece2">
 <p>
 This post presents my BQN solutions to some of the problems in <a href="https://projecteuler.net/">Project Euler</a>.
 It is discouraged to share them, but I very much dislike writing throw-away code,
@@ -314,18 +314,18 @@ parsing ← {
 </div>
 </div>
 </div>
-<div id="outline-container-org3f4c117" class="outline-2">
-<h2 id="org3f4c117">Problem 1</h2>
-<div class="outline-text-2" id="text-org3f4c117">
+<div id="outline-container-orgf98241e" class="outline-2">
+<h2 id="orgf98241e">Problem 1</h2>
+<div class="outline-text-2" id="text-orgf98241e">
 <div class="org-src-container">
 <pre class="src src-bqn">E1 ← +´(∨´0=5‿3|&lt;)⊸/
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org284c6a7" class="outline-2">
-<h2 id="org284c6a7">Problem 2</h2>
-<div class="outline-text-2" id="text-org284c6a7">
+<div id="outline-container-orga5982db" class="outline-2">
+<h2 id="orga5982db">Problem 2</h2>
+<div class="outline-text-2" id="text-orga5982db">
 <p>
 Estimate the upper bound with Binet's formula.
 </p>
@@ -336,9 +336,9 @@ Estimate the upper bound with Binet's formula.
 </div>
 </div>
 </div>
-<div id="outline-container-orgb23bdf5" class="outline-2">
-<h2 id="orgb23bdf5">Problem 3</h2>
-<div class="outline-text-2" id="text-orgb23bdf5">
+<div id="outline-container-orga38210f" class="outline-2">
+<h2 id="orga38210f">Problem 3</h2>
+<div class="outline-text-2" id="text-orga38210f">
 <p>
 A brute force attempt, in which I got lucky. We create a primes table, and then check:
 </p>
@@ -369,9 +369,9 @@ than or equal to its square root.
 </p>
 </div>
 </div>
-<div id="outline-container-orgc683a5b" class="outline-2">
-<h2 id="orgc683a5b">Problem 4</h2>
-<div class="outline-text-2" id="text-orgc683a5b">
+<div id="outline-container-org27a8f01" class="outline-2">
+<h2 id="org27a8f01">Problem 4</h2>
+<div class="outline-text-2" id="text-org27a8f01">
 <p>
 Anything other than brute force here? A little tacit function:
 </p>
@@ -386,9 +386,9 @@ This runs in 5 ms with the optimization of searching only in the 900's.
 </p>
 </div>
 </div>
-<div id="outline-container-org53afe8a" class="outline-2">
-<h2 id="org53afe8a">Problem 5</h2>
-<div class="outline-text-2" id="text-org53afe8a">
+<div id="outline-container-orgfa98379" class="outline-2">
+<h2 id="orgfa98379">Problem 5</h2>
+<div class="outline-text-2" id="text-orgfa98379">
 <p>
 That felt almost trivial.
 </p>
@@ -399,9 +399,9 @@ That felt almost trivial.
 </div>
 </div>
 </div>
-<div id="outline-container-orgf16dde0" class="outline-2">
-<h2 id="orgf16dde0">Problem 6</h2>
-<div class="outline-text-2" id="text-orgf16dde0">
+<div id="outline-container-orgb1388ac" class="outline-2">
+<h2 id="orgb1388ac">Problem 6</h2>
+<div class="outline-text-2" id="text-orgb1388ac">
 <p>
 Yeah well, what can I say, I love this identity:
 </p>
@@ -428,9 +428,9 @@ Quite a few characters more, though.
 </p>
 </div>
 </div>
-<div id="outline-container-org40f9fae" class="outline-2">
-<h2 id="org40f9fae">Problem 7</h2>
-<div class="outline-text-2" id="text-org40f9fae">
+<div id="outline-container-org4fa7a1d" class="outline-2">
+<h2 id="org4fa7a1d">Problem 7</h2>
+<div class="outline-text-2" id="text-org4fa7a1d">
 <p>
 The idea here is to use Eratosthenes' sieve with a correct upper bound, which we get
 thanks to Rosser's <a href="https://en.wikipedia.org/wiki/Prime-counting_function#Inequalities">theorem</a>:
@@ -442,9 +442,9 @@ thanks to Rosser's <a href="https://en.wikipedia.org/wiki/Prime-counting_functio
 </div>
 </div>
 </div>
-<div id="outline-container-org3da72e5" class="outline-2">
-<h2 id="org3da72e5">Problem 8</h2>
-<div class="outline-text-2" id="text-org3da72e5">
+<div id="outline-container-org107f573" class="outline-2">
+<h2 id="org107f573">Problem 8</h2>
+<div class="outline-text-2" id="text-org107f573">
 <p>
 A simple windowed reduction:
 </p>
@@ -455,9 +455,9 @@ A simple windowed reduction:
 </div>
 </div>
 </div>
-<div id="outline-container-orgaa97489" class="outline-2">
-<h2 id="orgaa97489">Problem 9</h2>
-<div class="outline-text-2" id="text-orgaa97489">
+<div id="outline-container-orgbfdbbe2" class="outline-2">
+<h2 id="orgbfdbbe2">Problem 9</h2>
+<div class="outline-text-2" id="text-orgbfdbbe2">
 <p>
 A stupid brute force does the trick:
 </p>
@@ -483,9 +483,9 @@ until √500 because \(m\) cannot be larger than it, as \(n\) is positive.
 </p>
 </div>
 </div>
-<div id="outline-container-orgc842e53" class="outline-2">
-<h2 id="orgc842e53">Problem 10</h2>
-<div class="outline-text-2" id="text-orgc842e53">
+<div id="outline-container-org74709a2" class="outline-2">
+<h2 id="org74709a2">Problem 10</h2>
+<div class="outline-text-2" id="text-org74709a2">
 <p>
 The sieve again:
 </p>
@@ -496,9 +496,9 @@ The sieve again:
 </div>
 </div>
 </div>
-<div id="outline-container-org960c9e7" class="outline-2">
-<h2 id="org960c9e7">Problem 11</h2>
-<div class="outline-text-2" id="text-org960c9e7">
+<div id="outline-container-org90a78da" class="outline-2">
+<h2 id="org90a78da">Problem 11</h2>
+<div class="outline-text-2" id="text-org90a78da">
 <p>
 This has to be brute force. First, I will parse the grid:
 </p>
@@ -522,9 +522,9 @@ It computes the answer in 300μs.
 </p>
 </div>
 </div>
-<div id="outline-container-org9fd6c8b" class="outline-2">
-<h2 id="org9fd6c8b">Problem 12</h2>
-<div class="outline-text-2" id="text-org9fd6c8b">
+<div id="outline-container-org32c7d59" class="outline-2">
+<h2 id="org32c7d59">Problem 12</h2>
+<div class="outline-text-2" id="text-org32c7d59">
 <p>
 Here I tried to use an awesome array solution for the number of divisors <code>1+´0=↕⊸|</code>,
 which unfortunately does not scale. So I use trial division for computing the divisor
@@ -564,9 +564,9 @@ implement the high school sum algorithm though (check it out with Python or what
 </div>
 </div>
 </div>
-<div id="outline-container-orge3c6287" class="outline-2">
-<h2 id="orge3c6287">Problem 14</h2>
-<div class="outline-text-2" id="text-orge3c6287">
+<div id="outline-container-org9e06d44" class="outline-2">
+<h2 id="org9e06d44">Problem 14</h2>
+<div class="outline-text-2" id="text-org9e06d44">
 <p>
 Memoization, so we don't wait an eternity:
 </p>
@@ -583,9 +583,9 @@ Memoization, so we don't wait an eternity:
 </div>
 </div>
 </div>
-<div id="outline-container-org07d4c3e" class="outline-2">
-<h2 id="org07d4c3e">Problem 15</h2>
-<div class="outline-text-2" id="text-org07d4c3e">
+<div id="outline-container-org3999a6f" class="outline-2">
+<h2 id="org3999a6f">Problem 15</h2>
+<div class="outline-text-2" id="text-org3999a6f">
 <p>
 First generate the input array:
 </p>
@@ -679,9 +679,9 @@ Yeah, something like that. Although the sum is less useful in that form.
 </pre>
 </div>
 </div>
-<div id="outline-container-orgaef3d21" class="outline-2">
-<h2 id="orgaef3d21">Problem 17</h2>
-<div class="outline-text-2" id="text-orgaef3d21">
+<div id="outline-container-org74e25a5" class="outline-2">
+<h2 id="org74e25a5">Problem 17</h2>
+<div class="outline-text-2" id="text-org74e25a5">
 <p>
 Nothing special here, store the lengths of the ones', teens' and tens' names
 (with padding), pass it in a modifier because a variable would be ugly,
@@ -702,9 +702,9 @@ The magic numbers 11, 7, and 3 are for <code>one thousand</code>, <code>hundred<
 </p>
 </div>
 </div>
-<div id="outline-container-org7e95978" class="outline-2">
-<h2 id="org7e95978">Problems 18 and 67</h2>
-<div class="outline-text-2" id="text-org7e95978">
+<div id="outline-container-org9274f1d" class="outline-2">
+<h2 id="org9274f1d">Problems 18 and 67</h2>
+<div class="outline-text-2" id="text-org9274f1d">
 <p>
 First we do some parsing, the lame padding to make it look like a proper low triangular
 matrix:
@@ -715,7 +715,7 @@ matrix:
 </pre>
 </div>
 
-<pre class="example" id="org3a1e54a">
+<pre class="example" id="org640c834">
 ┌─                                              
 ╵ 75  0  0  0  0  0  0  0  0  0  0  0  0  0  0  
   95 64  0  0  0  0  0  0  0  0  0  0  0  0  0  
@@ -749,9 +749,9 @@ This solution also works for Problem 67, which has only larger input. You get th
 </p>
 </div>
 </div>
-<div id="outline-container-org0d3b84f" class="outline-2">
-<h2 id="org0d3b84f">Problem 19</h2>
-<div class="outline-text-2" id="text-org0d3b84f">
+<div id="outline-container-org8a7c09b" class="outline-2">
+<h2 id="org8a7c09b">Problem 19</h2>
+<div class="outline-text-2" id="text-org8a7c09b">
 <p>
 Here we simply simulate the Gregorian calendar, and since in the desired range we don't
 have to account for <a href="https://en.wikipedia.org/wiki/Century_leap_year">century leap years</a>, testing multiples of 4 suffices:
@@ -770,9 +770,9 @@ Don't forget to add the proper initial to the scan, <code>7|1+365</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-orga0a3b26" class="outline-2">
-<h2 id="orga0a3b26">Problem 20</h2>
-<div class="outline-text-2" id="text-orga0a3b26">
+<div id="outline-container-org8a6978e" class="outline-2">
+<h2 id="org8a6978e">Problem 20</h2>
+<div class="outline-text-2" id="text-org8a6978e">
 <p>
 Here we can use the same method for bigint arithmetic of <a href="#pe16">Problem 16</a>. We define the array
 that will contain the digits, using an upper bound. This array will be used as the initial for
@@ -800,9 +800,9 @@ have to be adjusted as well.
 </p>
 </div>
 </div>
-<div id="outline-container-orga3d9c79" class="outline-2">
-<h2 id="orga3d9c79">Problem 21</h2>
-<div class="outline-text-2" id="text-orga3d9c79">
+<div id="outline-container-org8fa6b21" class="outline-2">
+<h2 id="org8fa6b21">Problem 21</h2>
+<div class="outline-text-2" id="text-org8fa6b21">
 <p>
 Beautiful array solution, not much more to say. 
 </p>
