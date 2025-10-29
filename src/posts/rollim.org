@@ -534,11 +534,13 @@ the original APL and J sources.
 #+RESULTS:
 : (function block)
 
-The key to Tuttle’s method lies in understanding the role of the grade up. Rather than constructing
-the spiral step by step, this approach derives it by sorting a list whose relative order
-encodes the path of the spiral. The scan integrates a sequence of alternating increments
-and decrements that capture the turning rhythm of the spiral, and =⍋= then ranks
-those cumulative values, producing exactly the traversal order of the spiral cells.  
+The key to Tuttle’s method is understanding the role of grade up as a permutation inverter.
+Rather than constructing the spiral directly, the algorithm first generates a =value → position= map.
+This list is created by a scan that integrates a sequence of delta moves capturing the spiral's path
+(just a simulation, negative values go west and ).
+The resulting path vector is a map where =k⊑V= is the final flattened position for the value =k=.
+The grade up =⍋P= then inverts this relationship, transforming it into a =position → value=
+map: the final flattened spiral.
 
 Interestingly, this particular problem also has a concise closed-form solution, 
 described beautifully in this other [[https://susam.net/zigzag-number-spiral.html][post]], made zero based with the observation that
