@@ -536,9 +536,9 @@ the original APL and J sources.
 
 The key to Tuttle’s method is understanding the role of grade up as a permutation inverter.
 Rather than constructing the spiral directly, the algorithm first generates a =value → position= map.
-This list is created by a scan that integrates a sequence of delta moves capturing the spiral's path
-(just a simulation, negative values go west and ).
-The resulting path vector is a map where =k⊑V= is the final flattened position for the value =k=.
+This list is created by a scan that integrates a sequence of delta moves capturing the spiral's path =P=,
+that is, a simulation of the process with =⟨1, 𝕩, ¯1, -𝕩⟩= corresponding to steps right, down, left, up.
+The resulting path vector is a map where =k⊑P= is the final flattened position for the value =k=.
 The grade up =⍋P= then inverts this relationship, transforming it into a =position → value=
 map: the final flattened spiral.
 
