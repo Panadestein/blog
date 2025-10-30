@@ -42,6 +42,49 @@ and [[https://arxiv.org/abs/1608.03355][arXiv:1608.03355]]. For simplicity, we a
   }
 #+end_src
 
+#+begin_export html
+</br>
+<details>
+<summary>Physical context</summary>
+#+end_export
+
+The interpreter’s logic is straightforward: it evolves the wavefunction $\Psi_0^n$  
+in the full [[https://en.wikipedia.org/wiki/Hilbert_space][Hilbert space]], whose dimension is $2^n$ for $n$ qubits.  
+Each quantum gate is extended to this space through Kronecker lifting (=E=),  
+performed by the function =L=:
+
+\begin{equation*}
+  L_U = I \otimes \cdots U \cdots \otimes I
+\end{equation*}
+
+Note that the function =L= performs more than a plain Kronecker embedding.  
+Before constructing \(L_U\), the affected qubits are permuted to become  
+index-adjacent in the tensor order. This permutation is decomposed into  
+adjacent swaps, applied as unitary transpositions (=T=). The system then evolves
+under the sequence of lifted gates, defined by =A=:
+
+\begin{equation*}
+\Psi_m^n = \Psi_0^n \prod_i^m L_{U_i}
+\end{equation*}
+
+Measurement is implemented by sampling from the [[https://en.wikipedia.org/wiki/Cumulative_distribution_function][CDF]] of the squared amplitudes of the state vector.  
+Statistically, this corresponds to drawing a discrete random variable $q_j$ whose  
+cumulative distribution is:
+
+\begin{equation*}
+  F(q_j) = \sum_{i \le j}p(q_i)
+\end{equation*}
+
+Given a uniform random variable $U \sim \text{Uniform}(0, 1)$, we sample by inversion:
+
+\begin{equation*}
+  \text{Pr}(U \in (F(q_{j-1}), F(q_{j})]) = \text{Pr}(F(q_{j-1}) < U \le F(q_{j})) = F(q_{j}) - F(q_{j-1}) = p(q_{j})
+\end{equation*}
+
+#+begin_export html
+</details>
+#+end_export
+
 ** Shor's algorithm
 
 As a test case, we employ the quantum circuit of Shor's algorithm
@@ -49,7 +92,6 @@ for the number fifteen and base eleven, following references
 [[https://arxiv.org/abs/1804.03719][arXiv:1804.03719]] and [[https://arxiv.org/abs/2306.09122][arXiv:2306.09122]]. The resulting compiled circuit
 uses five qubits, three of which serve as control. To enhance
 statistical accuracy, the experiment is repeated multiple times.
-Additionally, we define a classical post-processing function:
 
 #+name: test
 #+begin_src bqn :exports code :results none :tangle ../bqn/q.bqn
@@ -65,7 +107,13 @@ Additionally, we define a classical post-processing function:
   C ← {n (⊣≡×´∘GCD) +‿-{𝕩𝕎1}¨ <a⋆(≠÷2×⊑∘⍒) 0⌾⊑+˝∘‿(2⋆qb-2)⥊𝕩}
 #+end_src
 
-Wir müssen wissen, wir werden wissen![fn:4]
+The function =C= performs the classical post-processing part of the algorithm.
+Given the measurement registers, it reconstructs the candidate period \(r\) and
+checks the Shor certificate: it is true iff both \(\gcd(a^{\,r/2}\pm 1,N)\)
+are non-trivial and their product equals \(N\).
+
+Let’s run the quantum simulation and complete the reasoning in the classical domain;
+let us kill the ignorabimus. Wir müssen wissen, wir werden wissen![fn:4]
 
 #+name: run
 #+begin_src bqn :exports both :tangle ../bqn/q.bqn
@@ -75,13 +123,23 @@ Wir müssen wissen, wir werden wissen![fn:4]
 #+RESULTS: run
 : 1
 
-Compare the result with that from a real [[https://panadestein.github.io/blog/supp/ibm_eagle/shor_factorize_fifteen.html][quantum computer]].
+Compare the result with that obtained using an IBM's [[https://panadestein.github.io/blog/supp/ibm_eagle/shor_factorize_fifteen.html][Eagle QPU]].
 
 ** Epilogue
 
-Why the hieroglyphs, you may ask? The tacit and functional style, coupled with numerous combinators,
-makes programming feel like solving a fun algebraic puzzle rather than drafting a manifesto.
-BQN is the epitome of minimalism's power:
+This was, of course, a conceptually simple simulation, the minimal instance of  
+Shor’s algorithm that has been verified experimentally. The interpreter itself  
+remains in its basic, non-optimized form. Yet for me, the goal was different:  
+to stress-test BQN on a genuinely technical task. I enjoyed distilling the  
+essence of a long and intricate implementation into a few concise expressions,  
+like trimming a bonsai.
+
+In that process, the language revealed its character.  
+Why the hieroglyphs, you may ask? The tacit and functional style woven from  
+combinators, turns programming into a quiet algebraic game.  
+The resulting program feels less written than discovered, its complexity  
+compressed into a handful of primitives. BQN is the epitome of minimalism's  
+power, and the primitive statistics below tell the same story in numbers:
 
 #+begin_export html
 <details>
