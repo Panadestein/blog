@@ -106,19 +106,19 @@ to enjoy the breeze down there, or simply to remember.
 ** Bonus: Opeth anthology
 
 This is the Opeth album I would recommend to anyone. The query function needs to be modified a bit for generating it.
-But before that, let's look at the [[https://www.opeth.com/releases/albums][official discography]]:
+But before that, let's look at average album length in the [[https://www.opeth.com/releases/albums][official discography]]:
 
 #+begin_src bqn :results none :exports both :tangle ../bqn/spodat.bqn
   lo ← (↕∘⌈+´÷≠) 7‿5‿9‿7‿8‿6‿8‿8‿7‿10‿7‿11‿10
 #+end_src
 
-Then:
+We can then filter all Opeth entries among the top songs, and select the first =≠lo=:  
 
 #+begin_src bqn :results none :tangle ../bqn/spodat.bqn
   O ← {lo (1⊸+∘⊣≍˘⊏) (⊢˝˘⊸∊⟜𝕨/⊏˘) ∾(⍷s‿a⊸⊏˘)¨ ((⍒(+´m⊸⊏˘)¨)⊸⊏ s⊸⊏˘⊐⊸⊔⊢) >1⊏¨ 𝕩}
 #+end_src
 
-Enjoy:
+Enjoy this whisper within a sigh[fn:3]:
 
 #+begin_src bqn :exports both :tangle ../bqn/spodat.bqn
   spd O˜⋈ "Opeth" 
@@ -143,5 +143,6 @@ some [[https://support.spotify.com/us/article/understanding-my-data/][interestin
 Spotify Web API, which is beyond the scope of this post.
 [fn:2] Well, modulo all from =Tool= and =Silent state optimizer= from =Leech=, which are definitely in my top ten,
 and which I listen to on YouTube. It's possible to analyze the [[https://takeout.google.com/settings/takeout][data]] from this site as well—perhaps in a follow-up post.
+[fn:3] Who am I kidding, this is definitely my favorite Opeth song.
 
 #+INCLUDE: "../html-foot.org"
