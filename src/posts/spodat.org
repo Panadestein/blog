@@ -2,10 +2,9 @@
 #+INCLUDE: "../html-head.org"
 
 I analyzed my Spotify data[fn:1] for the period 2016-2024, eight years of listening condensed into data;
-yet the patterns it reveals are more about me[fn:2] than the music itself.
-
-I processed everything in [[https://mlochbaum.github.io/BQN/index.html][BQN]], because its clarity suits both data and introspection. If you enjoy these
-kinds of patterns, or just the music itself, I’m always glad to exchange thoughts.
+yet the patterns it reveals are more about me[fn:2] than the music itself. I processed everything in [[https://mlochbaum.github.io/BQN/index.html][BQN]],
+because its clarity suits both data and introspection. If you enjoy these
+kinds of patterns, or just the music, I’m always glad to exchange thoughts.
 
 ** Technical details
 
