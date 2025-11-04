@@ -1,10 +1,10 @@
 #+TITLE: Songs to pave the seasons
 #+INCLUDE: "../html-head.org"
 
-I analyzed my Spotify data[fn:1] for the period 2016-2024, eight years of listening condensed into data;
-yet the patterns it reveals are more about me[fn:2] than the music itself. I processed everything in [[https://mlochbaum.github.io/BQN/index.html][BQN]],
-because its clarity suits both data and introspection. If you enjoy these
-kinds of patterns, or just the music, I’m always glad to exchange thoughts.
+My Spotify data[fn:1] from 2016-2024, representing eight years of listening, reveals patterns that are
+more about me[fn:2] than the music itself. I processed it all in [[https://mlochbaum.github.io/BQN/index.html][BQN]], as its clarity is perfectly
+suited for both data analysis and introspection. Whether you enjoy these kinds of patterns or
+just the music, I’m always glad to exchange thoughts.
 
 ** Technical details
 
@@ -141,7 +141,7 @@ Enjoy this whisper within a sigh[fn:3]:
 some [[https://support.spotify.com/us/article/understanding-my-data/][interesting fields]] in the data, but more advanced information, such as genre, requires querying the
 Spotify Web API, which is beyond the scope of this post.
 [fn:2] Well, modulo all from =Tool= and =Silent state optimizer= from =Leech=, which are definitely in my top ten,
-and which I listen to on YouTube. It's possible to analyze the [[https://takeout.google.com/settings/takeout][data]] from this site as well—perhaps in a follow-up post.
+and which I listen to on YouTube. It's possible to analyze the [[https://takeout.google.com/settings/takeout][data]] from this site as well, perhaps in a follow-up post.
 [fn:3] Who am I kidding, this is definitely my favorite Opeth song.
 
 #+INCLUDE: "../html-foot.org"
