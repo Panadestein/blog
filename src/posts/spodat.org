@@ -1,33 +1,41 @@
 #+TITLE: Songs to pave the seasons
 #+INCLUDE: "../html-head.org"
 
-I have analyzed my Spotify data[fn:1] for the period 2016-2024. The results accurately represent
-my actual music taste[fn:2].
+I analyzed my Spotify data[fn:1] for the period 2016-2024, eight years of listening condensed into data;
+yet the patterns it reveals are more about me[fn:2] than the music itself.
+
+I processed everything in [[https://mlochbaum.github.io/BQN/index.html][BQN]], because its clarity suits both data and introspection. If you enjoy these
+kinds of patterns, or just the music itself, I’m always glad to exchange thoughts.
 
 ** Technical details
 
-This is a suitable task for an array language, so I rely on [[https://mlochbaum.github.io/BQN/index.html][BQN]] which is my
-favorite one:
+The data come as a large JSON file exported from Spotify. Parsing it is straightforward
+thanks to [[https://github.com/mlochbaum/bqn-libs][bqn-libs]]:
 
 #+begin_src bqn :results none :tangle ../bqn/spodat.bqn
   ⟨P⇐Parse⟩ ← •Import "../../bqn-libs/json.bqn"
   @ ⊣ spd ← P •file.Chars "../../supp/spdat/data.json"
 #+end_src
 
-Additional structural information is needed, namely index of the songs,
-artists, elapsed time, and the length of the desired result.
+For later queries I isolate the relevant fields (song index, artist, elapsed time)
+and set the length of the desired result:
 
 #+begin_src bqn :results none :tangle ../bqn/spodat.bqn
   s‿a‿m‿l ← ⟨7, 8, 3, 1+↕20⟩
 #+end_src
 
-We define a (50 chars) dyadic block function to execute the queries:
+Finally, I define a compact (50 chars) dyadic block function to perform ranked
+lookups and return the top entries:
 
 #+begin_src bqn :results none :tangle ../bqn/spodat.bqn
   Q ← {l≍˘∾(⍷𝕨⊸⊏˘)¨ l⊏ ((⍒(+´m⊸⊏˘)¨)⊸⊏ 𝕨⊸⊏˘⊐⊸⊔⊢) >1⊏¨ 𝕩}
 #+end_src
 
 ** Top songs
+
+The result is somewhat eclectic, yet a clear pattern emerges. Most pieces belong to a world of intricate
+harmonies and long forms: during these years, it's been all about progressive rock and progressive metal.
+A few simpler intrusions distort the spectrum; traces of another musical landscape I once inhabited.
 
 #+begin_src bqn :exports both :tangle ../bqn/spodat.bqn
   s Q spd	
@@ -60,6 +68,10 @@ We define a (50 chars) dyadic block function to execute the queries:
 #+end_example
 
 ** Top artists
+
+The same tendency appears at the level of artists. I gravitate toward music that
+builds worlds rather than merely expresses moods. Yet sometimes I descend to a simpler plane,
+to enjoy the breeze down there, or simply to remember.
 
 #+begin_src bqn :exports both :tangle ../bqn/spodat.bqn
   a Q spd
