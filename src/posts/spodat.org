@@ -34,7 +34,7 @@ lookups and return the top entries:
 
 The result is somewhat eclectic, yet a clear pattern emerges. Most pieces belong to a world of intricate
 harmonies and long forms: during these years, it's been all about progressive rock and progressive metal.
-A few simpler intrusions distort the spectrum; traces of another musical landscape I once inhabited.
+A few simpler intrusions distort the spectrum: traces of a desert island I once inhabited.
 
 #+begin_src bqn :exports both :tangle ../bqn/spodat.bqn
   s Q spd	
@@ -70,7 +70,7 @@ A few simpler intrusions distort the spectrum; traces of another musical landsca
 
 The same tendency appears at the level of artists. I gravitate toward music that
 builds worlds rather than merely expresses moods. Yet sometimes I descend to a simpler plane,
-to enjoy the breeze down there, or simply to remember.
+to enjoy the breeze down there, or to feel the melancholia of my past existence[fn:3].
 
 #+begin_src bqn :exports both :tangle ../bqn/spodat.bqn
   a Q spd
@@ -117,7 +117,7 @@ We can then filter all Opeth entries among the top songs, and select the first =
   O ← {lo (1⊸+∘⊣≍˘⊏) (⊢˝˘⊸∊⟜𝕨/⊏˘) ∾(⍷s‿a⊸⊏˘)¨ ((⍒(+´m⊸⊏˘)¨)⊸⊏ s⊸⊏˘⊐⊸⊔⊢) >1⊏¨ 𝕩}
 #+end_src
 
-Enjoy this whisper within a sigh[fn:3]:
+Enjoy this whisper within a sigh[fn:4]:
 
 #+begin_src bqn :exports both :tangle ../bqn/spodat.bqn
   spd O˜⋈ "Opeth" 
@@ -142,6 +142,7 @@ some [[https://support.spotify.com/us/article/understanding-my-data/][interestin
 Spotify Web API, which is beyond the scope of this post.
 [fn:2] Well, modulo all from =Tool= and =Silent state optimizer= from =Leech=, which are definitely in my top ten,
 and which I listen to on YouTube. It's possible to analyze the [[https://takeout.google.com/settings/takeout][data]] from this site as well, perhaps in a follow-up post.
-[fn:3] Who am I kidding, this is definitely my favorite Opeth song.
+[fn:3] Silvio would say "Ahora me parece que hubiera vivido un caudal de siglos por viejos caminos".
+[fn:4] Who am I kidding, this is definitely my favorite Opeth song.
 
 #+INCLUDE: "../html-foot.org"
