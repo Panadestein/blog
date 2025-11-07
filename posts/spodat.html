@@ -204,15 +204,17 @@ overflow-x: auto !important;
 <div id="content" class="content">
 <h1 class="title">Songs to pave the seasons</h1>
 <p>
-I have analyzed my Spotify data<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> for the period 2016-2024. The results accurately represent
-my actual music taste<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
+My Spotify data<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> from 2016-2024, representing eight years of listening, reveals patterns that are
+more about me<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> than the music itself. I processed it all in <a href="https://mlochbaum.github.io/BQN/index.html">BQN</a>, as its clarity is perfectly
+suited for both data analysis and introspection. Whether you enjoy these kinds of patterns or
+just the music, I’m always glad to exchange thoughts.
 </p>
-<div id="outline-container-org6e0436f" class="outline-2">
-<h2 id="org6e0436f">Technical details</h2>
-<div class="outline-text-2" id="text-org6e0436f">
+<div id="outline-container-org644d7e9" class="outline-2">
+<h2 id="org644d7e9">Technical details</h2>
+<div class="outline-text-2" id="text-org644d7e9">
 <p>
-This is a suitable task for an array language, so I rely on <a href="https://mlochbaum.github.io/BQN/index.html">BQN</a> which is my
-favorite one:
+The data come as a large JSON file exported from Spotify. Parsing it is straightforward
+thanks to <a href="https://github.com/mlochbaum/bqn-libs">bqn-libs</a>:
 </p>
 
 <div class="org-src-container">
@@ -222,8 +224,8 @@ favorite one:
 </div>
 
 <p>
-Additional structural information is needed, namely index of the songs,
-artists, elapsed time, and the length of the desired result.
+For later queries I isolate the relevant fields (song index, artist, elapsed time)
+and set the length of the desired result:
 </p>
 
 <div class="org-src-container">
@@ -232,7 +234,8 @@ artists, elapsed time, and the length of the desired result.
 </div>
 
 <p>
-We define a (50 chars) dyadic block function to execute the queries:
+Finally, I define a compact (50 chars) dyadic block function to perform ranked
+lookups and return the top entries:
 </p>
 
 <div class="org-src-container">
@@ -241,15 +244,21 @@ We define a (50 chars) dyadic block function to execute the queries:
 </div>
 </div>
 </div>
-<div id="outline-container-orgbebd0e8" class="outline-2">
-<h2 id="orgbebd0e8">Top songs</h2>
-<div class="outline-text-2" id="text-orgbebd0e8">
+<div id="outline-container-org540525d" class="outline-2">
+<h2 id="org540525d">Top songs</h2>
+<div class="outline-text-2" id="text-org540525d">
+<p>
+The result is somewhat eclectic, yet a clear pattern emerges. Most pieces belong to a world of intricate
+harmonies and long forms: during these years, it's been all about progressive rock and progressive metal.
+A few simpler intrusions distort the spectrum: traces of a desert island I once inhabited.
+</p>
+
 <div class="org-src-container">
 <pre class="src src-bqn">s Q spd	
 </pre>
 </div>
 
-<pre class="example" id="org469861f">
+<pre class="example" id="org269ffe4">
 ┌─                                                     
 ╵ 1  "Countless Skies"                                 
   2  "Divertimento I, K.136: Allegro"                  
@@ -275,15 +284,21 @@ We define a (50 chars) dyadic block function to execute the queries:
 </pre>
 </div>
 </div>
-<div id="outline-container-org5ee4993" class="outline-2">
-<h2 id="org5ee4993">Top artists</h2>
-<div class="outline-text-2" id="text-org5ee4993">
+<div id="outline-container-org273a5b7" class="outline-2">
+<h2 id="org273a5b7">Top artists</h2>
+<div class="outline-text-2" id="text-org273a5b7">
+<p>
+The same tendency appears at the level of artists. I gravitate toward music that
+builds worlds rather than merely expresses moods. Yet sometimes I descend to a simpler plane,
+to enjoy the breeze down there, or to feel the melancholia of my past existence<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>.
+</p>
+
 <div class="org-src-container">
 <pre class="src src-bqn">a Q spd
 </pre>
 </div>
 
-<pre class="example" id="org0c5e672">
+<pre class="example" id="orgadeba55">
 ┌─                              
 ╵ 1  "Opeth"                    
   2  "Wolfgang Amadeus Mozart"  
@@ -309,12 +324,12 @@ We define a (50 chars) dyadic block function to execute the queries:
 </pre>
 </div>
 </div>
-<div id="outline-container-orgd637d62" class="outline-2">
-<h2 id="orgd637d62">Bonus: Opeth anthology</h2>
-<div class="outline-text-2" id="text-orgd637d62">
+<div id="outline-container-orge0e25c3" class="outline-2">
+<h2 id="orge0e25c3">Bonus: Opeth anthology</h2>
+<div class="outline-text-2" id="text-orge0e25c3">
 <p>
 This is the Opeth album I would recommend to anyone. The query function needs to be modified a bit for generating it.
-But before that, let's look at the <a href="https://www.opeth.com/releases/albums">official discography</a>:
+But before that, let's look at average album length in the <a href="https://www.opeth.com/releases/albums">official discography</a>:
 </p>
 
 <div class="org-src-container">
@@ -323,7 +338,7 @@ But before that, let's look at the <a href="https://www.opeth.com/releases/album
 </div>
 
 <p>
-Then:
+We can then filter all Opeth entries among the top songs, and select the first <code>≠lo</code>:  
 </p>
 
 <div class="org-src-container">
@@ -332,7 +347,7 @@ Then:
 </div>
 
 <p>
-Enjoy:
+Enjoy this whisper within a sigh<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>:
 </p>
 
 <div class="org-src-container">
@@ -340,7 +355,7 @@ Enjoy:
 </pre>
 </div>
 
-<pre class="example" id="orgf12a287">
+<pre class="example" id="org2ceb46c">
 ┌─                             
 ╵ 1 "Ghost of Perdition"       
   2 "River"                    
@@ -366,7 +381,15 @@ Spotify Web API, which is beyond the scope of this post.
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 Well, modulo all from <code>Tool</code> and <code>Silent state optimizer</code> from <code>Leech</code>, which are definitely in my top ten,
-and which I listen to on YouTube. It's possible to analyze the <a href="https://takeout.google.com/settings/takeout">data</a> from this site as well—perhaps in a follow-up post.
+and which I listen to on YouTube. It's possible to analyze the <a href="https://takeout.google.com/settings/takeout">data</a> from this site as well, perhaps in a follow-up post.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Silvio would say "Ahora me parece que hubiera vivido un caudal de siglos por viejos caminos".
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Who am I kidding, this is definitely my favorite Opeth song.
 </p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">

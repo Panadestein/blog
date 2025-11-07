@@ -235,9 +235,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">BQN's Quantum Noise</h1>
-<div id="outline-container-orgcc43765" class="outline-2">
-<h2 id="orgcc43765">Preamble</h2>
-<div class="outline-text-2" id="text-orgcc43765">
+<div id="outline-container-orgebcd233" class="outline-2">
+<h2 id="orgebcd233">Preamble</h2>
+<div class="outline-text-2" id="text-orgebcd233">
 <p>
 We will implement and test a Schrödinger-style<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> quantum simulator in the BQN<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> programming language.
 Initially, we import the necessary system functions and define a 1-modifier for handling
@@ -245,7 +245,7 @@ complex-valued matrix products. Next, we define a namespace containing various q
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="orgfe4cd56">Sin‿Cos‿GCD ← •math
+<pre class="src src-bqn" id="org83d150a">Sin‿Cos‿GCD ← •math
 U ← •rand.Range
 _cp ← {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
 
@@ -259,16 +259,16 @@ g ← {
 </div>
 </div>
 </div>
-<div id="outline-container-orgf7e0ad2" class="outline-2">
-<h2 id="orgf7e0ad2">Interpreter</h2>
-<div class="outline-text-2" id="text-orgf7e0ad2">
+<div id="outline-container-org2064b40" class="outline-2">
+<h2 id="org2064b40">Interpreter</h2>
+<div class="outline-text-2" id="text-org2064b40">
 <p>
 The (400 chars<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>) quantum interpreter is based on references <a href="https://arxiv.org/abs/1711.02086">arXiv:1711.02086</a>
 and <a href="https://arxiv.org/abs/1608.03355">arXiv:1608.03355</a>. For simplicity, we always measure at the end of the execution:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="org86cb742">Q ← {𝕊qb‿sc‿r:
+<pre class="src src-bqn" id="org393bd6b">Q ← {𝕊qb‿sc‿r:
   wf ← (1⌾⊑⋈⊢)⥊⟜0 2⋆qb
   M‿K ← ⟨+˝∘×⎉1‿∞ _cp, {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜&lt;_cp𝕩}⟩
   E ← {0𝕊𝕩:1; K⍟(𝕨-1)˜𝕩}
@@ -331,9 +331,9 @@ Given a uniform random variable \(U \sim \text{Uniform}(0, 1)\), we sample by in
 </details>
 </div>
 </div>
-<div id="outline-container-org248cf3a" class="outline-2">
-<h2 id="org248cf3a">Shor's algorithm</h2>
-<div class="outline-text-2" id="text-org248cf3a">
+<div id="outline-container-orgd1ef66b" class="outline-2">
+<h2 id="orgd1ef66b">Shor's algorithm</h2>
+<div class="outline-text-2" id="text-orgd1ef66b">
 <p>
 As a test case, we employ the quantum circuit of Shor's algorithm
 for the number fifteen and base eleven, following references
@@ -343,7 +343,7 @@ statistical accuracy, the experiment is repeated multiple times.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="org495b859">n‿a‿qb‿r ← ⟨15, 11, 5, 0 U˜ 2⋆3⟩
+<pre class="src src-bqn" id="org9816769">n‿a‿qb‿r ← ⟨15, 11, 5, 0 U˜ 2⋆3⟩
 
 sc ← ⟨
   ⟨0⟩‿g.h ⋄ ⟨1⟩‿g.h ⋄ ⟨2⟩‿g.h
@@ -369,7 +369,7 @@ let us kill the ignorabimus. Wir müssen wissen, wir werden wissen!<sup><a id="f
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="orge483884">C &gt;+˝{Q qb‿sc‿𝕩}¨ r
+<pre class="src src-bqn" id="orga3fe5d1">C &gt;+˝{Q qb‿sc‿𝕩}¨ r
 </pre>
 </div>
 
@@ -383,9 +383,9 @@ Compare the result with that obtained using an IBM's <a href="https://panadestei
 </p>
 </div>
 </div>
-<div id="outline-container-org07a7b7b" class="outline-2">
-<h2 id="org07a7b7b">Epilogue</h2>
-<div class="outline-text-2" id="text-org07a7b7b">
+<div id="outline-container-org94b4f92" class="outline-2">
+<h2 id="org94b4f92">Epilogue</h2>
+<div class="outline-text-2" id="text-org94b4f92">
 <p>
 This was, of course, a conceptually simple simulation, the minimal instance of  
 Shor’s algorithm that has been verified experimentally. The interpreter itself  
@@ -416,7 +416,7 @@ The <code class="src src-bqn">prog</code> string contains the full source code. 
 </pre>
 </div>
 
-<pre class="example" id="org48714ba">
+<pre class="example" id="org90e476a">
 ⟨ 44 64 ⟩
 </pre>
 
@@ -429,7 +429,7 @@ With this distribution:
 </pre>
 </div>
 
-<pre class="example" id="org4e36108">
+<pre class="example" id="orgf612b67">
 ┌─                                                                                                                                                                                 
 ╵ '-' '´' '¨' '⋈' '+' '⟜' '⌽' '⊢' '≢' '⥊' '&lt;' '=' '⌜' '˜' '↕' '∾' '○' '⌾' '⊸' '⊑' '÷' '√' '⊏' '⋆' '˝' '∘' '×' '⎉' '≡' '⊣' '⌊' '⁼' '≠' '⍟' '◶' '↓' '¬' '∊' '/' '»' '∨' '`' '&gt;' '⍒'  
   8   8   10  5   8   3   6   7   1   5   9   6   3   12  6   5   2   5   7   9   5   1   1   5   4   8   5   1   3   3   1   1   5   1   2   1   1   1   1   1   1   2   3   1    
@@ -450,7 +450,7 @@ BQN is also fast:
 While the interpreter's performance is not particularly optimized, here is a comparison with the equivalent Common Lisp code:
 </p>
 
-<pre class="example" id="org2923adf">
+<pre class="example" id="orgdb73ca6">
 Benchmark 1: cbqn -f ./bqn/q.bqn
   Time (mean ± σ):      5.468 s ±  0.077 s    [User: 5.427 s, System: 0.005 s]
   Range (min … max):    5.358 s …  5.535 s    5 runs
@@ -473,7 +473,7 @@ And here is a full program's profile. All time is spent in the Kronecker and mat
 </pre>
 </div>
 
-<pre class="example" id="org162c6a5">
+<pre class="example" id="orge436795">
 Got 25361 samples
 (REPL): 25361 samples:
      2│  Q ← {𝕊qb‿sc‿r:
