@@ -477,10 +477,9 @@ solutions may in fact be equivalent up to permutation or geometric symmetry (rot
 
 *** Solving linear systems
 
-[[https://en.wikipedia.org/wiki/Gaussian_elimination][Gaussian elimination]] is one of my favorite algorithms, and one of the first techniques one learns in
-any numerical analysis course. The implementation below is the classical \(O(\frac{2}{3}N^3)\)
-with partial pivoting. It relies on outer products to eliminate columns below the pivot
-in a more vectorized fashion:
+[[https://en.wikipedia.org/wiki/Gaussian_elimination][Gaussian elimination]] is one of the first techniques one learns in any numerical analysis course.
+The implementation below is the classical \(O(\frac{2}{3}N^3)\) with partial pivoting. It relies
+on outer products to eliminate columns below the pivot in a more vectorized fashion:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
   GE ← {
@@ -494,7 +493,7 @@ in a more vectorized fashion:
 
 The second pass (back substitution) is a purely functional fold that resolves the variable vector =v=
 by threading the known solutions upwards against the upper-triangular matrix =m=. A bit janky for my taste.
-The implementation of Gauss-Jordan does deliver in terms of elegance:
+The implementation of Gauss-Jordan, which is \(O(N^3)\), does deliver the elegance I seek:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
   GJ ← {
@@ -505,8 +504,9 @@ The implementation of Gauss-Jordan does deliver in terms of elegance:
   }
 #+end_src
 
-Regardless of the theoretical advantage of the former, the latter is a lot faster for
-matrices with millions of entries:
+We can confirm the correctness of both implementations by solving a random system and checking the
+resulting residual. If they are equal up to a tolerance, we compare the CPU times. Regardless of the
+theoretical time complexity, Gauss-Jordan is faster in BQN due to its vectorized nature:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
   {1e¯10>|+´(GE-GJ)𝕩}◶@‿(GE•_timed÷GJ•_timed) (⊢•rand.Range˜⊢⋈+⟜1) 1e3
@@ -514,7 +514,6 @@ matrices with millions of entries:
 
 #+RESULTS:
 : 19.52462177736598
-
 
 ** Array programming
 
