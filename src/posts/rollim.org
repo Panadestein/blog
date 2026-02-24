@@ -515,6 +515,85 @@ theoretical time complexity, Gauss-Jordan is faster in BQN due to its vectorized
 #+RESULTS:
 : 19.52462177736598
 
+*** Chebyshev coefficients of the first kind
+
+There is a compact expression already in the [[https://mlochbaum.github.io/bqncrate/?q=cheb#][BQNcrate]], which efficiently implements the
+standard recurrence:
+
+\begin{equation*}
+  T_n(x) = 2x T_{n-1}(x) - T_{n-2}(x)
+\end{equation*}
+
+I wanted to explore an alternative approach that I haven't seen so often. Instead of viewing $T_n$
+as the child of $T_{n-1}$, we view it as the solution to an eigenvalue problem. The polynomial $T_n(x)$
+is the eigenfunction of the [[https://en.wikipedia.org/wiki/Chebyshev_equation][Chebyshev Differential Equation]] with eigenvalue $n^2$:
+
+\begin{equation*}
+  (1-x^2)y'' - xy' + n^2y = 0
+\end{equation*}
+
+Using the Frobenius method, we assume a solution of the form $y = \sum a_k x^k$. Plugging this
+into the ODE gives us a direct relationship between coefficients of power $k$ and $k+2$:
+
+\begin{equation*}
+  a_{k+2} (k+2)(k+1) + a_k (n^2 - k^2) = 0
+\end{equation*}
+
+Now we only need an suitable initial condition. Fortunately, for all Chebyshev polynomials (odd or even),
+the leading coefficient is determined by the normalization $T_n(x) \approx (2x)^n \dots$, so $a_n = 2^{n-1}$.
+By starting at the singularity ($k=n$) and flowing down to $k=0$, we avoid all parity checks and singularities:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  T ← {
+    v ← ×`(1⌈2⋆𝕩-1)⌾⊑÷˝⟨1,𝕩,2,-𝕩⟩+⌜p ← 𝕩-2×↕1+⌊𝕩÷2
+    v⌾(p⊸⊏)0⥊˜𝕩+1
+  }
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+Using some beautiful array tricks, like folding division over a list of functions, which nicely
+simplifies fractions of binomials due to the "inverted" operation order of =÷=; and creating
+an alternate boolean mask by scanning =≠=, which eliminates the need for the clunky under, Marshall
+transformed the previous function into this (little-endian):
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  T ← {⌽(⊢××`∘⋆)⟜(≠`1¨)(1⌈2⋆𝕩-1)∾÷˝⟨1,𝕩,2,-𝕩⟩+⌜⌽↕𝕩}
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+And here is the typical table:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  {
+    A ← "x"∾"⁰¹²³⁴⁵⁶⁷⁸⁹"⊏˜'0'-˜•Fmt
+    B ← ⊢/˜·¬≠↑"1x"⍷⊢
+    C ← 1↓·∾∘⌽0⊸≠/×⊸⊏⟜" +-"∾¨•Fmt∘|¨∾¨·A¨⊒˜
+    (>⊢↑¨˜·⌈´≠¨)(B C∘T↓˜¯2+2⊸|)¨↕𝕩
+  } 11
+#+end_src
+
+#+RESULTS:
+#+begin_example
+┌─                                   
+╵"1                                  
+  x                                  
+  2x²-1                              
+  4x³-3x                             
+  8x⁴-8x²+1                          
+  16x⁵-20x³+5x                       
+  32x⁶-48x⁴+18x²-1                   
+  64x⁷-112x⁵+56x³-7x                 
+  128x⁸-256x⁶+160x⁴-32x²+1           
+  256x⁹-576x⁷+432x⁵-120x³+9x         
+  512x¹⁰-1280x⁸+1120x⁶-400x⁴+50x²-1" 
+                                    ┘
+#+end_example
+
+
 ** Array programming
 
 Here are some tricks and I ideas I find useful in array programming, many of them born from some REPL exploration.
