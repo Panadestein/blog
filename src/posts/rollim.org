@@ -567,7 +567,7 @@ transformed the previous function into this (little-endian):
 
 And here is the typical table:
 
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
   {
     A ← "x"∾"⁰¹²³⁴⁵⁶⁷⁸⁹"⊏˜'0'-˜•Fmt
     B ← ⊢/˜·¬≠↑"1x"⍷⊢
