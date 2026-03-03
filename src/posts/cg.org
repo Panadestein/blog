@@ -1,0 +1,36 @@
+#+TITLE: A Markovian nursery game
+#+INCLUDE: "../html-head.org"
+
+** Die Gewinnwahrscheinlichkeit
+
+There is a distinct, quiet pleasure in playing a casual board game with your family
+on a Sunday afternoon. Because HABA's [[https://www.haba-play.com/de-de/p/meine-ersten-spiele-erster-obstgarten--1004655#variationId=1004655001][Erster Obstgarten]] is designed collaboratively for two-year-olds,
+the assumption naturally follows: it must be trivially easy to win. Inevitably,
+an unrealistic expectation settles on the physicist in the room to compute the exact
+win probability (try saying it three times in German). Staring at the wooden fruits
+and the raven advancing down its path, my only honest answer at the time was:
+I just know it is not a trivial problem[fn:1].
+
+** A Markov decision process
+** Multidimensional DP lattice
+** Algebraic strategies
+
+#+begin_src bqn :results none :tangle ../bqn/cg.bqn
+  _eog ← {𝔽_𝕣 t‿f‿r:
+    p‿d‿v‿s ← ⟨1⌾⊑0¨, 6-·+´¨0⊸=, 𝔽, +´¨⟩{𝕎𝕩}¨<↕t⥊f+1
+    ⊢´⥊{p𝕏{𝕩+(𝕨=s)×(d÷˜𝕗+V)𝕩{»⎉𝕩𝕗}¨1+↕t}´-⟜↕t×f}⍟r 0¨s
+  }
+  
+  •Show {+´+·+´((<⊑∘⍒¨𝕩)=⌽↕=𝕩)⊸×}_eog 4‿4‿5
+  {(1+1÷1⌈+´¨0<𝕩)×+´}_eog 4‿4‿5
+#+end_src
+
+#+RESULTS:
+: 0.6313573066006354
+: 0.596632015719557
+
+[fn:1] The game is a staple in Germanic countries, and it is known as "First Orchard" in English.
+As I suspected, calculating the true odds of winning is mathematically rich enough
+to have inspired dedicated [[https://www.stochastik-in-der-schule.de/sisonline/Jahrgang41-2021/Heft%201/Stochastik_1_2021_9_18.pdf][papers]] and [[https://www.youtube.com/watch?v=5WXzEbm68XI][videos]].
+
+#+INCLUDE: "../html-foot.org"
