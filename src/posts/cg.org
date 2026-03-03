@@ -11,16 +11,26 @@ win probability (try saying it three times in German). Staring at the wooden fru
 and the raven advancing down its path, my only honest answer at the time was:
 I just know it is not a trivial problem[fn:1].
 
+Indeed, what masquerades as a toddler's pastime quickly reveals itself as an incredibly
+rich computational problem, perfectly suited for multidimensional array programming.
+The mechanics are simple: there are =t= trees, each starting with =f= fruits.
+Players take turns rolling a =t+2=-sided die. Rolling one of the =t= colors lets you harvest
+a fruit from the matching tree (if the tree is empty, nothing happens).
+Rolling the side /basket/ lets the players collaboratively pick any available fruit.
+Finally, rolling the side /raven/ advances a wooden bird one step down a path of =r= steps.
+If you collect all =f×t= fruits before the raven reaches the orchard, everyone wins.
+If the raven arrives first, too bad.
+
 ** A Markov decision process
 ** Multidimensional DP lattice
 ** Algebraic strategies
 
 #+begin_src bqn :results none :tangle ../bqn/cg.bqn
   _eog ← {𝔽_𝕣 t‿f‿r:
-    p‿d‿v‿s ← ⟨1⌾⊑0¨, 6-·+´¨0⊸=, 𝔽, +´¨⟩{𝕎𝕩}¨<↕t⥊f+1
+    p‿d‿v‿s ← ⟨1⌾⊑0¨, (t+2)-·+´¨0⊸=, 𝔽, +´¨⟩{𝕎𝕩}¨<↕t⥊f+1
     ⊢´⥊{p𝕏{𝕩+(𝕨=s)×(d÷˜𝕗+V)𝕩{»⎉𝕩𝕗}¨1+↕t}´-⟜↕t×f}⍟r 0¨s
   }
-  
+
   •Show {+´+·+´((<⊑∘⍒¨𝕩)=⌽↕=𝕩)⊸×}_eog 4‿4‿5
   {(1+1÷1⌈+´¨0<𝕩)×+´}_eog 4‿4‿5
 #+end_src
