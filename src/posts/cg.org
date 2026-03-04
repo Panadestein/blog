@@ -3,44 +3,174 @@
 
 ** Die Gewinnwahrscheinlichkeit
 
-There is a distinct, quiet pleasure in playing a casual board game with your family
-on a Sunday afternoon. Because HABA's [[https://www.haba-play.com/de-de/p/meine-ersten-spiele-erster-obstgarten--1004655#variationId=1004655001][Erster Obstgarten]] is designed collaboratively for two-year-olds,
-the assumption naturally follows: it must be trivially easy to win. Inevitably,
-an unrealistic expectation settles on the physicist in the room to compute the exact
-win probability (try saying it three times in German). Staring at the wooden fruits
-and the raven advancing down its path, my only honest answer at the time was:
-I just know it is not a trivial problem[fn:1].
+I love playing casual board games with my family. Our current favorite is HABA's [[https://www.haba-play.com/de-de/p/meine-ersten-spiele-erster-obstgarten--1004655#variationId=1004655001][Erster Obstgarten]], which
+is designed collaboratively for two-year-olds. The assumption naturally follows: it must be trivially easy to win.
+Naturally, someone then turns to the physicist in the room and asks for the exact win probability[fn:1].
+Staring at the wooden fruits and watching the raven advance along its track, I could only answer honestly:
+I’m pretty sure this is not a trivial calculation[fn:2].
 
-Indeed, what masquerades as a toddler's pastime quickly reveals itself as an incredibly
-rich computational problem, perfectly suited for multidimensional array programming.
-The mechanics are simple: there are =t= trees, each starting with =f= fruits.
+So here is the question the game implicitly poses and I tried to answer in this post: starting
+from the initial setup, what is the probability that the players collect all fruits before the
+raven reaches the orchard?
+
+** A Markov decision process
+
+The game is a stochastic process: each die roll changes the state of the board. If every roll
+determined the next move uniquely, we could model it as a Markov chain. /Erster Obstgarten/[fn:3],
+however, contains one decision: when the die shows the /basket/, the players may choose which tree
+to harvest from. That single choice turns the problem into a Markov decision process ([[https://en.wikipedia.org/wiki/Markov_decision_process][MDP]]).
+
+A state consists of two pieces of information:
+
+- the raven position \(r\in{0,\ldots,r_{max}-1}\)
+- the fruit counts \(\mathbf{f}=(f_0, \ldots,f_{t−1})\), where each \(f_i\in{0,\ldots,f_{max}}\)
+  and \(t\) is the number of trees.
+
+From any state, every outcome is monotone: either a fruit count decreases, or the raven advances.
+Therefore the state graph is a DAG (apart from /dead rolls/ on empty trees,
+which we will eliminate algebraically). This cyclist is the key: it means we can compute
+win probabilities by dynamic programming over a finite lattice of states instead of sampling with Monte Carlo.
+With the state fixed, the remaining task is to write a recursion for the win probability from any state.
+
+** The Bellman equation
+
+Let \(V(\mathbf{f}, r)\) be the probability of winning from state \((\mathbf{f}, r)\) under optimal play.
+The boundary conditions are immediate:
+
+- Victory: \(V(\mathbf{0}, r) = 1\) for all \(r\)
+- Defeat: \(V(\mathbf{f}, r_{max}) = 0\) for all \(\mathbf{f}\neq\mathbf{0}\)
+
+From any intermediate state there are three kinds of outcomes on the \(t+2\)-sided die:
+
+- Raven: advance the raven, \((\mathbf f, r) \to (\mathbf f, r+1)\).
+- Color: harvest from tree \(i\) if possible, \((\mathbf f, r) \to (\mathbf f-\mathbf e_i, r)\) when \(f_i>0\),
+   otherwise is a /dead roll/.
+- Basket: choose one non-empty tree \(i\) and harvest it, \((\mathbf f, r) \to (\mathbf f-\mathbf e_i, r)\).
+
+Taking the expectation over the uniform die and maximizing only in the basket case gives the [[https://en.wikipedia.org/wiki/Bellman_equation][Bellman equation]]:
+
+\begin{equation*}
+  V(\mathbf f, r)
+  =\frac{1}{t+2}V(\mathbf f, r+1)
+  +\frac{1}{t+2}\sum_{i=0}^{t-1} V(\mathbf f-\mathbf e_i, r)\mathbb I(f_i>0)
+  +\frac{1}{t+2}\max_{j:f_j>0} V(\mathbf f-\mathbf e_j, r).
+\end{equation*}
+
+Here \(\mathbf e_i\) is the \(i\)-th standard basis vector and \(\mathbb I(\cdot)\) prevents illegal harvests.
+The only control in the system is the /basket/ term; everything else is dictated by the die.
+
+** Eliminating dead rolls
+
+The recursion above still hides an annoyance: /dead rolls/. If the die shows the color of an empty tree,
+nothing happens and the state stays \((\mathbf{f}, r)\). In the Bellman equation this appears as
+self-dependence, because some outcomes contribute \(V(\mathbf{f}, r)\) back into the expectation.
+
+Let \(D(\mathbf{f})\) be the number of empty trees in state \(\mathbf f\), i.e. the count of
+indices with \(f_i = 0\). Then exactly \(D\) color-faces of the die are dead, contributing
+
+\begin{equation*}
+  \frac{D}{t+2}V(\mathbf f,r)
+\end{equation*}
+
+to the right-hand side. We can move this term to the left and condition on
+the next roll that actually changes the state, which eventually yields:
+
+\begin{equation*}
+  V(\mathbf f,r)
+  =\frac{V(\mathbf f,r+1)
+  +\sum_{i:f_i>0} V(\mathbf f-\mathbf e_i,r)
+  +\max_{j:f_j>0} V(\mathbf f-\mathbf e_j,r)}
+  {t+2-D(\mathbf f)}.
+\end{equation*}
+
+This is the same process, just written in a form without self-loops: the denominator is the number of
+die faces that can actually change the state. At this point the entire computation is fixed except
+for one ingredient: how we choose the tree in the basket case, i.e. how we evaluate the \(\max\)
+term (or a different policy if we model toddler play).
+
+** Optimal or toddler?
+
+With dead rolls eliminated, every state \((\mathbf f,r)\) reduces to averaging over active die faces.
+The only remaining modeling choice is the /basket/ rule. It is convenient to view the numerator
+as a sum of “future values” associated with harvesting from each active tree. If we write
+
+\begin{equation*}
+  S(\mathbf f,r) = V(\mathbf f,r+1) + \sum_{i:f_i>0} V(\mathbf f-\mathbf e_i,r),
+\end{equation*}
+
+then the simplified recursion from the previous section is
+
+\begin{equation*}
+  V(\mathbf f,r) = \frac{S(\mathbf f,r) + V_b(\mathbf f,r)}{t+2-D(\mathbf f)},
+\end{equation*}
+
+where \(V_b(\mathbf f,r)\) encodes the basket policy. Under optimal play the basket should choose
+the tree that maximizes the future win probability:
+
+\begin{equation*}
+  V_b(\mathbf f,r) = \max_{j:f_j>0} V(\mathbf f-\mathbf e_j,r).
+\end{equation*}
+
+If we instead model a toddler as choosing uniformly among the \(A(\mathbf f)=|{i : f_i>0}|\) active trees,
+then the basket term is an average:
+
+\begin{equation*}
+  V_b(\mathbf f,r) = \frac{1}{A(\mathbf f)}\sum_{j:f_j>0} V(\mathbf f-\mathbf e_j,r).
+\end{equation*}
+
+Equivalently, every active tree’s future value gets a multiplier of \(1+\tfrac{1}{A}\): one unit from its
+color face, plus an extra \(\tfrac{1}{A}\) from the basket being distributed evenly.
+
+In BQN, all of that gibberish is: 
+
+#+begin_src bqn :tangle ../bqn/cg.bqn :exports code
+  O ← {+´+·+´((<⊑∘⍒¨𝕩)=⌽↕=𝕩)⊸×}
+  T ← {(1+1÷1⌈+´¨0<𝕩)×+´}
+#+end_src
+
+** Four lines of BQN
+
+With the recurrence fully specified, all that remains is to evaluate it exactly over the finite state lattice.
+The monotonicity we observed earlier means we can compute \(V\) bottom-up. In a scalar implementation one
+would index neighbors one by one to fetch the values \(V(\mathbf f-\mathbf e_i,r)\). But in BQN we have beautiful
+rank polymorphism and powerful shifting functions. The method I chose was to clone the lattice \(t\) times (one per tree),
+and shift along axis \(i\) to model subtracting \(\mathbf e_i\).
+
+The function =»= pads vacated entries with zeros, which is exactly what we want: states “beyond” the boundary
+(trying to harvest from an empty tree) should contribute nothing. We seed the absorbing victory boundary
+by setting \(V(\mathbf 0,r)=1\) and then repeatedly apply the dead-roll-normalized transition to
+propagate values outward across the lattice. Here is the compact implementation as a 1-modifier:
+
+#+begin_src bqn :tangle ../bqn/cg.bqn :exports code
+  _eog ← {𝔽_𝕣 t‿f‿r:
+    p‿d‿v‿s ← ⟨1⌾⊑0¨, (t+2)-·+´¨0⊸=, 𝔽, +´¨⟩{𝕎𝕩}¨<↕t⥊f+1
+    ⊢´⥊{p𝕏{𝕩+(𝕨=s)×(d÷˜𝕗+V)𝕩{»⎉𝕩𝕗}¨1+↕t}´-⟜↕t×f}⍟r 0¨s
+  }
+#+end_src
+
+#+RESULTS:
+: (1-modifier block)
+
+Finally, running the DP for the standard setup (four trees, four fruits each, raven track length five) gives:
+
+#+begin_src bqn :tangle ../bqn/cg.bqn :exports both
+  O‿T {𝕎_eog𝕩}¨ <4‿4‿5
+#+end_src
+
+#+RESULTS:
+: ⟨ 0.6313573066006354 0.596632015719557 ⟩
+
+Not quite the trivial toddler game my intuition expected.
+
+[fn:1] That's what the title of the section reads in German. Try saying it out loud three times.
+[fn:2] The game is very popular in German-speaking countries, and it is known as "First Orchard" in English.
+As I suspected, calculating the true odds of winning is hard enough to inspire [[https://www.stochastik-in-der-schule.de/sisonline/Jahrgang41-2021/Heft%201/Stochastik_1_2021_9_18.pdf][papers]] and [[https://www.youtube.com/watch?v=5WXzEbm68XI][videos]].
+[fn:3] The mechanics are simple: there are =t= trees, each starting with =f= fruits.
 Players take turns rolling a =t+2=-sided die. Rolling one of the =t= colors lets you harvest
 a fruit from the matching tree (if the tree is empty, nothing happens).
 Rolling the side /basket/ lets the players collaboratively pick any available fruit.
 Finally, rolling the side /raven/ advances a wooden bird one step down a path of =r= steps.
 If you collect all =f×t= fruits before the raven reaches the orchard, everyone wins.
 If the raven arrives first, too bad.
-
-** A Markov decision process
-** Multidimensional DP lattice
-** Algebraic strategies
-
-#+begin_src bqn :results none :tangle ../bqn/cg.bqn
-  _eog ← {𝔽_𝕣 t‿f‿r:
-    p‿d‿v‿s ← ⟨1⌾⊑0¨, (t+2)-·+´¨0⊸=, 𝔽, +´¨⟩{𝕎𝕩}¨<↕t⥊f+1
-    ⊢´⥊{p𝕏{𝕩+(𝕨=s)×(d÷˜𝕗+V)𝕩{»⎉𝕩𝕗}¨1+↕t}´-⟜↕t×f}⍟r 0¨s
-  }
-
-  •Show {+´+·+´((<⊑∘⍒¨𝕩)=⌽↕=𝕩)⊸×}_eog 4‿4‿5
-  {(1+1÷1⌈+´¨0<𝕩)×+´}_eog 4‿4‿5
-#+end_src
-
-#+RESULTS:
-: 0.6313573066006354
-: 0.596632015719557
-
-[fn:1] The game is a staple in Germanic countries, and it is known as "First Orchard" in English.
-As I suspected, calculating the true odds of winning is mathematically rich enough
-to have inspired dedicated [[https://www.stochastik-in-der-schule.de/sisonline/Jahrgang41-2021/Heft%201/Stochastik_1_2021_9_18.pdf][papers]] and [[https://www.youtube.com/watch?v=5WXzEbm68XI][videos]].
 
 #+INCLUDE: "../html-foot.org"

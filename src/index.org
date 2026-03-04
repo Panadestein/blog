@@ -43,5 +43,6 @@
 9. [[./posts/ps.org][Sieving primes at the speed of C]]
 10. [[./posts/mp.org][Blazing matrix products]]
 11. [[./posts/bc.org][Strips from the BQNcrate]]
+12. [[./posts/cg.org][A Markovian nursery game]]
 
 #+HTML: </div>
