@@ -107,7 +107,7 @@ the tree that maximizes the future win probability:
   V_b(\mathbf f,r) = \max_{j:f_j>0} V(\mathbf f-\mathbf e_j,r).
 \end{equation*}
 
-If we instead model a toddler as choosing uniformly among the \(A(\mathbf f)=\operatorname{card}\{\, i : f_i>0 \,\}\)
+If we instead model a toddler as choosing uniformly among the \(A(\mathbf f)=t-D(\mathbf{f})\)
 active trees, then the basket term is an average:
 
 \begin{equation*}
