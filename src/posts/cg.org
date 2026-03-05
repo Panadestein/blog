@@ -78,13 +78,15 @@ changes the state, which yields:
   {t+2-D(\mathbf f)}.
 \end{equation*}
 
-This is the same process, just written in a form without self-loops. The denominator is the number of
-die faces that can actually change the state. At this point the entire computation is fixed except
-for how we choose the tree in the /basket/ case, i.e. how we evaluate the policy term.
+This is the same process, just written in a form without self-loops. The denominator is the number
+of die faces that can actually change the state. At this point the entire computation is fixed
+except for how we choose the tree in the /basket/ case. In the equations above I used the
+optimal-play convention, which makes the basket term a \(\max\); in the next section I replace
+that term to model other policies.
 
 ** Optimal or toddler?
 
-With dead rolls eliminated, every state \((\mathbf f,r)\) reduces to averaging over active die faces.
+With /dead rolls/ eliminated, every state \((\mathbf f,r)\) reduces to averaging over active die faces.
 The only remaining modeling choice is the /basket/ rule. It is convenient to view the numerator
 as a sum of /future values/ associated with harvesting from each active tree. If we write
 
@@ -126,7 +128,7 @@ My implementation clones the lattice \(t\) times (one per tree), and shifts alon
 subtracting \(\mathbf e_i\). The function =»= pads vacated entries with fills, which is exactly what
 we want: states beyond the boundary (e.g. trying to harvest from an empty tree) contribute nothing.
 We seed the absorbing victory boundary by setting \(V(\mathbf 0,r)=1\) and then repeatedly apply
-the dead-roll-normalized transition to propagate values outward across the lattice.
+the /dead-roll/-normalized transition to propagate values outward across the lattice.
 
 The policy functions discussed in the previous section become:
 
@@ -156,7 +158,7 @@ in CBQN:
 
 Not quite the trivial toddler game huh?
 
-[fn:1] That's what the title of the section reads in German. Try saying it out loud three times.
+[fn:1] That's what the section title says in German. Try saying it out loud three times.
 [fn:2] The game is very popular in German-speaking countries, and it is known as "First Orchard" in English.
 As I suspected, calculating the true odds of winning is hard enough to inspire [[https://www.stochastik-in-der-schule.de/sisonline/Jahrgang41-2021/Heft%201/Stochastik_1_2021_9_18.pdf][papers]] and [[https://www.youtube.com/watch?v=5WXzEbm68XI][videos]].
 [fn:3] The mechanics are simple: there are \(t\) trees, each starting with \(f_{max}\) fruits.
