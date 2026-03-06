@@ -23,8 +23,8 @@ to harvest from. That single choice turns the problem into a Markov decision pro
 
 A state consists of two pieces of information:
 
-- the raven position \(r\in{0,\ldots,r_{max}}\)
-- the fruit counts \(\mathbf{f}=(f_0, \ldots,f_{t−1})\), where each \(f_i\in{0,\ldots,f_{max}}\)
+- the raven position \(r\in\{0,\ldots,r_{max}\}\)
+- the fruit counts \(\mathbf{f}=(f_0, \ldots,f_{t−1})\), where each \(f_i\in\{0,\ldots,f_{max}\}\)
   and \(t\) is the number of trees.
 
 From any state, every outcome is monotone because either a fruit count decreases, or the raven advances.
@@ -147,14 +147,13 @@ Which can be nicely plugged into the driver 1-modifier:
 #+end_src
 
 Since the raven advances strictly forward, it acts as a discrete arrow of time. Instead of a massive rank
-5 tensor, we allocate only the spatial grid and (implicitly) evolve it backward in time with =⍟r=. Inside
-each time step, we fold through the total fruit sums bottom-up. Because states with the exact same fruit
-sum cannot transition into each other, they are mutually independent.  This allows us to apply our
+5 tensor, we allocate only the spatial grid and (implicitly) evolve it backward in time with =⍟r=.
+Because states with the exact same fruit sum cannot transition into each other, they are mutually independent.  This allows us to apply our
 finite difference stencil to the entire universe simultaneously, using the boolean mask =𝕨=s= to
 lock in only the probabilities for the current active wavefront. Finally, the completed probability tensor
 from the previous raven step is injected into the inner loop as an operand =𝕏→𝕗= to
-supply the \(V(\mathbf{f},r+1)\) term. Running for the standard setup (four trees, four fruits each, raven
-track length five) takes \(\mu\)s in CBQN:
+supply the \(V(\mathbf{f},r+1)\) term. Running the standard setup (four trees, four fruits each, raven
+track length five) takes microseconds in CBQN:
 
 #+begin_src bqn :tangle ../bqn/cg.bqn :exports both
   O‿T {𝕎_eog𝕩}¨ <4‿4‿5
@@ -163,7 +162,7 @@ track length five) takes \(\mu\)s in CBQN:
 #+RESULTS:
 : ⟨ 0.6313573066006354 0.596632015719557 ⟩
 
-Not quite the trivial nursery game huh?
+The Bellman-optimal strategy does improve the odds, but only slightly. So much for a trivial nursery game.
 
 [fn:1] That's what the section title says in German. Try saying it out loud three times.
 [fn:2] The game is very popular in German-speaking countries, and it is known as "First Orchard" in English.
