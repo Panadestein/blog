@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>A Markovian nursery game</title>
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+<style>
+mjx-container[jax="CHTML"] {
+overflow-x: auto !important;
+}
+</style>
+<!-- Post-specific setting bellow -->
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">A Markovian nursery game</h1>
+<div id="outline-container-org8502c55" class="outline-2">
+<h2 id="org8502c55">Die Gewinnwahrscheinlichkeit</h2>
+<div class="outline-text-2" id="text-org8502c55">
+<p>
+I love playing casual board games with my family. Our current favourite is HABA's  <a href="https://www.haba-play.com/de-de/p/meine-ersten-spiele-erster-obstgarten--1004655#variationId=1004655001">Erster Obstgarten</a>,
+which is designed collaboratively for two-year-olds. It's only natural to assume that it must be trivially
+easy to win. However, after some unlucky rounds, someone turned to the physicist in the room and asked for
+the exact win probability<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. Staring at the wooden fruits and watching the raven advance along
+its track, I could only answer honestly that it is not a trivial calculation<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
+</p>
+
+<p>
+Given the game's initial state<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>, what is the probability that the players will collect all the fruits before
+the raven reaches the orchard? I thought about this question for quite some time and decided to write
+a post about the mathematical and computational insights I gained.
+</p>
+</div>
+</div>
+<div id="outline-container-orge9d550b" class="outline-2">
+<h2 id="orge9d550b">A Markov decision process</h2>
+<div class="outline-text-2" id="text-orge9d550b">
+<p>
+The game is obviously a stochastic process, since each die roll changes the state of the board. If every roll
+determined the next move uniquely, we could model it as a Markov chain. <i>Erster Obstgarten</i>,
+however, contains one decision: when the die shows the <i>basket</i>, the players may choose which tree
+to harvest from. That single choice turns the problem into a Markov decision process (<a href="https://en.wikipedia.org/wiki/Markov_decision_process">MDP</a>).
+</p>
+
+<p>
+A state consists of two pieces of information:
+</p>
+
+<ul class="org-ul">
+<li>the raven position \(r\in\{0,\ldots,r_{max}\}\)</li>
+<li>the fruit counts \(\mathbf{f}=(f_0, \ldots,f_{t−1})\), where each \(f_i\in\{0,\ldots,f_{max}\}\)
+and \(t\) is the number of trees.</li>
+</ul>
+
+<p>
+From any state, every outcome is monotone because either a fruit count decreases, or the raven advances.
+Therefore the state graph is a <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">DAG</a> (apart from <i>dead rolls</i> on empty trees,
+which we will eliminate algebraically). This acyclicity is the key: it means we can compute
+win probabilities by dynamic programming over a finite lattice of states instead of sampling with Monte Carlo.
+With the state fixed, the remaining task is to write a recursion for the win probability from any state.
+</p>
+</div>
+</div>
+<div id="outline-container-orgc90d1dc" class="outline-2">
+<h2 id="orgc90d1dc">The Bellman equation</h2>
+<div class="outline-text-2" id="text-orgc90d1dc">
+<p>
+Let \(V(\mathbf{f}, r)\) be the probability of winning from state \((\mathbf{f}, r)\) under optimal play.
+The boundary conditions are immediate:
+</p>
+
+<ul class="org-ul">
+<li>Victory: \(V(\mathbf{0}, r) = 1\) for all \(r\)</li>
+<li>Defeat: \(V(\mathbf{f}, r_{max}) = 0\) for all \(\mathbf{f}\neq\mathbf{0}\)</li>
+</ul>
+
+<p>
+From any intermediate state there are three kinds of outcomes on the \(t+2\)-sided die:
+</p>
+
+<ul class="org-ul">
+<li>Raven: advance the raven, \((\mathbf f, r) \to (\mathbf f, r+1)\).</li>
+<li>Color: harvest from tree \(i\) if possible, \((\mathbf f, r) \to (\mathbf f-\mathbf e_i, r)\) when \(f_i>0\),
+otherwise is a <i>dead roll</i>.</li>
+<li>Basket: choose one non-empty tree \(j\) and harvest it, \((\mathbf f, r) \to (\mathbf f-\mathbf e_j, r)\).</li>
+</ul>
+
+<p>
+Taking the expectation<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup> over the uniform die and maximizing only in the basket case gives the <a href="https://en.wikipedia.org/wiki/Bellman_equation">Bellman equation</a>:
+</p>
+
+\begin{equation*}
+  V(\mathbf f,r)=\frac1{t+2}\Bigg[
+  V(\mathbf f,r+1)
+  +\sum_{i:f_i>0}V(\mathbf f-\mathbf e_i,r)
+  +D(\mathbf f)V(\mathbf f,r)
+  +\max_{j:f_j>0}V(\mathbf f-\mathbf e_j,r)
+  \Bigg].
+\end{equation*}
+
+<p>
+Here \(\mathbf e_i\) is the \(i\)-th standard basis vector and \(D(\mathbf{f})\) is the number of empty trees
+in state \(\mathbf f\), i.e. the count of indices with \(f_i = 0\). The only control in the system is the <i>basket</i> term;
+everything else is dictated by the die.
+</p>
+
+<p>
+The equation above still contains the major annoyance of the <i>dead rolls</i>. If the die shows the color of an empty tree,
+nothing happens and the state stays \((\mathbf{f}, r)\). This appears as
+self-dependence, because some outcomes contribute \(V(\mathbf{f}, r)\) back into the expectation.
+These faces of the die contribute exactly \(D(\mathbf f)V(\mathbf f,r)/(t+2)\) to the
+right-hand side. We can move this term to the left and condition on the next roll that actually
+changes the state, which yields:
+</p>
+
+\begin{equation*}
+  V(\mathbf f,r)
+  =\frac{V(\mathbf f,r+1)
+  +\sum_{i:f_i>0} V(\mathbf f-\mathbf e_i,r)
+  +\max_{j:f_j>0} V(\mathbf f-\mathbf e_j,r)}
+  {t+2-D(\mathbf f)}.
+\end{equation*}
+
+<p>
+This is the same process, just written in a form without self-loops. The denominator is the number
+of die faces that can actually change the state. At this point the entire computation is fixed
+except for how we choose the tree in the <i>basket</i> case. In the equations above I used the
+optimal-play convention, which makes the basket term a \(\max\); in the next section I replace
+that term to model other policies.
+</p>
+</div>
+</div>
+<div id="outline-container-org861fb32" class="outline-2">
+<h2 id="org861fb32">Optimal or toddler?</h2>
+<div class="outline-text-2" id="text-org861fb32">
+<p>
+With <i>dead rolls</i> eliminated, every state \((\mathbf f,r)\) reduces to averaging over active die faces.
+The only remaining modeling choice is the <i>basket</i> rule. It is convenient to view the numerator
+as a sum of <i>future values</i> associated with harvesting from each active tree. If we write
+</p>
+
+\begin{equation*}
+  S(\mathbf f,r) = V(\mathbf f,r+1) + \sum_{i:f_i>0} V(\mathbf f-\mathbf e_i,r),
+\end{equation*}
+
+<p>
+then the simplified recursion from the previous section is
+</p>
+
+\begin{equation*}
+  V(\mathbf f,r) = \frac{S(\mathbf f,r) + V_b(\mathbf f,r)}{t+2-D(\mathbf f)},
+\end{equation*}
+
+<p>
+where \(V_b(\mathbf f,r)\) encodes the basket policy. Under optimal play the basket should choose
+the tree that maximizes the future win probability:
+</p>
+
+\begin{equation*}
+  V_b(\mathbf f,r) = \max_{j:f_j>0} V(\mathbf f-\mathbf e_j,r).
+\end{equation*}
+
+<p>
+If we instead model a toddler as choosing uniformly among the \(A(\mathbf f)=t-D(\mathbf{f})\)
+active trees, the basket term becomes an average, and our decision process collapses
+back into an absorbing Markov chain:
+</p>
+
+\begin{equation*}
+  V_b(\mathbf f,r) = \frac{1}{A(\mathbf f)}\sum_{j:f_j>0} V(\mathbf f-\mathbf e_j,r).
+\end{equation*}
+
+<p>
+Equivalently, every active tree’s future value gets a multiplier of \(1+\tfrac{1}{A}\): one unit from its
+color face, plus an extra \(\tfrac{1}{A}\) from the basket being distributed evenly.
+</p>
+</div>
+</div>
+<div id="outline-container-org5407c2d" class="outline-2">
+<h2 id="org5407c2d">Four lines of BQN</h2>
+<div class="outline-text-2" id="text-org5407c2d">
+<p>
+With the recurrence fully specified, all that remains is to evaluate it exactly over the finite state lattice<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>.
+The monotonicity we observed earlier means we can compute \(V\) bottom-up. In a scalar implementation one
+would index neighbors one by one to fetch the values \(V(\mathbf f-\mathbf e_i,r)\). But in BQN we have powerful
+rank polymorphism and shifting functions!
+</p>
+
+<p>
+My implementation clones the lattice \(t\) times (one per tree), and shifts at rank \(i\) to model
+subtracting \(\mathbf e_i\). The function <code>»</code> pads vacated entries with fills, which is exactly what
+we want: states beyond the boundary (e.g. trying to harvest from an empty tree) contribute nothing.
+We seed the absorbing victory boundary by setting \(V(\mathbf 0,r)=1\) and then repeatedly apply
+the <i>dead-roll</i>-normalized transition to propagate values outward across the lattice.
+</p>
+
+<p>
+The policy functions discussed in the previous section become:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">O ← {+´+·+´((&lt;⊑∘⍒¨𝕩)=⌽↕=𝕩)⊸×}
+T ← {(1+1÷1⌈+´¨0&lt;𝕩)×+´}
+</pre>
+</div>
+
+<p>
+Which can be nicely plugged into the driver 1-modifier:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">_eog ← {𝔽_𝕣 t‿f‿r:
+  p‿d‿v‿s ← ⟨1⌾⊑0¨, (t+2)-·+´¨0⊸=, 𝔽, +´¨⟩{𝕎𝕩}¨&lt;↕t⥊f+1
+  ⊢´⥊{p𝕏{𝕩+(𝕨=s)×(d÷˜𝕗+V)𝕩{»⎉𝕩𝕗}¨1+↕t}´-⟜↕t×f}⍟r 0¨s
+}
+</pre>
+</div>
+
+<p>
+Since the raven advances strictly forward, it acts as a discrete arrow of time. Instead of a massive rank
+5 tensor, we allocate only the spatial grid and (implicitly) evolve it backward in time with <code>⍟r</code>.
+Because states with the exact same fruit sum cannot transition into each other, they are mutually independent.  This allows us to apply our
+finite difference stencil to the entire universe simultaneously, using the boolean mask <code>𝕨=s</code> to
+lock in only the probabilities for the current active wavefront. Finally, the completed probability tensor
+from the previous raven step is injected into the inner loop as an operand <code>𝕏→𝕗</code> to
+supply the \(V(\mathbf{f},r+1)\) term. Running the standard setup (four trees, four fruits each, raven
+track length five) takes microseconds in CBQN:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">O‿T {𝕎_eog𝕩}¨ &lt;4‿4‿5
+</pre>
+</div>
+
+<pre class="example">
+⟨ 0.6313573066006354 0.596632015719557 ⟩
+</pre>
+
+
+<p>
+The Bellman-optimal strategy does improve the odds, but only slightly. So much for a trivial nursery game.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+That's what the section title says in German. Try saying it out loud three times.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+The game is very popular in German-speaking countries, and it is known as "First Orchard" in English.
+As I suspected, calculating the true odds of winning is hard enough to inspire <a href="https://www.stochastik-in-der-schule.de/sisonline/Jahrgang41-2021/Heft%201/Stochastik_1_2021_9_18.pdf">papers</a> and <a href="https://www.youtube.com/watch?v=5WXzEbm68XI">videos</a>.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+The mechanics are simple: there are \(t\) trees, each starting with \(f_{max}\) fruits.
+Players take turns rolling a \(t+2\)-sided die. Rolling one of the \(t\) colors lets you harvest
+a fruit from the matching tree (if the tree is empty, nothing happens).
+Rolling the side <i>basket</i> lets the players collaboratively pick any available fruit.
+Finally, rolling the side <i>raven</i> advances a wooden bird one step down a path of \(r_{max}\) steps.
+If you collect all \(f_{max}\times t\) fruits before the raven reaches the orchard, everyone wins.
+If the raven arrives first, too bad.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Without the basket choice, evaluating the next turn is simply a passive weighted average
+via the <a href="https://en.wikipedia.org/wiki/Law_of_total_probability">Law of total probability</a>. Injecting the max operator to account for the players' optimal
+decision is exactly what transforms this passive probability into the Bellman optimality equation.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Finally some code which I will present as if it didn't take ages to refine!
+</p>
+
+<div style="text-align: center; font-size: 2em; padding: 20px 0;">
+  <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
+</div></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>

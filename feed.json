@@ -74,6 +74,12 @@
             "url": "https://panadestein.github.io/blog/posts/bc.html",
 	    "title": "Strips from the BQNcrate.",
             "content_html": "Explaining some examples from the BQNcrate."
+        },
+        {
+            "id": "12",
+            "url": "https://panadestein.github.io/blog/posts/cg.html",
+	    "title": "A Markovian nursery game.",
+            "content_html": "Stochastic analysis of the Erster Obstgarten game."
         }
     ]
 }
