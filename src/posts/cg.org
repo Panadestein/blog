@@ -108,7 +108,8 @@ the tree that maximizes the future win probability:
 \end{equation*}
 
 If we instead model a toddler as choosing uniformly among the \(A(\mathbf f)=t-D(\mathbf{f})\)
-active trees, then the basket term is an average:
+active trees, the basket term becomes an average, and our decision process collapses
+back into an absorbing Markov chain:
 
 \begin{equation*}
   V_b(\mathbf f,r) = \frac{1}{A(\mathbf f)}\sum_{j:f_j>0} V(\mathbf f-\mathbf e_j,r).
