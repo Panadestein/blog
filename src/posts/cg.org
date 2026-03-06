@@ -9,7 +9,7 @@ easy to win. However, after some unlucky rounds, someone turned to the physicist
 the exact win probability[fn:1]. Staring at the wooden fruits and watching the raven advance along
 its track, I could only answer honestly that it is not a trivial calculation[fn:2].
 
-Given the game's initial state, what is the probability that the players will collect all the fruits before
+Given the game's initial state[fn:3], what is the probability that the players will collect all the fruits before
 the raven reaches the orchard? I thought about this question for quite some time and decided to write
 a post about the mathematical and computational insights I gained.
 
@@ -17,7 +17,7 @@ a post about the mathematical and computational insights I gained.
 ** A Markov decision process
 
 The game is obviously a stochastic process, since each die roll changes the state of the board. If every roll
-determined the next move uniquely, we could model it as a Markov chain. /Erster Obstgarten/[fn:3],
+determined the next move uniquely, we could model it as a Markov chain. /Erster Obstgarten/,
 however, contains one decision: when the die shows the /basket/, the players may choose which tree
 to harvest from. That single choice turns the problem into a Markov decision process ([[https://en.wikipedia.org/wiki/Markov_decision_process][MDP]]).
 
@@ -124,7 +124,7 @@ The monotonicity we observed earlier means we can compute \(V\) bottom-up. In a 
 would index neighbors one by one to fetch the values \(V(\mathbf f-\mathbf e_i,r)\). But in BQN we have powerful
 rank polymorphism and shifting functions!
 
-My implementation clones the lattice \(t\) times (one per tree), and shifts along axis \(i\) to model
+My implementation clones the lattice \(t\) times (one per tree), and shifts at rank \(i\) to model
 subtracting \(\mathbf e_i\). The function =»= pads vacated entries with fills, which is exactly what
 we want: states beyond the boundary (e.g. trying to harvest from an empty tree) contribute nothing.
 We seed the absorbing victory boundary by setting \(V(\mathbf 0,r)=1\) and then repeatedly apply
@@ -146,8 +146,15 @@ Which can be nicely plugged into the driver 1-modifier:
   }
 #+end_src
 
-Running the DP for the standard setup (four trees, four fruits each, raven track length five) takes \(\mu\)s
-in CBQN:
+Since the raven advances strictly forward, it acts as a discrete arrow of time. Instead of a massive rank
+5 tensor, we allocate only the spatial grid and (implicitly) evolve it backward in time with =⍟r=. Inside
+each time step, we fold through the total fruit sums bottom-up. Because states with the exact same fruit
+sum cannot transition into each other, they are mutually independent.  This allows us to apply our
+finite difference stencil to the entire universe simultaneously, using the boolean mask =𝕨=s= to
+lock in only the probabilities for the current active wavefront. Finally, the completed probability tensor
+from the previous raven step is injected into the inner loop as an operand =𝕏→𝕗= to
+supply the \(V(\mathbf{f},r+1)\) term. Running for the standard setup (four trees, four fruits each, raven
+track length five) takes \(\mu\)s in CBQN:
 
 #+begin_src bqn :tangle ../bqn/cg.bqn :exports both
   O‿T {𝕎_eog𝕩}¨ <4‿4‿5
@@ -156,7 +163,7 @@ in CBQN:
 #+RESULTS:
 : ⟨ 0.6313573066006354 0.596632015719557 ⟩
 
-Not quite the trivial toddler game huh?
+Not quite the trivial nursery game huh?
 
 [fn:1] That's what the section title says in German. Try saying it out loud three times.
 [fn:2] The game is very popular in German-speaking countries, and it is known as "First Orchard" in English.
