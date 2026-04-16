@@ -372,7 +372,7 @@ We also define a namespace for dealing with complex numbers, in particular the =
     _p ⇐ {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
     C‿E ⇐ ⟨⋈⟜-´˘, •math{𝕗.Cos≍˘𝕗.Sin}⟩
   }
-  FFT ← {𝕊⁼: z.C{≠÷˜·𝔽𝔾∘𝔽}𝕊𝕩; (1=≠)◶⟨(+∾-)⟜(⊢×z._p˘·z.E∘-π×↕⊸÷∘≠)´(𝕊¨⊢⊔˜2|⊒˜), ⊢⟩𝕩}
+  FFT ← {𝕊⁼: z.C{≠÷˜·𝔽𝔾∘𝔽}𝕊𝕩; (+∾-)⟜(⊢×z._p˘·z.E∘-π×↕⊸÷∘≠)´∘(𝕊¨⊢⊔˜2|⊒˜)⍟(1<≠)𝕩}
 #+end_src
 
 #+RESULTS:
@@ -385,7 +385,7 @@ Let's confirm that the inverse returns back the original list:
 #+end_src
 
 #+RESULTS:
-: 1.914614300435602e¯14
+: 2.4875934645507414e¯15
 
 We could also compare with the discrete Fourier transform, which despite being \(O(N^2)\)
 +has+ should have a nice array formulation:
@@ -396,7 +396,7 @@ We could also compare with the discrete Fourier transform, which despite being \
 #+end_src
 
 #+RESULTS:
-: ¯2.8412011632283907e¯10
+: ¯3.0956031835116526e¯10
 
 In the DFT code above, I got into a big mess with the complex numbers, because the
 =z= namespace was too tightly coupled with the FFT implementation. I had to do a
@@ -686,6 +686,36 @@ Let’s confirm that both methods produce identical results:
 :   15 14 13 12 21  
 :   16 17 18 19 20  
 :                  ┘
+
+*** Hillis-Steele scan
+
+I was asked to identify this clever [[https://developer.nvidia.com/gpugems/gpugems3/part-vi-gpu-computing/chapter-39-parallel-prefix-sum-scan-cuda][algorithm]] in a CUDA interview, but tripped up, mistaking its logarithmic
+stride for a radix-2 FFT [[https://en.wikipedia.org/wiki/Butterfly_diagram][butterfly]] pattern. While it sacrifices work efficiency for span, as it performs \(O(N log N)\)
+operations rather than \(O(N)\), the underlying concept is mathematically beautiful.
+
+Staring at the imperative CUDA implementation, with its explicit thread barriers and pointer arithmetic, it is
+hard to intuitively "feel" the algorithm. In contrast, BQN strips away the hardware mechanics
+to reveal its crystal-clear algebraic essence:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  HS ← ⊢{𝕩+»⍟𝕨𝕩}´↕∘⌈⌾(2⊸⋆⁼)∘≠
+#+end_src
+
+An alternative array approach here is to precompute zero-padding blocks to drive a dyadic shift, =(⊢+»)´0⥊˜¨=,
+but materializing those intermediate creates a memory bandwidth pressure for large inputs. Ultimately,
+the true parallel power of Hillis-Steele lives entirely inside the vector sum and spatial shift;
+the fold itself acts merely as the temporal synchronization barrier. Implementing this in BQN is
+practically pointless for production though, as the language already boasts a heavily optimized,
+SIMD-accelerated [[https://mlochbaum.github.io/BQN/implementation/primitive/fold.html][implementation]] of the scan primitive:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  (HS•_timed÷+`•_timed)⍟(+`≡HS) •rand.Deal 1e7
+#+end_src
+
+#+RESULTS:
+: 76.56145702110905
+
+So yeah, don't do this at home.
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
