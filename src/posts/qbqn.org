@@ -8,7 +8,7 @@ Initially, we import the necessary system functions and define a 1-modifier for 
 complex-valued matrix products. Next, we define a namespace containing various quantum gates:
 
 #+name: preamble
-#+begin_src bqn :exports code :results none :tangle ../bqn/q.bqn
+#+begin_src bqn :exports code :tangle ../bqn/q.bqn
   Sin‿Cos‿GCD ← •math
   U ← •rand.Range
   _cp ← {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
@@ -17,7 +17,7 @@ complex-valued matrix products. Next, we define a namespace containing various q
     IM ← (⊢⋈≢⥊⟜0⊢)¨
     x‿id‿h ⇐ (⌽‿⊢{𝕎𝕩}¨<=⌜˜↕2) ∾○IM <-⌾(1‿1⊸⊑)2‿2⥊÷√2
     swap‿cnot ⇐ IM ⟨1‿2, 2‿3⟩ {⌽⌾(𝕨⊸⊏)𝕩}¨ <=⌜˜↕4
-    P ⇐ {⟨=⌜˜↕4,  4‿4⥊0⟩ {𝕨⌾(3‿3⊸⊑) 𝕩}¨˜ Sin⊸⋈⟜Cos 𝕩}
+    P ⇐ {⟨=⌜˜↕4,  4‿4⥊0⟩ {𝕨⌾(3‿3⊸⊑)𝕩}¨˜ Sin⊸⋈⟜Cos𝕩}
   }
 #+end_src
 
@@ -27,18 +27,17 @@ The (call_count-chars() chars[fn:3]) quantum interpreter is based on references 
 and [[https://arxiv.org/abs/1608.03355][arXiv:1608.03355]]. For simplicity, we always measure at the end of the execution:
 
 #+name: interpreter
-#+begin_src bqn :exports code :results none :tangle ../bqn/q.bqn
+#+begin_src bqn :exports code :tangle ../bqn/q.bqn
   Q ← {𝕊qb‿sc‿r:
     wf ← (1⌾⊑⋈⊢)⥊⟜0 2⋆qb
-    M‿K ← ⟨+˝∘×⎉1‿∞ _cp, {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜<_cp𝕩}⟩
-    E ← {0𝕊𝕩:1; K⍟(𝕨-1)˜𝕩}
-    L ← {K´ ⟨(qb-𝕨+⌊2⋆⁼≠⊑𝕩) E g.id, 𝕩, 𝕨 E g.id⟩}
-    T ← ∾↕∘≠{a←𝕩, i←𝕨{𝕩⊑a}•_while_{𝕩<𝕨}𝕨⊑a, 𝕨<◶⟨⟩‿{(⊢∾1⊸↓∘⌽)𝕨+↕𝕩-𝕨}i}¨<
-    A ← {qs‿gs𝕊v:
-      1⊸=◶{𝕊𝕩: ui ← 0 L gs
-        v M˜ {𝕊⟨⟩:ui; (M˜´M⟜ui⟜M˜M´) L⟜g.swap¨ 𝕩} T qs (⌽∘⊢∾¬∘∊/⊣)˜ ↕qb
-      }‿(v M˜ gs L˜ ⊑qs) ≠qs}
-    »⊸<∨` 0>r-`>+○(×˜)˝ wf A´ ⌽sc
+    M ← +˝∘×⎉1‿∞ _cp
+    K ← {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜<_cp𝕩}
+    L ← {𝕩K⍟𝕨1}{K´⟨g.id𝔽˜qb-𝕨+⌊2⋆⁼≠⊑𝕩, 𝕩, 𝕨𝔽g.id⟩}
+    T ← ∾↕∘≠{(⊢∾1↓⌽)𝕨↓↕𝕨⊑⟜𝕩˜•_while_>𝕨⊑𝕩}¨<
+    A ← {1=≠⊑𝕨 ? 𝕩M˜⊑⊸L´𝕨; ui ← 0⊸L´𝕨
+      𝕩M˜×∘≠◶ui‿(M˜´M⟜ui⟜M˜M´) L⟜g.swap¨T 𝕨(⌽∘⊢∾¬∘∊/⊣)⟜⊑˜↕qb
+    }
+    »⊸<∨` 0>r-`>+○(×˜)˝ wf A´⌽sc
   }
 #+end_src
 
@@ -50,7 +49,7 @@ and [[https://arxiv.org/abs/1608.03355][arXiv:1608.03355]]. For simplicity, we a
 
 The interpreter’s logic is straightforward: it evolves the wavefunction $\Psi_0^n$  
 in the full [[https://en.wikipedia.org/wiki/Hilbert_space][Hilbert space]], whose dimension is $2^n$ for $n$ qubits.  
-Each quantum gate is extended to this space through Kronecker lifting (=E=),  
+Each quantum gate is extended to this space through Kronecker lifting,  
 performed by the function =L=:
 
 \begin{equation*}
@@ -170,8 +169,8 @@ With this distribution:
 #+RESULTS:
 #+begin_example
 ┌─                                                                                                                                                                                 
-╵ '-' '´' '¨' '⋈' '+' '⟜' '⌽' '⊢' '≢' '⥊' '<' '=' '⌜' '˜' '↕' '∾' '○' '⌾' '⊸' '⊑' '÷' '√' '⊏' '⋆' '˝' '∘' '×' '⎉' '≡' '⊣' '⌊' '⁼' '≠' '⍟' '◶' '↓' '¬' '∊' '/' '»' '∨' '`' '>' '⍒'  
-  8   8   10  5   8   3   6   7   1   5   9   6   3   12  6   5   2   5   7   9   5   1   1   5   4   8   5   1   3   3   1   1   5   1   2   1   1   1   1   1   1   2   3   1    
+╵ '-' '´' '¨' '⋈' '+' '⟜' '⌽' '⊢' '≢' '⥊' '<' '=' '⌜' '˜' '↕' '∾' '○' '⌾' '⊸' '⊑' '÷' '√' '⊏' '⊣' '⋆' '˝' '∘' '×' '⎉' '⍟' '⌊' '⁼' '≠' '↓' '>' '◶' '¬' '∊' '/' '»' '∨' '`' '≡' '⍒'  
+  6   9   10  4   7   10  6   6   1   5   7   4   3   13  6   5   2   5   7   11  5   1   1   3   5   4   9   6   1   1   1   1   5   2   4   1   1   1   1   1   1   2   1   1    
                                                                                                                                                                                   ┘
 #+end_example
 
@@ -190,22 +189,22 @@ BQN is also fast:
 While the interpreter's performance is not particularly optimized, here is a comparison with the equivalent Common Lisp code:
 
 #+begin_src bash :exports results :tangle no :results raw :wrap example
-  hyperfine --runs 5 'cbqn -f ./bqn/q.bqn' 'sbcl --script ../../supp/perf_qi/q.lisp'
+  hyperfine --runs 5 'cbqn -f ../bqn/q.bqn' 'sbcl --script ../../supp/perf_qi/q.lisp'
 #+end_src
 
 #+RESULTS:
 #+begin_example
-Benchmark 1: cbqn -f ./bqn/q.bqn
-  Time (mean ± σ):      5.468 s ±  0.077 s    [User: 5.427 s, System: 0.005 s]
-  Range (min … max):    5.358 s …  5.535 s    5 runs
+Benchmark 1: cbqn -f ../bqn/q.bqn
+  Time (mean ± σ):      27.6 ms ±   1.1 ms    [User: 26.3 ms, System: 1.1 ms]
+  Range (min … max):    26.5 ms …  29.1 ms    5 runs
  
 Benchmark 2: sbcl --script ../../supp/perf_qi/q.lisp
-  Time (mean ± σ):     37.114 s ±  0.893 s    [User: 37.544 s, System: 0.207 s]
-  Range (min … max):   36.457 s … 38.634 s    5 runs
+  Time (mean ± σ):     36.288 s ±  0.411 s    [User: 36.427 s, System: 0.231 s]
+  Range (min … max):   35.709 s … 36.701 s    5 runs
  
 Summary
-  cbqn -f ./bqn/q.bqn ran
-    6.79 ± 0.19 times faster than sbcl --script ../../supp/perf_qi/q.lisp
+  cbqn -f ../bqn/q.bqn ran
+ 1316.34 ± 55.49 times faster than sbcl --script ../../supp/perf_qi/q.lisp
 #+end_example
 
 And here is a full program's profile. All time is spent in the Kronecker and matrix products:
@@ -216,20 +215,19 @@ And here is a full program's profile. All time is spent in the Kronecker and mat
 
 #+RESULTS:
 #+begin_example
-Got 25361 samples
-(REPL): 25361 samples:
-     2│  Q ← {𝕊qb‿sc‿r:
-     1│    wf ← (1⌾⊑⋈⊢)⥊⟜0 2⋆qb
-  2471│    M‿K ← ⟨+˝∘×⎉1‿∞ _cp, {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜<_cp𝕩}⟩
-    26│    E ← {0𝕊𝕩:1; K⍟(𝕨-1)˜𝕩}
-    39│    L ← {K´ ⟨(qb-𝕨+⌊2⋆⁼≠⊑𝕩) E g.id, 𝕩, 𝕨 E g.id⟩}
-    16│    T ← ∾↕∘≠{a←𝕩, i←𝕨{𝕩⊑a}•_while_{𝕩<𝕨}𝕨⊑a, 𝕨<◶⟨⟩‿{(⊢∾1⊸↓∘⌽)𝕨+↕𝕩-𝕨}i}¨<
-     1│    A ← {qs‿gs𝕊v:
-     4│      1⊸=◶{𝕊𝕩: ui ← 0 L gs
- 22430│        v M˜ {𝕊⟨⟩:ui; (M˜´M⟜ui⟜M˜M´) L⟜g.swap¨ 𝕩} T qs (⌽∘⊢∾¬∘∊/⊣)˜ ↕qb
-   366│      }‿(v M˜ gs L˜ ⊑qs) ≠qs}
-     5│    »⊸<∨` 0>r-`>+○(×˜)˝ wf A´ ⌽sc
+Got 125 samples
+(REPL): 125 samples:
+      │Q ← {𝕊qb‿sc‿r:
+      │  wf ← (1⌾⊑⋈⊢)⥊⟜0 2⋆qb
+      │  M ← +˝∘×⎉1‿∞ _cp
+    30│  K ← {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜<_cp𝕩}
+     1│  L ← {𝕩K⍟𝕨1}{K´⟨g.id𝔽˜qb-𝕨+⌊2⋆⁼≠⊑𝕩, 𝕩, 𝕨𝔽g.id⟩}
+      │  T ← ∾↕∘≠{(⊢∾1↓⌽)𝕨↓↕𝕨⊑⟜𝕩˜•_while_>𝕨⊑𝕩}¨<
+     2│  A ← {1=≠⊑𝕨 ? 𝕩M˜⊑⊸L´𝕨; ui ← 0⊸L´𝕨
+    92│    𝕩M˜×∘≠◶ui‿(M˜´M⟜ui⟜M˜M´) L⟜g.swap¨T 𝕨(⌽∘⊢∾¬∘∊/⊣)⟜⊑˜↕qb
       │  }
+      │  »⊸<∨` 0>r-`>+○(×˜)˝ wf A´⌽sc
+      │}
 #+end_example
 
 #+begin_export html
