@@ -186,7 +186,7 @@ BQN is also fast:
 <summary>Benchmarks</summary>
 #+end_export
 
-While the interpreter's performance is not particularly optimized, here is a comparison with the equivalent Common Lisp code:
+Here is a comparison with the reference Common Lisp code (which I believe is not particularly optimized):
 
 #+begin_src bash :exports results :tangle no :results raw :wrap example
   hyperfine --runs 5 'cbqn -f ../bqn/q.bqn' 'sbcl --script ../../supp/perf_qi/q.lisp'
