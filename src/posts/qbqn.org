@@ -28,18 +28,21 @@ and [[https://arxiv.org/abs/1608.03355][arXiv:1608.03355]]. For simplicity, we a
 
 #+name: interpreter
 #+begin_src bqn :exports code :tangle ../bqn/q.bqn
-  Q ← {𝕊qb‿sc‿r:
-    wf ← (1⌾⊑⋈⊢)⥊⟜0 2⋆qb
+  Q ← {𝕨𝕊nq‿qc:
+    wf ← 1⌾⊑⊸⋈0⥊˜2⋆nq
     M ← +˝∘×⎉1‿∞ _cp
     K ← {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜<_cp𝕩}
-    L ← {𝕩K⍟𝕨1}{K´⟨g.id𝔽˜qb-𝕨+⌊2⋆⁼≠⊑𝕩, 𝕩, 𝕨𝔽g.id⟩}
+    L ← {𝕩K⍟𝕨1}{K´⟨g.id𝔽˜nq-𝕨+⌊2⋆⁼≠⊑𝕩, 𝕩, 𝕨𝔽g.id⟩}
     T ← ∾↕∘≠{(⊢∾1↓⌽)𝕨↓↕𝕨⊑⟜𝕩˜•_while_>𝕨⊑𝕩}¨<
-    A ← {1=≠⊑𝕨 ? 𝕩M˜⊑⊸L´𝕨; ui ← 0⊸L´𝕨
-      𝕩M˜×∘≠◶ui‿(M˜´M⟜ui⟜M˜M´) L⟜g.swap¨T 𝕨(⌽∘⊢∾¬∘∊/⊣)⟜⊑˜↕qb
+    A ← {1=≠⊑𝕨 ? 𝕩M˜⊑⊸L´𝕨;
+      𝕩M´⟨0⊸L´𝕨⟩(⊢∾∾⟜⌽)L⟜g.swap¨T𝕨(⌽∘⊢∾¬∘∊/⊣)⟜⊑˜↕nq
     }
-    »⊸<∨` 0>r-`>+○(×˜)˝ wf A´⌽sc
+    »⊸<∨`0>𝕨-`+○(×˜)´wf A´ ⌽qc
   }
 #+end_src
+
+#+RESULTS: interpreter
+: (function block)
 
 #+begin_export html
 </br>
@@ -94,7 +97,7 @@ statistical accuracy, the experiment is repeated multiple times.
 
 #+name: test
 #+begin_src bqn :exports code :results none :tangle ../bqn/q.bqn
-  n‿a‿qb‿r ← ⟨15, 11, 5, 0 U˜ 2⋆3⟩
+  n‿a‿nq‿r ← ⟨15, 11, 5, 0 U˜ 2⋆10⟩
 
   sc ← ⟨
     ⟨0⟩‿g.h ⋄ ⟨1⟩‿g.h ⋄ ⟨2⟩‿g.h
@@ -103,7 +106,7 @@ statistical accuracy, the experiment is repeated multiple times.
     ⟨⟨1, 2⟩, g.P π÷4⟩ ⋄ ⟨⟨0, 2⟩, g.P π÷2⟩ ⋄ ⟨2⟩‿g.h
   ⟩
 
-  C ← {n (⊣≡×´∘GCD) +‿-{𝕩𝕎1}¨ <a⋆(≠÷2×⊑∘⍒) 0⌾⊑+˝∘‿(2⋆qb-2)⥊𝕩}
+  C ← {n (⊣≡×´∘GCD) +‿-{𝕩𝕎1}¨ <a⋆(≠÷2×⊑∘⍒) 0⌾⊑+˝∘‿(2⋆nq-2)⥊𝕩}
 #+end_src
 
 The function =C= performs the classical post-processing part of the algorithm.
@@ -116,13 +119,13 @@ let us kill the ignorabimus. Wir müssen wissen, wir werden wissen![fn:4]
 
 #+name: run
 #+begin_src bqn :exports both :tangle ../bqn/q.bqn
-  C >+˝{Q qb‿sc‿𝕩}¨ r
+  C +´Q⟜nq‿sc¨r
 #+end_src
 
 #+RESULTS: run
 : 1
 
-Compare the result with that obtained using an IBM's [[https://panadestein.github.io/blog/supp/ibm_eagle/shor_factorize_fifteen.html][Eagle QPU]].
+Compare the result with that obtained using an IBM's [[https://panadestein.github.io/blog/supp/ibm_eagle/shor_factorize_fifteen.html][Eagle QPU]]!
 
 ** Epilogue
 
@@ -157,21 +160,21 @@ The src_bqn[:exports code]{prog} string contains the full source code. We used:
 
 #+RESULTS:
 #+begin_example
-⟨ 44 64 ⟩
+⟨ 43 64 ⟩
 #+end_example
 
 With this distribution:
 
 #+begin_src bqn :noweb yes :noweb-prefix no :exports both :tangle no :wrap example
-  ⍉>(⍷∾≠)¨∘(⊐⊸⊔∊/⊣)⟜(⊑¨•primitives)˜ prog
+  prog (⍉·⌽˘∘∨⊣≍˘˜≠∘⊣↑/⁼∘⊐)˜"•↩←⇐·𝕊𝕏𝕎𝔽𝔾𝕤𝕩𝕨𝕣𝕗𝕘"∾⊑¨•primitives
 #+end_src
 
 #+RESULTS:
 #+begin_example
-┌─                                                                                                                                                                                 
-╵ '-' '´' '¨' '⋈' '+' '⟜' '⌽' '⊢' '≢' '⥊' '<' '=' '⌜' '˜' '↕' '∾' '○' '⌾' '⊸' '⊑' '÷' '√' '⊏' '⊣' '⋆' '˝' '∘' '×' '⎉' '⍟' '⌊' '⁼' '≠' '↓' '>' '◶' '¬' '∊' '/' '»' '∨' '`' '≡' '⍒'  
-  6   9   10  4   7   10  6   6   1   5   7   4   3   13  6   5   2   5   7   11  5   1   1   3   5   4   9   6   1   1   1   1   5   2   4   1   1   1   1   1   1   2   1   1    
-                                                                                                                                                                                  ┘
+┌─                                                                                                                                                                                                                                                                                                                                 
+╵ '𝕩' '𝕨' '←' '⊑' '˜' '¨' '´' '⟜' '⊸' '∘' '⌽' '∾' '<' '+' '⊢' '↕' '-' '⥊' '⌾' '⋆' '÷' '×' '𝔽' '⋈' '≠' '=' '𝕊' '⌜' '⇐' '•' '˝' '>' '𝕎' '○' '⊣' '↓' '`' '⎉' '⍟' '⍒' '⌊' '⊏' '≢' '≡' '∨' '√' '∊' '⁼' '»' '¬' '/' '𝕤' '𝕣' '𝕘' '𝕗' '𝕏' '𝔾' '⚇' '◶' '⎊' '⍷' '⍋' '⍉' '⌈' '⊘' '⊔' '⊒' '⊐' '≥' '≤' '≍' '∧' '↩' '↑' '˙' '˘' '·' '«' '|' '!'  
+  17  15  15  11  11  10  9   8   8   8   7   7   7   7   6   6   6   5   5   5   5   5   4   4   4   4   3   3   3   3   3   3   2   2   2   2   2   1   1   1   1   1   1   1   1   1   1   1   1   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0    
+                                                                                                                                                                                                                                                                                                                                  ┘
 #+end_example
 
 #+begin_export html
@@ -186,7 +189,8 @@ BQN is also fast:
 <summary>Benchmarks</summary>
 #+end_export
 
-Here is a comparison with the reference Common Lisp code (which I believe is not particularly optimized):
+Here is a comparison with the reference, not particularly optimized Common Lisp code running
+also 1024 samples:
 
 #+begin_src bash :exports results :tangle no :results raw :wrap example
   hyperfine --runs 5 'cbqn -f ../bqn/q.bqn' 'sbcl --script ../../supp/perf_qi/q.lisp'
@@ -195,38 +199,50 @@ Here is a comparison with the reference Common Lisp code (which I believe is not
 #+RESULTS:
 #+begin_example
 Benchmark 1: cbqn -f ../bqn/q.bqn
-  Time (mean ± σ):      27.6 ms ±   1.1 ms    [User: 26.3 ms, System: 1.1 ms]
-  Range (min … max):    26.5 ms …  29.1 ms    5 runs
+  Time (mean ± σ):     806.9 ms ± 118.0 ms    [User: 800.6 ms, System: 2.9 ms]
+  Range (min … max):   752.2 ms … 1017.9 ms    5 runs
  
 Benchmark 2: sbcl --script ../../supp/perf_qi/q.lisp
-  Time (mean ± σ):     36.288 s ±  0.411 s    [User: 36.427 s, System: 0.231 s]
-  Range (min … max):   35.709 s … 36.701 s    5 runs
+  Time (mean ± σ):     37.015 s ±  0.184 s    [User: 37.271 s, System: 0.223 s]
+  Range (min … max):   36.826 s … 37.286 s    5 runs
  
 Summary
   cbqn -f ../bqn/q.bqn ran
- 1316.34 ± 55.49 times faster than sbcl --script ../../supp/perf_qi/q.lisp
+   45.87 ± 6.71 times faster than sbcl --script ../../supp/perf_qi/q.lisp
 #+end_example
 
 And here is a full program's profile. All time is spent in the Kronecker and matrix products:
 
 #+begin_src bqn :exports both :tangle no :results raw :wrap example
-  )profile C >+˝{Q qb‿sc‿𝕩}¨ r
+  )profile C +´Q⟜nq‿sc¨r
 #+end_src
 
 #+RESULTS:
 #+begin_example
-Got 125 samples
-(REPL): 125 samples:
-      │Q ← {𝕊qb‿sc‿r:
-      │  wf ← (1⌾⊑⋈⊢)⥊⟜0 2⋆qb
+Got 5598 samples
+GC: 12 samples
+(REPL): 5567 samples:
+     1│Q ← {𝕨𝕊nq‿qc:
+     1│  wf ← 1⌾⊑⊸⋈0⥊˜2⋆qb
       │  M ← +˝∘×⎉1‿∞ _cp
-    30│  K ← {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜<_cp𝕩}
-     1│  L ← {𝕩K⍟𝕨1}{K´⟨g.id𝔽˜qb-𝕨+⌊2⋆⁼≠⊑𝕩, 𝕩, 𝕨𝔽g.id⟩}
-      │  T ← ∾↕∘≠{(⊢∾1↓⌽)𝕨↓↕𝕨⊑⟜𝕩˜•_while_>𝕨⊑𝕩}¨<
-     2│  A ← {1=≠⊑𝕨 ? 𝕩M˜⊑⊸L´𝕨; ui ← 0⊸L´𝕨
-    92│    𝕩M˜×∘≠◶ui‿(M˜´M⟜ui⟜M˜M´) L⟜g.swap¨T 𝕨(⌽∘⊢∾¬∘∊/⊣)⟜⊑˜↕qb
+  2977│  K ← {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜<_cp𝕩}
+    86│  L ← {𝕩K⍟𝕨1}{K´⟨g.id𝔽˜nq-𝕨+⌊2⋆⁼≠⊑𝕩, 𝕩, 𝕨𝔽g.id⟩}
+    26│  T ← ∾↕∘≠{(⊢∾1↓⌽)𝕨↓↕𝕨⊑⟜𝕩˜•_while_>𝕨⊑𝕩}¨<
+   284│  A ← {1=≠⊑𝕨 ? 𝕩M˜⊑⊸L´𝕨;
+  2186│    𝕩M´⟨0⊸L´𝕨⟩(⊢∾∾⟜⌽)L⟜g.swap¨T𝕨(⌽∘⊢∾¬∘∊/⊣)⟜⊑˜↕nq
       │  }
-      │  »⊸<∨` 0>r-`>+○(×˜)˝ wf A´⌽sc
+     6│  »⊸<∨`0>𝕨-`+○(×˜)´wf A´ ⌽qc
+      │}
+(REPL): 19 samples:
+      │Sin‿Cos‿GCD ← •math
+      │U ← •rand.Range
+    19│_cp ← {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
+      │  
+      │g ← {
+      │  IM ← (⊢⋈≢⥊⟜0⊢)¨
+      │  x‿id‿h ⇐ (⌽‿⊢{𝕎𝕩}¨<=⌜˜↕2) ∾○IM <-⌾(1‿1⊸⊑)2‿2⥊÷√2
+      │  swap‿cnot ⇐ IM ⟨1‿2, 2‿3⟩ {⌽⌾(𝕨⊸⊏)𝕩}¨ <=⌜˜↕4
+      │  P ⇐ {⟨=⌜˜↕4,  4‿4⥊0⟩ {𝕨⌾(3‿3⊸⊑)𝕩}¨˜ Sin⊸⋈⟜Cos𝕩}
       │}
 #+end_example
 
@@ -237,6 +253,39 @@ Got 125 samples
 Try running the simulation in the call_generate-bqn-link() and explore it!
 If you are an Emacs user, the =org-mode= computational notebook in
 the blog's [[https://github.com/Panadestein/blog][repository]] provides the best experience.
+
+One last thing: if you are particularly pedantic like me, you have by now realized that the
+Shor's algorithm test above is a surprisingly weak unit test. Because it relies on extracting
+global periodic structures, it can easily mask severe, localized topological routing bugs.
+To formally verify our tensor geometry, we must test unitary reversibility:
+
+#+begin_export html
+<details>
+<summary>Uncomputation test</summary>
+#+end_export
+
+#+begin_src bqn
+  UC ← {𝕊nq‿depth:
+    fs ← ⟨g.h⋈˜U ⋄ g.cnot⋈˜2⊸•rand.Deal ⋄ 2⊸•rand.Deal⋈·g.P 2×π×U∘0⟩⊏˜U⟜3 depth
+    (⍉¨⋈⟜-´)⌾(1⊸⊑)¨∘⌽⊸∾{𝕏nq}¨fs
+  }
+#+end_src
+
+By generating a chaotic sequence of parameterized gates and appending its exact conjugate-transpose
+inverse in reverse chronological order, the total circuit evaluates to the identity matrix.
+If our simulator's geometry is mathematically flawless, applying this circuit will perfectly
+uncompute the system and restore the initial state vector unmodified:
+
+#+begin_src bqn
+  {(1⌾⊑0⥊˜2⋆𝕩) ≡ 0 U⊸Q𝕩⋈UC𝕩‿20} 10
+#+end_src
+
+#+RESULTS:
+: 1
+
+#+begin_export html
+</details>
+#+end_export
 
 #+name: generate-bqn-link
 #+begin_src emacs-lisp :noweb yes :noweb-prefix no :exports none :results raw :tangle no
