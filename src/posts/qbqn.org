@@ -305,6 +305,7 @@ For an efficient implementation, see [[https://arxiv.org/abs/1710.05867v4][arXiv
 beyond that.
 [fn:3] I optimized it up to this number, but I wasn't targeting the Kolmogorov complexity. Also,
 I am not particularly fond of that while loop, but the closest option I have found is the clunky ={𝕩𝕊⍟≢⊏⟜𝕩⌾((/𝕩<↕≠𝕩)⊸⊏)𝕩}=.
+Edit: I have this one ={𝕩𝕊⍟≢⊒˜⊸⌊⊸⊏𝕩}=!
 [fn:4] Hilbert's [[https://mathweb.ucsd.edu/~williams/motiv/hilbert.html][radio address]] in 1930.
 
 #+INCLUDE: "../html-foot.org"
