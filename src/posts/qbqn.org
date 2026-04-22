@@ -304,8 +304,8 @@ For an efficient implementation, see [[https://arxiv.org/abs/1710.05867v4][arXiv
 [fn:2] This post's title is a playful recursive acronym that employs quantum computing terminology, without any specific significance
 beyond that.
 [fn:3] I golfed this down a fair bit, though true Kolmogorov complexity isn't the goal of course.
-I'm not fond of that =•_while_= loop, but my only alternative is the brute-force
-structural inversion ={𝕩𝕊⍟≢⊏⟜𝕩⌾((/𝕩<↕≠𝕩)⊸⊏)𝕩}=. *Edit*: ={𝕩𝕊⍟≢⊒˜⊸⌊⊸⊏𝕩}=.
+I'm not fond of that =•_while_= loop, but my only alternative is the under ={𝕩𝕊⍟≢⊏⟜𝕩⌾((/𝕩<↕≠𝕩)⊸⊏)𝕩}=.
+*Edit*: duh ={𝕩𝕊⍟≢⊒˜⊸⌊⊸⊏𝕩}=.
 [fn:4] Hilbert's [[https://mathweb.ucsd.edu/~williams/motiv/hilbert.html][radio address]] in 1930.
 
 #+INCLUDE: "../html-foot.org"
