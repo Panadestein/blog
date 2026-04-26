@@ -262,18 +262,6 @@ If someone ever published that much, sorting will eventually be slower:
 A testament to the idea that the simplest solution in BQN is often the most efficient:
 I initially clip my citations array with ={≠¨⊔≠∘𝕩¨⌾(≥⟜≠∘𝕩⊸/)𝕩}=, which is just =/⁼≠⊸⌊=.
 
-*** Array style breath-first search
-
-If your problem is small enough to fit comfortably within a dense adjacency matrix,
-you won't find a more elegant BFS algorithm than the one presented
-in this excellent GraphBLAS [[https://archive.fosdem.org/2020/schedule/event/graphblas/][talk]].
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn
-  BFS ← {1+´¬∨`𝕩∨˝∘∧⍟n𝕨=n←↕≠𝕩}
-#+end_src
-
-#+RESULTS:
-: (function block)
 
 
 ** Numerical methods
@@ -687,6 +675,24 @@ Let’s confirm that both methods produce identical results:
 :   16 17 18 19 20  
 :                  ┘
 
+*** Array style breath-first search
+
+If your problem is small enough to fit comfortably within a dense adjacency matrix,
+you won't find a more elegant BFS algorithm than the one presented
+in this excellent GraphBLAS [[https://archive.fosdem.org/2020/schedule/event/graphblas/][talk]].
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn
+  BFS ← {1+´¬∨`𝕩∨˝∘∧⍟n𝕨=n←↕≠𝕩}
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+** Foundations of computation
+
+For a lack of a better heather. Here a group some ideas which are more in the direction of theoretical computer science
+and algorithm design, rather than practical implementations.
+
 *** Hillis-Steele scan
 
 I was asked to identify this clever [[https://developer.nvidia.com/gpugems/gpugems3/part-vi-gpu-computing/chapter-39-parallel-prefix-sum-scan-cuda][algorithm]] in a CUDA interview, but tripped up, mistaking its logarithmic
@@ -716,6 +722,38 @@ SIMD-accelerated [[https://mlochbaum.github.io/BQN/implementation/primitive/fold
 : 76.56145702110905
 
 So yeah, don't do this at home.
+
+*** The Z combinator
+
+In an eagerly-evaluated language, the legendary [[https://en.wikipedia.org/wiki/Fixed-point_combinator#Y_combinator][Y combinator]] will eagerly blow your stack. To find
+the fixed point of a higher-order generator function without infinite evaluation loops,
+we need the delayed η-expansion of Z. Mathematicians are notoriously good at overloading terminology,
+and thank to this I mistakenly conflated this functional fixed point
+with [[https://en.wikipedia.org/wiki/Fixed-point_iteration][fixed-point iteration]], which elegantly achieved in BQN with this 1-modifier: ={𝕊⍟≢⟜𝔽𝕩}=.
+
+Given BQN's native self-reference, there is little practical reason to implement Z from scratch.
+The motivation is purely the intellectual joy of golfing something structurally cleaner than the
+heavily parenthesized tangles found in other [[https://rosettacode.org/wiki/Y_combinator][languages]]. Here is my attempt:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  Z ← {𝕏∘{𝕩{(𝔽𝕗)∘⊢𝕩}}{𝔽𝕗}}
+#+end_src
+
+By leveraging BQN's syntactic roles and closures, the necessary structural delay falls naturally into place.
+Now we just need a cliché recursive algorithm to test our engine. The Collatz conjecture stopping time will do nicely:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  C ← {𝕩{1=𝕩 ? 0; 1+𝔽2⊸|◶⟨÷⟜2, 1+×⟜3⟩𝕩}}
+#+end_src
+
+And we defer to [[https://oeis.org/A006577][OEIS A006577]] for our empirical validation:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  (Z c)○⊢¨ 1+↕10
+#+end_src
+
+#+RESULTS:
+: ⟨ 0 1 7 2 5 8 16 3 19 6 ⟩
 
 [fn:1] Almost Perfect Artifacts Improve only in Small Ways: APL is more French than English,
 Alan J. Perlis (1978). From [[https://www.jsoftware.com/papers/perlis78.htm][jsoftware]]'s papers collection.
