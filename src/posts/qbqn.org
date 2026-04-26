@@ -277,7 +277,7 @@ inverse in reverse chronological order, the total circuit evaluates to the ident
 If our simulator's geometry is mathematically flawless, applying this circuit will perfectly
 uncompute the system and restore the initial state vector unmodified:
 
-#+begin_src bqn
+#+begin_src bqn :exports both
   {(1⌾⊑0⥊˜2⋆𝕩) ≡ 0 U⊸Q𝕩⋈UC𝕩‿20} 10
 #+end_src
 
