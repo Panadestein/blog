@@ -262,6 +262,7 @@ To formally verify our tensor geometry, we must test unitary reversibility:
 #+begin_export html
 <details>
 <summary>Uncomputation test</summary>
+</br>
 #+end_export
 
 #+begin_src bqn
