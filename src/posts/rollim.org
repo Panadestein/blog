@@ -728,8 +728,8 @@ So yeah, don't do this at home.
 In an eagerly-evaluated language, the legendary [[https://en.wikipedia.org/wiki/Fixed-point_combinator#Y_combinator][Y combinator]] will eagerly blow your stack. To find
 the fixed point of a higher-order generator function without infinite evaluation loops,
 we need the delayed η-expansion of Z. Mathematicians are notoriously good at overloading terminology,
-and thank to this I mistakenly conflated this functional fixed point
-with [[https://en.wikipedia.org/wiki/Fixed-point_iteration][fixed-point iteration]], which elegantly achieved in BQN with this 1-modifier: ={𝕊⍟≢⟜𝔽𝕩}=.
+and thanks to it I mistakenly conflated this functional fixed point
+with the [[https://en.wikipedia.org/wiki/Fixed-point_iteration][fixed-point iteration]], which is different and elegantly achieved in BQN with this 1-modifier: ={𝕊⍟≢⟜𝔽𝕩}=.
 
 Given BQN's native self-reference, there is little practical reason to implement Z from scratch.
 The motivation is purely the intellectual joy of golfing something structurally cleaner than the
