@@ -690,7 +690,7 @@ in this excellent GraphBLAS [[https://archive.fosdem.org/2020/schedule/event/gra
 
 ** Foundations of computation
 
-For a lack of a better heather. Here a group some ideas which are more in the direction of theoretical computer science
+For a lack of a better header. Here a group some ideas which are more in the direction of theoretical computer science
 and algorithm design, rather than practical implementations.
 
 *** Hillis-Steele scan
