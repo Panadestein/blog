@@ -235,9 +235,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">BQN's Quantum Noise</h1>
-<div id="outline-container-org6036a02" class="outline-2">
-<h2 id="org6036a02">Preamble</h2>
-<div class="outline-text-2" id="text-org6036a02">
+<div id="outline-container-org92e2d5d" class="outline-2">
+<h2 id="org92e2d5d">Preamble</h2>
+<div class="outline-text-2" id="text-org92e2d5d">
 <p>
 We will implement and test a Schrödinger-style<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> quantum simulator in the BQN<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> programming language.
 Initially, we import the necessary system functions and define a 1-modifier for handling
@@ -245,7 +245,7 @@ complex-valued matrix products. Next, we define a namespace containing various q
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="org93ac421">Sin‿Cos‿GCD ← •math
+<pre class="src src-bqn" id="orgc054d10">Sin‿Cos‿GCD ← •math
 U ← •rand.Range
 _cp ← {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
 
@@ -253,32 +253,31 @@ g ← {
   IM ← (⊢⋈≢⥊⟜0⊢)¨
   x‿id‿h ⇐ (⌽‿⊢{𝕎𝕩}¨&lt;=⌜˜↕2) ∾○IM &lt;-⌾(1‿1⊸⊑)2‿2⥊÷√2
   swap‿cnot ⇐ IM ⟨1‿2, 2‿3⟩ {⌽⌾(𝕨⊸⊏)𝕩}¨ &lt;=⌜˜↕4
-  P ⇐ {⟨=⌜˜↕4,  4‿4⥊0⟩ {𝕨⌾(3‿3⊸⊑) 𝕩}¨˜ Sin⊸⋈⟜Cos 𝕩}
+  P ⇐ {⟨=⌜˜↕4,  4‿4⥊0⟩ {𝕨⌾(3‿3⊸⊑)𝕩}¨˜ Sin⊸⋈⟜Cos𝕩}
 }
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org670e204" class="outline-2">
-<h2 id="org670e204">Interpreter</h2>
-<div class="outline-text-2" id="text-org670e204">
+<div id="outline-container-org354829e" class="outline-2">
+<h2 id="org354829e">Interpreter</h2>
+<div class="outline-text-2" id="text-org354829e">
 <p>
-The (400 chars<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>) quantum interpreter is based on references <a href="https://arxiv.org/abs/1711.02086">arXiv:1711.02086</a>
+The (282 chars<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>) quantum interpreter is based on references <a href="https://arxiv.org/abs/1711.02086">arXiv:1711.02086</a>
 and <a href="https://arxiv.org/abs/1608.03355">arXiv:1608.03355</a>. For simplicity, we always measure at the end of the execution:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="org65841fe">Q ← {𝕊qb‿sc‿r:
-  wf ← (1⌾⊑⋈⊢)⥊⟜0 2⋆qb
-  M‿K ← ⟨+˝∘×⎉1‿∞ _cp, {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜&lt;_cp𝕩}⟩
-  E ← {0𝕊𝕩:1; K⍟(𝕨-1)˜𝕩}
-  L ← {K´ ⟨(qb-𝕨+⌊2⋆⁼≠⊑𝕩) E g.id, 𝕩, 𝕨 E g.id⟩}
-  T ← ∾↕∘≠{a←𝕩, i←𝕨{𝕩⊑a}•_while_{𝕩&lt;𝕨}𝕨⊑a, 𝕨&lt;◶⟨⟩‿{(⊢∾1⊸↓∘⌽)𝕨+↕𝕩-𝕨}i}¨&lt;
-  A ← {qs‿gs𝕊v:
-    1⊸=◶{𝕊𝕩: ui ← 0 L gs
-      v M˜ {𝕊⟨⟩:ui; (M˜´M⟜ui⟜M˜M´) L⟜g.swap¨ 𝕩} T qs (⌽∘⊢∾¬∘∊/⊣)˜ ↕qb
-    }‿(v M˜ gs L˜ ⊑qs) ≠qs}
-  »⊸&lt;∨` 0&gt;r-`&gt;+○(×˜)˝ wf A´ ⌽sc
+<pre class="src src-bqn" id="orgf9fdb6c">Q ← {𝕨𝕊nq‿qc:
+  wf ← 1⌾⊑⊸⋈0⥊˜2⋆nq
+  M ← +˝∘×⎉1‿∞ _cp
+  K ← {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜&lt;_cp𝕩}
+  L ← {𝕩K⍟𝕨1}{K´⟨g.id𝔽˜nq-𝕨+⌊2⋆⁼≠⊑𝕩, 𝕩, 𝕨𝔽g.id⟩}
+  T ← ∾↕∘≠{(⊢∾1↓⌽)𝕨↓↕𝕨⊑⟜𝕩˜•_while_&gt;𝕨⊑𝕩}¨&lt;
+  A ← {1=≠⊑𝕨 ? 𝕩M˜⊑⊸L´𝕨;
+    𝕩M´⟨0⊸L´𝕨⟩(⊢∾∾⟜⌽)L⟜g.swap¨T𝕨(⌽∘⊢∾¬∘∊/⊣)⟜⊑˜↕nq
+  }
+  »⊸&lt;∨`0&gt;𝕨-`+○(×˜)´wf A´ ⌽qc
 }
 </pre>
 </div>
@@ -290,7 +289,7 @@ and <a href="https://arxiv.org/abs/1608.03355">arXiv:1608.03355</a>. For simplic
 <p>
 The interpreter’s logic is straightforward: it evolves the wavefunction \(\Psi_0^n\)  
 in the full <a href="https://en.wikipedia.org/wiki/Hilbert_space">Hilbert space</a>, whose dimension is \(2^n\) for \(n\) qubits.  
-Each quantum gate is extended to this space through Kronecker lifting (<code>E</code>),  
+Each quantum gate is extended to this space through Kronecker lifting,  
 performed by the function <code>L</code>:
 </p>
 
@@ -331,9 +330,9 @@ Given a uniform random variable \(U \sim \text{Uniform}(0, 1)\), we sample by in
 </details>
 </div>
 </div>
-<div id="outline-container-org85ae5dc" class="outline-2">
-<h2 id="org85ae5dc">Shor's algorithm</h2>
-<div class="outline-text-2" id="text-org85ae5dc">
+<div id="outline-container-org9788a69" class="outline-2">
+<h2 id="org9788a69">Shor's algorithm</h2>
+<div class="outline-text-2" id="text-org9788a69">
 <p>
 As a test case, we employ the quantum circuit of Shor's algorithm
 for the number fifteen and base eleven, following references
@@ -343,7 +342,7 @@ statistical accuracy, the experiment is repeated multiple times.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="org85eb602">n‿a‿qb‿r ← ⟨15, 11, 5, 0 U˜ 2⋆3⟩
+<pre class="src src-bqn" id="org6f06773">n‿a‿nq‿r ← ⟨15, 11, 5, 0 U˜ 2⋆10⟩
 
 sc ← ⟨
   ⟨0⟩‿g.h ⋄ ⟨1⟩‿g.h ⋄ ⟨2⟩‿g.h
@@ -352,7 +351,7 @@ sc ← ⟨
   ⟨⟨1, 2⟩, g.P π÷4⟩ ⋄ ⟨⟨0, 2⟩, g.P π÷2⟩ ⋄ ⟨2⟩‿g.h
 ⟩
 
-C ← {n (⊣≡×´∘GCD) +‿-{𝕩𝕎1}¨ &lt;a⋆(≠÷2×⊑∘⍒) 0⌾⊑+˝∘‿(2⋆qb-2)⥊𝕩}
+C ← {n (⊣≡×´∘GCD) +‿-{𝕩𝕎1}¨ &lt;a⋆(≠÷2×⊑∘⍒) 0⌾⊑+˝∘‿(2⋆nq-2)⥊𝕩}
 </pre>
 </div>
 
@@ -369,7 +368,7 @@ let us kill the ignorabimus. Wir müssen wissen, wir werden wissen!<sup><a id="f
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="org9350eec">C &gt;+˝{Q qb‿sc‿𝕩}¨ r
+<pre class="src src-bqn" id="org720e2bb">C +´Q⟜nq‿sc¨r
 </pre>
 </div>
 
@@ -379,13 +378,13 @@ let us kill the ignorabimus. Wir müssen wissen, wir werden wissen!<sup><a id="f
 
 
 <p>
-Compare the result with that obtained using an IBM's <a href="https://panadestein.github.io/blog/supp/ibm_eagle/shor_factorize_fifteen.html">Eagle QPU</a>.
+Compare the result with that obtained using an IBM's <a href="https://panadestein.github.io/blog/supp/ibm_eagle/shor_factorize_fifteen.html">Eagle QPU</a>!
 </p>
 </div>
 </div>
-<div id="outline-container-org5eb3780" class="outline-2">
-<h2 id="org5eb3780">Epilogue</h2>
-<div class="outline-text-2" id="text-org5eb3780">
+<div id="outline-container-orge2257bf" class="outline-2">
+<h2 id="orge2257bf">Epilogue</h2>
+<div class="outline-text-2" id="text-orge2257bf">
 <p>
 This was, of course, a conceptually simple simulation, the minimal instance of  
 Shor’s algorithm that has been verified experimentally. The interpreter itself  
@@ -416,8 +415,8 @@ The <code class="src src-bqn">prog</code> string contains the full source code. 
 </pre>
 </div>
 
-<pre class="example" id="org1a9f95c">
-⟨ 44 64 ⟩
+<pre class="example" id="org34e3c0e">
+⟨ 43 64 ⟩
 </pre>
 
 <p>
@@ -425,15 +424,15 @@ With this distribution:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">⍉&gt;(⍷∾≠)¨∘(⊐⊸⊔∊/⊣)⟜(⊑¨•primitives)˜ prog
+<pre class="src src-bqn">prog (⍉·⌽˘∘∨⊣≍˘˜≠∘⊣↑/⁼∘⊐)˜"•↩←⇐·𝕊𝕏𝕎𝔽𝔾𝕤𝕩𝕨𝕣𝕗𝕘"∾⊑¨•primitives
 </pre>
 </div>
 
-<pre class="example" id="org8d28a9a">
-┌─                                                                                                                                                                                 
-╵ '-' '´' '¨' '⋈' '+' '⟜' '⌽' '⊢' '≢' '⥊' '&lt;' '=' '⌜' '˜' '↕' '∾' '○' '⌾' '⊸' '⊑' '÷' '√' '⊏' '⋆' '˝' '∘' '×' '⎉' '≡' '⊣' '⌊' '⁼' '≠' '⍟' '◶' '↓' '¬' '∊' '/' '»' '∨' '`' '&gt;' '⍒'  
-  8   8   10  5   8   3   6   7   1   5   9   6   3   12  6   5   2   5   7   9   5   1   1   5   4   8   5   1   3   3   1   1   5   1   2   1   1   1   1   1   1   2   3   1    
-                                                                                                                                                                                  ┘
+<pre class="example" id="org0817120">
+┌─                                                                                                                                                                                                                                                                                                                                 
+╵ '𝕩' '𝕨' '←' '⊑' '˜' '¨' '´' '⟜' '⊸' '∘' '⌽' '∾' '&lt;' '+' '⊢' '↕' '-' '⥊' '⌾' '⋆' '÷' '×' '𝔽' '⋈' '≠' '=' '𝕊' '⌜' '⇐' '•' '˝' '&gt;' '𝕎' '○' '⊣' '↓' '`' '⎉' '⍟' '⍒' '⌊' '⊏' '≢' '≡' '∨' '√' '∊' '⁼' '»' '¬' '/' '𝕤' '𝕣' '𝕘' '𝕗' '𝕏' '𝔾' '⚇' '◶' '⎊' '⍷' '⍋' '⍉' '⌈' '⊘' '⊔' '⊒' '⊐' '≥' '≤' '≍' '∧' '↩' '↑' '˙' '˘' '·' '«' '|' '!'  
+  17  15  15  11  11  10  9   8   8   8   7   7   7   7   6   6   6   5   5   5   5   5   4   4   4   4   3   3   3   3   3   3   2   2   2   2   2   1   1   1   1   1   1   1   1   1   1   1   1   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0    
+                                                                                                                                                                                                                                                                                                                                  ┘
 </pre>
 
 </details>
@@ -447,21 +446,22 @@ BQN is also fast:
 <summary>Benchmarks</summary>
 
 <p>
-While the interpreter's performance is not particularly optimized, here is a comparison with the equivalent Common Lisp code:
+Here is a comparison with the reference, not particularly optimized Common Lisp code running
+also 1024 samples:
 </p>
 
-<pre class="example" id="orgd75969b">
-Benchmark 1: cbqn -f ./bqn/q.bqn
-  Time (mean ± σ):      5.468 s ±  0.077 s    [User: 5.427 s, System: 0.005 s]
-  Range (min … max):    5.358 s …  5.535 s    5 runs
+<pre class="example" id="org899c636">
+Benchmark 1: cbqn -f ../bqn/q.bqn
+  Time (mean ± σ):     806.9 ms ± 118.0 ms    [User: 800.6 ms, System: 2.9 ms]
+  Range (min … max):   752.2 ms … 1017.9 ms    5 runs
  
 Benchmark 2: sbcl --script ../../supp/perf_qi/q.lisp
-  Time (mean ± σ):     37.114 s ±  0.893 s    [User: 37.544 s, System: 0.207 s]
-  Range (min … max):   36.457 s … 38.634 s    5 runs
+  Time (mean ± σ):     37.015 s ±  0.184 s    [User: 37.271 s, System: 0.223 s]
+  Range (min … max):   36.826 s … 37.286 s    5 runs
  
 Summary
-  cbqn -f ./bqn/q.bqn ran
-    6.79 ± 0.19 times faster than sbcl --script ../../supp/perf_qi/q.lisp
+  cbqn -f ../bqn/q.bqn ran
+   45.87 ± 6.71 times faster than sbcl --script ../../supp/perf_qi/q.lisp
 </pre>
 
 <p>
@@ -469,34 +469,77 @@ And here is a full program's profile. All time is spent in the Kronecker and mat
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">)profile C &gt;+˝{Q qb‿sc‿𝕩}¨ r
+<pre class="src src-bqn">)profile C +´Q⟜nq‿sc¨r
 </pre>
 </div>
 
-<pre class="example" id="orgce12201">
-Got 25361 samples
-(REPL): 25361 samples:
-     2│  Q ← {𝕊qb‿sc‿r:
-     1│    wf ← (1⌾⊑⋈⊢)⥊⟜0 2⋆qb
-  2471│    M‿K ← ⟨+˝∘×⎉1‿∞ _cp, {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜&lt;_cp𝕩}⟩
-    26│    E ← {0𝕊𝕩:1; K⍟(𝕨-1)˜𝕩}
-    39│    L ← {K´ ⟨(qb-𝕨+⌊2⋆⁼≠⊑𝕩) E g.id, 𝕩, 𝕨 E g.id⟩}
-    16│    T ← ∾↕∘≠{a←𝕩, i←𝕨{𝕩⊑a}•_while_{𝕩&lt;𝕨}𝕨⊑a, 𝕨&lt;◶⟨⟩‿{(⊢∾1⊸↓∘⌽)𝕨+↕𝕩-𝕨}i}¨&lt;
-     1│    A ← {qs‿gs𝕊v:
-     4│      1⊸=◶{𝕊𝕩: ui ← 0 L gs
- 22430│        v M˜ {𝕊⟨⟩:ui; (M˜´M⟜ui⟜M˜M´) L⟜g.swap¨ 𝕩} T qs (⌽∘⊢∾¬∘∊/⊣)˜ ↕qb
-   366│      }‿(v M˜ gs L˜ ⊑qs) ≠qs}
-     5│    »⊸&lt;∨` 0&gt;r-`&gt;+○(×˜)˝ wf A´ ⌽sc
+<pre class="example" id="org8df5a29">
+Got 5598 samples
+GC: 12 samples
+(REPL): 5567 samples:
+     1│Q ← {𝕨𝕊nq‿qc:
+     1│  wf ← 1⌾⊑⊸⋈0⥊˜2⋆qb
+      │  M ← +˝∘×⎉1‿∞ _cp
+  2977│  K ← {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜&lt;_cp𝕩}
+    86│  L ← {𝕩K⍟𝕨1}{K´⟨g.id𝔽˜nq-𝕨+⌊2⋆⁼≠⊑𝕩, 𝕩, 𝕨𝔽g.id⟩}
+    26│  T ← ∾↕∘≠{(⊢∾1↓⌽)𝕨↓↕𝕨⊑⟜𝕩˜•_while_&gt;𝕨⊑𝕩}¨&lt;
+   284│  A ← {1=≠⊑𝕨 ? 𝕩M˜⊑⊸L´𝕨;
+  2186│    𝕩M´⟨0⊸L´𝕨⟩(⊢∾∾⟜⌽)L⟜g.swap¨T𝕨(⌽∘⊢∾¬∘∊/⊣)⟜⊑˜↕nq
       │  }
+     6│  »⊸&lt;∨`0&gt;𝕨-`+○(×˜)´wf A´ ⌽qc
+      │}
+(REPL): 19 samples:
+      │Sin‿Cos‿GCD ← •math
+      │U ← •rand.Range
+    19│_cp ← {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
+      │  
+      │g ← {
+      │  IM ← (⊢⋈≢⥊⟜0⊢)¨
+      │  x‿id‿h ⇐ (⌽‿⊢{𝕎𝕩}¨&lt;=⌜˜↕2) ∾○IM &lt;-⌾(1‿1⊸⊑)2‿2⥊÷√2
+      │  swap‿cnot ⇐ IM ⟨1‿2, 2‿3⟩ {⌽⌾(𝕨⊸⊏)𝕩}¨ &lt;=⌜˜↕4
+      │  P ⇐ {⟨=⌜˜↕4,  4‿4⥊0⟩ {𝕨⌾(3‿3⊸⊑)𝕩}¨˜ Sin⊸⋈⟜Cos𝕩}
+      │}
 </pre>
 
 </details>
 
 <p>
-Try running the simulation in the <a href="https://mlochbaum.github.io/BQN/try.html#code=U2lu4oC/Q29z4oC/R0NEIOKGkCDigKJtYXRoClUg4oaQIOKAonJhbmQuUmFuZ2UKX2NwIOKGkCB7KC3CtPCdlL3CqCnii4goK8K08J2UvcKoKeKfnOKMvX0KICAKZyDihpAgewogIElNIOKGkCAo4oqi4ouI4omi4qWK4p+cMOKKoinCqAogIHjigL9pZOKAv2gg4oeQICjijL3igL/iiqJ78J2VjvCdlal9wqg8PeKMnMuc4oaVMikg4oi+4peLSU0gPC3ijL4oMeKAvzHiirjiipEpMuKAvzLipYrDt+KImjIKICBzd2Fw4oC/Y25vdCDih5AgSU0g4p+oMeKAvzIsIDLigL8z4p+pIHvijL3ijL4o8J2VqOKKuOKKjynwnZWpfcKoIDw94oycy5zihpU0CiAgUCDih5Age+KfqD3ijJzLnOKGlTQsICA04oC/NOKlijDin6kge/CdlajijL4oM+KAvzPiirjiipEpIPCdlal9wqjLnCBTaW7iirjii4jin5xDb3Mg8J2VqX0KfQoKUSDihpAge/CdlYpxYuKAv3Nj4oC/cjoKICB3ZiDihpAgKDHijL7iipHii4jiiqIp4qWK4p+cMCAy4ouGcWIKICBN4oC/SyDihpAg4p+oK8ud4oiYw5fijokx4oC/4oieIF9jcCwgezHwnZWK8J2VqTrwnZWpOyDwnZWo8J2VijE68J2VqDsg8J2VqOKIvuKImMOX4p+cPF9jcPCdlal94p+pCiAgRSDihpAgezDwnZWK8J2VqToxOyBL4o2fKPCdlagtMSnLnPCdlal9CiAgTCDihpAge0vCtCDin6gocWIt8J2VqCvijIoy4ouG4oG84omg4oqR8J2VqSkgRSBnLmlkLCDwnZWpLCDwnZWoIEUgZy5pZOKfqX0KICBUIOKGkCDiiL7ihpXiiJjiiaB7YeKGkPCdlaksIGnihpDwnZWoe/CdlaniipFhfeKAol93aGlsZV978J2VqTzwnZWoffCdlajiipFhLCDwnZWoPOKXtuKfqOKfqeKAv3so4oqi4oi+MeKKuOKGk+KImOKMvSnwnZWoK+KGlfCdlakt8J2VqH1pfcKoPAogIEEg4oaQIHtxc+KAv2dz8J2VinY6CiAgICAx4oq4PeKXtnvwnZWK8J2VqTogdWkg4oaQIDAgTCBncwogICAgICB2IE3LnCB78J2ViuKfqOKfqTp1aTsgKE3LnMK0TeKfnHVp4p+cTcucTcK0KSBM4p+cZy5zd2Fwwqgg8J2VqX0gVCBxcyAo4oy94oiY4oqi4oi+wqziiJjiiIov4oqjKcucIOKGlXFiCiAgICB94oC/KHYgTcucIGdzIEzLnCDiipFxcykg4omgcXN9CiAgwrviirg84oioYCAwPnItYD4r4peLKMOXy5wpy50gd2YgQcK0IOKMvXNjCn0KCm7igL9h4oC/cWLigL9yIOKGkCDin6gxNSwgMTEsIDUsIDAgVcucIDLii4Yz4p+pCgpzYyDihpAg4p+oCiAg4p+oMOKfqeKAv2cuaCDii4Qg4p+oMeKfqeKAv2cuaCDii4Qg4p+oMuKfqeKAv2cuaAogIOKfqDIsIDPin6nigL9nLmNub3Qg4ouEIOKfqDIsIDTin6nigL9nLmNub3Qg4ouEIOKfqDHin6nigL9nLmgKICDin6jin6gxLCAw4p+pLCBnLlAgz4DDtzLin6kg4ouEIOKfqDDin6nigL9nLmgKICDin6jin6gxLCAy4p+pLCBnLlAgz4DDtzTin6kg4ouEIOKfqOKfqDAsIDLin6ksIGcuUCDPgMO3MuKfqSDii4Qg4p+oMuKfqeKAv2cuaArin6kKCkMg4oaQIHtuICjiiqPiiaHDl8K04oiYR0NEKSAr4oC/LXvwnZWp8J2VjjF9wqggPGHii4Yo4omgw7cyw5fiipHiiJjijZIpIDDijL7iipEry53iiJjigL8oMuKLhnFiLTIp4qWK8J2VqX0KCkMgPivLnXtRIHFi4oC/c2PigL/wnZWpfcKoIHI=">BQN repl</a> and explore it!
+Try running the simulation in the <a href="https://mlochbaum.github.io/BQN/try.html#code=U2lu4oC/Q29z4oC/R0NEIOKGkCDigKJtYXRoClUg4oaQIOKAonJhbmQuUmFuZ2UKX2NwIOKGkCB7KC3CtPCdlL3CqCnii4goK8K08J2UvcKoKeKfnOKMvX0KICAKZyDihpAgewogIElNIOKGkCAo4oqi4ouI4omi4qWK4p+cMOKKoinCqAogIHjigL9pZOKAv2gg4oeQICjijL3igL/iiqJ78J2VjvCdlal9wqg8PeKMnMuc4oaVMikg4oi+4peLSU0gPC3ijL4oMeKAvzHiirjiipEpMuKAvzLipYrDt+KImjIKICBzd2Fw4oC/Y25vdCDih5AgSU0g4p+oMeKAvzIsIDLigL8z4p+pIHvijL3ijL4o8J2VqOKKuOKKjynwnZWpfcKoIDw94oycy5zihpU0CiAgUCDih5Age+KfqD3ijJzLnOKGlTQsICA04oC/NOKlijDin6kge/CdlajijL4oM+KAvzPiirjiipEp8J2VqX3CqMucIFNpbuKKuOKLiOKfnENvc/Cdlal9Cn0KClEg4oaQIHvwnZWo8J2Vim5x4oC/cWM6CiAgd2Yg4oaQIDHijL7iipHiirjii4gw4qWKy5wy4ouGbnEKICBNIOKGkCAry53iiJjDl+KOiTHigL/iiJ4gX2NwCiAgSyDihpAgezHwnZWK8J2VqTrwnZWpOyDwnZWo8J2VijE68J2VqDsg8J2VqOKIvuKImMOX4p+cPF9jcPCdlal9CiAgTCDihpAge/CdlalL4o2f8J2VqDF9e0vCtOKfqGcuaWTwnZS9y5xucS3wnZWoK+KMijLii4bigbziiaDiipHwnZWpLCDwnZWpLCDwnZWo8J2UvWcuaWTin6l9CiAgVCDihpAg4oi+4oaV4oiY4omgeyjiiqLiiL4x4oaT4oy9KfCdlajihpPihpXwnZWo4oqR4p+c8J2Vqcuc4oCiX3doaWxlXz7wnZWo4oqR8J2VqX3CqDwKICBBIOKGkCB7MT3iiaDiipHwnZWoID8g8J2VqU3LnOKKkeKKuEzCtPCdlag7CiAgICDwnZWpTcK04p+oMOKKuEzCtPCdlajin6ko4oqi4oi+4oi+4p+c4oy9KUzin5xnLnN3YXDCqFTwnZWoKOKMveKImOKKouKIvsKs4oiY4oiKL+KKoynin5ziipHLnOKGlW5xCiAgfQogIMK74oq4POKIqGAwPvCdlagtYCvil4sow5fLnCnCtHdmIEHCtCDijL1xYwp9Cgpu4oC/YeKAv25x4oC/ciDihpAg4p+oMTUsIDExLCA1LCAwIFXLnCAy4ouGMTDin6kKCnNjIOKGkCDin6gKICDin6gw4p+p4oC/Zy5oIOKLhCDin6gx4p+p4oC/Zy5oIOKLhCDin6gy4p+p4oC/Zy5oCiAg4p+oMiwgM+KfqeKAv2cuY25vdCDii4Qg4p+oMiwgNOKfqeKAv2cuY25vdCDii4Qg4p+oMeKfqeKAv2cuaAogIOKfqOKfqDEsIDDin6ksIGcuUCDPgMO3MuKfqSDii4Qg4p+oMOKfqeKAv2cuaAogIOKfqOKfqDEsIDLin6ksIGcuUCDPgMO3NOKfqSDii4Qg4p+o4p+oMCwgMuKfqSwgZy5QIM+Aw7cy4p+pIOKLhCDin6gy4p+p4oC/Zy5oCuKfqQoKQyDihpAge24gKOKKo+KJocOXwrTiiJhHQ0QpICvigL8te/CdlanwnZWOMX3CqCA8YeKLhijiiaDDtzLDl+KKkeKImOKNkikgMOKMvuKKkSvLneKImOKAvygy4ouGbnEtMinipYrwnZWpfQoKQyArwrRR4p+cbnHigL9zY8Kocg==">BQN repl</a> and explore it!
 If you are an Emacs user, the <code>org-mode</code> computational notebook in
 the blog's <a href="https://github.com/Panadestein/blog">repository</a> provides the best experience.
 </p>
+
+<p>
+One last thing: if you are particularly pedantic like me, you have by now realized that the
+Shor's algorithm test above is a surprisingly weak unit test. Because it relies on extracting
+global periodic structures, it can easily mask severe, localized topological routing bugs.
+To formally verify our tensor geometry, we must test unitary reversibility:
+</p>
+
+<details>
+<summary>Uncomputation test</summary>
+
+<div class="org-src-container">
+<pre class="src src-bqn">UC ← {𝕊nq‿depth:
+  fs ← ⟨g.h⋈˜U ⋄ g.cnot⋈˜2⊸•rand.Deal ⋄ 2⊸•rand.Deal⋈·g.P 2×π×U∘0⟩⊏˜U⟜3 depth
+  (⍉¨⋈⟜-´)⌾(1⊸⊑)¨∘⌽⊸∾{𝕏nq}¨fs
+}
+</pre>
+</div>
+
+<p>
+By generating a chaotic sequence of parameterized gates and appending its exact conjugate-transpose
+inverse in reverse chronological order, the total circuit evaluates to the identity matrix.
+If our simulator's geometry is mathematically flawless, applying this circuit will perfectly
+uncompute the system and restore the initial state vector unmodified:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">{(1⌾⊑0⥊˜2⋆𝕩) ≡ 0 U⊸Q𝕩⋈UC𝕩‿20} 10
+</pre>
+</div>
+
+</details>
 </div>
 </div>
 <div id="footnotes">
@@ -514,7 +557,9 @@ beyond that.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-I optimized it up to this number, but I wasn't targeting the Kolmogorov complexity.
+I golfed this down a fair bit, though true Kolmogorov complexity isn't the goal of course.
+I'm not fond of that <code>•_while_</code> loop, but my only alternative is the under <code>{𝕩𝕊⍟≢⊏⟜𝕩⌾((/𝕩&lt;↕≠𝕩)⊸⊏)𝕩}</code>.
+<b>Edit</b>: duh <code>{𝕩𝕊⍟≢⊒˜⊸⌊⊸⊏𝕩}</code>.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
