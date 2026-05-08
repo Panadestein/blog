@@ -235,9 +235,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">A Markovian nursery game</h1>
-<div id="outline-container-org9c4c5ee" class="outline-2">
-<h2 id="org9c4c5ee">Die Gewinnwahrscheinlichkeit</h2>
-<div class="outline-text-2" id="text-org9c4c5ee">
+<div id="outline-container-org46e0145" class="outline-2">
+<h2 id="org46e0145">Die Gewinnwahrscheinlichkeit</h2>
+<div class="outline-text-2" id="text-org46e0145">
 <p>
 I love playing casual board games with my family. Our current favourite is HABA's  <a href="https://www.haba-play.com/de-de/p/meine-ersten-spiele-erster-obstgarten--1004655#variationId=1004655001">Erster Obstgarten</a>,
 which is designed collaboratively for two-year-olds. It's only natural to assume that it must be trivially
@@ -253,9 +253,9 @@ a post about the mathematical and computational insights I gained.
 </p>
 </div>
 </div>
-<div id="outline-container-orgbbfac77" class="outline-2">
-<h2 id="orgbbfac77">A Markov decision process</h2>
-<div class="outline-text-2" id="text-orgbbfac77">
+<div id="outline-container-org65b0acd" class="outline-2">
+<h2 id="org65b0acd">A Markov decision process</h2>
+<div class="outline-text-2" id="text-org65b0acd">
 <p>
 The game is obviously a stochastic process, since each die roll changes the state of the board. If every roll
 determined the next move uniquely, we could model it as a Markov chain. <i>Erster Obstgarten</i>,
@@ -282,9 +282,9 @@ With the state fixed, the remaining task is to write a recursion for the win pro
 </p>
 </div>
 </div>
-<div id="outline-container-org71749ec" class="outline-2">
-<h2 id="org71749ec">The Bellman equation</h2>
-<div class="outline-text-2" id="text-org71749ec">
+<div id="outline-container-org9d2595f" class="outline-2">
+<h2 id="org9d2595f">The Bellman equation</h2>
+<div class="outline-text-2" id="text-org9d2595f">
 <p>
 Let \(V(\mathbf{f}, r)\) be the probability of winning from state \((\mathbf{f}, r)\) under optimal play.
 The boundary conditions are immediate:
@@ -351,9 +351,9 @@ that term to model other policies.
 </p>
 </div>
 </div>
-<div id="outline-container-org6880c79" class="outline-2">
-<h2 id="org6880c79">Optimal or toddler?</h2>
-<div class="outline-text-2" id="text-org6880c79">
+<div id="outline-container-org7d8fac4" class="outline-2">
+<h2 id="org7d8fac4">Optimal or toddler?</h2>
+<div class="outline-text-2" id="text-org7d8fac4">
 <p>
 With <i>dead rolls</i> eliminated, every state \((\mathbf f,r)\) reduces to averaging over active die faces.
 The only remaining modeling choice is the <i>basket</i> rule. It is convenient to view the numerator
@@ -397,9 +397,9 @@ color face, plus an extra \(\tfrac{1}{A}\) from the basket being distributed eve
 </p>
 </div>
 </div>
-<div id="outline-container-orgfe3d3cf" class="outline-2">
-<h2 id="orgfe3d3cf">Four lines of BQN</h2>
-<div class="outline-text-2" id="text-orgfe3d3cf">
+<div id="outline-container-org9122131" class="outline-2">
+<h2 id="org9122131">Four lines of BQN</h2>
+<div class="outline-text-2" id="text-org9122131">
 <p>
 With the recurrence fully specified, all that remains is to evaluate it exactly over the finite state lattice<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>.
 The monotonicity we observed earlier means we can compute \(V\) bottom-up. In a scalar implementation one
