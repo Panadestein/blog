@@ -366,34 +366,53 @@ We also define a namespace for dealing with complex numbers, in particular the =
 #+RESULTS:
 : (function block)
 
-Let's confirm that the inverse returns back the original list:
+Let's confirm that the inverse accurately recovers the original array:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  (+´∘⥊⊢-FFT⁼∘FFT) 0•rand.Range˜2⋈˜2⋆10
+  (+´∘|∘⥊⊢-FFT⁼∘FFT) 0•rand.Range˜2⋈˜2⋆10
 #+end_src
 
 #+RESULTS:
-: 2.4875934645507414e¯15
+: 2.421795403106941e¯13
 
-We could also compare with the discrete Fourier transform, which despite being \(O(N^2)\)
-+has+ should have a nice array formulation:
+*Big Update:* CBQN now has experimental support for complex numbers as of May 2026!
+If you’d like to test it out, I’ve put together a [[https://github.com/Panadestein/complex_cbqn][Nix flake]] so you can dive right
+in without having to fiddle with various branches or repositories. With these new features,
+the code above simplifies nicely:
 
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  DFT ← ≍˘´<˘{𝔽∘⍉+˝∘×⎉1‿∞ z._p˜·𝔽1‿0⍉⁼·z.E ¯2×π×≠÷˜·×⌜˜⊒˜}
-  (+´∘⥊FFT-DFT) 0•rand.Range˜2⋈˜2⋆10
+#+begin_src bqn :exports code
+  FFT ← {𝕊⁼: +∘𝕊∘+⊸÷⟜≠𝕩; (+∾-)⟜(⊢×·⋆·⍳¯π×↕⊸÷∘≠)´∘(𝕊¨⊢⊔˜2|↕∘≠)⍟(1<≠)𝕩}
 #+end_src
 
 #+RESULTS:
-: ¯3.0956031835116526e¯10
+: (function block)
 
-In the DFT code above, I got into a big mess with the complex numbers, because the
-=z= namespace was too tightly coupled with the FFT implementation. I had to do a
-bunch of enclosing and coupling to get the same shape. With proper complex numbers
-support it would be something like:
+Applying a similar verification to our updated function:
 
-#+begin_src bqn :tangle ../bqn/rollim.bqn
-  DFT ← ⊢+˝∘×⎉1‿∞˜·⋆¯2×π×≠÷˜·×⌜˜⊒˜
+#+begin_src bqn :exports both
+  (+´∘|∘⥊⊢-FFT⁼∘FFT) •rand.Range⟜0{𝔽⍳𝔽}2⋆10
 #+end_src
+
+#+RESULTS:
+: 2.1695396105492033e¯13
+
+We can now also express the elegant but slow \(O(N^2)\) Discrete Fourier Transform:
+
+#+begin_src bqn :exports code
+  DFT ← ⊢+˝∘×⎉1‿∞˜·⋆·⍳¯2×π×≠÷˜·×⌜˜↕∘≠
+#+end_src
+
+#+RESULTS:
+: ⊢+˝∘×⎉⟨ 1 ∞ ⟩˜(⋆(⍳¯2×3.141592653589793×≠÷˜(×⌜˜↕∘≠)))
+
+Does it align with our FFT? Yes:
+
+#+begin_src bqn :exports both
+  (+´∘|∘⥊FFT-DFT) •rand.Range⟜0{𝔽⍳𝔽}2⋆10
+#+end_src
+
+#+RESULTS:
+: 1.9555062234402244e¯9
 
 *** Tensor n-mode product
 
