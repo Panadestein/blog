@@ -346,14 +346,17 @@ We can test it with random matrices:
 
 *** Fast Fourier Transform
 
-Below is an implementation of the radix-2 [[https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm][Cooley–Tukey FFT algorithm]]. The function leverages
-BQN's headers to define the inverse transform in a succinct way using the property:
+Below is a radix-2 implementation of the [[https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm][Cooley–Tukey FFT algorithm]] in BQN. The inverse is defined with a header, using the
+standard conjugation identity:
 
 \begin{equation*}
   \text{iFFT}[\mathbf{x}] = \frac{1}{N}\text{FFT}^{*}[\mathbf{x}^{*}]
 \end{equation*}
 
-We also define a namespace for dealing with complex numbers, in particular the =Cis= function:
+Currently CBQN's =develop= branch does not yet have native complex numbers, so the code uses a
+small namespace of explicit complex-number utilities. The important piece here
+is =z.E=, which builds complex exponentials, and =z._p=, which performs the
+complex multiplication needed for the twiddle factors.
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
   z ← {
@@ -366,20 +369,22 @@ We also define a namespace for dealing with complex numbers, in particular the =
 #+RESULTS:
 : (function block)
 
-Let's confirm that the inverse accurately recovers the original array:
+As a first sanity check, we can measure the round-trip error after applying the
+transform and its inverse. This is the absolute \(L^1\)-error over the flattened
+array, not a normalized relative error:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  _eq ← {+´∘|∘⥊⊢-𝔽⁼∘𝔽}
-  FFT _eq 0•rand.Range˜2⋈˜2⋆10
+  _rte ← {+´∘|∘⥊⊢-𝔽⁼∘𝔽}
+  FFT _rte 0•rand.Range˜2⋈˜2⋆10
 #+end_src
 
 #+RESULTS:
-: 2.3064883336587627e¯13
+: 2.5042468099201187e¯13
 
-*Big Update:* CBQN now has experimental support for complex numbers as of May 2026!
-If you’d like to test it out, I’ve put together a [[https://github.com/Panadestein/complex_cbqn][Nix flake]] so you can dive right
-in without having to fiddle with various branches or repositories. With these new features,
-the code above simplifies nicely:
+There is, however, experimental support for complex numbers as of May 2026. I put together
+a [[https://github.com/Panadestein/complex_cbqn][Nix flake]] for it, so it can be tested without spelunking through branches and build
+flags. With native complex numbers, the previous implementation collapses to something much closer to the
+mathematical shape of the algorithm:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
   FFT ← {𝕊⁼: 𝕊⌾+⊸÷⟜≠𝕩; (+∾-)⟜(⊢×·⋆∘⍳¯π×⊒˜÷≠)´∘(𝕊¨⊢⊔˜2|⊒˜)⍟(1<≠)𝕩}
@@ -388,17 +393,19 @@ the code above simplifies nicely:
 #+RESULTS:
 : (function block)
 
-Applying a similar verification to our updated function:
+The round trip error is very similar to the one with explicit complex number utilities:
 
 #+begin_src bqn :exports both
   RC ← •rand.Range⟜0{𝔽⍳𝔽}
-  FFT _eq RC 2⋆10
+  FFT _rte RC 2⋆10
 #+end_src
 
 #+RESULTS:
-: 1.8391128721153864e¯13
+: 1.96736020361133e¯13
 
-We can now also express the elegant but slow \(O(N^2)\) Discrete Fourier Transform:
+Native complex numbers also make it pleasant to write the direct
+\(O(N^2)\) Discrete Fourier Transform. This is not meant to be fast. It is the
+reference anvil:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
   DFT ← ⊢+˝∘×⎉1‿∞˜·⋆∘⍳¯2×π×≠÷˜·×⌜˜↕∘≠
@@ -407,14 +414,51 @@ We can now also express the elegant but slow \(O(N^2)\) Discrete Fourier Transfo
 #+RESULTS:
 : ⊢+˝∘×⎉⟨ 1 ∞ ⟩˜(⋆∘⍳¯2×3.141592653589793×≠÷˜(×⌜˜↕∘≠))
 
-Does it align with our FFT? Yes:
+The FFT agrees with the direct DFT up to the expected floating-point noise:
 
 #+begin_src bqn :exports both
-  (+´∘|∘⥊FFT-DFT) RC 2⋆10
+  _err_ ← {+´∘|∘⥊𝔽-𝔾}
+  FFT _err_ DFT RC 2⋆10
 #+end_src
 
 #+RESULTS:
-: 1.9257786774761647e¯9
+: 1.9725279656053874e¯9
+
+The recursive FFT above is pretty, but it is not gentle on memory. Each level
+performs splits, recursive calls, joins, and reshaping gymnastics.
+A more operational formulation is the iterative radix-2 FFT: first apply the
+bit-reversal permutation, then perform the butterfly stages in-place in the
+usual order. In BQN this still allocates, of course, but it removes the recursive
+tree of joins and makes the stage structure explicit:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  FFFT ← {
+    (𝕩⊏˜⥊+⌜´0∾¨p){
+      t ← ⋆-⍳π×𝕨÷˜↕𝕨
+      ⥊(+∾-)⟜(t⊸×)˝⌾⍉∘‿2‿𝕨⥊𝕩
+    }´⌽p ← ↕⌾(2⊸⋆⁼)≠𝕩 
+  } 
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+Numerically, it matches the recursive implementation:
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  !(1e¯15>FFT _err_ FFFT) v ← RC 2⋆20
+  5 (FFT•_timed⋈FFFT•_timed) v
+#+end_src
+
+#+RESULTS:
+: ⟨ 4.2545860818 4.1168952496 ⟩
+
+The timing is not great yet (NumPy's FFT crunches that size in milliseconds).
+A large part of the cost here comes from the current experimental complex-number branch itself:
+the real-number path can run arrays of length \(2^{20}\) in milliseconds when the twiddles are artificially
+made real, which is mathematically wrong but performance-informative.
+The encouraging part is that the algorithmic shape is now expressible directly,
+in a way I find aesthetically very pleasing.
 
 *** Tensor n-mode product
 
