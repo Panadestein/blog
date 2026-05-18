@@ -150,6 +150,31 @@ FFFT ← {
 
 
 
+FFFFT ← {
+  kernel ← •HashMap˜⟨⟩
+  Pease ← {
+    kernel.Has≠𝕩 ? ft ← kernel.Get≠𝕩 ⋄ FT𝕩;
+    t ← ⌽⊸{𝕨/¨⋆⍳-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)≠𝕩
+    s‿r ← ⟨⥊⍉2‿∘⥊↕≠𝕩, ⥊+⌜´0∾¨k⟩ 
+    FT ← {r⊏𝕩{s⊏(+∾𝕨×-)˝2‿∘⥊𝕩}´t}
+    ft kernel.Set˜≠𝕩 ⋄ FT𝕩
+  }
+  _block ← {
+    𝕗≥≠𝕩 ? Pease𝕩;
+    c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ≠𝕩
+    t ← ⋆-⍳2×π×n÷˜c×⌜○↕r
+    ⥊𝕊˘⌾⍉t×𝕊˘⍉r‿c⥊𝕩
+  }
+  1024 _block 𝕩
+}
+
+
+
+!(1e¯6>FFT _err_ FFFFT) v ← RC 2⋆20
+5 (FFT•_timed⋈FFFFT•_timed) v
+
+
+
 {+˝∘×⎉1‿∞⟜𝕩⌾(⍉⍟𝕗)𝕨}
 
 

@@ -379,7 +379,7 @@ array, not a normalized relative error:
 #+end_src
 
 #+RESULTS:
-: 2.5042468099201187e¯13
+: 2.3505503099485736e¯13
 
 There is, however, experimental support for complex numbers as of May 2026. I put together
 a [[https://github.com/Panadestein/complex_cbqn][Nix flake]] for it, so it can be tested without spelunking through branches and build
@@ -401,7 +401,7 @@ The round trip error is very similar to the one with explicit complex number uti
 #+end_src
 
 #+RESULTS:
-: 1.96736020361133e¯13
+: 1.8350564257552384e¯13
 
 Native complex numbers also make it pleasant to write the direct
 \(O(N^2)\) Discrete Fourier Transform. This is not meant to be fast. It is the
@@ -422,7 +422,7 @@ The FFT agrees with the direct DFT up to the expected floating-point noise:
 #+end_src
 
 #+RESULTS:
-: 1.9725279656053874e¯9
+: 1.997053680853405e¯9
 
 The recursive FFT above is pretty, but it is not gentle on memory. Each level
 performs splits, recursive calls, joins, and reshaping gymnastics.
@@ -451,14 +451,51 @@ Numerically, it matches the recursive implementation:
 #+end_src
 
 #+RESULTS:
-: ⟨ 4.2545860818 4.1168952496 ⟩
+: ⟨ 4.2211076136 4.1039009052 ⟩
 
 The timing is not great yet (NumPy's FFT crunches that size in milliseconds).
 A large part of the cost here comes from the current experimental complex-number branch itself:
 the real-number path can run arrays of length \(2^{20}\) in milliseconds when the twiddles are artificially
-made real, which is mathematically wrong but performance-informative.
-The encouraging part is that the algorithmic shape is now expressible directly,
-in a way I find aesthetically very pleasing.
+made real.
+
+Aesthetics aside, the performance still tanks at scale because CBQN spends most of its life chasing
+memory allocations and thrashing the cache. To get anywhere near competitive speeds, we have to make
+the geometry sympathetic to the hardware. We can do this by using the Cooley-Tukey block layout as a
+macro-scale partitioner, shredding the massive array into chunks that fit entirely inside the L1 data cache.
+Once the data is isolated there, we feed those chunks into a rigid, transpose-free Pease micro-engine.
+To avoid the brute-force precomputation of a massive global table of constants for every
+possible block size, we can hide a =•HashMap= inside the closure.
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  FFFFT ← {
+    kernel ← •HashMap˜⟨⟩
+    Pease ← {
+      kernel.Has≠𝕩 ? ft ← kernel.Get≠𝕩 ⋄ FT𝕩;
+      t ← ⌽⊸{𝕨/¨⋆⍳-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)≠𝕩
+      s‿r ← ⟨⥊⍉2‿∘⥊↕≠𝕩, ⥊+⌜´0∾¨k⟩ 
+      FT ← {r⊏𝕩{s⊏(+∾𝕨×-)˝2‿∘⥊𝕩}´t}
+      ft kernel.Set˜≠𝕩 ⋄ FT𝕩
+    }
+    _block ← {
+      𝕗≥≠𝕩 ? Pease𝕩;
+      c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ≠𝕩
+      t ← ⋆-⍳2×π×n÷˜c×⌜○↕r
+      ⥊𝕊˘⌾⍉t×𝕊˘⍉r‿c⥊𝕩
+    }
+    1024 _block 𝕩
+  }
+#+end_src
+
+#+RESULTS:
+: (function block)
+
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
+  !(1e¯6>FFT _err_ FFFFT) v ← RC 2⋆20
+  5 (FFT•_timed⋈FFFFT•_timed) v
+#+end_src
+
+#+RESULTS:
+: ⟨ 4.464848621 1.0995509246 ⟩
 
 *** Tensor n-mode product
 
@@ -827,5 +864,7 @@ quickly filled the text with footnotes. I often get help streamlining my solutio
 from [[https://github.com/mlochbaum][Marshall Lochbaum]] (the BQN creator), [[https://github.com/dzaima][dzaima]] (the CBQN developer),
 and other fine folks from the BQN matrix [[https://app.element.io/#/room/%23array:matrix.org][room]], thank you all! Please check the [[https://github.com/dzaima/chatlogs][logs]] for more context.
 [fn:3] Don’t believe me? Just ask Kilgore Trout!
+[fn:4] A long forgotten idea that was delightful to rediscover: [[https://dl.acm.org/doi/10.1145/321450.321457][Pease]]'s FFT. For all the boring C
+stuff that makes FFTs fast there is [[https://arxiv.org/abs/2602.23525][arXiv:2602.23525]].
 
 #+INCLUDE: "../html-foot.org"
