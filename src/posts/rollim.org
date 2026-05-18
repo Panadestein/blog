@@ -866,7 +866,7 @@ quickly filled the text with footnotes. I often get help streamlining my solutio
 from [[https://github.com/mlochbaum][Marshall Lochbaum]] (the BQN creator), [[https://github.com/dzaima][dzaima]] (the CBQN developer),
 and other fine folks from the BQN matrix [[https://app.element.io/#/room/%23array:matrix.org][room]], thank you all! Please check the [[https://github.com/dzaima/chatlogs][logs]] for more context.
 [fn:3] Don’t believe me? Just ask Kilgore Trout!
-[fn:4] I was very happy of finding [[https://dl.acm.org/doi/10.1145/321450.321457][Pease]]'s FFT, an old idea worth rediscovering. For an in-depth take
-on FFTs performance see [[https://arxiv.org/abs/2602.23525][arXiv:2602.23525]].
+[fn:4] I was very pleased to come across [[https://dl.acm.org/doi/10.1145/321450.321457][Pease]]'s FFT, an old idea worth rediscovering. For an in-depth
+discussion of FFT performance see, [[https://arxiv.org/abs/2602.23525][arXiv:2602.23525]].
 
 #+INCLUDE: "../html-foot.org"
