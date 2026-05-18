@@ -489,13 +489,15 @@ possible block size, we can hide a =•HashMap= inside the closure.
 #+RESULTS:
 : (function block)
 
+Still not a brilliant speed-up, but it's gotta do it for now:
+
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
   !(1e¯6>FFT _err_ F4T) v ← RC 2⋆20
   5 (FFT•_timed⋈F4T•_timed) v
 #+end_src
 
 #+RESULTS:
-: ⟨ 5.3573133414 1.2977142476 ⟩
+: ⟨ 4.6529959086 1.2155092052 ⟩
 
 *** Tensor n-mode product
 
@@ -864,7 +866,7 @@ quickly filled the text with footnotes. I often get help streamlining my solutio
 from [[https://github.com/mlochbaum][Marshall Lochbaum]] (the BQN creator), [[https://github.com/dzaima][dzaima]] (the CBQN developer),
 and other fine folks from the BQN matrix [[https://app.element.io/#/room/%23array:matrix.org][room]], thank you all! Please check the [[https://github.com/dzaima/chatlogs][logs]] for more context.
 [fn:3] Don’t believe me? Just ask Kilgore Trout!
-[fn:4] A long forgotten idea that was delightful to rediscover: [[https://dl.acm.org/doi/10.1145/321450.321457][Pease]]'s FFT. For all the boring C
-stuff that makes FFTs fast there is [[https://arxiv.org/abs/2602.23525][arXiv:2602.23525]].
+[fn:4] I was very happy of finding [[https://dl.acm.org/doi/10.1145/321450.321457][Pease]]'s FFT, an old idea worth rediscovering. For an in-depth take
+on FFTs performance see [[https://arxiv.org/abs/2602.23525][arXiv:2602.23525]].
 
 #+INCLUDE: "../html-foot.org"
