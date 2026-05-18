@@ -136,7 +136,7 @@ DFT ← ⊢+˝∘×⎉1‿∞˜·⋆∘⍳¯2×π×≠÷˜·×⌜˜↕∘≠
 
 
 
-FFFT ← {
+F3T ← {
   (𝕩⊏˜⥊+⌜´0∾¨p){
     t ← ⋆-⍳π×𝕨÷˜↕𝕨
     ⥊(+∾-)⟜(t⊸×)˝⌾⍉∘‿2‿𝕨⥊𝕩
@@ -145,19 +145,19 @@ FFFT ← {
 
 
 
-!(1e¯15>FFT _err_ FFFT) v ← RC 2⋆20
-5 (FFT•_timed⋈FFFT•_timed) v
+!(1e¯15>FFT _err_ F3T) v ← RC 2⋆20
+5 (FFT•_timed⋈F3T•_timed) v
 
 
 
-FFFFT ← {
-  kernel ← •HashMap˜⟨⟩
+F4T ← {
+  hm ← •HashMap˜⟨⟩
   Pease ← {
-    kernel.Has≠𝕩 ? ft ← kernel.Get≠𝕩 ⋄ FT𝕩;
+    hm.Has≠𝕩 ? kernel ← hm.Get≠𝕩 ⋄ Kernel𝕩;
     t ← ⌽⊸{𝕨/¨⋆⍳-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)≠𝕩
     s‿r ← ⟨⥊⍉2‿∘⥊↕≠𝕩, ⥊+⌜´0∾¨k⟩ 
-    FT ← {r⊏𝕩{s⊏(+∾𝕨×-)˝2‿∘⥊𝕩}´t}
-    ft kernel.Set˜≠𝕩 ⋄ FT𝕩
+    Kernel ← {r⊏𝕩{s⊏(+∾𝕨×-)˝2‿∘⥊𝕩}´t}
+    kernel hm.Set˜≠𝕩 ⋄ Kernel𝕩
   }
   _block ← {
     𝕗≥≠𝕩 ? Pease𝕩;
@@ -170,8 +170,8 @@ FFFFT ← {
 
 
 
-!(1e¯6>FFT _err_ FFFFT) v ← RC 2⋆20
-5 (FFT•_timed⋈FFFFT•_timed) v
+!(1e¯6>FFT _err_ F4T) v ← RC 2⋆20
+5 (FFT•_timed⋈F4T•_timed) v
 
 
 

@@ -432,7 +432,7 @@ usual order. In BQN this still allocates, of course, but it removes the recursiv
 tree of joins and makes the stage structure explicit:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
-  FFFT ← {
+  F3T ← {
     (𝕩⊏˜⥊+⌜´0∾¨p){
       t ← ⋆-⍳π×𝕨÷˜↕𝕨
       ⥊(+∾-)⟜(t⊸×)˝⌾⍉∘‿2‿𝕨⥊𝕩
@@ -446,8 +446,8 @@ tree of joins and makes the stage structure explicit:
 Numerically, it matches the recursive implementation:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  !(1e¯15>FFT _err_ FFFT) v ← RC 2⋆20
-  5 (FFT•_timed⋈FFFT•_timed) v
+  !(1e¯15>FFT _err_ F3T) v ← RC 2⋆20
+  5 (FFT•_timed⋈F3T•_timed) v
 #+end_src
 
 #+RESULTS:
@@ -462,19 +462,19 @@ Aesthetics aside, the performance still tanks at scale because CBQN spends most 
 memory allocations and thrashing the cache. To get anywhere near competitive speeds, we have to make
 the geometry sympathetic to the hardware. We can do this by using the Cooley-Tukey block layout as a
 macro-scale partitioner, shredding the massive array into chunks that fit entirely inside the L1 data cache.
-Once the data is isolated there, we feed those chunks into a rigid, transpose-free Pease micro-engine.
+Once the data is isolated there, we feed those chunks into a rigid, transpose-free Pease[fn:4] micro-engine.
 To avoid the brute-force precomputation of a massive global table of constants for every
 possible block size, we can hide a =•HashMap= inside the closure.
 
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  FFFFT ← {
-    kernel ← •HashMap˜⟨⟩
+#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
+  F4T ← {
+    hm ← •HashMap˜⟨⟩
     Pease ← {
-      kernel.Has≠𝕩 ? ft ← kernel.Get≠𝕩 ⋄ FT𝕩;
+      hm.Has≠𝕩 ? kernel ← hm.Get≠𝕩 ⋄ Kernel𝕩;
       t ← ⌽⊸{𝕨/¨⋆⍳-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)≠𝕩
       s‿r ← ⟨⥊⍉2‿∘⥊↕≠𝕩, ⥊+⌜´0∾¨k⟩ 
-      FT ← {r⊏𝕩{s⊏(+∾𝕨×-)˝2‿∘⥊𝕩}´t}
-      ft kernel.Set˜≠𝕩 ⋄ FT𝕩
+      Kernel ← {r⊏𝕩{s⊏(+∾𝕨×-)˝2‿∘⥊𝕩}´t}
+      kernel hm.Set˜≠𝕩 ⋄ Kernel𝕩
     }
     _block ← {
       𝕗≥≠𝕩 ? Pease𝕩;
@@ -490,12 +490,12 @@ possible block size, we can hide a =•HashMap= inside the closure.
 : (function block)
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  !(1e¯6>FFT _err_ FFFFT) v ← RC 2⋆20
-  5 (FFT•_timed⋈FFFFT•_timed) v
+  !(1e¯6>FFT _err_ F4T) v ← RC 2⋆20
+  5 (FFT•_timed⋈F4T•_timed) v
 #+end_src
 
 #+RESULTS:
-: ⟨ 4.464848621 1.0995509246 ⟩
+: ⟨ 5.3573133414 1.2977142476 ⟩
 
 *** Tensor n-mode product
 
