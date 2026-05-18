@@ -432,7 +432,7 @@ usual order. In BQN this still allocates, of course, but it removes the recursiv
 tree of joins and makes the stage structure explicit:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
-  F3T ← {
+  FFT2 ← {
     (𝕩⊏˜⥊+⌜´0∾¨p){
       t ← ⋆-⍳π×𝕨÷˜↕𝕨
       ⥊(+∾-)⟜(t⊸×)˝⌾⍉∘‿2‿𝕨⥊𝕩
@@ -443,22 +443,17 @@ tree of joins and makes the stage structure explicit:
 #+RESULTS:
 : (function block)
 
-Numerically, it matches the recursive implementation:
+Numerically, it matches the recursive implementation. Performance-wise, it does not deliver:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  !(1e¯15>FFT _err_ F3T) v ← RC 2⋆20
-  5 (FFT•_timed⋈F3T•_timed) v
+  !(1e¯15>FFT _err_ FFT2) v ← RC 2⋆20
+  5 (FFT•_timed⋈FFT2•_timed) v
 #+end_src
 
 #+RESULTS:
 : ⟨ 4.2211076136 4.1039009052 ⟩
 
-The timing is not great yet (NumPy's FFT crunches that size in milliseconds).
-A large part of the cost here comes from the current experimental complex-number branch itself:
-the real-number path can run arrays of length \(2^{20}\) in milliseconds when the twiddles are artificially
-made real.
-
-Aesthetics aside, the performance still tanks at scale because CBQN spends most of its life chasing
+The performance still tanks at scale because CBQN spends most of the time chasing
 memory allocations and thrashing the cache. To get anywhere near competitive speeds, we have to make
 the geometry sympathetic to the hardware. We can do this by using the Cooley-Tukey block layout as a
 macro-scale partitioner, shredding the massive array into chunks that fit entirely inside the L1 data cache.
@@ -467,7 +462,7 @@ To avoid the brute-force precomputation of a massive global table of constants f
 possible block size, we can hide a =•HashMap= inside the closure.
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
-  F4T ← {
+  FFT3 ← {
     hm ← •HashMap˜⟨⟩
     Pease ← {
       hm.Has≠𝕩 ? kernel ← hm.Get≠𝕩 ⋄ Kernel𝕩;
@@ -489,15 +484,15 @@ possible block size, we can hide a =•HashMap= inside the closure.
 #+RESULTS:
 : (function block)
 
-Still not a brilliant speed-up, but it's gotta do it for now:
+Not exactly a triumph of performance engineering, but it will do for now:
 
 #+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  !(1e¯6>FFT _err_ F4T) v ← RC 2⋆20
-  5 (FFT•_timed⋈F4T•_timed) v
+  !(1e¯6>FFT _err_ FFT3) v ← RC 2⋆20
+  5 (FFT•_timed⋈FFT3•_timed) v
 #+end_src
 
 #+RESULTS:
-: ⟨ 4.6529959086 1.2155092052 ⟩
+: ⟨ 4.1142793994 0.975797937 ⟩
 
 *** Tensor n-mode product
 

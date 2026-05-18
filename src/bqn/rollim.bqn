@@ -136,7 +136,7 @@ DFT ← ⊢+˝∘×⎉1‿∞˜·⋆∘⍳¯2×π×≠÷˜·×⌜˜↕∘≠
 
 
 
-F3T ← {
+FFT2 ← {
   (𝕩⊏˜⥊+⌜´0∾¨p){
     t ← ⋆-⍳π×𝕨÷˜↕𝕨
     ⥊(+∾-)⟜(t⊸×)˝⌾⍉∘‿2‿𝕨⥊𝕩
@@ -145,12 +145,12 @@ F3T ← {
 
 
 
-!(1e¯15>FFT _err_ F3T) v ← RC 2⋆20
-5 (FFT•_timed⋈F3T•_timed) v
+!(1e¯15>FFT _err_ FFT2) v ← RC 2⋆20
+5 (FFT•_timed⋈FFT2•_timed) v
 
 
 
-F4T ← {
+FFT3 ← {
   hm ← •HashMap˜⟨⟩
   Pease ← {
     hm.Has≠𝕩 ? kernel ← hm.Get≠𝕩 ⋄ Kernel𝕩;
@@ -170,8 +170,8 @@ F4T ← {
 
 
 
-!(1e¯6>FFT _err_ F4T) v ← RC 2⋆20
-5 (FFT•_timed⋈F4T•_timed) v
+!(1e¯6>FFT _err_ FFT3) v ← RC 2⋆20
+5 (FFT•_timed⋈FFT3•_timed) v
 
 
 
