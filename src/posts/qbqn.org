@@ -301,7 +301,7 @@ uncompute the system and restore the initial state vector unmodified:
 #+end_src
 
 [fn:1] Although conceptually straightforward, a Hilbert space of size =2⋆n= makes this type of simulation a true computational challenge.
-For an efficient implementation, see [[https://arxiv.org/abs/1710.05867v4][arXiv:1710.05867]].
+For an efficient implementation, see [[https://arxiv.org/abs/1710.05867v4][arXiv:1710.05867]] and the current record as of June 2026 (of only 50 qubits!) [[https://arxiv.org/abs/2511.03359][arXiv:2511.03359]].
 [fn:2] This post's title is a playful recursive acronym that employs quantum computing terminology, without any specific significance
 beyond that.
 [fn:3] I golfed this down a fair bit, though true Kolmogorov complexity isn't the goal of course.
