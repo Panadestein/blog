@@ -235,9 +235,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">BQN's Quantum Noise</h1>
-<div id="outline-container-org353a654" class="outline-2">
-<h2 id="org353a654">Preamble</h2>
-<div class="outline-text-2" id="text-org353a654">
+<div id="outline-container-org64f01d2" class="outline-2">
+<h2 id="org64f01d2">Preamble</h2>
+<div class="outline-text-2" id="text-org64f01d2">
 <p>
 We will implement and test a Schrödinger-style<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> quantum simulator in the BQN<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> programming language.
 Initially, we import the necessary system functions and define a 1-modifier for handling
@@ -245,7 +245,7 @@ complex-valued matrix products. Next, we define a namespace containing various q
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="org0d54a38">Sin‿Cos‿GCD ← •math
+<pre class="src src-bqn" id="orgd0cb1f0">Sin‿Cos‿GCD ← •math
 U ← •rand.Range
 _cp ← {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
 
@@ -259,16 +259,16 @@ g ← {
 </div>
 </div>
 </div>
-<div id="outline-container-org3f7318c" class="outline-2">
-<h2 id="org3f7318c">Interpreter</h2>
-<div class="outline-text-2" id="text-org3f7318c">
+<div id="outline-container-orgede4d4e" class="outline-2">
+<h2 id="orgede4d4e">Interpreter</h2>
+<div class="outline-text-2" id="text-orgede4d4e">
 <p>
 The (282 chars<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>) quantum interpreter is based on references <a href="https://arxiv.org/abs/1711.02086">arXiv:1711.02086</a>
 and <a href="https://arxiv.org/abs/1608.03355">arXiv:1608.03355</a>. For simplicity, we always measure at the end of the execution:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="org1ad108a">Q ← {𝕨𝕊nq‿qc:
+<pre class="src src-bqn" id="orgdab23b1">Q ← {𝕨𝕊nq‿qc:
   wf ← 1⌾⊑⊸⋈0⥊˜2⋆nq
   M ← +˝∘×⎉1‿∞ _cp
   K ← {1𝕊𝕩:𝕩; 𝕨𝕊1:𝕨; 𝕨∾∘×⟜&lt;_cp𝕩}
@@ -330,9 +330,9 @@ Given a uniform random variable \(U \sim \text{Uniform}(0, 1)\), we sample by in
 </details>
 </div>
 </div>
-<div id="outline-container-org4ca9995" class="outline-2">
-<h2 id="org4ca9995">Shor's algorithm</h2>
-<div class="outline-text-2" id="text-org4ca9995">
+<div id="outline-container-org47aa948" class="outline-2">
+<h2 id="org47aa948">Shor's algorithm</h2>
+<div class="outline-text-2" id="text-org47aa948">
 <p>
 As a test case, we employ the quantum circuit of Shor's algorithm
 for the number fifteen and base eleven, following references
@@ -342,7 +342,7 @@ statistical accuracy, the experiment is repeated multiple times.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="org764a228">n‿a‿nq‿r ← ⟨15, 11, 5, 0 U˜ 2⋆10⟩
+<pre class="src src-bqn" id="org79bea4e">n‿a‿nq‿r ← ⟨15, 11, 5, 0 U˜ 2⋆10⟩
 
 sc ← ⟨
   ⟨0⟩‿g.h ⋄ ⟨1⟩‿g.h ⋄ ⟨2⟩‿g.h
@@ -368,7 +368,7 @@ let us kill the ignorabimus. Wir müssen wissen, wir werden wissen!<sup><a id="f
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn" id="org0d864ed">C +´Q⟜nq‿sc¨r
+<pre class="src src-bqn" id="org40299fc">C +´Q⟜nq‿sc¨r
 </pre>
 </div>
 
@@ -382,9 +382,9 @@ Compare the result with that obtained using an IBM's <a href="https://panadestei
 </p>
 </div>
 </div>
-<div id="outline-container-org13c60b4" class="outline-2">
-<h2 id="org13c60b4">Epilogue</h2>
-<div class="outline-text-2" id="text-org13c60b4">
+<div id="outline-container-orgc0f8261" class="outline-2">
+<h2 id="orgc0f8261">Epilogue</h2>
+<div class="outline-text-2" id="text-orgc0f8261">
 <p>
 This was, of course, a conceptually simple simulation, the minimal instance of  
 Shor’s algorithm that has been verified experimentally. The interpreter itself  
@@ -415,7 +415,7 @@ The <code class="src src-bqn">prog</code> string contains the full source code. 
 </pre>
 </div>
 
-<pre class="example" id="orgfca3616">
+<pre class="example" id="orgdefb1e4">
 ⟨ 43 64 ⟩
 </pre>
 
@@ -428,7 +428,7 @@ With this distribution:
 </pre>
 </div>
 
-<pre class="example" id="org415692d">
+<pre class="example" id="org1041086">
 ┌─                                                                                                                                                                                                                                                                                                                                 
 ╵ '𝕩' '𝕨' '←' '⊑' '˜' '¨' '´' '⟜' '⊸' '∘' '⌽' '∾' '&lt;' '+' '⊢' '↕' '-' '⥊' '⌾' '⋆' '÷' '×' '𝔽' '⋈' '≠' '=' '𝕊' '⌜' '⇐' '•' '˝' '&gt;' '𝕎' '○' '⊣' '↓' '`' '⎉' '⍟' '⍒' '⌊' '⊏' '≢' '≡' '∨' '√' '∊' '⁼' '»' '¬' '/' '𝕤' '𝕣' '𝕘' '𝕗' '𝕏' '𝔾' '⚇' '◶' '⎊' '⍷' '⍋' '⍉' '⌈' '⊘' '⊔' '⊒' '⊐' '≥' '≤' '≍' '∧' '↩' '↑' '˙' '˘' '·' '«' '|' '!'  
   17  15  15  11  11  10  9   8   8   8   7   7   7   7   6   6   6   5   5   5   5   5   4   4   4   4   3   3   3   3   3   3   2   2   2   2   2   1   1   1   1   1   1   1   1   1   1   1   1   1   1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0    
@@ -450,7 +450,7 @@ Here is a comparison with the reference, not particularly optimized Common Lisp 
 also 1024 samples:
 </p>
 
-<pre class="example" id="org1814d84">
+<pre class="example" id="org771c724">
 Benchmark 1: cbqn -f ../bqn/q.bqn
   Time (mean ± σ):     806.9 ms ± 118.0 ms    [User: 800.6 ms, System: 2.9 ms]
   Range (min … max):   752.2 ms … 1017.9 ms    5 runs
@@ -473,7 +473,7 @@ And here is a full program's profile. All time is spent in the Kronecker and mat
 </pre>
 </div>
 
-<pre class="example" id="orgfe49b97">
+<pre class="example" id="org98fecd7">
 Got 5598 samples
 GC: 12 samples
 (REPL): 5567 samples:
@@ -554,7 +554,7 @@ uncompute the system and restore the initial state vector unmodified:
 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 Although conceptually straightforward, a Hilbert space of size <code>2⋆n</code> makes this type of simulation a true computational challenge.
-For an efficient implementation, see <a href="https://arxiv.org/abs/1710.05867v4">arXiv:1710.05867</a>.
+For an efficient implementation, see <a href="https://arxiv.org/abs/1710.05867v4">arXiv:1710.05867</a> and the current record as of June 2026 (of only 50 qubits!) <a href="https://arxiv.org/abs/2511.03359">arXiv:2511.03359</a>.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
