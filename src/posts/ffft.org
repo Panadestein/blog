@@ -169,7 +169,7 @@ The remaining annoyance is that a native complex array is not the most useful
 shape for the operations above. Representing a complex vector as an array of
 shape =2‿n= makes the butterflies, twiddles, and stage permutations line up much better,
 while making the complex arithmetic completely explicit. Surprisingly, the code
-doesn't not loose so much in compactness:
+doesn't loose too much compactness:
 
 #+begin_src bqn :exports code :tangle ../bqn/ffft.bqn
   km‿tm ← •HashMap˜¨⋈˜↕0
