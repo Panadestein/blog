@@ -63,7 +63,7 @@ FFT4 ← {
   Pease ← {
     km.Has𝕨 ? (km.Get𝕨){𝔽}𝕩;
     t ← ⌽⊸{𝕨/˘¨Cis¨-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)𝕨
-    s‿r ← ⟨⥊⍉2‿∘⥊↕𝕨, ⥊+⌜´0∾¨k⟩ # perfect shuffle ⋈ bit reversal
+    s‿r ← ⟨⥊⍉2‿∘⥊↕𝕨, ⥊+⌜´0∾¨k⟩
     Kernel ← {r⊸⊏˘𝕩{s⊸⊏˘(+˝∾˘𝕨Cmu-˝)1⍉2‿2‿∘⥊𝕩}´t}
     𝕨 km.Set kernel ⋄ Kernel𝕩
   }
