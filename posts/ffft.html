@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>A fast Fast Fourier Transform</title>
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+<style>
+mjx-container[jax="CHTML"] {
+overflow-x: auto !important;
+}
+</style>
+<!-- Post-specific setting bellow -->
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">A fast Fast Fourier Transform</h1>
+<div id="outline-container-orgbb7675f" class="outline-2">
+<h2 id="orgbb7675f">Radix-2 FFT</h2>
+<div class="outline-text-2" id="text-orgbb7675f">
+<p>
+This post is my attempt to implement a decent FFT in BQN. It begins with the pleasant
+recursive version, then trades some of that pleasantness for a layout which is kinder to the
+cache. The code here uses CBQN's <code>complex</code> branch, which helps keeping the code close to the
+mathematical shape of the algorithm.
+</p>
+
+<p>
+All transforms below have power-of-two length and use the forward convention:
+</p>
+
+\begin{equation*}
+  X_k = \sum_{n=0}^{N-1}x_n\omega_N^{nk},
+  \qquad \omega_N = \exp\left(-\frac{2\pi i}{N}\right).
+\end{equation*}
+
+<p>
+The inverse falls out of the standard conjugation identity:
+</p>
+
+\begin{equation*}
+  \text{iFFT}[\mathbf{x}] = \frac{1}{N}\text{FFT}^{*}[\mathbf{x}^{*}].
+\end{equation*}
+
+<p>
+For comparison, here is the direct \(O(N^2)\) DFT, which I will use as reference
+at times:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">DFT ← ⊢+˝∘×⎉1‿∞˜·⋆∘⍳¯2×π×≠÷˜·×⌜˜↕∘≠
+</pre>
+</div>
+
+<p>
+I use this little generator and error function in the checks below:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">RC ← •rand.Range⟜0{𝔽⍳𝔽}
+_err_ ← {+´∘|∘⥊𝔽-𝔾}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1438f4c" class="outline-2">
+<h2 id="org1438f4c">Recursive formulation</h2>
+<div class="outline-text-2" id="text-org1438f4c">
+<p>
+The usual radix-2 formulation splits the input into its even and odd elements,
+recurses, and joins the two halves after multiplying one of them by the twiddle
+factors. In BQN that is compact enough to leave almost no algorithmic
+scaffolding visible:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">FFT ← {𝕊⁼: 𝕊⌾+⊸÷⟜≠𝕩; (+∾-)⟜(⊢×·⋆∘⍳¯π×⊒˜÷≠)´∘(𝕊¨⊢⊔˜2|⊒˜)⍟(1&lt;≠)𝕩}
+</pre>
+</div>
+
+<p>
+The <code>𝕊⁼</code> header supplies the inverse through the conjugation identity above.
+The rest is the recursive butterfly: split by parity, transform both parts,
+then add and subtract the twiddled odd part. It agrees with the direct DFT up
+to the expected floating-point noise:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">FFT _err_ DFT RC 2⋆10
+</pre>
+</div>
+
+<pre class="example">
+1.997053680853405e¯9
+</pre>
+
+
+<p>
+The recursive FFT is pretty, but it is not gentle on memory. Each level
+performs splits, recursive calls, joins, and reshaping gymnastics. Before
+trying to fix that, it is useful to make explicit the decomposition used by
+the larger-scale version later on.
+</p>
+</div>
+</div>
+<div id="outline-container-orge0febfa" class="outline-2">
+<h2 id="orge0febfa">Blocked formulation</h2>
+<div class="outline-text-2" id="text-orge0febfa">
+<p>
+Let \(N=rc\). Write an input index as \(n=m+rq\) and an output index as
+\(k=k_1+ck_2\), where \(0\leq m,k_2<r\) and \(0\leq q,k_1<c\). Substituting
+those into the DFT gives the Cooley–Tukey identity used for the recursion:
+</p>
+
+\begin{equation*}
+  X_{k_1+ck_2} =
+  \sum_{m=0}^{r-1}
+    \omega_r^{mk_2}\omega_N^{mk_1}
+    \left(\sum_{q=0}^{c-1}x_{m+rq}\omega_c^{qk_1}\right).
+\end{equation*}
+
+<p>
+The inner parenthesis is a length-\(c\) FFT on one strided piece of the
+input. The factor \(\omega_N^{mk_1}\) is the twiddle matrix, and the outer
+sum is a length-\(r\) FFT. An initial recursive implementation is then: apply
+the bit-reversal permutation first, then perform the butterfly stages in the
+usual order. In BQN this still allocates, of course, but it removes the
+recursive tree of joins and makes the stage structure explicit:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">FFT2 ← {
+  (𝕩⊏˜⥊+⌜´0∾¨p){
+    t ← ⋆-⍳π×𝕨÷˜↕𝕨
+    ⥊(+∾-)⟜(t⊸×)˝⌾⍉∘‿2‿𝕨⥊𝕩
+  }´⌽p ← ↕⌾(2⊸⋆⁼)≠𝕩
+}
+</pre>
+</div>
+
+<p>
+Numerically, it matches the recursive implementation. Performance-wise, it
+does not deliver:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">!(1e¯15&gt;FFT _err_ FFT2) v ← RC 2⋆20
+5 (FFT•_timed⋈FFT2•_timed) v
+</pre>
+</div>
+
+<pre class="example">
+⟨ 4.2211076136 4.1039009052 ⟩
+</pre>
+</div>
+</div>
+<div id="outline-container-orgab24649" class="outline-2">
+<h2 id="orgab24649">A Pease engine</h2>
+<div class="outline-text-2" id="text-orgab24649">
+<p>
+The performance still tanks at scale because CBQN spends most of the time
+chasing memory allocations and thrashing the cache. To get anywhere near
+competitive speeds, we have to make the geometry sympathetic to the hardware.
+The Cooley–Tukey block layout can act as a macro-scale partitioner. Once
+the data is isolated there, a rigid, transpose-free Pease<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> kernel takes
+over.
+</p>
+
+<p>
+For \(N=2^p\), a Pease stage is a vector of adjacent butterflies followed by a
+fixed perfect shuffle. If \(x^{(s)}\) is the vector entering stage \(s\), one
+way to write that stage is
+</p>
+
+\begin{equation*}
+  \begin{pmatrix}b^{(s)}_{2j}\\b^{(s)}_{2j+1}\end{pmatrix}
+  =
+  \begin{pmatrix}1 & \tau_s(j)\\1 & -\tau_s(j)\end{pmatrix}
+  \begin{pmatrix}x^{(s)}_{2j}\\x^{(s)}_{2j+1}\end{pmatrix},
+  \quad
+  x^{(s+1)} = P b^{(s)},
+  \quad
+  \tau_s(j)=\omega_N^{2^s(j\bmod 2^{p-s-1})}.
+\end{equation*}
+
+<p>
+Here \(P\) is the perfect-shuffle permutation. Thus every stage has exactly
+the same butterfly geometry; only its twiddles change. After \(p\) stages a
+final bit reversal puts the output in conventional order. To avoid the brute-force
+precomputation of a massive global table of constants for every possible block size,
+a <code>•HashMap</code> lives inside the closure:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">FFT3 ← {
+  hm ← •HashMap˜⟨⟩
+  Pease ← {
+    hm.Has≠𝕩 ? kernel ← hm.Get≠𝕩 ⋄ Kernel𝕩;
+    t ← ⌽⊸{𝕨/¨⋆⍳-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)≠𝕩
+    s‿r ← ⟨⥊⍉2‿∘⥊↕≠𝕩, ⥊+⌜´0∾¨k⟩
+    Kernel ← {r⊏𝕩{s⊏(+∾𝕨×-)˝2‿∘⥊𝕩}´t}
+    kernel hm.Set˜≠𝕩 ⋄ Kernel𝕩
+  }
+  _block ← {
+    𝕗≥≠𝕩 ? Pease𝕩;
+    c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ≠𝕩
+    t ← ⋆-⍳2×π×n÷˜c×⌜○↕r
+    ⥊𝕊˘⌾⍉t×𝕊˘⍉r‿c⥊𝕩
+  }
+  1024 _block 𝕩
+}
+</pre>
+</div>
+
+<p>
+Not exactly a triumph of performance engineering, but it will do for now:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">!(1e¯6&gt;FFT _err_ FFT3) v ← RC 2⋆20
+5 (FFT•_timed⋈FFT3•_timed) v
+</pre>
+</div>
+
+<pre class="example">
+⟨ 4.1142793994 0.975797937 ⟩
+</pre>
+</div>
+</div>
+<div id="outline-container-org17643b7" class="outline-2">
+<h2 id="org17643b7">Pairs of reals</h2>
+<div class="outline-text-2" id="text-org17643b7">
+<p>
+The remaining annoyance is that a native complex array is not the most useful
+shape for the operations above. Representing a complex vector as an array of
+shape <code>2‿n</code> makes the butterflies, twiddles, and stage permutations line up much better,
+while making the complex arithmetic completely explicit. Surprisingly, the code
+doesn't loose too much compactness:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">km‿tm ← •HashMap˜¨⋈˜↕0
+
+FFT4 ← {
+  𝕨𝕊⁼𝕩: ≍⟜-˝{⊢´∘≢÷˜·𝔽𝔾∘𝔽}(𝕨⊸𝕊)𝕩;
+  Cmu‿Cis ← ⟨-˝∘×≍·+˝×⟜⌽, •math{𝕗.Cos≍𝕗.Sin}⟩
+  Pease ← {
+    km.Has𝕨 ? (km.Get𝕨){𝔽}𝕩;
+    t ← ⌽⊸{𝕨/˘¨Cis¨-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)𝕨
+    s‿r ← ⟨⥊⍉2‿∘⥊↕𝕨, ⥊+⌜´0∾¨k⟩ # perfect shuffle ⋈ bit reversal
+    Kernel ← {r⊸⊏˘𝕩{s⊸⊏˘(+˝∾˘𝕨Cmu-˝)1⍉2‿2‿∘⥊𝕩}´t}
+    𝕨 km.Set kernel ⋄ Kernel𝕩
+  }
+  _block ← {
+    𝕗≥⊢´≢𝕩 ? ⊢´∘≢⊸Pease𝕩;
+    c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ⊢´≢𝕩
+    t ← {tm.Has n ? tm.Get n;
+      n tm.Set Cis˘-2×π×n÷˜c×⌜○↕r ⋄ tm.Get n
+    }
+    2‿∘⥊⍉𝕊˘2‿1⍉t Cmu˘𝕊˘⍉⁼2‿r‿c⥊𝕩
+  }
+  𝕨_block 𝕩
+}
+</pre>
+</div>
+
+<p>
+The round trip remains where it should be:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">1024 FFT4{+´|⥊𝕩-𝕨𝔽⁼𝕨𝔽𝕩} 0•rand.Range˜2⋈2⋆12
+</pre>
+</div>
+
+<pre class="example">
+1.0574249809103264e¯12
+</pre>
+
+
+<p>
+And, with a warm cache:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bqn">v ← 0•rand.Range˜2⋈2⋆23
+10 4096⊸FFT4•_timed v
+</pre>
+</div>
+
+<pre class="example">
+0.8296606557
+</pre>
+
+
+<p>
+The compact recursive FFT is still my favourite version of the algorithm. But
+the route from it to <code>FFT4</code> is a useful reminder: an asymptotically fast
+algorithm only starts the conversation. Data layout, regularity, and the cost
+of moving data decide whether it gets to finish it.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+I was very pleased to come across <a href="https://dl.acm.org/doi/10.1145/321450.321457">Pease</a>'s FFT, an old idea worth rediscovering. For an in-depth
+discussion of FFT performance see, <a href="https://arxiv.org/abs/2602.23525">arXiv:2602.23525</a>.
+</p>
+
+<div style="text-align: center; font-size: 2em; padding: 20px 0;">
+  <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
+</div></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>
