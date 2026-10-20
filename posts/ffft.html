@@ -235,9 +235,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">A fast Fast Fourier Transform</h1>
-<div id="outline-container-orgbb7675f" class="outline-2">
-<h2 id="orgbb7675f">Radix-2 FFT</h2>
-<div class="outline-text-2" id="text-orgbb7675f">
+<div id="outline-container-org3afa6e0" class="outline-2">
+<h2 id="org3afa6e0">Radix-2 FFT</h2>
+<div class="outline-text-2" id="text-org3afa6e0">
 <p>
 This post is my attempt to implement a decent FFT in BQN. It begins with the pleasant
 recursive version, then trades some of that pleasantness for a layout which is kinder to the
@@ -283,9 +283,9 @@ _err_ ← {+´∘|∘⥊𝔽-𝔾}
 </div>
 </div>
 </div>
-<div id="outline-container-org1438f4c" class="outline-2">
-<h2 id="org1438f4c">Recursive formulation</h2>
-<div class="outline-text-2" id="text-org1438f4c">
+<div id="outline-container-org2dbe15f" class="outline-2">
+<h2 id="org2dbe15f">Recursive formulation</h2>
+<div class="outline-text-2" id="text-org2dbe15f">
 <p>
 The usual radix-2 formulation splits the input into its even and odd elements,
 recurses, and joins the two halves after multiplying one of them by the twiddle
@@ -323,9 +323,9 @@ the larger-scale version later on.
 </p>
 </div>
 </div>
-<div id="outline-container-orge0febfa" class="outline-2">
-<h2 id="orge0febfa">Blocked formulation</h2>
-<div class="outline-text-2" id="text-orge0febfa">
+<div id="outline-container-org179eb4e" class="outline-2">
+<h2 id="org179eb4e">Blocked formulation</h2>
+<div class="outline-text-2" id="text-org179eb4e">
 <p>
 Let \(N=rc\). Write an input index as \(n=m+rq\) and an output index as
 \(k=k_1+ck_2\), where \(0\leq m,k_2<r\) and \(0\leq q,k_1<c\). Substituting
@@ -374,9 +374,9 @@ does not deliver:
 </pre>
 </div>
 </div>
-<div id="outline-container-orgab24649" class="outline-2">
-<h2 id="orgab24649">A Pease engine</h2>
-<div class="outline-text-2" id="text-orgab24649">
+<div id="outline-container-org5bbc6ac" class="outline-2">
+<h2 id="org5bbc6ac">A Pease engine</h2>
+<div class="outline-text-2" id="text-org5bbc6ac">
 <p>
 The performance still tanks at scale because CBQN spends most of the time
 chasing memory allocations and thrashing the cache. To get anywhere near
@@ -447,9 +447,9 @@ Not exactly a triumph of performance engineering, but it will do for now:
 </pre>
 </div>
 </div>
-<div id="outline-container-org17643b7" class="outline-2">
-<h2 id="org17643b7">Pairs of reals</h2>
-<div class="outline-text-2" id="text-org17643b7">
+<div id="outline-container-org4194aad" class="outline-2">
+<h2 id="org4194aad">Pairs of reals</h2>
+<div class="outline-text-2" id="text-org4194aad">
 <p>
 The remaining annoyance is that a native complex array is not the most useful
 shape for the operations above. Representing a complex vector as an array of
@@ -467,7 +467,7 @@ FFT4 ← {
   Pease ← {
     km.Has𝕨 ? (km.Get𝕨){𝔽}𝕩;
     t ← ⌽⊸{𝕨/˘¨Cis¨-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)𝕨
-    s‿r ← ⟨⥊⍉2‿∘⥊↕𝕨, ⥊+⌜´0∾¨k⟩ # perfect shuffle ⋈ bit reversal
+    s‿r ← ⟨⥊⍉2‿∘⥊↕𝕨, ⥊+⌜´0∾¨k⟩
     Kernel ← {r⊸⊏˘𝕩{s⊸⊏˘(+˝∾˘𝕨Cmu-˝)1⍉2‿2‿∘⥊𝕩}´t}
     𝕨 km.Set kernel ⋄ Kernel𝕩
   }
