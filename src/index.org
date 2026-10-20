@@ -44,5 +44,6 @@
 10. [[./posts/mp.org][Blazing matrix products]]
 11. [[./posts/bc.org][Strips from the BQNcrate]]
 12. [[./posts/cg.org][A Markovian nursery game]]
+13. [[./posts/ffft.org][A fast Fast Fourier Transform]]
 
 #+HTML: </div>

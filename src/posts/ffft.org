@@ -1,0 +1,234 @@
+#+title: A fast Fast Fourier Transform
+#+INCLUDE: "../html-head.org"
+
+** Radix-2 FFT
+
+This post is my attempt to implement a decent FFT in BQN. It begins with the pleasant
+recursive version, then trades some of that pleasantness for a layout which is kinder to the
+cache. The code here uses CBQN's =complex= branch, which helps keeping the code close to the
+mathematical shape of the algorithm.
+
+All transforms below have power-of-two length and use the forward convention:
+
+\begin{equation*}
+  X_k = \sum_{n=0}^{N-1}x_n\omega_N^{nk},
+  \qquad \omega_N = \exp\left(-\frac{2\pi i}{N}\right).
+\end{equation*}
+
+The inverse falls out of the standard conjugation identity:
+
+\begin{equation*}
+  \text{iFFT}[\mathbf{x}] = \frac{1}{N}\text{FFT}^{*}[\mathbf{x}^{*}].
+\end{equation*}
+
+For comparison, here is the direct \(O(N^2)\) DFT, which I will use as reference
+at times:
+
+#+begin_src bqn :exports code :tangle ../bqn/ffft.bqn
+  DFT ← ⊢+˝∘×⎉1‿∞˜·⋆∘⍳¯2×π×≠÷˜·×⌜˜↕∘≠
+#+end_src
+
+I use this little generator and error function in the checks below:
+
+#+begin_src bqn :exports code :tangle ../bqn/ffft.bqn
+  RC ← •rand.Range⟜0{𝔽⍳𝔽}
+  _err_ ← {+´∘|∘⥊𝔽-𝔾}
+#+end_src
+
+** Recursive formulation
+
+The usual radix-2 formulation splits the input into its even and odd elements,
+recurses, and joins the two halves after multiplying one of them by the twiddle
+factors. In BQN that is compact enough to leave almost no algorithmic
+scaffolding visible:
+
+#+begin_src bqn :exports code :tangle ../bqn/ffft.bqn
+  FFT ← {𝕊⁼: 𝕊⌾+⊸÷⟜≠𝕩; (+∾-)⟜(⊢×·⋆∘⍳¯π×⊒˜÷≠)´∘(𝕊¨⊢⊔˜2|⊒˜)⍟(1<≠)𝕩}
+#+end_src
+
+The =𝕊⁼= header supplies the inverse through the conjugation identity above.
+The rest is the recursive butterfly: split by parity, transform both parts,
+then add and subtract the twiddled odd part. It agrees with the direct DFT up
+to the expected floating-point noise:
+
+#+begin_src bqn :exports both :tangle ../bqn/ffft.bqn
+  FFT _err_ DFT RC 2⋆10
+#+end_src
+
+#+RESULTS:
+: 1.997053680853405e¯9
+
+The recursive FFT is pretty, but it is not gentle on memory. Each level
+performs splits, recursive calls, joins, and reshaping gymnastics. Before
+trying to fix that, it is useful to make explicit the decomposition used by
+the larger-scale version later on.
+
+** Blocked formulation
+
+Let \(N=rc\). Write an input index as \(n=m+rq\) and an output index as
+\(k=k_1+ck_2\), where \(0\leq m,k_2<r\) and \(0\leq q,k_1<c\). Substituting
+those into the DFT gives the Cooley–Tukey identity used for the recursion:
+
+\begin{equation*}
+  X_{k_1+ck_2} =
+  \sum_{m=0}^{r-1}
+    \omega_r^{mk_2}\omega_N^{mk_1}
+    \left(\sum_{q=0}^{c-1}x_{m+rq}\omega_c^{qk_1}\right).
+\end{equation*}
+
+The inner parenthesis is a length-\(c\) FFT on one strided piece of the
+input. The factor \(\omega_N^{mk_1}\) is the twiddle matrix, and the outer
+sum is a length-\(r\) FFT. An initial recursive implementation is then: apply
+the bit-reversal permutation first, then perform the butterfly stages in the
+usual order. In BQN this still allocates, of course, but it removes the
+recursive tree of joins and makes the stage structure explicit:
+
+#+begin_src bqn :exports code :tangle ../bqn/ffft.bqn
+  FFT2 ← {
+    (𝕩⊏˜⥊+⌜´0∾¨p){
+      t ← ⋆-⍳π×𝕨÷˜↕𝕨
+      ⥊(+∾-)⟜(t⊸×)˝⌾⍉∘‿2‿𝕨⥊𝕩
+    }´⌽p ← ↕⌾(2⊸⋆⁼)≠𝕩
+  }
+#+end_src
+
+Numerically, it matches the recursive implementation. Performance-wise, it
+does not deliver:
+
+#+begin_src bqn :exports both :tangle ../bqn/ffft.bqn
+  !(1e¯15>FFT _err_ FFT2) v ← RC 2⋆20
+  5 (FFT•_timed⋈FFT2•_timed) v
+#+end_src
+
+#+RESULTS:
+: ⟨ 4.2211076136 4.1039009052 ⟩
+
+** A Pease engine
+
+The performance still tanks at scale because CBQN spends most of the time
+chasing memory allocations and thrashing the cache. To get anywhere near
+competitive speeds, we have to make the geometry sympathetic to the hardware.
+The Cooley–Tukey block layout can act as a macro-scale partitioner. Once
+the data is isolated there, a rigid, transpose-free Pease[fn:1] kernel takes
+over.
+
+For \(N=2^p\), a Pease stage is a vector of adjacent butterflies followed by a
+fixed perfect shuffle. If \(x^{(s)}\) is the vector entering stage \(s\), one
+way to write that stage is
+
+\begin{equation*}
+  \begin{pmatrix}b^{(s)}_{2j}\\b^{(s)}_{2j+1}\end{pmatrix}
+  =
+  \begin{pmatrix}1 & \tau_s(j)\\1 & -\tau_s(j)\end{pmatrix}
+  \begin{pmatrix}x^{(s)}_{2j}\\x^{(s)}_{2j+1}\end{pmatrix},
+  \quad
+  x^{(s+1)} = P b^{(s)},
+  \quad
+  \tau_s(j)=\omega_N^{2^s(j\bmod 2^{p-s-1})}.
+\end{equation*}
+
+Here \(P\) is the perfect-shuffle permutation. Thus every stage has exactly
+the same butterfly geometry; only its twiddles change. After \(p\) stages a
+final bit reversal puts the output in conventional order. To avoid the brute-force
+precomputation of a massive global table of constants for every possible block size,
+a =•HashMap= lives inside the closure:
+
+#+begin_src bqn :exports code :tangle ../bqn/ffft.bqn
+  FFT3 ← {
+    hm ← •HashMap˜⟨⟩
+    Pease ← {
+      hm.Has≠𝕩 ? kernel ← hm.Get≠𝕩 ⋄ Kernel𝕩;
+      t ← ⌽⊸{𝕨/¨⋆⍳-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)≠𝕩
+      s‿r ← ⟨⥊⍉2‿∘⥊↕≠𝕩, ⥊+⌜´0∾¨k⟩
+      Kernel ← {r⊏𝕩{s⊏(+∾𝕨×-)˝2‿∘⥊𝕩}´t}
+      kernel hm.Set˜≠𝕩 ⋄ Kernel𝕩
+    }
+    _block ← {
+      𝕗≥≠𝕩 ? Pease𝕩;
+      c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ≠𝕩
+      t ← ⋆-⍳2×π×n÷˜c×⌜○↕r
+      ⥊𝕊˘⌾⍉t×𝕊˘⍉r‿c⥊𝕩
+    }
+    1024 _block 𝕩
+  }
+#+end_src
+
+Not exactly a triumph of performance engineering, but it will do for now:
+
+#+begin_src bqn :exports both :tangle ../bqn/ffft.bqn
+  !(1e¯6>FFT _err_ FFT3) v ← RC 2⋆20
+  5 (FFT•_timed⋈FFT3•_timed) v
+#+end_src
+
+#+RESULTS:
+: ⟨ 4.1142793994 0.975797937 ⟩
+
+** Pairs of reals
+
+The remaining annoyance is that a native complex array is not the most useful
+shape for the operations above. Representing a complex vector as an array of
+shape =2‿n= makes the butterflies, twiddles, and stage permutations line up much better,
+while making the complex arithmetic completely explicit. Surprisingly, the code
+doesn't not loose so much in compactness:
+
+#+begin_src bqn :exports code :tangle ../bqn/ffft.bqn
+  km‿tm ← •HashMap˜¨⋈˜↕0
+  
+  FFT4 ← {
+    𝕨𝕊⁼𝕩: ≍⟜-˝{⊢´∘≢÷˜·𝔽𝔾∘𝔽}(𝕨⊸𝕊)𝕩;
+
+    Cmu‿Cis ← ⟨-˝∘×≍·+˝×⟜⌽, •math{𝕗.Cos≍𝕗.Sin}⟩
+
+    Pease ← {
+      km.Has𝕨 ? (km.Get𝕨){𝔽}𝕩;
+      t ← ⌽⊸{𝕨/˘¨Cis¨-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)𝕨
+      s‿r ← ⟨⥊⍉2‿∘⥊↕𝕨, ⥊+⌜´0∾¨k⟩ # perfect shuffle ⋈ bit reversal
+      Kernel ← {r⊸⊏˘𝕩{s⊸⊏˘(+˝∾˘𝕨Cmu-˝)1⍉2‿2‿∘⥊𝕩}´t}
+      𝕨 km.Set kernel ⋄ Kernel𝕩
+    }
+
+    _block ← {
+      𝕗≥⊢´≢𝕩 ? ⊢´∘≢⊸Pease𝕩;
+      c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ⊢´≢𝕩
+      t ← {tm.Has n ? tm.Get n;
+        n tm.Set Cis˘-2×π×n÷˜c×⌜○↕r ⋄ tm.Get n
+      }
+      2‿∘⥊⍉𝕊˘2‿1⍉t Cmu˘𝕊˘⍉⁼2‿r‿c⥊𝕩
+    }
+
+    𝕨_block 𝕩
+  }
+#+end_src
+
+The round trip remains where it should be:
+
+#+begin_src bqn :exports both :tangle ../bqn/ffft.bqn
+  1024 FFT4{+´|⥊𝕩-𝕨𝔽⁼𝕨𝔽𝕩} 0•rand.Range˜2⋈2⋆12
+#+end_src
+
+#+RESULTS:
+: 1.0574249809103264e¯12
+
+And, with a warm cache:
+
+#+begin_src bqn :exports both :tangle ../bqn/ffft.bqn
+  v ← 0•rand.Range˜2⋈2⋆23
+  10 4096⊸FFT4•_timed v
+#+end_src
+
+#+RESULTS:
+: 0.8296606557
+
+The compact recursive FFT is still my favourite version of the algorithm. But
+the route from it to =FFT4= is a useful reminder: an asymptotically fast
+algorithm only starts the conversation. Data layout, regularity, and the cost
+of moving data decide whether it gets to finish it.
+
+[fn:1] I was very pleased to come across [[https://dl.acm.org/doi/10.1145/321450.321457][Pease]]'s FFT, an old idea worth rediscovering. For an in-depth
+discussion of FFT performance see, [[https://arxiv.org/abs/2602.23525][arXiv:2602.23525]].
+
+#+INCLUDE: "../html-foot.org"
+
+# Local Variables:
+# org-html-htmlize-output-type: nil
+# End:

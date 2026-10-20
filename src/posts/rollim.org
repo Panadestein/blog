@@ -262,8 +262,6 @@ If someone ever published that much, sorting will eventually be slower:
 A testament to the idea that the simplest solution in BQN is often the most efficient:
 I initially clip my citations array with ={≠¨⊔≠∘𝕩¨⌾(≥⟜≠∘𝕩⊸/)𝕩}=, which is just =/⁼≠⊸⌊=.
 
-
-
 ** Numerical methods
 
 I love numerical analysis. Compact implementations are often helpful to get the big picture.
@@ -343,156 +341,6 @@ We can test it with random matrices:
 :     0.6543813625255287  ¯0.23426031030668987  0.7189625438047855     0                  0                    0.029863470562463006     0 0 0    
 :                                                                  ┘                                                                ┘         ┘  
 :                                                                                                                                               ┘
-
-*** Fast Fourier Transform
-
-Below is a radix-2 implementation of the [[https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm][Cooley–Tukey FFT algorithm]] in BQN. The inverse is defined with a header, using the
-standard conjugation identity:
-
-\begin{equation*}
-  \text{iFFT}[\mathbf{x}] = \frac{1}{N}\text{FFT}^{*}[\mathbf{x}^{*}]
-\end{equation*}
-
-Currently CBQN's =develop= branch does not yet have native complex numbers, so the code uses a
-small namespace of explicit complex-number utilities. The important piece here
-is =z.E=, which builds complex exponentials, and =z._p=, which performs the
-complex multiplication needed for the twiddle factors.
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
-  z ← {
-    _p ⇐ {(-´𝔽¨)⋈(+´𝔽¨)⟜⌽}
-    C‿E ⇐ ⟨⋈⟜-´˘, •math{𝕗.Cos≍˘𝕗.Sin}⟩
-  }
-  FFT ← {𝕊⁼: z.C{≠÷˜·𝔽𝔾∘𝔽}𝕊𝕩; (+∾-)⟜(⊢×z._p˘·z.E∘-π×↕⊸÷∘≠)´∘(𝕊¨⊢⊔˜2|⊒˜)⍟(1<≠)𝕩}
-#+end_src
-
-#+RESULTS:
-: (function block)
-
-As a first sanity check, we can measure the round-trip error after applying the
-transform and its inverse. This is the absolute \(L^1\)-error over the flattened
-array, not a normalized relative error:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  _rte ← {+´∘|∘⥊⊢-𝔽⁼∘𝔽}
-  FFT _rte 0•rand.Range˜2⋈˜2⋆10
-#+end_src
-
-#+RESULTS:
-: 2.3505503099485736e¯13
-
-There is, however, experimental support for complex numbers as of May 2026. I put together
-a [[https://github.com/Panadestein/complex_cbqn][Nix flake]] for it, so it can be tested without spelunking through branches and build
-flags. With native complex numbers, the previous implementation collapses to something much closer to the
-mathematical shape of the algorithm:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
-  FFT ← {𝕊⁼: 𝕊⌾+⊸÷⟜≠𝕩; (+∾-)⟜(⊢×·⋆∘⍳¯π×⊒˜÷≠)´∘(𝕊¨⊢⊔˜2|⊒˜)⍟(1<≠)𝕩}
-#+end_src
-
-#+RESULTS:
-: (function block)
-
-The round trip error is very similar to the one with explicit complex number utilities:
-
-#+begin_src bqn :exports both
-  RC ← •rand.Range⟜0{𝔽⍳𝔽}
-  FFT _rte RC 2⋆10
-#+end_src
-
-#+RESULTS:
-: 1.8350564257552384e¯13
-
-Native complex numbers also make it pleasant to write the direct
-\(O(N^2)\) Discrete Fourier Transform. This is not meant to be fast. It is the
-reference anvil:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
-  DFT ← ⊢+˝∘×⎉1‿∞˜·⋆∘⍳¯2×π×≠÷˜·×⌜˜↕∘≠
-#+end_src
-
-#+RESULTS:
-: ⊢+˝∘×⎉⟨ 1 ∞ ⟩˜(⋆∘⍳¯2×3.141592653589793×≠÷˜(×⌜˜↕∘≠))
-
-The FFT agrees with the direct DFT up to the expected floating-point noise:
-
-#+begin_src bqn :exports both
-  _err_ ← {+´∘|∘⥊𝔽-𝔾}
-  FFT _err_ DFT RC 2⋆10
-#+end_src
-
-#+RESULTS:
-: 1.997053680853405e¯9
-
-The recursive FFT above is pretty, but it is not gentle on memory. Each level
-performs splits, recursive calls, joins, and reshaping gymnastics.
-A more operational formulation is the iterative radix-2 FFT: first apply the
-bit-reversal permutation, then perform the butterfly stages in-place in the
-usual order. In BQN this still allocates, of course, but it removes the recursive
-tree of joins and makes the stage structure explicit:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
-  FFT2 ← {
-    (𝕩⊏˜⥊+⌜´0∾¨p){
-      t ← ⋆-⍳π×𝕨÷˜↕𝕨
-      ⥊(+∾-)⟜(t⊸×)˝⌾⍉∘‿2‿𝕨⥊𝕩
-    }´⌽p ← ↕⌾(2⊸⋆⁼)≠𝕩 
-  } 
-#+end_src
-
-#+RESULTS:
-: (function block)
-
-Numerically, it matches the recursive implementation. Performance-wise, it does not deliver:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  !(1e¯15>FFT _err_ FFT2) v ← RC 2⋆20
-  5 (FFT•_timed⋈FFT2•_timed) v
-#+end_src
-
-#+RESULTS:
-: ⟨ 4.2211076136 4.1039009052 ⟩
-
-The performance still tanks at scale because CBQN spends most of the time chasing
-memory allocations and thrashing the cache. To get anywhere near competitive speeds, we have to make
-the geometry sympathetic to the hardware. We can do this by using the Cooley-Tukey block layout as a
-macro-scale partitioner, shredding the massive array into chunks that fit entirely inside the L1 data cache.
-Once the data is isolated there, we feed those chunks into a rigid, transpose-free Pease[fn:4] micro-engine.
-To avoid the brute-force precomputation of a massive global table of constants for every
-possible block size, we can hide a =•HashMap= inside the closure.
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports code
-  FFT3 ← {
-    hm ← •HashMap˜⟨⟩
-    Pease ← {
-      hm.Has≠𝕩 ? kernel ← hm.Get≠𝕩 ⋄ Kernel𝕩;
-      t ← ⌽⊸{𝕨/¨⋆⍳-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)≠𝕩
-      s‿r ← ⟨⥊⍉2‿∘⥊↕≠𝕩, ⥊+⌜´0∾¨k⟩ 
-      Kernel ← {r⊏𝕩{s⊏(+∾𝕨×-)˝2‿∘⥊𝕩}´t}
-      kernel hm.Set˜≠𝕩 ⋄ Kernel𝕩
-    }
-    _block ← {
-      𝕗≥≠𝕩 ? Pease𝕩;
-      c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ≠𝕩
-      t ← ⋆-⍳2×π×n÷˜c×⌜○↕r
-      ⥊𝕊˘⌾⍉t×𝕊˘⍉r‿c⥊𝕩
-    }
-    1024 _block 𝕩
-  }
-#+end_src
-
-#+RESULTS:
-: (function block)
-
-Not exactly a triumph of performance engineering, but it will do for now:
-
-#+begin_src bqn :tangle ../bqn/rollim.bqn :exports both
-  !(1e¯6>FFT _err_ FFT3) v ← RC 2⋆20
-  5 (FFT•_timed⋈FFT3•_timed) v
-#+end_src
-
-#+RESULTS:
-: ⟨ 4.1142793994 0.975797937 ⟩
 
 *** Tensor n-mode product
 
@@ -861,7 +709,5 @@ quickly filled the text with footnotes. I often get help streamlining my solutio
 from [[https://github.com/mlochbaum][Marshall Lochbaum]] (the BQN creator), [[https://github.com/dzaima][dzaima]] (the CBQN developer),
 and other fine folks from the BQN matrix [[https://app.element.io/#/room/%23array:matrix.org][room]], thank you all! Please check the [[https://github.com/dzaima/chatlogs][logs]] for more context.
 [fn:3] Don’t believe me? Just ask Kilgore Trout!
-[fn:4] I was very pleased to come across [[https://dl.acm.org/doi/10.1145/321450.321457][Pease]]'s FFT, an old idea worth rediscovering. For an in-depth
-discussion of FFT performance see, [[https://arxiv.org/abs/2602.23525][arXiv:2602.23525]].
 
 #+INCLUDE: "../html-foot.org"
