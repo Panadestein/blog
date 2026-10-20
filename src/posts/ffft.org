@@ -176,9 +176,7 @@ doesn't loose too much compactness:
   
   FFT4 ← {
     𝕨𝕊⁼𝕩: ≍⟜-˝{⊢´∘≢÷˜·𝔽𝔾∘𝔽}(𝕨⊸𝕊)𝕩;
-
     Cmu‿Cis ← ⟨-˝∘×≍·+˝×⟜⌽, •math{𝕗.Cos≍𝕗.Sin}⟩
-
     Pease ← {
       km.Has𝕨 ? (km.Get𝕨){𝔽}𝕩;
       t ← ⌽⊸{𝕨/˘¨Cis¨-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)𝕨
@@ -186,7 +184,6 @@ doesn't loose too much compactness:
       Kernel ← {r⊸⊏˘𝕩{s⊸⊏˘(+˝∾˘𝕨Cmu-˝)1⍉2‿2‿∘⥊𝕩}´t}
       𝕨 km.Set kernel ⋄ Kernel𝕩
     }
-
     _block ← {
       𝕗≥⊢´≢𝕩 ? ⊢´∘≢⊸Pease𝕩;
       c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ⊢´≢𝕩
@@ -195,7 +192,6 @@ doesn't loose too much compactness:
       }
       2‿∘⥊⍉𝕊˘2‿1⍉t Cmu˘𝕊˘⍉⁼2‿r‿c⥊𝕩
     }
-
     𝕨_block 𝕩
   }
 #+end_src
