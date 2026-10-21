@@ -235,18 +235,15 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">A fast Fast Fourier Transform</h1>
-<div id="outline-container-org3afa6e0" class="outline-2">
-<h2 id="org3afa6e0">Radix-2 FFT</h2>
-<div class="outline-text-2" id="text-org3afa6e0">
+<div id="outline-container-orgfc9e237" class="outline-2">
+<h2 id="orgfc9e237">Radix-2 FFT</h2>
+<div class="outline-text-2" id="text-orgfc9e237">
 <p>
-This post is my attempt to implement a decent FFT in BQN. It begins with the pleasant
-recursive version, then trades some of that pleasantness for a layout which is kinder to the
-cache. The code here uses CBQN's <code>complex</code> branch, which helps keeping the code close to the
-mathematical shape of the algorithm.
-</p>
-
-<p>
-All transforms below have power-of-two length and use the forward convention:
+This post is my attempt to implement a reasonably fast FFT in BQN. It begins with the pleasant
+recursive version, then trades some of that beauty for a layout which is kinder to the
+cache. I used CBQN's <code>complex</code> branch, which helps keeping the code close to the
+mathematical shape of the algorithms. All transforms below have power-of-two length
+and use the forward convention:
 </p>
 
 \begin{equation*}
@@ -283,9 +280,9 @@ _err_ ← {+´∘|∘⥊𝔽-𝔾}
 </div>
 </div>
 </div>
-<div id="outline-container-org2dbe15f" class="outline-2">
-<h2 id="org2dbe15f">Recursive formulation</h2>
-<div class="outline-text-2" id="text-org2dbe15f">
+<div id="outline-container-orgf7d6952" class="outline-2">
+<h2 id="orgf7d6952">Recursive formulation</h2>
+<div class="outline-text-2" id="text-orgf7d6952">
 <p>
 The usual radix-2 formulation splits the input into its even and odd elements,
 recurses, and joins the two halves after multiplying one of them by the twiddle
@@ -323,12 +320,12 @@ the larger-scale version later on.
 </p>
 </div>
 </div>
-<div id="outline-container-org179eb4e" class="outline-2">
-<h2 id="org179eb4e">Blocked formulation</h2>
-<div class="outline-text-2" id="text-org179eb4e">
+<div id="outline-container-org620b4a2" class="outline-2">
+<h2 id="org620b4a2">Blocked formulation</h2>
+<div class="outline-text-2" id="text-org620b4a2">
 <p>
 Let \(N=rc\). Write an input index as \(n=m+rq\) and an output index as
-\(k=k_1+ck_2\), where \(0\leq m,k_2<r\) and \(0\leq q,k_1<c\). Substituting
+\(k=k_1+ck_2\), where \(0 \leq m,k_2 < r\) and \(0 \leq q,k_1 < c\). Substituting
 those into the DFT gives the Cooley–Tukey identity used for the recursion:
 </p>
 
@@ -374,9 +371,9 @@ does not deliver:
 </pre>
 </div>
 </div>
-<div id="outline-container-org5bbc6ac" class="outline-2">
-<h2 id="org5bbc6ac">A Pease engine</h2>
-<div class="outline-text-2" id="text-org5bbc6ac">
+<div id="outline-container-orgd7781f2" class="outline-2">
+<h2 id="orgd7781f2">A Pease engine</h2>
+<div class="outline-text-2" id="text-orgd7781f2">
 <p>
 The performance still tanks at scale because CBQN spends most of the time
 chasing memory allocations and thrashing the cache. To get anywhere near
@@ -447,15 +444,14 @@ Not exactly a triumph of performance engineering, but it will do for now:
 </pre>
 </div>
 </div>
-<div id="outline-container-org4194aad" class="outline-2">
-<h2 id="org4194aad">Pairs of reals</h2>
-<div class="outline-text-2" id="text-org4194aad">
+<div id="outline-container-org4f58ff1" class="outline-2">
+<h2 id="org4f58ff1">Pairs of reals</h2>
+<div class="outline-text-2" id="text-org4f58ff1">
 <p>
-The remaining annoyance is that a native complex array is not the most useful
-shape for the operations above. Representing a complex vector as an array of
-shape <code>2‿n</code> makes the butterflies, twiddles, and stage permutations line up much better,
-while making the complex arithmetic completely explicit. Surprisingly, the code
-doesn't loose too much compactness:
+The remaining annoyance is that a native complex operations are not optimized in BQN yet.
+Representing a complex vector as an array of shape <code>2‿n</code> makes the butterflies,
+twiddles, and stage permutations leverage the SIMD-optimized machinery of the interpreter
+much better. Surprisingly, the code doesn't loose too much compactness:
 </p>
 
 <div class="org-src-container">
