@@ -3,12 +3,11 @@
 
 ** Radix-2 FFT
 
-This post is my attempt to implement a decent FFT in BQN. It begins with the pleasant
-recursive version, then trades some of that pleasantness for a layout which is kinder to the
-cache. The code here uses CBQN's =complex= branch, which helps keeping the code close to the
-mathematical shape of the algorithm.
-
-All transforms below have power-of-two length and use the forward convention:
+This post is my attempt to implement a reasonably fast FFT in BQN. It begins with the pleasant
+recursive version, then trades some of that beauty for a layout which is kinder to the
+cache. I used CBQN's =complex= branch, which helps keeping the code close to the
+mathematical shape of the algorithms. All transforms below have power-of-two length
+and use the forward convention:
 
 \begin{equation*}
   X_k = \sum_{n=0}^{N-1}x_n\omega_N^{nk},
@@ -66,7 +65,7 @@ the larger-scale version later on.
 ** Blocked formulation
 
 Let \(N=rc\). Write an input index as \(n=m+rq\) and an output index as
-\(k=k_1+ck_2\), where \(0\leq m,k_2<r\) and \(0\leq q,k_1<c\). Substituting
+\(k=k_1+ck_2\), where \(0 \leq m,k_2 < r\) and \(0 \leq q,k_1 < c\). Substituting
 those into the DFT gives the Cooley–Tukey identity used for the recursion:
 
 \begin{equation*}
@@ -165,11 +164,10 @@ Not exactly a triumph of performance engineering, but it will do for now:
 
 ** Pairs of reals
 
-The remaining annoyance is that a native complex array is not the most useful
-shape for the operations above. Representing a complex vector as an array of
-shape =2‿n= makes the butterflies, twiddles, and stage permutations line up much better,
-while making the complex arithmetic completely explicit. Surprisingly, the code
-doesn't loose too much compactness:
+The remaining annoyance is that a native complex operations are not optimized in BQN yet.
+Representing a complex vector as an array of shape =2‿n= makes the butterflies,
+twiddles, and stage permutations leverage the SIMD-optimized machinery of the interpreter
+much better. Surprisingly, the code doesn't loose too much compactness:
 
 #+begin_src bqn :exports code :tangle ../bqn/ffft.bqn
   km‿tm ← •HashMap˜¨⋈˜↕0
