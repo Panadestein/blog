@@ -164,7 +164,7 @@ Not exactly a triumph of performance engineering, but it will do for now:
 
 ** Pairs of reals
 
-The remaining annoyance is that a native complex operations are not optimized in BQN yet.
+The remaining annoyance is that native complex operations are not optimized in BQN yet.
 Representing a complex vector as an array of shape =2‿n= makes the butterflies,
 twiddles, and stage permutations leverage the SIMD-optimized machinery of the interpreter
 much better. Surprisingly, the code doesn't loose too much compactness:
