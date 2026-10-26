@@ -30,8 +30,9 @@ FFT2 ← {
 
 
 
+hm ← •HashMap˜⟨⟩
+
 FFT3 ← {
-  hm ← •HashMap˜⟨⟩
   Pease ← {
     hm.Has≠𝕩 ? kernel ← hm.Get≠𝕩 ⋄ Kernel𝕩;
     t ← ⌽⊸{𝕨/¨⋆⍳-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)≠𝕩
@@ -39,13 +40,13 @@ FFT3 ← {
     Kernel ← {r⊏𝕩{s⊏(+∾𝕨×-)˝2‿∘⥊𝕩}´t}
     kernel hm.Set˜≠𝕩 ⋄ Kernel𝕩
   }
-  _block ← {
+  _bailey ← {
     𝕗≥≠𝕩 ? Pease𝕩;
     c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ≠𝕩
     t ← ⋆-⍳2×π×n÷˜c×⌜○↕r
     ⥊𝕊˘⌾⍉t×𝕊˘⍉r‿c⥊𝕩
   }
-  1024 _block 𝕩
+  1024 _bailey 𝕩
 }
 
 
@@ -63,11 +64,10 @@ FFT4 ← {
   Pease ← {
     km.Has𝕨 ? (km.Get𝕨){𝔽}𝕩;
     t ← ⌽⊸{𝕨/˘¨Cis¨-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)𝕨
-    s‿r ← ⟨⥊⍉2‿∘⥊↕𝕨, ⥊+⌜´0∾¨k⟩
-    Kernel ← {r⊸⊏˘𝕩{s⊸⊏˘(+˝∾˘𝕨Cmu-˝)1⍉2‿2‿∘⥊𝕩}´t}
+    Kernel ← {(⥊+⌜´0∾¨k)⊸⊏˘2‿∘⥊𝕩{⍉(+˝˘≍𝕨Cmu-˝˘)2‿2‿∘⥊𝕩}´t}
     𝕨 km.Set kernel ⋄ Kernel𝕩
   }
-  _block ← {
+  _bailey ← {
     𝕗≥⊢´≢𝕩 ? ⊢´∘≢⊸Pease𝕩;
     c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ⊢´≢𝕩
     t ← {tm.Has n ? tm.Get n;
@@ -75,7 +75,7 @@ FFT4 ← {
     }
     2‿∘⥊⍉𝕊˘2‿1⍉t Cmu˘𝕊˘⍉⁼2‿r‿c⥊𝕩
   }
-  𝕨_block 𝕩
+  𝕨_bailey 𝕩
 }
 
 
