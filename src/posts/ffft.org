@@ -65,7 +65,7 @@ the larger-scale version later on.
 Let \(N=rc\). Write an input index as \(n=m+rq\) and an output index as
 \(k=k_1+ck_2\), where \(0 \leq m,k_2 < r\) and \(0 \leq q,k_1 < c\). Substituting
 those into the DFT gives the Cooley–Tukey identity from which Bailey's four-step
-FFT[fn:2] is built:
+FFT[fn:1] is built:
 
 \begin{equation*}
   X_{k_1+ck_2} =
@@ -107,7 +107,7 @@ The performance still tanks at scale because CBQN spends most of the time
 chasing memory allocations and thrashing the cache. To get anywhere near
 competitive speeds, we have to make the geometry sympathetic to the hardware.
 The Cooley–Tukey block layout can act as a macro-scale partitioner. Once
-the data is isolated there, a rigid, transpose-free Pease[fn:1] kernel takes
+the data is isolated there, a rigid, transpose-free Pease[fn:2] kernel takes
 over.
 
 For \(N=2^p\), a Pease stage is a vector of adjacent butterflies followed by a
@@ -218,10 +218,10 @@ the route from it to =FFT4= is a useful reminder: an asymptotically fast
 algorithm only starts the conversation. Data layout, regularity, and the cost
 of moving data decide whether it gets to finish it.
 
-[fn:1] I was very pleased to come across [[https://dl.acm.org/doi/10.1145/321450.321457][Pease]]'s FFT, an old idea worth rediscovering. For an in-depth
-discussion of FFT performance see, [[https://arxiv.org/abs/2602.23525][arXiv:2602.23525]].
-[fn:2] D. H. Bailey, [[https://www.davidhbailey.com/dhbpapers/fftq.pdf]["FFTs in External or Hierarchical Memory"]]. Bailey found that the four-step
+[fn:1] D. H. Bailey, [[https://www.davidhbailey.com/dhbpapers/fftq.pdf]["FFTs in External or Hierarchical Memory"]]. Bailey found that the four-step
 FFT had already appeared twenty years earlier, anticipating hierarchical memory.
+[fn:2] I was very pleased to come across [[https://dl.acm.org/doi/10.1145/321450.321457][Pease]]'s FFT, an old idea worth rediscovering. For an in-depth
+discussion of FFT performance see, [[https://arxiv.org/abs/2602.23525][arXiv:2602.23525]].
 
 #+INCLUDE: "../html-foot.org"
 
