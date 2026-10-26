@@ -235,9 +235,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">A fast Fast Fourier Transform</h1>
-<div id="outline-container-org1469c2b" class="outline-2">
-<h2 id="org1469c2b">Radix-2 FFT</h2>
-<div class="outline-text-2" id="text-org1469c2b">
+<div id="outline-container-org237cd69" class="outline-2">
+<h2 id="org237cd69">Motivation</h2>
+<div class="outline-text-2" id="text-org237cd69">
 <p>
 This post is my attempt to implement a reasonably fast FFT in BQN. It begins with the pleasant
 recursive version, then trades some of that beauty for a layout which is kinder to the
@@ -280,11 +280,11 @@ _err_ ← {+´∘|∘⥊𝔽-𝔾}
 </div>
 </div>
 </div>
-<div id="outline-container-orgef7c722" class="outline-2">
-<h2 id="orgef7c722">Recursive formulation</h2>
-<div class="outline-text-2" id="text-orgef7c722">
+<div id="outline-container-orgd32360b" class="outline-2">
+<h2 id="orgd32360b">Radix-2 formulation</h2>
+<div class="outline-text-2" id="text-orgd32360b">
 <p>
-The usual radix-2 formulation splits the input into its even and odd elements,
+The usual implementation splits the input into its even and odd elements,
 recurses, and joins the two halves after multiplying one of them by the twiddle
 factors. In BQN that is compact enough to leave almost no algorithmic
 scaffolding visible:
@@ -297,8 +297,7 @@ scaffolding visible:
 
 <p>
 The <code>𝕊⁼</code> header supplies the inverse through the conjugation identity above.
-The rest is the recursive butterfly: split by parity, transform both parts,
-then add and subtract the twiddled odd part. It agrees with the direct DFT up
+The rest is the recursive butterfly. It agrees with the direct DFT up
 to the expected floating-point noise:
 </p>
 
@@ -313,20 +312,20 @@ to the expected floating-point noise:
 
 
 <p>
-The recursive FFT is pretty, but it is not gentle on memory. Each level
-performs splits, recursive calls, joins, and reshaping gymnastics. Before
+The recursive FFT is pretty, but it is not gentle on memory. Before
 trying to fix that, it is useful to make explicit the decomposition used by
 the larger-scale version later on.
 </p>
 </div>
 </div>
-<div id="outline-container-orgfe540bc" class="outline-2">
-<h2 id="orgfe540bc">Blocked formulation</h2>
-<div class="outline-text-2" id="text-orgfe540bc">
+<div id="outline-container-org6bf35aa" class="outline-2">
+<h2 id="org6bf35aa">Four-step formulation</h2>
+<div class="outline-text-2" id="text-org6bf35aa">
 <p>
 Let \(N=rc\). Write an input index as \(n=m+rq\) and an output index as
 \(k=k_1+ck_2\), where \(0 \leq m,k_2 < r\) and \(0 \leq q,k_1 < c\). Substituting
-those into the DFT gives the Cooley–Tukey identity used for the recursion:
+those into the DFT gives the Cooley–Tukey identity from which Bailey's four-step
+FFT<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> is built:
 </p>
 
 \begin{equation*}
@@ -371,15 +370,15 @@ does not deliver:
 </pre>
 </div>
 </div>
-<div id="outline-container-orge3a6ea1" class="outline-2">
-<h2 id="orge3a6ea1">A Pease engine</h2>
-<div class="outline-text-2" id="text-orge3a6ea1">
+<div id="outline-container-org6d89b82" class="outline-2">
+<h2 id="org6d89b82">Pease engine</h2>
+<div class="outline-text-2" id="text-org6d89b82">
 <p>
 The performance still tanks at scale because CBQN spends most of the time
 chasing memory allocations and thrashing the cache. To get anywhere near
 competitive speeds, we have to make the geometry sympathetic to the hardware.
 The Cooley–Tukey block layout can act as a macro-scale partitioner. Once
-the data is isolated there, a rigid, transpose-free Pease<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> kernel takes
+the data is isolated there, a rigid, transpose-free Pease<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> kernel takes
 over.
 </p>
 
@@ -403,14 +402,13 @@ way to write that stage is
 <p>
 Here \(P\) is the perfect-shuffle permutation. Thus every stage has exactly
 the same butterfly geometry; only its twiddles change. After \(p\) stages a
-final bit reversal puts the output in conventional order. To avoid the brute-force
-precomputation of a massive global table of constants for every possible block size,
-a <code>•HashMap</code> lives inside the closure:
+final bit reversal puts the output in conventional order:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bqn">FFT3 ← {
-  hm ← •HashMap˜⟨⟩
+<pre class="src src-bqn">hm ← •HashMap˜⟨⟩
+
+FFT3 ← {
   Pease ← {
     hm.Has≠𝕩 ? kernel ← hm.Get≠𝕩 ⋄ Kernel𝕩;
     t ← ⌽⊸{𝕨/¨⋆⍳-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)≠𝕩
@@ -418,13 +416,13 @@ a <code>•HashMap</code> lives inside the closure:
     Kernel ← {r⊏𝕩{s⊏(+∾𝕨×-)˝2‿∘⥊𝕩}´t}
     kernel hm.Set˜≠𝕩 ⋄ Kernel𝕩
   }
-  _block ← {
+  _bailey ← {
     𝕗≥≠𝕩 ? Pease𝕩;
     c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ≠𝕩
     t ← ⋆-⍳2×π×n÷˜c×⌜○↕r
     ⥊𝕊˘⌾⍉t×𝕊˘⍉r‿c⥊𝕩
   }
-  1024 _block 𝕩
+  1024 _bailey 𝕩
 }
 </pre>
 </div>
@@ -444,9 +442,9 @@ Not exactly a triumph of performance engineering, but it will do for now:
 </pre>
 </div>
 </div>
-<div id="outline-container-org82d5bf0" class="outline-2">
-<h2 id="org82d5bf0">Pairs of reals</h2>
-<div class="outline-text-2" id="text-org82d5bf0">
+<div id="outline-container-org8b33b0a" class="outline-2">
+<h2 id="org8b33b0a">Pairs of reals</h2>
+<div class="outline-text-2" id="text-org8b33b0a">
 <p>
 The remaining annoyance is that native complex operations are not optimized in BQN yet.
 Representing a complex vector as an array of shape <code>2‿n</code> makes the butterflies,
@@ -463,11 +461,10 @@ FFT4 ← {
   Pease ← {
     km.Has𝕨 ? (km.Get𝕨){𝔽}𝕩;
     t ← ⌽⊸{𝕨/˘¨Cis¨-π×↕⊸÷¨𝕩}k ← ↕⌾(2⊸⋆⁼)𝕨
-    s‿r ← ⟨⥊⍉2‿∘⥊↕𝕨, ⥊+⌜´0∾¨k⟩
-    Kernel ← {r⊸⊏˘𝕩{s⊸⊏˘(+˝∾˘𝕨Cmu-˝)1⍉2‿2‿∘⥊𝕩}´t}
+    Kernel ← {(⥊+⌜´0∾¨k)⊸⊏˘2‿∘⥊𝕩{⍉(+˝˘≍𝕨Cmu-˝˘)2‿2‿∘⥊𝕩}´t}
     𝕨 km.Set kernel ⋄ Kernel𝕩
   }
-  _block ← {
+  _bailey ← {
     𝕗≥⊢´≢𝕩 ? ⊢´∘≢⊸Pease𝕩;
     c‿r ← (⌊⋈⌈)∘÷⟜2⌾(2⊸⋆⁼)n ← ⊢´≢𝕩
     t ← {tm.Has n ? tm.Get n;
@@ -475,7 +472,7 @@ FFT4 ← {
     }
     2‿∘⥊⍉𝕊˘2‿1⍉t Cmu˘𝕊˘⍉⁼2‿r‿c⥊𝕩
   }
-  𝕨_block 𝕩
+  𝕨_bailey 𝕩
 }
 </pre>
 </div>
@@ -490,7 +487,7 @@ The round trip remains where it should be:
 </div>
 
 <pre class="example">
-1.0574249809103264e¯12
+1.0315238246905167e¯12
 </pre>
 
 
@@ -505,7 +502,7 @@ And, with a warm cache:
 </div>
 
 <pre class="example">
-0.8296606557
+0.6731298545
 </pre>
 
 
@@ -522,13 +519,18 @@ of moving data decide whether it gets to finish it.
 <div id="text-footnotes">
 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-I was very pleased to come across <a href="https://dl.acm.org/doi/10.1145/321450.321457">Pease</a>'s FFT, an old idea worth rediscovering. For an in-depth
-discussion of FFT performance see, <a href="https://arxiv.org/abs/2602.23525">arXiv:2602.23525</a>.
+D. H. Bailey, <a href="https://www.davidhbailey.com/dhbpapers/fftq.pdf">"FFTs in External or Hierarchical Memory"</a>. Bailey found that the four-step
+FFT had already appeared twenty years earlier, anticipating hierarchical memory.
 </p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
 </div></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+I was very pleased to come across <a href="https://dl.acm.org/doi/10.1145/321450.321457">Pease</a>'s FFT, an old idea worth rediscovering. For an in-depth
+discussion of FFT performance see, <a href="https://arxiv.org/abs/2602.23525">arXiv:2602.23525</a>.
+</p></div></div>
 
 
 </div>
