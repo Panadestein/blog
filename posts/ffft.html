@@ -235,9 +235,9 @@ overflow-x: auto !important;
 <body>
 <div id="content" class="content">
 <h1 class="title">A fast Fast Fourier Transform</h1>
-<div id="outline-container-org237cd69" class="outline-2">
-<h2 id="org237cd69">Motivation</h2>
-<div class="outline-text-2" id="text-org237cd69">
+<div id="outline-container-org1f2c0e4" class="outline-2">
+<h2 id="org1f2c0e4">Motivation</h2>
+<div class="outline-text-2" id="text-org1f2c0e4">
 <p>
 This post is my attempt to implement a reasonably fast FFT in BQN. It begins with the pleasant
 recursive version, then trades some of that beauty for a layout which is kinder to the
@@ -280,9 +280,9 @@ _err_ ← {+´∘|∘⥊𝔽-𝔾}
 </div>
 </div>
 </div>
-<div id="outline-container-orgd32360b" class="outline-2">
-<h2 id="orgd32360b">Radix-2 formulation</h2>
-<div class="outline-text-2" id="text-orgd32360b">
+<div id="outline-container-org2f22f9f" class="outline-2">
+<h2 id="org2f22f9f">Radix-2 formulation</h2>
+<div class="outline-text-2" id="text-org2f22f9f">
 <p>
 The usual implementation splits the input into its even and odd elements,
 recurses, and joins the two halves after multiplying one of them by the twiddle
@@ -318,9 +318,9 @@ the larger-scale version later on.
 </p>
 </div>
 </div>
-<div id="outline-container-org6bf35aa" class="outline-2">
-<h2 id="org6bf35aa">Four-step formulation</h2>
-<div class="outline-text-2" id="text-org6bf35aa">
+<div id="outline-container-org4e57f83" class="outline-2">
+<h2 id="org4e57f83">Four-step formulation</h2>
+<div class="outline-text-2" id="text-org4e57f83">
 <p>
 Let \(N=rc\). Write an input index as \(n=m+rq\) and an output index as
 \(k=k_1+ck_2\), where \(0 \leq m,k_2 < r\) and \(0 \leq q,k_1 < c\). Substituting
@@ -370,9 +370,9 @@ does not deliver:
 </pre>
 </div>
 </div>
-<div id="outline-container-org6d89b82" class="outline-2">
-<h2 id="org6d89b82">Pease engine</h2>
-<div class="outline-text-2" id="text-org6d89b82">
+<div id="outline-container-orgfbbdf7e" class="outline-2">
+<h2 id="orgfbbdf7e">Pease engine</h2>
+<div class="outline-text-2" id="text-orgfbbdf7e">
 <p>
 The performance still tanks at scale because CBQN spends most of the time
 chasing memory allocations and thrashing the cache. To get anywhere near
@@ -442,9 +442,9 @@ Not exactly a triumph of performance engineering, but it will do for now:
 </pre>
 </div>
 </div>
-<div id="outline-container-org8b33b0a" class="outline-2">
-<h2 id="org8b33b0a">Pairs of reals</h2>
-<div class="outline-text-2" id="text-org8b33b0a">
+<div id="outline-container-org678abf0" class="outline-2">
+<h2 id="org678abf0">Pairs of reals</h2>
+<div class="outline-text-2" id="text-org678abf0">
 <p>
 The remaining annoyance is that native complex operations are not optimized in BQN yet.
 Representing a complex vector as an array of shape <code>2‿n</code> makes the butterflies,
@@ -521,16 +521,16 @@ of moving data decide whether it gets to finish it.
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 D. H. Bailey, <a href="https://www.davidhbailey.com/dhbpapers/fftq.pdf">"FFTs in External or Hierarchical Memory"</a>. Bailey found that the four-step
 FFT had already appeared twenty years earlier, anticipating hierarchical memory.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+I was very pleased to come across <a href="https://dl.acm.org/doi/10.1145/321450.321457">Pease</a>'s FFT, an old idea worth rediscovering. For an in-depth
+discussion of FFT performance see, <a href="https://arxiv.org/abs/2602.23525">arXiv:2602.23525</a>.
 </p>
 
 <div style="text-align: center; font-size: 2em; padding: 20px 0;">
   <a href="https://panadestein.github.io/blog/" style="text-decoration: none;">⊑∘∞</a>
 </div></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-I was very pleased to come across <a href="https://dl.acm.org/doi/10.1145/321450.321457">Pease</a>'s FFT, an old idea worth rediscovering. For an in-depth
-discussion of FFT performance see, <a href="https://arxiv.org/abs/2602.23525">arXiv:2602.23525</a>.
-</p></div></div>
 
 
 </div>
